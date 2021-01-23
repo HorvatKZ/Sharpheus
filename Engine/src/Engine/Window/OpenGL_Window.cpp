@@ -4,16 +4,33 @@
 
 namespace Sharpheus {
 
+	static void GLFWErrorCallback(int error, const char* description)
+	{
+		SPH_LOG_ERROR("GLFW Error[{0}]: {1}", error, description);
+	}
+
+
 	OpenGL_Window::OpenGL_Window(const Window::Props& props) : Window(props)
 	{
-		glfwInit();
+		int success = glfwInit();
+		SPH_ASSERT(success == GLFW_TRUE, "Error during GLFW initialization!");
+
+		glfwSetErrorCallback(GLFWErrorCallback);
 		win = glfwCreateWindow(props.width, props.height, props.title.c_str(), props.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
+		SPH_LOG_INFO("Window created: {0}x{1}", props.width, props.height);
 		glfwMakeContextCurrent(win);
+
+		success = glewInit();
+		SPH_ASSERT(success == 0, "Error during GLEW initialization!");
+		Renderer::Init();
+
 		glfwSetWindowUserPointer(win, &callback);
 		SetVsync(true);
 
 		glfwSetWindowCloseCallback(win, [](GLFWwindow* win) {
 			std::function<void()> closeCallback = *(std::function<void()>*)glfwGetWindowUserPointer(win);
+			
+			SPH_LOG("Window closed");
 			closeCallback();
 		});
 	}
@@ -22,12 +39,25 @@ namespace Sharpheus {
 	OpenGL_Window::~OpenGL_Window()
 	{
 		glfwDestroyWindow(win);
+		Renderer::Clear();
 	}
 
 
-	void OpenGL_Window::Tick()
+	void OpenGL_Window::PollEvents()
 	{
 		glfwPollEvents();
+	}
+
+
+	void OpenGL_Window::StartRender()
+	{
+		Renderer::StartFrame();
+	}
+
+
+	void OpenGL_Window::EndRender()
+	{
+		Renderer::EndFrame();
 		glfwSwapBuffers(win);
 	}
 

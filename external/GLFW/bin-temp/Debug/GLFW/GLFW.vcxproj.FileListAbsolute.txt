@@ -1,2 +1,0 @@
-D:\Programming\Sharpheus\external\GLFW\bin\Debug\GLFW.pdb
-D:\Programming\Sharpheus\external\GLFW\bin-temp\Debug\GLFW\GLFW.pdb

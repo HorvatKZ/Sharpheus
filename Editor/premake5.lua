@@ -4,8 +4,8 @@ project "Editor"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir ("%{wks.location}/bin/" .. outputdir)
-    objdir ("%{wks.location}/bin-temp/" .. outputdir .. "/%{prj.name}")
+	targetdir (bindir)
+	objdir (bintempdir)
     
 
 	files
@@ -23,7 +23,9 @@ project "Editor"
 	includedirs
 	{
         "src",
-        "%{wks.location}/Engine/src"
+		"%{wks.location}/Engine/src",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.spdlog}"
 	}
 
 	links

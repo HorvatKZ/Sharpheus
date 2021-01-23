@@ -3,6 +3,8 @@
 #include "pch.h"
 #include "Window.hpp"
 
+#include <GL/glew.h>
+#include <GL/wglew.h>
 #include <GLFW/glfw3.h>
 
 
@@ -14,7 +16,9 @@ namespace Sharpheus {
 		OpenGL_Window(const Window::Props& props = Props());
 		~OpenGL_Window();
 
-		void Tick() override;
+		void PollEvents() override;
+		void StartRender() override;
+		void EndRender() override;
 
 		uint32_t GetWidth() override;
 		uint32_t GetHeight() override;

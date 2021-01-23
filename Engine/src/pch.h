@@ -9,3 +9,5 @@
 
 // Engine
 #include "Macros.h"
+#include "Engine/Logger/Logger.hpp"
+#include "Engine/Geometry/Geometry.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Engine/Renderer/Renderer.hpp"
 
 
 namespace Sharpheus {
@@ -18,7 +19,9 @@ namespace Sharpheus {
 		Window(const Props& props = Props()) : props(props) {}
 		virtual ~Window() = default;
 
-		virtual void Tick() = 0;
+		virtual void PollEvents() = 0;
+		virtual void StartRender() = 0;
+		virtual void EndRender() = 0;
 
 		virtual uint32_t GetWidth() = 0;
 		virtual uint32_t GetHeight() = 0;

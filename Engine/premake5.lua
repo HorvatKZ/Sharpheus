@@ -4,8 +4,8 @@ project "Engine"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir ("%{wks.location}/bin/" .. outputdir)
-	objdir ("%{wks.location}/bin-temp/" .. outputdir .. "/%{prj.name}")
+	targetdir (bindir)
+	objdir (bintempdir)
 
 	pchheader "pch.h"
 	pchsource "src/pch.cpp"
@@ -14,30 +14,39 @@ project "Engine"
 	{
         "src/**.h",
         "src/**.hpp",
-		"src/**.cpp"
-	}
-
-	defines
-	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"src/**.cpp",
+		"external/glm/glm/**.hpp",
+		"external/glm/glm/**.inl",
+		"external/stb_image/stb_image.h",
+		"external/stb_image/stb_image.cpp"
 	}
 
 	includedirs
 	{
 		"src",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLEW}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.spdlog}"
 	}
 
 	links
 	{
 		"GLFW",
+		"GLEW",
+		"spdlog",
 		"opengl32.lib"
-    }
-    
-    defines
-    {
-        "SPH_BUILD_ENGINE"
-    }
+	}
+	
+	defines
+	{
+		"SPH_BUILD_ENGINE",
+		"_CRT_SECURE_NO_WARNINGS",
+		"GLFW_INCLUDE_NONE",
+		"GLEW_STATIC",
+		"SPDLOG_COMPILED_LIB"
+	}
 
 
 	filter "system:windows"

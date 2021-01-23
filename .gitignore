@@ -1,9 +1,9 @@
 # Binaries
-/bin
-/bin-temp
+**/bin
+**/bin-temp
 
 # Gen project
-/external/Premake
+/external/Premake/premake5.exe
 /GenSolution.bat
 
 # Visual Studio
