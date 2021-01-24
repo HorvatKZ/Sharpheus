@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "Engine/Renderer/Renderer.hpp"
+#include "Engine/Events/EventHandler.hpp"
 
 
 namespace Sharpheus {
@@ -16,7 +17,7 @@ namespace Sharpheus {
 			bool fullscreen = false;
 		};
 
-		Window(const Props& props = Props()) : props(props) {}
+		Window(const Props& props = Props()) : props(props), callback(SPH_BIND_STATIC(EventHandler::Handle)) {}
 		virtual ~Window() = default;
 
 		virtual void PollEvents() = 0;
@@ -32,12 +33,11 @@ namespace Sharpheus {
 		virtual void SetHeight(uint32_t height) = 0;
 		virtual void SetTitle(const std::string& title) = 0;
 		virtual void SetVsync(bool vsync) = 0;
-		virtual void SetCloseCallback(std::function<void()> callback) = 0;
 
 	protected:
 		bool isVsync = true;
 		Props props;
-		std::function<void()> callback;
+		EventFunc callback;
 	};
 
 }

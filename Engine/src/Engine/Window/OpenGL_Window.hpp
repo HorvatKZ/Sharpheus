@@ -29,10 +29,11 @@ namespace Sharpheus {
 		void SetHeight(uint32_t height) override;
 		void SetTitle(const std::string& title) override;
 		void SetVsync(bool vsync) override;
-		void SetCloseCallback(std::function<void()> callback) override;
 
 	private:
 		GLFWwindow* win;
+
+		void SetCallbacks();
 	};
 
 }

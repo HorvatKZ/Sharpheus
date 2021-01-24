@@ -18,6 +18,8 @@ namespace Sharpheus {
 
 		editorLogger = spdlog::stdout_color_mt("EDITOR");
 		editorLogger->set_level(spdlog::level::trace);
+
+		SPH_INFO("Loggers initialized!");
 	}
 
 

@@ -9,7 +9,6 @@ namespace Sharpheus {
 	void Renderer::Init()
 	{
 		renderer = new OpenGL_Renderer();
-		SPH_LOG_INFO("OpenGL renderer created");
 	}
 
 

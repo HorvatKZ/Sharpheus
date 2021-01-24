@@ -3,19 +3,38 @@
 
 #include "Window/OpenGL_Window.hpp"
 #include "ResourceManager/ResourceManager.hpp"
+#include "Events/EventHandler.hpp"
+#include "Events/EventListener.hpp"
 
 
 namespace Sharpheus {
 
+	class WinEventListener : public EventListener // Only for testing
+	{
+	public:
+		WinEventListener() {
+			Subscribe<WindowClosedEvent>(SPH_BIND(WinEventListener::WinClosed));
+			Subscribe<WindowResizedEvent>(SPH_BIND(WinEventListener::WinResized));
+		}
+
+		void WinClosed(const WindowClosedEvent& e) {
+			SPH_INFO("{0}", e.ToStr());
+		}
+
+		void WinResized(const WindowResizedEvent& e) {
+			SPH_INFO("{0}", e.ToStr());
+		}
+	};
+
 	Game::Game()
 	{
-		ResourceManager::Init();
 		Logger::Init();
+		SPH_INFO("Welcome to Sharpheus!");
 
-		SPH_LOG_INFO("Loggers initialized!");
+		ResourceManager::Init();
+		EventHandler::Init(SPH_BIND(Game::WindowClosed));
 
 		win = new OpenGL_Window();
-		win->SetCloseCallback(SPH_BIND(Game::Stop));
 	}
 
 
@@ -23,15 +42,17 @@ namespace Sharpheus {
 	{
 		delete win;
 		ResourceManager::Clear();
+		EventHandler::Clear();
 
-		SPH_LOG_INFO("Game successfully exited");
+		SPH_INFO("Game successfully exited");
 		Logger::Clear();
 	}
 
 
 	void Game::Run()
 	{
-		Image* image = ResourceManager::GetImage("D:/Programming/Sharpheus/Assets/Branding/sharpheus_promo.png");
+		Image* image = ResourceManager::GetImage("../Assets/Branding/sharpheus_promo.png", true);
+		WinEventListener we;
 		while (isRunning) {
 			win->PollEvents();
 			// Do ticks
@@ -51,6 +72,12 @@ namespace Sharpheus {
 	bool Game::IsRunning()
 	{
 		return isRunning;
+	}
+
+
+	void Game::WindowClosed(const WindowClosedEvent& e)
+	{
+		Stop();
 	}
 
 } // namespace Sharpheus

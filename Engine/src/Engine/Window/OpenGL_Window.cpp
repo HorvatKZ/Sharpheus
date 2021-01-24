@@ -1,12 +1,16 @@
 #include "pch.h"
 #include "OpenGL_Window.hpp"
 
+#define SPH_PROPAGATE() \
+	EventFunc callback = *(EventFunc*)glfwGetWindowUserPointer(win); \
+	callback(e);
+
 
 namespace Sharpheus {
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
-		SPH_LOG_ERROR("GLFW Error[{0}]: {1}", error, description);
+		SPH_ERROR("GLFW Error[{0}]: {1}", error, description);
 	}
 
 
@@ -17,7 +21,7 @@ namespace Sharpheus {
 
 		glfwSetErrorCallback(GLFWErrorCallback);
 		win = glfwCreateWindow(props.width, props.height, props.title.c_str(), props.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
-		SPH_LOG_INFO("Window created: {0}x{1}", props.width, props.height);
+		SPH_INFO("Window created: {0}x{1}({2})", props.width, props.height, props.fullscreen ? "Fullscreen" : "Windowed");
 		glfwMakeContextCurrent(win);
 
 		success = glewInit();
@@ -25,14 +29,8 @@ namespace Sharpheus {
 		Renderer::Init();
 
 		glfwSetWindowUserPointer(win, &callback);
+		SetCallbacks();
 		SetVsync(true);
-
-		glfwSetWindowCloseCallback(win, [](GLFWwindow* win) {
-			std::function<void()> closeCallback = *(std::function<void()>*)glfwGetWindowUserPointer(win);
-			
-			SPH_LOG("Window closed");
-			closeCallback();
-		});
 	}
 
 
@@ -51,6 +49,18 @@ namespace Sharpheus {
 
 	void OpenGL_Window::StartRender()
 	{
+		glClearColor(0, 0, 0.2, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glEnable(GL_TEXTURE_2D);   // textures
+		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_BLEND);
+		glDisable(GL_DEPTH_TEST);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glViewport(0, 0, props.width, props.height);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 		Renderer::StartFrame();
 	}
 
@@ -113,8 +123,18 @@ namespace Sharpheus {
 		isVsync = vsync;
 	}
 
-	void OpenGL_Window::SetCloseCallback(std::function<void()> callback)
+
+	void OpenGL_Window::SetCallbacks()
 	{
-		this->callback = callback;
+		glfwSetWindowCloseCallback(win, [](GLFWwindow* win) {
+			SPH_LOG("Window closed");
+			WindowClosedEvent e;
+			SPH_PROPAGATE();
+		});
+
+		glfwSetWindowSizeCallback(win, [](GLFWwindow* win, int newWidth, int newHeight) {
+			WindowResizedEvent e(newWidth, newHeight);
+			SPH_PROPAGATE();
+		});
 	}
 }

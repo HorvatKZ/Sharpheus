@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Events/WindowEvents.hpp"
 
 
 namespace Sharpheus {
@@ -14,6 +15,8 @@ namespace Sharpheus {
 		void Run();
 		void Stop();
 		bool IsRunning();
+
+		void WindowClosed(const WindowClosedEvent& e);
 
 	private:
 		bool isRunning = true;

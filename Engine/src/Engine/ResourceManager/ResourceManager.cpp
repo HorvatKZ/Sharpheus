@@ -17,14 +17,14 @@ namespace Sharpheus {
 		}
 	}
 
-	Image* ResourceManager::GetImage(const std::string& path)
+	Image* ResourceManager::GetImage(const std::string& path, bool filtered)
 	{
 		std::unordered_map<std::string, Image*>::iterator it = images.find(path);
 		if (it != images.end()) {
 			return (*it).second;
 		}
 
-		Image* newImage = new Image(path);
+		Image* newImage = new Image(path, filtered);
 		images[path] = newImage;
 		return newImage;
 	}

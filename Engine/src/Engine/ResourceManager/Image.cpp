@@ -47,6 +47,7 @@ namespace Sharpheus {
 
 	void Image::LoadImg(const std::string& path)
 	{
+		SPH_LOG("Importing image: \"{0}\"", path);
 		glGenTextures(1, &ID);
 		glBindTexture(GL_TEXTURE_2D, ID);
 		glActiveTexture(ID);
@@ -62,6 +63,9 @@ namespace Sharpheus {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, sampling);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			SPH_LOG("Import successful({0}x{1} {2})", width, height, channels == 4 ? "RGBA" : "RGB");
+		} else {
+			SPH_ERROR("Unable to import image: \"{0}\"", path);
 		}
 
 		stbi_image_free(data);
