@@ -20,6 +20,7 @@ namespace Sharpheus {
 		void StartRender() override;
 		void EndRender() override;
 
+		float GetDeltaTime() override;
 		uint32_t GetWidth() override;
 		uint32_t GetHeight() override;
 		std::string GetTitle() override;
@@ -32,6 +33,8 @@ namespace Sharpheus {
 
 	private:
 		GLFWwindow* win;
+		float lastTime, lastSecond;
+		uint32_t fps = 0;
 
 		void SetCallbacks();
 	};

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "OpenGL_Window.hpp"
 
-#define SPH_PROPAGATE() \
+#define SPH_PROPAGATE(e) \
 	EventFunc callback = *(EventFunc*)glfwGetWindowUserPointer(win); \
 	callback(e);
 
@@ -30,7 +30,10 @@ namespace Sharpheus {
 
 		glfwSetWindowUserPointer(win, &callback);
 		SetCallbacks();
-		SetVsync(true);
+		SetVsync(false);
+
+		lastTime = glfwGetTime();
+		lastSecond = lastTime;
 	}
 
 
@@ -49,18 +52,6 @@ namespace Sharpheus {
 
 	void OpenGL_Window::StartRender()
 	{
-		glClearColor(0, 0, 0.2, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glEnable(GL_TEXTURE_2D);   // textures
-		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_BLEND);
-		glDisable(GL_DEPTH_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		glViewport(0, 0, props.width, props.height);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
 		Renderer::StartFrame();
 	}
 
@@ -69,6 +60,22 @@ namespace Sharpheus {
 	{
 		Renderer::EndFrame();
 		glfwSwapBuffers(win);
+	}
+
+
+	float OpenGL_Window::GetDeltaTime()
+	{
+		float currentTime = glfwGetTime();
+		float deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+		if (lastSecond + 1 < currentTime) {
+			glfwSetWindowTitle(win, (props.title + " [" + std::to_string(fps) + " FPS]").c_str());
+			lastSecond = currentTime;
+			fps = 0;
+		} else {
+			++fps;
+		}
+		return deltaTime;
 	}
 
 
@@ -127,14 +134,30 @@ namespace Sharpheus {
 	void OpenGL_Window::SetCallbacks()
 	{
 		glfwSetWindowCloseCallback(win, [](GLFWwindow* win) {
-			SPH_LOG("Window closed");
 			WindowClosedEvent e;
-			SPH_PROPAGATE();
+			SPH_PROPAGATE(e);
 		});
 
 		glfwSetWindowSizeCallback(win, [](GLFWwindow* win, int newWidth, int newHeight) {
 			WindowResizedEvent e(newWidth, newHeight);
-			SPH_PROPAGATE();
+			SPH_PROPAGATE(e);
+		});
+
+		glfwSetKeyCallback(win, [](GLFWwindow* win, int keyCode, int scancode, int action, int mods) {
+			switch (action) {
+				case GLFW_PRESS:
+					{
+						KeyPressedEvent e((KeyCode)keyCode);
+						SPH_PROPAGATE(e);
+					}
+					break;
+				case GLFW_RELEASE:
+					{
+						KeyReleasedEvent e((KeyCode)keyCode);
+						SPH_PROPAGATE(e);
+					}
+					break;
+			}
 		});
 	}
 }

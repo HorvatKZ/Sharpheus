@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Renderer.hpp"
+#include "Renderer_API/OpenGL_Renderer.hpp"
+
 
 namespace Sharpheus {
 
@@ -30,9 +32,15 @@ namespace Sharpheus {
 	}
 
 
-	void Renderer::DrawQuad(const Point& begin, const Point& end)
+	void Renderer::DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown)
 	{
-		renderer->DrawQuad(begin, end);
+		renderer->DrawQuad(leftUp, rightUp, rightDown, leftDown);
+	}
+
+
+	void Renderer::SetCamera(class Camera* camera)
+	{
+		renderer->SetCamera(camera);
 	}
 
 }

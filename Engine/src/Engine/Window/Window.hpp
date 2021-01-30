@@ -24,10 +24,11 @@ namespace Sharpheus {
 		virtual void StartRender() = 0;
 		virtual void EndRender() = 0;
 
-		virtual uint32_t GetWidth() = 0;
-		virtual uint32_t GetHeight() = 0;
+		virtual float		GetDeltaTime() = 0;
+		virtual uint32_t	GetWidth() = 0;
+		virtual uint32_t	GetHeight() = 0;
 		virtual std::string GetTitle() = 0;
-		virtual bool IsVsync() = 0;
+		virtual bool		IsVsync() = 0;
 
 		virtual void SetWidth(uint32_t width) = 0;
 		virtual void SetHeight(uint32_t height) = 0;

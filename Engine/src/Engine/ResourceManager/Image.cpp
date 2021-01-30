@@ -38,10 +38,10 @@ namespace Sharpheus {
 	}
 
 
-	void Image::Render(const Point& begin, const Point& end)
+	void Image::Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown)
 	{
 		glBindTexture(GL_TEXTURE_2D, ID);
-		Renderer::DrawQuad(begin, end);
+		Renderer::DrawQuad(leftUp, rightUp, rightDown, leftDown);
 	}
 
 

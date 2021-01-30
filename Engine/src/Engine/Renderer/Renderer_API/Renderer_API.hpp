@@ -13,7 +13,12 @@ namespace Sharpheus {
 		virtual void StartFrame() = 0;
 		virtual void EndFrame() = 0;
 
-		virtual void DrawQuad(const Point& begin, const Point& end) = 0;
+		void SetCamera(class Camera* camera) { this->camera = camera; }
+
+		virtual void DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown) = 0;
+
+	protected:
+		class Camera* camera = nullptr;
 	};
 
 }

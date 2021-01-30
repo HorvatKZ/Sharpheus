@@ -20,7 +20,7 @@ namespace Sharpheus {
 		int GetHeight();
 		std::string GetPath();
 
-		void Render(const Point& begin, const Point& end);
+		void Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown);
 
 	private:
 		GLuint ID = TEXTURE_ID_NONE;

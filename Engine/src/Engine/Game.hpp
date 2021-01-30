@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "Events/WindowEvents.hpp"
+#include "Level.hpp"
 
 
 namespace Sharpheus {
@@ -21,6 +22,8 @@ namespace Sharpheus {
 	private:
 		bool isRunning = true;
 		class Window* win;
+
+		Level* level;
 	};
 
 }

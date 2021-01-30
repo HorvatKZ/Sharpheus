@@ -9,17 +9,13 @@ namespace Sharpheus {
 	class EventListener
 	{
 	public:
-		EventListener() : listenerID(nextFreeID++), subscribedNum(0) {}
-		virtual ~EventListener() {
-			if (subscribedNum != 0) {
-				EventHandler::UnSubscribeAll(listenerID);
-			}
-		}
+		EventListener();
+		virtual ~EventListener();
 		
-		EventListener(EventListener& /*other*/) : listenerID(nextFreeID++), subscribedNum(0) {}
-		EventListener& operator=(EventListener& other) { *this = other; return *this; }
-		EventListener(EventListener&& other) noexcept : listenerID(other.listenerID) { other.listenerID = 0; }
-		EventListener& operator=(EventListener&& other) noexcept { *this = std::move(other); return *this; }
+		EventListener(EventListener& other);
+		EventListener& operator=(EventListener& other);
+		EventListener(EventListener&& other) noexcept;
+		EventListener& operator=(EventListener&& other) noexcept;
 		
 
 		template <class T_Event>
@@ -45,6 +41,4 @@ namespace Sharpheus {
 		uint32_t subscribedNum;
 		uint32_t listenerID;
 	};
-
-	uint32_t EventListener::nextFreeID = 1;
 }

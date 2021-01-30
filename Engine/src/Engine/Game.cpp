@@ -9,23 +9,6 @@
 
 namespace Sharpheus {
 
-	class WinEventListener : public EventListener // Only for testing
-	{
-	public:
-		WinEventListener() {
-			Subscribe<WindowClosedEvent>(SPH_BIND(WinEventListener::WinClosed));
-			Subscribe<WindowResizedEvent>(SPH_BIND(WinEventListener::WinResized));
-		}
-
-		void WinClosed(const WindowClosedEvent& e) {
-			SPH_INFO("{0}", e.ToStr());
-		}
-
-		void WinResized(const WindowResizedEvent& e) {
-			SPH_INFO("{0}", e.ToStr());
-		}
-	};
-
 	Game::Game()
 	{
 		Logger::Init();
@@ -35,6 +18,7 @@ namespace Sharpheus {
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
 
 		win = new OpenGL_Window();
+		level = new Level();
 	}
 
 
@@ -51,13 +35,11 @@ namespace Sharpheus {
 
 	void Game::Run()
 	{
-		Image* image = ResourceManager::GetImage("../Assets/Branding/sharpheus_promo.png", true);
-		WinEventListener we;
 		while (isRunning) {
 			win->PollEvents();
-			// Do ticks
+			level->Tick(win->GetDeltaTime());
 			win->StartRender();
-			image->Render({ -0.5, -0.5 }, { 0.5, 0.5 });
+			level->Render();
 			win->EndRender();
 		}
 	}
@@ -77,6 +59,7 @@ namespace Sharpheus {
 
 	void Game::WindowClosed(const WindowClosedEvent& e)
 	{
+		SPH_LOG("Window closed");
 		Stop();
 	}
 

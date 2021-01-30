@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.h"
-#include "Renderer_API/OpenGL_Renderer.hpp"
+#include "Renderer_API/Renderer_API.hpp"
 
 
 namespace Sharpheus {
@@ -15,7 +15,9 @@ namespace Sharpheus {
 		static void StartFrame();
 		static void EndFrame();
 
-		static void DrawQuad(const Point& begin, const Point& end);
+		static void DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown);
+
+		static void SetCamera(class Camera* camera);
 
 	private:
 		static Renderer_API* renderer;
