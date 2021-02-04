@@ -18,7 +18,7 @@ namespace Sharpheus {
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
 
 		win = new OpenGL_Window();
-		level = new Level();
+		level = new Level("Level");
 	}
 
 

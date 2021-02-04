@@ -67,6 +67,31 @@ namespace Sharpheus {
 		glEnd();
 	}
 
+	
+	void OpenGL_Renderer::DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
+		const Point& leftDown, const Color& color)
+	{
+		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
+
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+
+		Point posLeftUp = camera->Project(leftUp);
+		Point posRightUp = camera->Project(rightUp);
+		Point posRightDown = camera->Project(rightDown);
+		Point posLeftDown = camera->Project(leftDown);
+
+		glColor4f(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
+		glVertex2f(posLeftUp.x, posLeftUp.y);
+		glVertex2f(posRightUp.x, posRightUp.y);
+		glVertex2f(posRightDown.x, posRightDown.y);
+		glVertex2f(posLeftDown.x, posLeftDown.y);
+		glColor3f(1, 1, 1);
+
+		glEnd();
+		glEnable(GL_TEXTURE_2D);
+	}
+
 
 	void OpenGL_Renderer::ScreenResized(const WindowResizedEvent& e)
 	{

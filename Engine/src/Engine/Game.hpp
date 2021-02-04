@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pch.h"
 #include "Events/WindowEvents.hpp"
 #include "Level.hpp"
 

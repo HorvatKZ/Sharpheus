@@ -1,10 +1,12 @@
 #pragma once
 
-#include "pch.h"
 #include "EventHandler.hpp"
 
 
 namespace Sharpheus {
+
+	typedef uint32_t ID;
+
 
 	class EventListener
 	{
@@ -16,6 +18,8 @@ namespace Sharpheus {
 		EventListener& operator=(EventListener& other);
 		EventListener(EventListener&& other) noexcept;
 		EventListener& operator=(EventListener&& other) noexcept;
+
+		inline ID GetID() { return listenerID; }
 		
 
 		template <class T_Event>
@@ -36,9 +40,9 @@ namespace Sharpheus {
 		}
 
 	protected:
-		static uint32_t nextFreeID;
+		static ID nextFreeID;
 
-		uint32_t subscribedNum;
-		uint32_t listenerID;
+		ID subscribedNum;
+		ID listenerID;
 	};
 }

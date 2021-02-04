@@ -4,9 +4,13 @@
 
 namespace Sharpheus {
 
-	GameObject::GameObject(const std::string& name, const Transform& trafo) : name(name), trafo(trafo)
+	GameObject::GameObject(GameObject* parent, const std::string& name, const Transform& trafo) : parent(parent), name(name), trafo(trafo)
 	{
-		worldTrafo = (parent != nullptr ? parent->worldTrafo : Transform()) + trafo;
+		if (parent != nullptr) {
+			parent->AddChild(this);
+		} else {
+			worldTrafo = trafo;
+		}
 	}
 
 
@@ -42,6 +46,19 @@ namespace Sharpheus {
 	{
 		children.push_back(child);
 		child->parent = this;
+		child->UpdateWorldTrafo(worldTrafo);
+	}
+
+
+	void GameObject::RemoveChild(GameObject* child)
+	{
+		auto placeInVector = std::find(children.begin(), children.end(), child);
+		
+		if (placeInVector != children.end()) {
+			children.erase(placeInVector);
+		} else {
+			SPH_WARN("Attempt to remove non-existing child \"{0}\" from \"{1}\"", child->name, name);
+		}
 	}
 
 
@@ -61,6 +78,29 @@ namespace Sharpheus {
 	{
 		this->trafo = trafo;
 		UpdateWorldTrafo(parent != nullptr ? parent->worldTrafo : Transform());
+	}
+
+
+	void GameObject::SetWorldTrafo(const Transform& worldTrafo)
+	{
+		Transform parentWorldTrafo = parent != nullptr ? parent->worldTrafo : Transform();
+		this->trafo = worldTrafo.SubstractFirst(parentWorldTrafo);
+		UpdateWorldTrafo(parentWorldTrafo);
+	}
+
+
+	GameObject* GameObject::GetChild(const std::string& name)
+	{
+		uint32_t i = 0;
+		while (i < children.size() && name != children[i]->name) {
+			++i;
+		}
+
+		if (i < children.size()) {
+			return children[i];
+		}
+
+		return nullptr;
 	}
 
 

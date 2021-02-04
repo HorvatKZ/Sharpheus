@@ -4,10 +4,10 @@
 
 namespace Sharpheus {
 
-	std::unordered_map<uint32_t, WindowClosedEventFunc> EventHandler::windowClosedListeners;
-	std::unordered_map<uint32_t, WindowResizedEventFunc> EventHandler::windowResizedListeners;
-	std::unordered_map<uint32_t, KeyPressedEventFunc> EventHandler::keyPressedListeners;
-	std::unordered_map<uint32_t, KeyReleasedEventFunc> EventHandler::keyReleasedListeners;
+	std::unordered_map<ID, WindowClosedEventFunc> EventHandler::windowClosedListeners;
+	std::unordered_map<ID, WindowResizedEventFunc> EventHandler::windowResizedListeners;
+	std::unordered_map<ID, KeyPressedEventFunc> EventHandler::keyPressedListeners;
+	std::unordered_map<ID, KeyReleasedEventFunc> EventHandler::keyReleasedListeners;
 	WindowClosedEventFunc EventHandler::closeGame;
 
 
@@ -26,6 +26,9 @@ namespace Sharpheus {
 	void EventHandler::Handle(const Event& e)
 	{
 		switch (e.GetType()) {
+			case Event::Type::Local:
+				SPH_WARN("Local event caught in global EventHanler. Event ignored");
+				break;
 			case Event::Type::WindowClosed:
 				HandleWindowsClosed(static_cast<const WindowClosedEvent&>(e));
 				break;
@@ -44,7 +47,7 @@ namespace Sharpheus {
 	}
 
 
-	void EventHandler::UnSubscribeAll(uint32_t listenerID)
+	void EventHandler::UnSubscribeAll(ID listenerID)
 	{
 		SPH_UNSUBSCRIBE_EVENTS_IN(windowClosedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(windowResizedListeners);

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pch.h"
 #include "Window.hpp"
 
 #include <GL/glew.h>

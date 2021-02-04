@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pch.h"
 #include "Renderer_API.hpp"
 #include "Engine/Events/EventListener.hpp"
 
@@ -17,6 +16,8 @@ namespace Sharpheus {
 		void EndFrame() override;
 
 		void DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown) override;
+		void DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
+			const Point& leftDown, const Color& color) override;
 
 		void ScreenResized(const WindowResizedEvent& e);
 

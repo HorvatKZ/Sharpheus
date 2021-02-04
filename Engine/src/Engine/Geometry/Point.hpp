@@ -17,15 +17,20 @@ namespace Sharpheus {
 		float			operator*(const Point& other) const;
 		Point			operator*(float other) const;
 		friend Point	operator*(float lhs, const Point& rhs);
+		Point			operator/(float other) const;
+		friend Point	operator/(float lhs, const Point& rhs);
 
 		Point&			operator+=(const Point& other);
 		Point&			operator-=(const Point& other);
 		Point&			operator*=(float other);
+		Point&			operator/=(float other);
 
 		bool			operator==(const Point& other) const;
 		bool			operator!=(const Point& other) const;
 
 		float			Length() const;
+		float			Distance(const Point& other) const;
+		Point			Normalize() const;
 		glm::vec2		ToVec2() const;
 
 		Point			Rotate(float angle) const;
@@ -36,6 +41,9 @@ namespace Sharpheus {
 		static Point Down;
 		static Point Left;
 		static Point Right;
+
+		static bool DoSectionsIntersect(const Point& sec1begin, const Point& sec1end, const Point& sec2begin, const Point& sec2end);
+		static Point GetNormalVectorToward(const Point& secBegin, const Point& secEnd, const Point& toward);
 	};
 
 }

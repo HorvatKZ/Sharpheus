@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pch.h"
 #include "Engine/Renderer/Renderer.hpp"
 #include <GL/glew.h>
 #include <GL/wglew.h>

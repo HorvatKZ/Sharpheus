@@ -20,8 +20,9 @@ namespace Sharpheus {
 	public:
 		enum class Type {
 			None,
+			Local,
 			WindowClosed, WindowResized,
-			KeyPressed, KeyReleased
+			KeyPressed, KeyReleased,
 		};
 
 		virtual ~Event() = default;

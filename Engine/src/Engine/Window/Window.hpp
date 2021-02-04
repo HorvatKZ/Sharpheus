@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pch.h"
 #include "Engine/Renderer/Renderer.hpp"
 #include "Engine/Events/EventHandler.hpp"
 

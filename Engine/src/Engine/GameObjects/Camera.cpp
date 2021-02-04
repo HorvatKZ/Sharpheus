@@ -5,8 +5,8 @@
 
 namespace Sharpheus {
 
-	Camera::Camera(const std::string& name, const Transform& trafo, float width, float height) :
-		GameObject(name, trafo), width(width), height(height)
+	Camera::Camera(GameObject* parent, const std::string& name, const Transform& trafo, float width, float height) :
+		GameObject(parent, name, trafo), width(width), height(height)
 	{
 		Subscribe<WindowResizedEvent>(SPH_BIND(Camera::WindowResized));
 	}

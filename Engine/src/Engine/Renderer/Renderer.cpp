@@ -37,6 +37,11 @@ namespace Sharpheus {
 		renderer->DrawQuad(leftUp, rightUp, rightDown, leftDown);
 	}
 
+	void Renderer::DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
+		const Point& leftDown, const Color& color)
+	{
+		renderer->DrawMonocromeQuad(leftUp, rightUp, rightDown, leftDown, color);
+	}
 
 	void Renderer::SetCamera(class Camera* camera)
 	{

@@ -5,17 +5,17 @@
 
 namespace Sharpheus {
 
-	Sprite::Sprite(const std::string& name, const Transform& trafo, const std::string& imagePath) :
-		GameObject(name, trafo), image(ResourceManager::GetImage(imagePath, true)) {}
+	Sprite::Sprite(GameObject* parent, const std::string& name, const Transform& trafo, const std::string& imagePath) :
+		GameObject(parent, name, trafo), image(ResourceManager::GetImage(imagePath, true)) {}
 
-	Sprite::Sprite(const std::string& name, const Transform& trafo, Image* image) :
-		GameObject(name, trafo), image(image) {}
+	Sprite::Sprite(GameObject* parent, const std::string& name, const Transform& trafo, Image* image) :
+		GameObject(parent, name, trafo), image(image) {}
 
 
 	void Sprite::SetTrafo(const Transform& trafo)
 	{
+		needToRecalcOffset = needToRecalcOffset || (this->trafo.scale != trafo.scale || this->trafo.rot != trafo.rot);
 		GameObject::SetTrafo(trafo);
-		needToRecalcOffset = true;
 	}
 
 
@@ -38,8 +38,10 @@ namespace Sharpheus {
 
 	void Sprite::UpdateWorldTrafo(const Transform& parentWorldTrafo)
 	{
+		Point prevScale = worldTrafo.scale;
+		float prevRot = worldTrafo.rot;
 		GameObject::UpdateWorldTrafo(parentWorldTrafo);
-		needToRecalcOffset = true;
+		needToRecalcOffset = needToRecalcOffset || (prevScale != worldTrafo.scale || prevRot != worldTrafo.rot);
 	}
 
 }

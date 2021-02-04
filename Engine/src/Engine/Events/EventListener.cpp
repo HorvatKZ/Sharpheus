@@ -4,7 +4,7 @@
 
 namespace Sharpheus {
 
-	uint32_t EventListener::nextFreeID = 1;
+	ID EventListener::nextFreeID = 1;
 
 	EventListener::EventListener() : listenerID(nextFreeID++), subscribedNum(0) {}
 
