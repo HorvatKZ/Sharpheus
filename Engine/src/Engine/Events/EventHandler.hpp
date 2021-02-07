@@ -35,6 +35,7 @@ namespace Sharpheus {
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(WindowClosedEvent, windowClosedListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(WindowResizedEvent, windowResizedListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(KeyPressedEvent, keyPressedListeners)
+		SPH_DECL_EVENTTYPE_SUBSCRIPTION(KeyRepeatEvent, keyRepeatListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(KeyReleasedEvent, keyReleasedListeners)
 
 
@@ -50,6 +51,9 @@ namespace Sharpheus {
 			case Event::Type::KeyPressed:
 				SPH_UNSUBSCRIBE_EVENTS_IN(keyPressedListeners);
 				break;
+			case Event::Type::KeyRepeat:
+				SPH_UNSUBSCRIBE_EVENTS_IN(keyRepeatListeners);
+				break;
 			case Event::Type::KeyReleased:
 				SPH_UNSUBSCRIBE_EVENTS_IN(keyReleasedListeners);
 				break;
@@ -64,12 +68,14 @@ namespace Sharpheus {
 		static std::unordered_map<ID, WindowClosedEventFunc> windowClosedListeners;
 		static std::unordered_map<ID, WindowResizedEventFunc> windowResizedListeners;
 		static std::unordered_map<ID, KeyPressedEventFunc> keyPressedListeners;
+		static std::unordered_map<ID, KeyRepeatEventFunc> keyRepeatListeners;
 		static std::unordered_map<ID, KeyReleasedEventFunc> keyReleasedListeners;
 		static WindowClosedEventFunc closeGame;
 
 		static void HandleWindowsClosed(const WindowClosedEvent& e);
 		static void HandleWindowsResized(const WindowResizedEvent& e);
 		static void HandleKeyPressed(const KeyPressedEvent& e);
+		static void HandleKeyRepeat(const KeyRepeatEvent& e);
 		static void HandleKeyReleased(const KeyReleasedEvent& e);
 	};
 

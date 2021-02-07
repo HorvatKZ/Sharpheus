@@ -43,6 +43,7 @@ namespace Sharpheus {
 
 	SPH_DEF_EVENT_FUNC(KeyPressedEvent)
 	SPH_DEF_EVENT_FUNC(KeyReleasedEvent)
+	SPH_DEF_EVENT_FUNC(KeyRepeatEvent)
 
 
 	class SPH_EXPORT KeyPressedEvent : public Event
@@ -54,6 +55,20 @@ namespace Sharpheus {
 		inline std::string ToStr() const override { return "KeyPressedEvent " + std::to_string((int)code); }
 
 		SPH_DECL_EVENT(KeyPressed)
+
+		KeyCode code;
+	};
+
+
+	class SPH_EXPORT KeyRepeatEvent : public Event
+	{
+	public:
+		KeyRepeatEvent(KeyCode code) : code(code) {}
+		virtual ~KeyRepeatEvent() = default;
+
+		inline std::string ToStr() const override { return "KeyRepeatEvent " + std::to_string((int)code); }
+
+		SPH_DECL_EVENT(KeyRepeat)
 
 		KeyCode code;
 	};
@@ -71,4 +86,5 @@ namespace Sharpheus {
 
 		KeyCode code;
 	};
+
 }

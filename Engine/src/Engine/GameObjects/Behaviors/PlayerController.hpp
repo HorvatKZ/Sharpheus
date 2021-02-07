@@ -11,6 +11,7 @@ public:
 	virtual ~PlayerController();
 
 	void OnKeyPressed(const Sharpheus::KeyPressedEvent& e);
+	void OnKeyRepeat(const Sharpheus::KeyRepeatEvent& e);
 	void OnKeyReleased(const Sharpheus::KeyReleasedEvent& e);
 	void OnCollision(const Sharpheus::CollisionEvent& e);
 

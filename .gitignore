@@ -1,14 +1,27 @@
 # Binaries
 **/bin
 **/bin-temp
+**.o
+**.obj
+**.pdb
+**.lib
+**.dll
+**.exp
+**.ilk
 
-# Gen project
-/external/Premake/premake5.exe
-/GenSolution.bat
+# Logs
+**.log
+**.tlog
+**.lastbuildstate
 
 # Visual Studio
-/.vs
+**/.vs
+**/.vscode
 **.sln
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+!external/wxWidgets/*.sln
+!external/wxWidgets/*.vcxproj
+!external/wxWidgets/*.vcxproj.filters
+!external/wxWidgets/*.vcxproj.user

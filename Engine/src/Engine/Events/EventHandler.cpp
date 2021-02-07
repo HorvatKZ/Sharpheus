@@ -7,6 +7,7 @@ namespace Sharpheus {
 	std::unordered_map<ID, WindowClosedEventFunc> EventHandler::windowClosedListeners;
 	std::unordered_map<ID, WindowResizedEventFunc> EventHandler::windowResizedListeners;
 	std::unordered_map<ID, KeyPressedEventFunc> EventHandler::keyPressedListeners;
+	std::unordered_map<ID, KeyRepeatEventFunc> EventHandler::keyRepeatListeners;
 	std::unordered_map<ID, KeyReleasedEventFunc> EventHandler::keyReleasedListeners;
 	WindowClosedEventFunc EventHandler::closeGame;
 
@@ -38,6 +39,9 @@ namespace Sharpheus {
 			case Event::Type::KeyPressed:
 				HandleKeyPressed(static_cast<const KeyPressedEvent&>(e));
 				break;
+			case Event::Type::KeyRepeat:
+				HandleKeyRepeat(static_cast<const KeyRepeatEvent&>(e));
+				break;
 			case Event::Type::KeyReleased:
 				HandleKeyReleased(static_cast<const KeyReleasedEvent&>(e));
 				break;
@@ -52,6 +56,7 @@ namespace Sharpheus {
 		SPH_UNSUBSCRIBE_EVENTS_IN(windowClosedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(windowResizedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(keyPressedListeners);
+		SPH_UNSUBSCRIBE_EVENTS_IN(keyRepeatListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(keyReleasedListeners);
 	}
 
@@ -74,6 +79,13 @@ namespace Sharpheus {
 	void EventHandler::HandleKeyPressed(const KeyPressedEvent& e)
 	{
 		for (auto it = keyPressedListeners.begin(); it != keyPressedListeners.end(); ++it) {
+			(*it).second(e);
+		}
+	}
+
+	void EventHandler::HandleKeyRepeat(const KeyRepeatEvent& e)
+	{
+		for (auto it = keyRepeatListeners.begin(); it != keyRepeatListeners.end(); ++it) {
 			(*it).second(e);
 		}
 	}

@@ -151,6 +151,12 @@ namespace Sharpheus {
 						SPH_PROPAGATE(e);
 					}
 					break;
+				case GLFW_REPEAT:
+					{
+						KeyRepeatEvent e((KeyCode)keyCode);
+						SPH_PROPAGATE(e);
+					}
+					break;
 				case GLFW_RELEASE:
 					{
 						KeyReleasedEvent e((KeyCode)keyCode);
