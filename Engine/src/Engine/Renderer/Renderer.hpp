@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	class Renderer
+	class SPH_EXPORT Renderer
 	{
 	public:
 		static void Init();

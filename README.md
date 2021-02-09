@@ -13,12 +13,16 @@ Easy-to-use 2D C++ game engine created as a university project
 + Editor
 
 ### Supported platforms:
-+ Windows
++ **Windows**
 + *Linux (in future)*
 
 ### Supported rendering APIs:
-+ OpenGL
++ **OpenGL**
 + *More in future*
+
+### Supported architectures:
++ **64-bit (x64) only**
++ **Sharpheus will NOT support 32-bit (x86) architecture**
 
 ### How to use it
 + Clone this repo

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Logger.hpp"
-#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/rotating_file_sink.h>
 
 
 namespace Sharpheus {
@@ -11,12 +11,12 @@ namespace Sharpheus {
 
 	void Logger::Init()
 	{
-		spdlog::set_pattern("%^[%T] %n: %v%$");
+		spdlog::set_pattern("%^[%T] %n %l: %v%$");
 
-		engineLogger = spdlog::stdout_color_mt("ENGINE");
+		engineLogger = spdlog::rotating_logger_mt("ENGINE", "../logs/engine.log", 5000000, 3);
 		engineLogger->set_level(spdlog::level::trace);
 
-		editorLogger = spdlog::stdout_color_mt("EDITOR");
+		editorLogger = spdlog::rotating_logger_mt("EDITOR", "../logs/editor.log", 5000000, 3);
 		editorLogger->set_level(spdlog::level::trace);
 
 		SPH_INFO("Loggers initialized!");

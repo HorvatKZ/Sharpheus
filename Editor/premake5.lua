@@ -20,7 +20,8 @@ project "Editor"
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS",
-		"_UNICODE"
+		"_UNICODE",
+		"GLEW_STATIC"
 	}
 
 	includedirs
@@ -28,13 +29,17 @@ project "Editor"
         "src",
 		"%{wks.location}/Engine/src",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.wxWidgets}"
 	}
 
 	links
 	{
-		"Engine"
+		"Engine",
+		"GLEW",
+		"opengl32.lib",
+		"Glu32.lib"
 	}
 
 

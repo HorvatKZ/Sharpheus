@@ -8,8 +8,10 @@
 **.dll
 **.exp
 **.ilk
+**.pch
 
 # Logs
+/logs
 **.log
 **.tlog
 **.lastbuildstate

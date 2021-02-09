@@ -12,3 +12,6 @@
 
 // wxWidgets
 #include <wx/wx.h>
+
+// Editor
+#include "editor_macros.h"

@@ -9,6 +9,9 @@ namespace Sharpheus {
 
 	OpenGL_Renderer::OpenGL_Renderer()
 	{
+		GLenum err = glewInit();
+		SPH_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
+
 		Subscribe<WindowResizedEvent>(SPH_BIND(OpenGL_Renderer::ScreenResized));
 		SPH_INFO("OpenGL renderer created");
 	}

@@ -13,7 +13,7 @@
 
 // Logs
 #define SPH_LOG(...) ::Sharpheus::Logger::GetEngineLogger()->trace(__VA_ARGS__)
-#define SPH_INFO(...) ::Sharpheus::Logger::GetEngineLogger()->info(__VA_ARGS__)
+#define SPH_INFO(...) ::Sharpheus::Logger::GetEngineLogger()->info( __VA_ARGS__)
 #define SPH_WARN(...) ::Sharpheus::Logger::GetEngineLogger()->warn(__VA_ARGS__)
 #define SPH_ERROR(...) ::Sharpheus::Logger::GetEngineLogger()->error(__VA_ARGS__)
 #define SPH_FATAL(...) ::Sharpheus::Logger::GetEngineLogger()->critical(__VA_ARGS__)

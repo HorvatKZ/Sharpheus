@@ -1,7 +1,7 @@
 #pragma once
 
 #include "editor_pch.h"
-#include "EditorWindow.hpp"
+#include "EditorWindow/EditorWindow.hpp"
 
 
 namespace Sharpheus {

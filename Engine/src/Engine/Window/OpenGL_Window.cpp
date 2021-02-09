@@ -24,8 +24,6 @@ namespace Sharpheus {
 		SPH_INFO("Window created: {0}x{1}({2})", props.width, props.height, props.fullscreen ? "Fullscreen" : "Windowed");
 		glfwMakeContextCurrent(win);
 
-		success = glewInit();
-		SPH_ASSERT(success == 0, "Error during GLEW initialization!");
 		Renderer::Init();
 
 		glfwSetWindowUserPointer(win, &callback);

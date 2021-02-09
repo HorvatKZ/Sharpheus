@@ -14,8 +14,7 @@ namespace Sharpheus {
 		void Tick(float deltaTime);
 		void Render();
 
-		void Attach(const std::string& parentName, class GameObject* newObject);
-		void Attach(class GameObject* parent, class GameObject* newObject);
+		void Attach(class GameObject* newObject);
 		void Detach(class GameObject* parent);
 
 		inline class GameObject* GetGameObject(const std::string& name) {
