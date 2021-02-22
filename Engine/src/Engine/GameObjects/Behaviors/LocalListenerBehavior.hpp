@@ -7,10 +7,10 @@
 
 namespace Sharpheus {
 
-	class LocalListenerBehavior : public Behavior
+	class SPH_EXPORT LocalListenerBehavior : public Behavior
 	{
 	public:
-		LocalListenerBehavior(GameObject* parent, const std::string& name, const Transform& trafo = Transform()) : Behavior(parent, name, trafo) {}
+		LocalListenerBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name) {}
 		virtual ~LocalListenerBehavior() {
 			for (auto it = subscribedColliders.begin(); it != subscribedColliders.end(); ++it) {
 				(*it).second->UnSubscribeCollision(listenerID);
@@ -33,11 +33,7 @@ namespace Sharpheus {
 			if (it != subscribedColliders.end()) subscribedColliders.erase(it);
 		}
 
-		SPH_DECL_GAMEOBJECT(LocalListenerBehavior);
-
 	protected:
 		std::unordered_map<ID, Collider*> subscribedColliders;
-
-		virtual void RenderThis() override {}
 	};
 }

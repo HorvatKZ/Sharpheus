@@ -7,7 +7,7 @@
 class PlayerController : public Sharpheus::LocalListenerBehavior
 {
 public:
-	PlayerController(GameObject* parent, const std::string& name, float jumpForce, float speed);
+	PlayerController(GameObject* parent, const std::string& name);
 	virtual ~PlayerController();
 
 	void OnKeyPressed(const Sharpheus::KeyPressedEvent& e);
@@ -15,10 +15,15 @@ public:
 	void OnKeyReleased(const Sharpheus::KeyReleasedEvent& e);
 	void OnCollision(const Sharpheus::CollisionEvent& e);
 
+	inline float GetJumpForce() { return jumpForce; }
+	inline float GetSpeed() { return speed; }
+	inline void SetJumpForce(float jumpForce) { this->jumpForce = jumpForce; }
+	inline void SetSpeed(float speed) { this->speed = speed; }
+
 protected:
-	float jumpForce, speed;
+	float jumpForce = 0.f, speed = 0.f;
 	bool canJump = false;
 
-	void TickThis(float deltaTime) override;
+	void Tick(float deltaTime) override;
 };
 

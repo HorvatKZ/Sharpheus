@@ -6,3 +6,4 @@
 #include "Colliders/BoxCollider.hpp"
 #include "Colliders/PhysicsObject.hpp"
 #include "Behaviors/Behavior.hpp"
+#include "Behaviors/LocalListenerBehavior.hpp"

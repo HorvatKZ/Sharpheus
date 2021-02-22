@@ -32,15 +32,20 @@ namespace Sharpheus {
 	}
 
 
-	void Renderer::DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown)
+	void Renderer::DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint)
 	{
-		renderer->DrawQuad(leftUp, rightUp, rightDown, leftDown);
+		renderer->DrawQuad(leftUp, rightUp, rightDown, leftDown, tint);
 	}
 
 	void Renderer::DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
 		const Point& leftDown, const Color& color)
 	{
 		renderer->DrawMonocromeQuad(leftUp, rightUp, rightDown, leftDown, color);
+	}
+
+	inline Camera* Renderer::GetCamera()
+	{
+		return renderer->GetCamera();
 	}
 
 	void Renderer::SetCamera(class Camera* camera)

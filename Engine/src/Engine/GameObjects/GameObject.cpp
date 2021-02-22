@@ -1,10 +1,16 @@
 #include "pch.h"
 #include "GameObject.hpp"
+#include "Engine/Level.hpp"
+#include "Engine/ResourceManager/ResourceManager.hpp"
 
 
 namespace Sharpheus {
 
-	GameObject::GameObject(GameObject* parent, const std::string& name, const Transform& trafo) : parent(parent), name(name), trafo(trafo)
+	float GameObject::selectCircleRadius = 20.f;
+	Color GameObject::selectColor(255, 255, 0, 128);
+
+
+	GameObject::GameObject(GameObject* parent, const std::string& name) : parent(parent), name(name)
 	{
 		if (parent != nullptr) {
 			parent->AddChild(this);
@@ -16,29 +22,44 @@ namespace Sharpheus {
 
 	GameObject::~GameObject()
 	{
-		for (GameObject* child : children) {
-			delete child;
+		while (!children.empty()) {
+			delete children[0];
+		}
+
+		if (parent != nullptr) {
+			parent->RemoveChild(this);
+		}
+
+		if (level != nullptr) {
+			level->Deregister(this);
 		}
 	}
 
 
-	void GameObject::Tick(float deltaTime)
+	void GameObject::TickAll(float deltaTime)
 	{
-		TickThis(deltaTime);
+		Tick(deltaTime);
 
 		for (GameObject* child : children) {
-			child->Tick(deltaTime);
+			child->TickAll(deltaTime);
 		}
 	}
 
 
-	void GameObject::Render()
+	void GameObject::RenderAll()
 	{
-		RenderThis();
+		Render();
 		
 		for (GameObject* child : children) {
-			child->Render();
+			child->RenderAll();
 		}
+	}
+
+
+	void GameObject::RenderAsSelected()
+	{
+		Render();
+		RenderSelection();
 	}
 
 
@@ -61,6 +82,11 @@ namespace Sharpheus {
 		}
 	}
 
+	bool GameObject::IsSelected(const Point& pos)
+	{
+		return (pos - worldTrafo.pos).Length() <= selectCircleRadius;
+	}
+
 
 	GameObject* GameObject::GetRoot()
 	{
@@ -73,6 +99,21 @@ namespace Sharpheus {
 		return root;
 	}
 
+	void GameObject::Move(GameObject* newParent)
+	{
+		if (parent == nullptr) {
+			SPH_ERROR("Cannot move root GameObject");
+			return;
+		}
+
+		if (newParent == nullptr) {
+			SPH_ERROR("Cannot move GameObject to null parent");
+			return;
+		}
+
+		parent->RemoveChild(this);
+		newParent->AddChild(this);
+	}
 
 	void GameObject::SetTrafo(const Transform& trafo)
 	{
@@ -101,6 +142,48 @@ namespace Sharpheus {
 		}
 
 		return nullptr;
+	}
+
+
+	void GameObject::SetName(const std::string& name)
+	{
+		this->name = level->RenameGameObject(this, name);
+	}
+
+
+	bool GameObject::IsParentOfCurrentCamera()
+	{
+		if (IsCurrentCamera()) {
+			return true;
+		}
+
+		uint32_t i = 0;
+		while (i < children.size() && !children[i]->IsParentOfCurrentCamera()) {
+			++i;
+		}
+
+		return i < children.size();
+	}
+
+	GameObject* GameObject::GetUpperMostSelected(const Point& pos)
+	{
+		int32_t i = children.size() - 1;
+		while (i >= 0) {
+			GameObject* childSelected = children[i]->GetUpperMostSelected(pos);
+			if (childSelected != nullptr) {
+				return childSelected;
+			}
+			--i;
+		}
+
+		return IsSelected(pos) ? this : nullptr;
+	}
+
+
+	void GameObject::RenderSelection()
+	{
+		ResourceManager::GetCicrle()->Render(worldTrafo.pos + Point(-selectCircleRadius, -selectCircleRadius), worldTrafo.pos + Point(selectCircleRadius, -selectCircleRadius),
+			worldTrafo.pos + Point(selectCircleRadius, selectCircleRadius), worldTrafo.pos + Point(-selectCircleRadius, selectCircleRadius), selectColor);
 	}
 
 

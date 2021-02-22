@@ -23,6 +23,6 @@ DebugBehavior::~DebugBehavior()
 {
 }
 
-void DebugBehavior::TickThis(float deltaTime)
+void DebugBehavior::Tick(float deltaTime)
 {
 }

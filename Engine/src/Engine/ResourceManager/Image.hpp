@@ -9,7 +9,7 @@
 
 namespace Sharpheus {
 
-	class Image
+	class SPH_EXPORT Image
 	{
 	public:
 		Image(const std::string& path, bool filtered = false);
@@ -17,9 +17,9 @@ namespace Sharpheus {
 
 		int GetWidth();
 		int GetHeight();
-		std::string GetPath();
+		const std::string& GetPath();
 
-		void Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown);
+		void Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint = Color::White);
 
 	private:
 		GLuint ID = TEXTURE_ID_NONE;

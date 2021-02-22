@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	class CollisionSystem
+	class SPH_EXPORT CollisionSystem
 	{
 	public:
 		static void Init();
@@ -18,6 +18,7 @@ namespace Sharpheus {
 
 		static void ShowColliders();
 		static void HideColliders();
+		static bool AreCollidersVisible();
 
 	private:
 		static std::vector<class Collider*> colliders;

@@ -11,8 +11,6 @@ namespace Sharpheus {
 	{
 		GLenum err = glewInit();
 		SPH_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
-
-		Subscribe<WindowResizedEvent>(SPH_BIND(OpenGL_Renderer::ScreenResized));
 		SPH_INFO("OpenGL renderer created");
 	}
 
@@ -24,7 +22,9 @@ namespace Sharpheus {
 
 	void OpenGL_Renderer::StartFrame()
 	{
-		glClearColor(0, 0, 0.2, 1.0);
+		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
+
+		glClearColor(0.125f, 0.25f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glEnable(GL_TEXTURE_2D);   // textures
@@ -33,7 +33,7 @@ namespace Sharpheus {
 		glDisable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glViewport(0, 0, screenWidth, screenHeight);
+		glViewport(0, 0, camera->GetWidth(), camera->GetHeight());
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 	}
@@ -44,7 +44,7 @@ namespace Sharpheus {
 	}
 
 
-	void OpenGL_Renderer::DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown)
+	void OpenGL_Renderer::DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint)
 	{
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 
@@ -54,6 +54,8 @@ namespace Sharpheus {
 		Point posRightUp = camera->Project(rightUp);
 		Point posRightDown = camera->Project(rightDown);
 		Point posLeftDown = camera->Project(leftDown);
+
+		glColor4f(tint.GetRed(), tint.GetGreen(), tint.GetBlue(), tint.GetAlpha());
 
 		glTexCoord2f(0.f, 0.f);
 		glVertex2f(posLeftUp.x, posLeftUp.y);
@@ -93,13 +95,6 @@ namespace Sharpheus {
 
 		glEnd();
 		glEnable(GL_TEXTURE_2D);
-	}
-
-
-	void OpenGL_Renderer::ScreenResized(const WindowResizedEvent& e)
-	{
-		screenWidth = e.newWidth;
-		screenHeight = e.newHeight;
 	}
 
 }

@@ -193,6 +193,21 @@ namespace Sharpheus {
 	}
 
 
+	bool Point::IsBelow(const Point& secBegin, const Point& secEnd, const Point& point)
+	{
+		if (secBegin.x == secEnd.x) { // vertical
+			return point.x > secBegin.x;
+		}
+		if (secBegin.y == secEnd.y) { // horizontal
+			return point.y > secBegin.y;
+		}
+
+		float secSlope = (secEnd.y - secBegin.y) / (secEnd.x - secBegin.x);
+		float secOffset = secBegin.y - secBegin.x * secSlope;
+		return secSlope * point.x + secOffset > point.y;
+	}
+
+
 	Point operator*(float lhs, const Point& rhs)
 	{
 		return Point(lhs * rhs.x, lhs * rhs.y);

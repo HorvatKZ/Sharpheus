@@ -13,5 +13,10 @@
 // wxWidgets
 #include <wx/wx.h>
 
+#ifdef __WXMSW__
+	#include <wx/msw/msvcrt.h>
+#endif
+
 // Editor
 #include "editor_macros.h"
+#include "Editor/CommonUtils.hpp"

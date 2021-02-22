@@ -5,10 +5,10 @@
 
 namespace Sharpheus {
 
-	Color Collider::shapeColor = Color(0, 255, 0, 127);
+	Color Collider::shapeColor = Color(0, 255, 64, 127);
 
 
-	Collider::Collider(GameObject* parent, const std::string& name, const Transform& trafo) : GameObject(parent, name, trafo)
+	Collider::Collider(GameObject* parent, const std::string& name, bool useRect) : RectGameObject(parent, name, useRect)
 	{
 		prevPos = worldTrafo.pos;
 		CollisionSystem::AddCollider(this);
@@ -29,11 +29,11 @@ namespace Sharpheus {
 		prevPos = worldTrafo.pos;
 	}
 
-	void Collider::TickThis(float deltaTime)
+	void Collider::Tick(float deltaTime)
 	{
 	}
 
-	void Collider::RenderThis()
+	void Collider::Render()
 	{
 		if (visible) {
 			RenderShape();

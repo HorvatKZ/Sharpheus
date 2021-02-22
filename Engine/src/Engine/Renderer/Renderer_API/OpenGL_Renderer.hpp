@@ -15,11 +15,9 @@ namespace Sharpheus {
 		void StartFrame() override;
 		void EndFrame() override;
 
-		void DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown) override;
+		void DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint) override;
 		void DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
 			const Point& leftDown, const Color& color) override;
-
-		void ScreenResized(const WindowResizedEvent& e);
 
 	private:
 		float screenWidth, screenHeight;

@@ -73,4 +73,9 @@ namespace Sharpheus {
 			collider->Hide();
 		}
 	}
+
+	bool CollisionSystem::AreCollidersVisible()
+	{
+		return areCollidersVisible;
+	}
 }

@@ -5,43 +5,41 @@
 
 namespace Sharpheus {
 
-	Sprite::Sprite(GameObject* parent, const std::string& name, const Transform& trafo, const std::string& imagePath) :
-		GameObject(parent, name, trafo), image(ResourceManager::GetImage(imagePath, true)) {}
+	ClassInfo Sprite::classInfo("Sprite", "sprite.png", {
+		new ImageProvider<Sprite>("Image", SPH_BIND_GETTER(Sprite::GetImage), SPH_BIND_SETTER(Sprite::SetImage), SPH_BIND_3(Sprite::SetImageFromPath)),
+		new ColorProvider<Sprite>("Tint", SPH_BIND_GETTER(Sprite::GetTint), SPH_BIND_SETTER(Sprite::SetTint))
+	});
 
-	Sprite::Sprite(GameObject* parent, const std::string& name, const Transform& trafo, Image* image) :
-		GameObject(parent, name, trafo), image(image) {}
+
+	Sprite::Sprite(GameObject* parent, const std::string& name) :
+		RectGameObject(parent, name) {}
 
 
-	void Sprite::SetTrafo(const Transform& trafo)
+	void Sprite::SetImageFromPath(const std::string& path, bool filtered)
 	{
-		needToRecalcOffset = needToRecalcOffset || (this->trafo.scale != trafo.scale || this->trafo.rot != trafo.rot);
-		GameObject::SetTrafo(trafo);
+		image = ResourceManager::GetImage(path, filtered);
+		needToRecalcOffset = true;
 	}
 
 
-	void Sprite::TickThis(float deltaTime) {}
+	void Sprite::Tick(float deltaTime) {}
 
 
-	void Sprite::RenderThis()
+	void Sprite::Render()
 	{
-		if (needToRecalcOffset) {
-			uint32_t imgWidth = image->GetWidth();
-			uint32_t imgHeight = image->GetHeight();
-			offset = Point(imgWidth * worldTrafo.scale.x / 2, imgHeight * worldTrafo.scale.y / 2).Rotate(worldTrafo.rot);
-			secondaryOffset = Point(-(imgWidth * worldTrafo.scale.x / 2), imgHeight * worldTrafo.scale.y / 2).Rotate(worldTrafo.rot);
-			needToRecalcOffset = false;
+		if (image != nullptr) {
+			if (needToRecalcOffset) {
+				RecalcOffsets();
+			}
+
+			image->Render(worldTrafo.pos + offsets[0], worldTrafo.pos + offsets[1], worldTrafo.pos + offsets[2],
+				worldTrafo.pos + offsets[3], tint);
 		}
-		
-		image->Render(worldTrafo.pos - offset, worldTrafo.pos - secondaryOffset, worldTrafo.pos + offset, worldTrafo.pos + secondaryOffset);
 	}
 
 
-	void Sprite::UpdateWorldTrafo(const Transform& parentWorldTrafo)
+	void Sprite::RecalcOffsets()
 	{
-		Point prevScale = worldTrafo.scale;
-		float prevRot = worldTrafo.rot;
-		GameObject::UpdateWorldTrafo(parentWorldTrafo);
-		needToRecalcOffset = needToRecalcOffset || (prevScale != worldTrafo.scale || prevRot != worldTrafo.rot);
+		RecalcOffsetsCommon(image->GetWidth() * worldTrafo.scale.x, image->GetHeight() * worldTrafo.scale.y, worldTrafo.rot);
 	}
-
 }

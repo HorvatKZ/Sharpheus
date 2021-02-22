@@ -57,6 +57,11 @@ project "Engine"
 		runtime "Debug"
 		symbols "on"
 
+		defines 
+		{
+			"_CRTDBG_MAP_ALLOC"
+		}
+
 	filter "configurations:Release"
 		defines "SPH_RELEASE"
 		runtime "Release"

@@ -7,11 +7,18 @@
 
 namespace Sharpheus {
 
-	BoxCollider::BoxCollider(GameObject* parent, const std::string& name, const Transform& trafo, float width, float height)
-		: Collider(parent, name, trafo), width(width), height(height)
+	ClassInfo BoxCollider::classInfo("BoxCollider", "boxcollider.png", {
+		new UFloatProvider<BoxCollider>("Width", SPH_BIND_GETTER(BoxCollider::GetWidth), SPH_BIND_SETTER(BoxCollider::SetWidth)),
+		new UFloatProvider<BoxCollider>("Height", SPH_BIND_GETTER(BoxCollider::GetHeight), SPH_BIND_SETTER(BoxCollider::SetHeight))
+	});
+
+
+	BoxCollider::BoxCollider(GameObject* parent, const std::string& name)
+		: Collider(parent, name, true)
 	{
-		UpdateCorners();
+		RecalcOffsets();
 	}
+
 
 	BoxCollider::~BoxCollider()
 	{
@@ -32,13 +39,13 @@ namespace Sharpheus {
 				while (i < 4) {
 					uint32_t j = 0;
 					while (j < 4) {
-						if (Point::DoSectionsIntersect(worldTrafo.pos + cornersOffsets[i], worldTrafo.pos + cornersOffsets[(i + 1) % 4],
-							otherBox->worldTrafo.pos + otherBox->cornersOffsets[j], otherBox->worldTrafo.pos + otherBox->cornersOffsets[(j + 1) % 4])) {
+						if (Point::DoSectionsIntersect(worldTrafo.pos + offsets[i], worldTrafo.pos + offsets[(i + 1) % 4],
+							otherBox->worldTrafo.pos + otherBox->offsets[j], otherBox->worldTrafo.pos + otherBox->offsets[(j + 1) % 4])) {
 							return {
-								Point::GetNormalVectorToward(worldTrafo.pos + cornersOffsets[i],
-									worldTrafo.pos + cornersOffsets[(i + 1) % 4], otherBox->prevPos),
-								Point::GetNormalVectorToward(otherBox->worldTrafo.pos + otherBox->cornersOffsets[j],
-									otherBox->worldTrafo.pos + otherBox->cornersOffsets[(j + 1) % 4], prevPos)
+								Point::GetNormalVectorToward(worldTrafo.pos + offsets[i],
+									worldTrafo.pos + offsets[(i + 1) % 4], otherBox->prevPos),
+								Point::GetNormalVectorToward(otherBox->worldTrafo.pos + otherBox->offsets[j],
+									otherBox->worldTrafo.pos + otherBox->offsets[(j + 1) % 4], prevPos)
 								};
 						}
 						++j;
@@ -78,42 +85,38 @@ namespace Sharpheus {
 	}
 
 
-	void BoxCollider::SetTrafo(const Transform& trafo)
+	void BoxCollider::RenderSelection()
 	{
-		needsToUpdateCorners = needsToUpdateCorners || (this->trafo.scale != trafo.scale || this->trafo.rot != trafo.rot);
-		GameObject::SetTrafo(trafo);
+		if (needToRecalcOffset) {
+			RecalcOffsets();
+		}
+
+		RectGameObject::RenderSelection();
 	}
 
 
-	void BoxCollider::TickThis(float deltaTime)
+	void BoxCollider::RecalcOffsets()
 	{
-		if (needsToUpdateCorners) {
-			UpdateCorners();
+		RecalcOffsetsCommon(width * worldTrafo.scale.x, height * worldTrafo.scale.y, worldTrafo.rot);
+		radius = offsets[0].Length();
+	}
+
+
+	void BoxCollider::Tick(float deltaTime)
+	{
+		if (needToRecalcOffset) {
+			RecalcOffsets();
 		}
 	}
 
 	void BoxCollider::RenderShape()
 	{
-		Renderer::DrawMonocromeQuad(worldTrafo.pos + cornersOffsets[0], worldTrafo.pos + cornersOffsets[1],
-			worldTrafo.pos + cornersOffsets[2], worldTrafo.pos + cornersOffsets[3], shapeColor);
+		if (needToRecalcOffset) {
+			RecalcOffsets();
+		}
+
+		Renderer::DrawMonocromeQuad(worldTrafo.pos + offsets[0], worldTrafo.pos + offsets[1],
+			worldTrafo.pos + offsets[2], worldTrafo.pos + offsets[3], shapeColor);
 	}
 
-	void BoxCollider::UpdateWorldTrafo(const Transform& parentWorldTrafo)
-	{
-		Point prevScale = worldTrafo.scale;
-		float prevRot = worldTrafo.rot;
-		GameObject::UpdateWorldTrafo(parentWorldTrafo);
-		needsToUpdateCorners = needsToUpdateCorners || (prevScale != worldTrafo.scale || prevRot != worldTrafo.rot);
-	}
-
-
-	void BoxCollider::UpdateCorners()
-	{
-		cornersOffsets[0] = Point(width * worldTrafo.scale.x / 2, height * worldTrafo.scale.y / 2).Rotate(worldTrafo.rot);
-		cornersOffsets[1] = Point(-width * worldTrafo.scale.x / 2, height * worldTrafo.scale.y / 2).Rotate(worldTrafo.rot);
-		cornersOffsets[2] = -1 * cornersOffsets[0];
-		cornersOffsets[3] = -1 * cornersOffsets[1];
-		radius = cornersOffsets[0].Length();
-		needsToUpdateCorners = false;
-	}
 }

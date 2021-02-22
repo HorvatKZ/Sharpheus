@@ -12,27 +12,44 @@ namespace Sharpheus {
 	{
 		CollisionSystem::Init();
 
+		
 		root = new Collection(nullptr, name);
+		gameObjects[name] = root;
+		root->SetLevel(this);
+
+		Camera* camera = Create<Camera>(root, "Camera");
+		//camera->SetUpRect(1280, 720);
+		camera->SetCurrent();
 
 		// For testing
-		PhysicsObject* player = new PhysicsObject(root, "Player", { { 0, 0 }, {1, 1}, 0 });
+		PhysicsObject* player = Create<PhysicsObject>(root, "Player");
 		player->SetGravity(500);
-		new Sprite(player, "Sprite", { { 0, 0 }, {3, 3}, 0 }, "../Assets/Testing/test.png");
-		new BoxCollider(player, "Box", { { 0, 0 }, {3, 3}, 0 }, 20, 32);
-		new PlayerController(player, "Controller", 200, 200);
-		Attach(player);
 
-		Sprite* ground = new Sprite(root, "Sprite2", { { 0, 300 }, {1, .1}, 0 }, "../Assets/Branding/sharpheus_promo.png");
-		new BoxCollider(ground, "GroundBox1", { {0, 0}, {1, 1}, 0 }, 800, 600);
-		new BoxCollider(ground, "GroundBox2", { {-400, 0}, {1, 1}, 0 }, 60, 5000);
-		new BoxCollider(ground, "GroundBox3", { {400, 0}, {1, 1}, 0 }, 60, 5000);
-		Attach(ground);
+		Sprite* playerSprite = Create<Sprite>(player, "Sprite");
+		playerSprite->SetTrafo({ { 0, 0 }, {3, 3}, 0 });
+		playerSprite->SetImageFromPath("../Assets/Testing/test.png", false);
 
-		Attach(new DebugBehavior(root, "Debug"));
+		BoxCollider* playerCol = Create<BoxCollider>(player, "Box");
+		playerCol->SetTrafo({ { 0, 0 }, {3, 3}, 0 });
+		playerCol->SetRect(20, 32);
 
-		Camera* cam = new Camera(root, "Camera", { { 0, 0 }, {1, 1}, 0 }, 1280, 720);
-		cam->SetCurrent();
-		Attach(cam);
+		Create<PlayerController>(player, "Controller");
+
+		Sprite* ground = Create<Sprite>(root, "Sprite2");
+		ground->SetTrafo({ { 0, 300 }, {1, .1}, 0 });
+		ground->SetImageFromPath("../Assets/Branding/sharpheus_promo.png", true);
+
+		BoxCollider* box1 = Create<BoxCollider>(ground, "GroundBox1");
+		box1->SetTrafo({ {0, 0}, {1, 1}, 0 });
+		box1->SetRect(800, 600);
+		BoxCollider* box2 = Create<BoxCollider>(ground, "GroundBox2");
+		box2->SetTrafo({{-400, 0}, {1, 1}, 0 });
+		box2->SetRect(60, 5000);
+		BoxCollider* box3 = Create<BoxCollider>(ground, "GroundBox3");
+		box3->SetTrafo({ {400, 0}, {1, 1}, 0 });
+		box3->SetRect(60, 5000);
+
+		Create<DebugBehavior>(root, "Debug");
 	}
 
 
@@ -46,36 +63,35 @@ namespace Sharpheus {
 	void Level::Tick(float deltaTime)
 	{
 		CollisionSystem::Tick();
-		root->Tick(deltaTime);
+		root->TickAll(deltaTime);
 	}
 
 
 	void Level::Render()
 	{
-		root->Render();
+		root->RenderAll();
 	}
 
 
-	void Level::Attach(GameObject* newObject)
+	void Level::Delete(GameObject* obj)
 	{
-		SPH_ASSERT(newObject->GetParent() != nullptr, "Attempt to attach unparented GameObject \"{0}\" to \"{1}\"", newObject->GetName(), name);
-		RegisterWithUniqueName(newObject);
-		for (GameObject* child : newObject->GetChildren()) {
-			RegisterWithUniqueName(child);
-		}
+		delete obj;
 	}
 
 
-	void Level::Detach(GameObject* newObject)
+	std::string Level::RenameGameObject(GameObject* obj, const std::string& newName)
 	{
-		GameObject* parent = newObject->GetParent();
-		SPH_ASSERT("Attempt to detach parentless child \"{0}\"", newObject->GetName());
+		Deregister(obj);
+		std::string correctNewName = GenerateUniqueName(newName);
+		gameObjects[correctNewName] = obj;
+		return correctNewName;
+	}
 
-		parent->RemoveChild(newObject);
-		Deregister(newObject);
-		for (GameObject* child : newObject->GetChildren()) {
-			Deregister(child);
-		}
+
+	void Level::Move(GameObject* obj, GameObject* newParent)
+	{
+		SPH_ASSERT(obj != nullptr, "Tried to move null GameObject");
+		obj->Move(newParent);
 	}
 
 

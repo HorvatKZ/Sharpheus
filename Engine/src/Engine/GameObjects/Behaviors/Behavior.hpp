@@ -5,15 +5,15 @@
 
 namespace Sharpheus {
 
-	class Behavior : public GameObject
+	class SPH_EXPORT Behavior : public GameObject
 	{
 	public:
-		Behavior(GameObject* parent, const std::string& name, const Transform& trafo = Transform()) : GameObject(parent, name, trafo) {}
+		Behavior(GameObject* parent, const std::string& name) : GameObject(parent, name) {}
 		virtual ~Behavior() = default;
 
 		SPH_DECL_GAMEOBJECT(Behavior);
 
 	protected:
-		virtual void RenderThis() override {}
+		virtual void Render() override {}
 	};
 }

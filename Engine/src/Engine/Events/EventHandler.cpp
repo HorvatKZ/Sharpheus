@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "EventHandler.hpp"
 
-
 namespace Sharpheus {
 
 	std::unordered_map<ID, WindowClosedEventFunc> EventHandler::windowClosedListeners;

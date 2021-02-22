@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../GameObject.hpp"
+#include "../RectGameObject.hpp"
 
 
 namespace Sharpheus {
@@ -11,10 +11,10 @@ namespace Sharpheus {
 	SPH_DEF_EVENT_FUNC(LocalSourceDestroyedEvent);
 
 
-	class SPH_EXPORT Collider : public GameObject
+	class SPH_EXPORT Collider : public RectGameObject
 	{
 	public:
-		Collider(GameObject* parent, const std::string& name, const Transform& trafo);
+		Collider(GameObject* parent, const std::string& name, bool useRect = false);
 		virtual ~Collider();
 
 		virtual std::pair<Point, Point> CalcCollision(Collider* other) = 0;
@@ -41,14 +41,14 @@ namespace Sharpheus {
 
 	protected:
 		Point prevPos;
-		bool visible;
-		float radius;
+		bool visible = false;
+		float radius = 0.f;
 		std::unordered_map<ID, std::pair<CollisionEventFunc, LocalSourceDestroyedEventFunc>> subscribers;
 
 		static Color shapeColor;
 
-		virtual void TickThis(float deltaTime) override;
-		virtual void RenderThis() override;
+		virtual void Tick(float deltaTime) override;
+		virtual void Render() override;
 		virtual void RenderShape() = 0;
 	};
 

@@ -14,10 +14,7 @@ namespace Sharpheus {
 		EventListener();
 		virtual ~EventListener();
 		
-		EventListener(EventListener& other);
-		EventListener& operator=(EventListener& other);
-		EventListener(EventListener&& other) noexcept;
-		EventListener& operator=(EventListener&& other) noexcept;
+		EventListener(const EventListener& other);
 
 		inline ID GetID() { return listenerID; }
 		

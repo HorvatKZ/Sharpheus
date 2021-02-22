@@ -4,12 +4,12 @@
 
 namespace Sharpheus {
 
-	class PhysicsObject : public GameObject
+	class SPH_EXPORT PhysicsObject : public GameObject
 	{
 		friend class Collider;
 
 	public:
-		PhysicsObject(GameObject* parent, const std::string& name, const Transform& trafo);
+		PhysicsObject(GameObject* parent, const std::string& name);
 		virtual ~PhysicsObject() = default;
 
 		inline Point& GetVelocity() { return velocity; }
@@ -34,8 +34,8 @@ namespace Sharpheus {
 		float mass = 1.f;
 		float gravity = 1.f;
 
-		virtual void TickThis(float deltaTime) override;
-		virtual void RenderThis() override;
+		virtual void Tick(float deltaTime) override;
+		virtual void Render() override;
 	};
 
 }

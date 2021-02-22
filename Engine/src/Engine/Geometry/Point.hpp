@@ -34,7 +34,7 @@ namespace Sharpheus {
 		glm::vec2		ToVec2() const;
 
 		Point			Rotate(float angle) const;
-		float			GetAngle(const Point& other) const;
+		float			GetAngle(const Point& other = Right) const;
 
 		static Point Zero;
 		static Point Up;
@@ -44,6 +44,7 @@ namespace Sharpheus {
 
 		static bool DoSectionsIntersect(const Point& sec1begin, const Point& sec1end, const Point& sec2begin, const Point& sec2end);
 		static Point GetNormalVectorToward(const Point& secBegin, const Point& secEnd, const Point& toward);
+		static bool IsBelow(const Point& secBegin, const Point& secEnd, const Point& point);
 	};
 
 }

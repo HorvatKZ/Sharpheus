@@ -6,8 +6,8 @@
 using namespace Sharpheus;
 
 
-PlayerController::PlayerController(GameObject* parent, const std::string& name, float jumpForce, float speed)
-	: LocalListenerBehavior(parent, name), jumpForce(jumpForce), speed(speed)
+PlayerController::PlayerController(GameObject* parent, const std::string& name)
+	: LocalListenerBehavior(parent, name)
 {
 	SPH_ASSERT(parent->GetType() == Type::PhysicsObject, "Parent \"{0}\" is not a PhysicsObject", parent->GetName());
 	Subscribe<KeyPressedEvent>(SPH_BIND(PlayerController::OnKeyPressed));
@@ -72,6 +72,6 @@ void PlayerController::OnCollision(const Sharpheus::CollisionEvent& e)
 }
 
 
-void PlayerController::TickThis(float deltaTime)
+void PlayerController::Tick(float deltaTime)
 {
 }

@@ -2,7 +2,7 @@ project "Editor"
 	kind "WindowedApp"
     language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir (bindir)
 	objdir (bintempdir)
@@ -70,7 +70,8 @@ project "Editor"
 
 		defines
 		{
-			"__WXDEBUG__"
+			"__WXDEBUG__",
+			"_CRTDBG_MAP_ALLOC"
 		}
 
 

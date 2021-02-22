@@ -10,6 +10,6 @@ public:
 	virtual ~DebugBehavior();
 
 protected:
-	void TickThis(float deltaTime) override;
+	void Tick(float deltaTime) override;
 };
 

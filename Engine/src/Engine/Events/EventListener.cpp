@@ -16,9 +16,6 @@ namespace Sharpheus {
 		}
 	}
 
-	EventListener::EventListener(EventListener& /*other*/) : listenerID(nextFreeID++), subscribedNum(0) {}
-	EventListener& EventListener::operator=(EventListener& other) { *this = other; return *this; }
-	EventListener::EventListener(EventListener&& other) noexcept : listenerID(other.listenerID) { other.listenerID = 0; }
-	EventListener& EventListener::operator=(EventListener&& other) noexcept { *this = std::move(other); return *this; }
+	EventListener::EventListener(const EventListener& /*other*/) : listenerID(nextFreeID++), subscribedNum(0) {}
 
 }

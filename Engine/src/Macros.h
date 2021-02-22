@@ -7,8 +7,20 @@
 #endif
 
 
-#define SPH_BIND(x) std::bind(&x, this, std::placeholders::_1)
-#define SPH_BIND_STATIC(x) std::bind(&x, std::placeholders::_1)
+// Binds
+#define SPH_BIND_0(x) std::bind(&x)
+#define SPH_BIND_1(x) std::bind(&x, std::placeholders::_1)
+#define SPH_BIND_2(x) std::bind(&x, std::placeholders::_1, std::placeholders::_2)
+#define SPH_BIND_3(x) std::bind(&x, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
+#define SPH_BIND_THIS_0(x) std::bind(&x, this)
+#define SPH_BIND_THIS_1(x) std::bind(&x, this, std::placeholders::_1)
+#define SPH_BIND_THIS_2(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2)
+#define SPH_BIND_THIS_3(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
+
+#define SPH_BIND(x) SPH_BIND_THIS_1(x)
+#define SPH_BIND_GETTER(x) SPH_BIND_1(x)
+#define SPH_BIND_SETTER(x) SPH_BIND_2(x)
+#define SPH_BIND_STATIC(x) SPH_BIND_1(x)
 
 
 // Logs

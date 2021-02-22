@@ -32,16 +32,16 @@ namespace Sharpheus {
 	}
 
 
-	std::string Image::GetPath()
+	const std::string& Image::GetPath()
 	{
 		return path;
 	}
 
 
-	void Image::Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown)
+	void Image::Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint)
 	{
 		glBindTexture(GL_TEXTURE_2D, ID);
-		Renderer::DrawQuad(leftUp, rightUp, rightDown, leftDown);
+		Renderer::DrawQuad(leftUp, rightUp, rightDown, leftDown, tint);
 	}
 
 
