@@ -2,6 +2,8 @@
 
 #include "Engine/Events/EventListener.hpp"
 #include "Engine/EditorInterface/ClassInfo.hpp"
+#include "Engine/FileUnits/FileLoader.hpp"
+#include "Engine/FileUnits/FileSaver.hpp"
 
 #define SPH_DECL_GAMEOBJECT(type) \
 	static ClassInfo classInfo; \
@@ -32,7 +34,7 @@ namespace Sharpheus {
 		void					RenderAll();
 		void					RenderAsSelected();
 
-		inline void				SetLevel(class Level* level) { this->level = level; }
+		virtual inline void		SetLevel(class Level* level) { this->level = level; }
 		inline GameObject*		GetParent() { return parent; }
 		GameObject*				GetRoot();
 		void					Move(GameObject* newParent);
@@ -53,6 +55,9 @@ namespace Sharpheus {
 		bool		IsParentOfCurrentCamera();
 		GameObject* GetUpperMostSelected(const Point& pos);
 
+		bool SaveAll(FileSaver& fs);
+		virtual bool Load(FileLoader& fl);
+
 	protected:
 		std::string name;
 		Transform trafo;
@@ -67,6 +72,8 @@ namespace Sharpheus {
 
 		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
+
+		virtual bool Save(FileSaver& file);
 
 		virtual bool IsSelected(const Point& pos);
 

@@ -9,13 +9,13 @@ using namespace Sharpheus;
 
 DebugBehavior::DebugBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name)
 {
-	Subscribe<KeyPressedEvent>([&](const KeyPressedEvent& e) {
+	/*Subscribe<KeyPressedEvent>([&](const KeyPressedEvent& e) {
 		if (e.code == KeyCode::E) CollisionSystem::ShowColliders();
 	});
 
 	Subscribe<KeyReleasedEvent>([&](const KeyReleasedEvent& e) {
 		if (e.code == KeyCode::E) CollisionSystem::HideColliders();
-	});
+	});*/
 }
 
 

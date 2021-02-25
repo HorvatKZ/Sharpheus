@@ -25,14 +25,17 @@ namespace Sharpheus {
 		Bind(wxEVT_TREE_END_DRAG, &LevelHierarchy::OnDragEnd, this);
 	}
 
+
 	LevelHierarchy::~LevelHierarchy()
 	{
 	}
+
 
 	void LevelHierarchy::BindCallbacks(std::function<void()>&& currChangedCallback)
 	{
 		this->currChangedCallback = std::move(currChangedCallback);
 	}
+
 
 	void LevelHierarchy::CreateNewGameObject(const std::string& name, GameObject::Type type)
 	{
@@ -70,12 +73,23 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void LevelHierarchy::FillWith(GameObject* root)
 	{
+		Clear();
+
 		wxTreeItemId rootID = AddRoot(root->GetName(), typeToIcon[root->GetType()]);
 		nameToId[root->GetName()] = rootID;
 		AddChildren(rootID, root);
 	}
+
+
+	void LevelHierarchy::Clear()
+	{
+		nameToId.clear();
+		DeleteAllItems();
+	}
+
 
 	void LevelHierarchy::CurrentChanged(GameObject* curr)
 	{
@@ -85,6 +99,7 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void LevelHierarchy::CurrentNameChanged(const std::string& oldName, const std::string& newName)
 	{
 		wxTreeItemId selected = GetSelection();
@@ -92,6 +107,7 @@ namespace Sharpheus {
 		nameToId[newName] = selected;
 		SetItemText(selected, newName);
 	}
+
 
 	void LevelHierarchy::AddChildren(wxTreeItemId parentID, GameObject* parent)
 	{
@@ -102,6 +118,7 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void LevelHierarchy::DeleteAllChildrenName(GameObject* parent)
 	{
 		for (GameObject* child : parent->GetChildren()) {
@@ -110,12 +127,14 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void LevelHierarchy::OnSelectionChange(wxTreeEvent& e)
 	{
 		wxTreeItemId selected = GetSelection();
 		EditorData::SetCurrent(wxStr2StdStr(GetItemText(selected)));
 		currChangedCallback();
 	}
+
 
 	void LevelHierarchy::OnKeyPress(wxKeyEvent& e)
 	{
@@ -146,6 +165,7 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void LevelHierarchy::OnDragBegin(wxTreeEvent& e)
 	{
 		dragTarget = EditorData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(e.GetItem())));
@@ -155,6 +175,7 @@ namespace Sharpheus {
 			e.Allow();
 		}
 	}
+
 
 	void LevelHierarchy::OnDragEnd(wxTreeEvent& e)
 	{

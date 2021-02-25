@@ -38,6 +38,25 @@ namespace Sharpheus {
 	}
 
 
+	bool Sprite::Save(FileSaver& fs)
+	{
+		GameObject::Save(fs);
+		fs.Write(image);
+		fs.Write(tint);
+		return fs.GetStatus();
+	}
+
+
+	bool Sprite::Load(FileLoader& fl)
+	{
+		GameObject::Load(fl);
+		fl.Read(&image);
+		fl.Read(tint);
+		needToRecalcOffset = true;
+		return fl.GetStatus();
+	}
+
+
 	void Sprite::RecalcOffsets()
 	{
 		RecalcOffsetsCommon(image->GetWidth() * worldTrafo.scale.x, image->GetHeight() * worldTrafo.scale.y, worldTrafo.rot);

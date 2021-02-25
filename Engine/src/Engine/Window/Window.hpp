@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	class Window
+	class SPH_EXPORT Window
 	{
 	public:
 		struct Props {

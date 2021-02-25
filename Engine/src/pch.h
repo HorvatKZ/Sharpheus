@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <fstream>
 
 // Engine
 #include "Macros.h"

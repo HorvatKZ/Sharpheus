@@ -26,7 +26,7 @@ namespace Sharpheus {
 			const Point& leftDown, const Color& color) = 0;
 
 	protected:
-		class Camera* camera = nullptr;
+		Camera* camera = nullptr;
 	};
 
 }

@@ -12,16 +12,9 @@ namespace Sharpheus {
 		GameBase();
 		virtual ~GameBase();
 
-		virtual void Run();
-		void Stop();
-		bool IsRunning();
-
 		virtual void WindowClosed(const WindowClosedEvent& e) = 0;
 
 	protected:
-		bool isRunning = true;
-		class Window* win;
-
 		Level* level;
 	};
 
@@ -32,7 +25,15 @@ namespace Sharpheus {
 		Game();
 		virtual ~Game();
 
+		virtual void Run();
+		void Stop();
+		bool IsRunning();
+
 		void WindowClosed(const WindowClosedEvent& e) override;
+
+	private:
+		bool isRunning = true;
+		class Window* win;
 	};
 
 }

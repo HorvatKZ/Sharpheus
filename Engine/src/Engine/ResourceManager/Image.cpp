@@ -20,24 +20,6 @@ namespace Sharpheus {
 	}
 
 
-	int Image::GetWidth()
-	{
-		return width;
-	}
-
-
-	int Image::GetHeight()
-	{
-		return height;
-	}
-
-
-	const std::string& Image::GetPath()
-	{
-		return path;
-	}
-
-
 	void Image::Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint)
 	{
 		glBindTexture(GL_TEXTURE_2D, ID);
@@ -53,7 +35,7 @@ namespace Sharpheus {
 		glActiveTexture(ID);
 
 		int channels;
-		unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		unsigned char* data = stbi_load(path.c_str(), (int*)&width, (int*)&height, &channels, 0);
 		if (data) {
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 			glTexImage2D(GL_TEXTURE_2D, 0, channels, width, height, 0, channels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);

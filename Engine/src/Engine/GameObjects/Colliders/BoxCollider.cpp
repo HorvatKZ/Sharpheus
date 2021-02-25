@@ -95,6 +95,25 @@ namespace Sharpheus {
 	}
 
 
+	bool BoxCollider::Save(FileSaver& fs)
+	{
+		GameObject::Save(fs);
+		fs.Write(width);
+		fs.Write(height);
+		return fs.GetStatus();
+	}
+
+
+	bool BoxCollider::Load(FileLoader& fl)
+	{
+		GameObject::Load(fl);
+		fl.Read(width);
+		fl.Read(height);
+		needToRecalcOffset = true;
+		return fl.GetStatus();
+	}
+
+
 	void BoxCollider::RecalcOffsets()
 	{
 		RecalcOffsetsCommon(width * worldTrafo.scale.x, height * worldTrafo.scale.y, worldTrafo.rot);

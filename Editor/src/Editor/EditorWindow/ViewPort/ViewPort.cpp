@@ -1,6 +1,7 @@
 #include "editor_pch.h"
 #include "ViewPort.hpp"
 #include "Editor/Registry/EditorData.hpp"
+#include "Editor/Registry/ProjectData.hpp"
 
 
 namespace Sharpheus {
@@ -17,7 +18,7 @@ namespace Sharpheus {
 		Renderer::Init();
 
 		camera = new Camera(nullptr, "ViewPort camera");
-		camera->SetUpRect(size.x, size.y);
+		camera->SetCustomRect(size.x, size.y);
 		editArrow = new EditingArrow(camera);
 
 		prevMousePos = wxGetMousePosition() - this->GetScreenPosition();
@@ -67,7 +68,7 @@ namespace Sharpheus {
 	void ViewPort::OnResize(wxSizeEvent& e)
 	{
 		wxSize size = GetSize();
-		camera->SetUpRect(size.x, size.y);
+		camera->SetCustomRect(size.x, size.y);
 	}
 
 

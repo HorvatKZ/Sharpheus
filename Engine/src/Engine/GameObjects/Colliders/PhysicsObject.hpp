@@ -27,12 +27,16 @@ namespace Sharpheus {
 		inline void SetMass(float mass) { this->mass = mass; }
 		inline void SetGravity(float gravity) { this->gravity = gravity; }
 
+		virtual bool Load(FileLoader& fl) override;
+
 		SPH_DECL_GAMEOBJECT(PhysicsObject)
 
 	protected:
 		Point velocity = Point(0, 0);
 		float mass = 1.f;
 		float gravity = 1.f;
+
+		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
 		virtual void Render() override;

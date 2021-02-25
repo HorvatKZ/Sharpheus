@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "GameObjects/GameObjects.h"
+#include "CollisionSystem/CollisionSystem.hpp"
 
 
 namespace Sharpheus {
@@ -9,6 +10,7 @@ namespace Sharpheus {
 	class SPH_EXPORT Level
 	{
 	public:
+		Level();
 		Level(const std::string& name);
 		virtual ~Level();
 
@@ -36,6 +38,7 @@ namespace Sharpheus {
 		std::string RenameGameObject(GameObject* obj, const std::string& newName);
 		void Deregister(class GameObject* obj);
 
+		inline CollisionSystem& GetCollSys() { return collSys; }
 		inline class GameObject* GetRoot() { return root; }
 
 		inline class GameObject* GetGameObject(const std::string& name) {
@@ -47,10 +50,24 @@ namespace Sharpheus {
 			return gameObjects[name];
 		}
 
+		inline bool HasPath() { return !path.empty(); }
+		inline const std::string& GetPath() { return path; }
+		bool Save();
+		bool Save(const std::string& filepath);
+		bool Load(const std::string& filepath);
+
+
 	private:
 		std::string name;
+		std::string path;
 		class GameObject* root;
+		CollisionSystem collSys;
 		std::unordered_map<std::string, class GameObject*> gameObjects;
+
+		bool SaveLevelData(FileSaver& file);
+		bool LoadLevelData(FileLoader& file);
+		bool LoadRoot(FileLoader& file);
+		bool LoadGameObject(FileLoader& file, GameObject* parent);
 
 		void RegisterWithUniqueName(class GameObject* newObject);
 

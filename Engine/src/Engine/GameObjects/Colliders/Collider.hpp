@@ -21,6 +21,8 @@ namespace Sharpheus {
 		virtual void OnCollision(const CollisionEvent& e) = 0;
 		void UpdatePrevPos();
 
+		void SetLevel(Level* level) override;
+
 		inline bool WasStill() { return prevPos == worldTrafo.pos; }
 		inline bool IsVisible() { return visible; }
 		inline void SetVisible(bool visible) { this->visible = visible; }

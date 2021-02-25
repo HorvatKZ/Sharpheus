@@ -23,20 +23,20 @@ namespace Sharpheus {
 	Point Camera::Project(const Point& pos)
 	{
 		Point diff = (pos - worldTrafo.pos).Rotate(-worldTrafo.rot);
-		return Point(2 * diff.x / width / worldTrafo.scale.x, -2 * diff.y / height / worldTrafo.scale.y);
+		return Point(2 * diff.x / GetWidth() / worldTrafo.scale.x, -2 * diff.y / GetHeight() / worldTrafo.scale.y);
 	}
 
 
 	Point Camera::ScreenPosToGamePos(const Point& pos)
 	{
-		Point fromCenter = Point(pos.x - width / 2, pos.y - height / 2).Rotate(worldTrafo.rot);
+		Point fromCenter = Point(pos.x - GetWidth() / 2, pos.y - GetHeight() / 2).Rotate(worldTrafo.rot);
 		return Point(worldTrafo.pos.x + fromCenter.x * worldTrafo.scale.x, worldTrafo.pos.y + fromCenter.y * worldTrafo.scale.y);
 	}
 
 	Point Camera::GamePosToScreenPos(const Point& pos)
 	{
 		Point diff = (pos - worldTrafo.pos).Rotate(-worldTrafo.rot);
-		return Point(diff.x / worldTrafo.scale.x + width / 2, diff.y / worldTrafo.scale.y + height / 2);
+		return Point(diff.x / worldTrafo.scale.x + GetWidth() / 2, diff.y / worldTrafo.scale.y + GetHeight() / 2);
 	}
 
 
@@ -56,9 +56,9 @@ namespace Sharpheus {
 
 	void Camera::ZoomToScreen(float scale, const Point& keepInPlace)
 	{
-		Point diff(keepInPlace.x - width / 2, keepInPlace.y - height / 2);
+		Point diff(keepInPlace.x - GetWidth() / 2, keepInPlace.y - GetHeight() / 2);
 		Point newScreenCenterDiff = (1.f - scale) * diff;
-		Point newScreenCenter(newScreenCenterDiff.x + width / 2, newScreenCenterDiff.y + height / 2);
+		Point newScreenCenter(newScreenCenterDiff.x + GetWidth() / 2, newScreenCenterDiff.y + GetHeight() / 2);
 		worldTrafo.pos = ScreenPosToGamePos(newScreenCenter);
 		worldTrafo.scale *= scale;
 		needToRecalcOffset = true;
@@ -95,9 +95,29 @@ namespace Sharpheus {
 	}
 
 
+	bool Camera::Save(FileSaver& fs)
+	{
+		GameObject::Save(fs);
+		fs.Write(isCurrent);
+		return fs.GetStatus();
+	}
+
+
+	bool Camera::Load(FileLoader& fl)
+	{
+		GameObject::Load(fl);
+		fl.Read(isCurrent);
+		if (isCurrent) {
+			SetCurrent();
+		}
+		needToRecalcOffset = true;
+		return fl.GetStatus();
+	}
+
+
 	void Camera::RecalcOffsets()
 	{
-		RecalcOffsetsCommon(width * worldTrafo.scale.x, height * worldTrafo.scale.y, worldTrafo.rot);
+		RecalcOffsetsCommon(GetWidth() * worldTrafo.scale.x, GetHeight() * worldTrafo.scale.y, worldTrafo.rot);
 	}
 
 	void Camera::RenderSelection()

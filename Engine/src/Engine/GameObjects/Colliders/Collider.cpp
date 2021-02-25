@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Collider.hpp"
 #include "Engine/CollisionSystem/CollisionSystem.hpp"
+#include "Engine/Level.hpp"
 
 
 namespace Sharpheus {
@@ -11,12 +12,12 @@ namespace Sharpheus {
 	Collider::Collider(GameObject* parent, const std::string& name, bool useRect) : RectGameObject(parent, name, useRect)
 	{
 		prevPos = worldTrafo.pos;
-		CollisionSystem::AddCollider(this);
 	}
+
 
 	Collider::~Collider()
 	{
-		CollisionSystem::RemoveCollider(this);
+		level->GetCollSys().RemoveCollider(this);
 
 		LocalSourceDestroyedEvent e(GetID());
 		for (auto it = subscribers.begin(); it != subscribers.end(); ++it) {
@@ -24,14 +25,24 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void Collider::UpdatePrevPos()
 	{
 		prevPos = worldTrafo.pos;
 	}
 
+
+	void Collider::SetLevel(Level* level)
+	{
+		GameObject::SetLevel(level);
+		level->GetCollSys().AddCollider(this);
+	}
+
+
 	void Collider::Tick(float deltaTime)
 	{
 	}
+
 
 	void Collider::Render()
 	{

@@ -3,6 +3,7 @@
 #include "ViewPort/ViewPort.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
 #include "Engine/CollisionSystem/CollisionSystem.hpp"
+#include "Editor/Registry/EditorData.hpp"
 
 
 namespace Sharpheus {
@@ -21,7 +22,6 @@ namespace Sharpheus {
 		playButton->Bind(wxEVT_BUTTON, &ToolBar::OnPlayPressed, this);
 		gridButton->Bind(wxEVT_BUTTON, &ToolBar::OnGridPressed, this);
 		snapToGridButton->Bind(wxEVT_BUTTON, &ToolBar::OnSnapToGridPressed, this);
-		CollisionSystem::HideColliders();
 	}
 
 
@@ -34,6 +34,13 @@ namespace Sharpheus {
 	{
 		this->startGame = std::move(startGame);
 		this->stopGame = std::move(stopGame);
+	}
+
+
+	void ToolBar::CancelPlay()
+	{
+		isPlaying = false;
+		playButton->SetBitmap(play);
 	}
 
 
@@ -52,11 +59,11 @@ namespace Sharpheus {
 
 	void ToolBar::OnShowHideCollidersPressed(wxCommandEvent& e)
 	{
-		if (CollisionSystem::AreCollidersVisible()) {
-			CollisionSystem::HideColliders();
+		if (EditorData::GetLevel()->GetCollSys().AreCollidersVisible()) {
+			EditorData::GetLevel()->GetCollSys().HideColliders();
 			showHideColliders->SetBitmap(hiddenColliders);
 		} else {
-			CollisionSystem::ShowColliders();
+			EditorData::GetLevel()->GetCollSys().ShowColliders();
 			showHideColliders->SetBitmap(shownColliders);
 		}
 		viewPort->Refresh();

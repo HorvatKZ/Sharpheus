@@ -26,6 +26,8 @@ namespace Sharpheus {
 		inline void SetSnapToGrid(bool value) { isSnapToGrid = value; }
 		inline bool IsSnapToGrid() { return isSnapToGrid; }
 
+		inline wxGLContext* GetContext() { return glContext; }
+
 	private:
 		Camera* camera;
 		EditingArrow* editArrow;

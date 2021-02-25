@@ -7,6 +7,7 @@
 #include "LevelHierarchy.hpp"
 #include "ToolBar.hpp"
 #include "ViewPort/ViewPort.hpp"
+#include "MenuBar/MenuBar.hpp"
 #include "Editor/GamePreview/GamePreview.hpp"
 #include <wx/gbsizer.h>
 
@@ -21,6 +22,7 @@ namespace Sharpheus {
 		virtual ~EditorWindow();
 
 		void InitContent();
+		void LevelChanged();
 		void CurrentChanged();
 		void CurrentNameChanged(const std::string& oldName, const std::string& newName);
 		void CurrentDataChanged();
@@ -35,8 +37,12 @@ namespace Sharpheus {
 		LevelHierarchy* levelHierarchy;
 		ToolBar* toolBar;
 		ViewPort* viewPort;
+		MenuBar* menuBar;
 
 		GamePreview* game = nullptr;
+		Camera* originalCamera = nullptr;
+
+		void OnGamePreviewExit(wxCloseEvent& e);
 	};
 
 }

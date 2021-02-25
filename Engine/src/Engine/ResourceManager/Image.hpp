@@ -15,15 +15,17 @@ namespace Sharpheus {
 		Image(const std::string& path, bool filtered = false);
 		~Image();
 
-		int GetWidth();
-		int GetHeight();
-		const std::string& GetPath();
+		inline uint32_t GetWidth() { return width; }
+		inline uint32_t GetHeight() { return height; }
+		inline const std::string& GetPath() { return path; }
+		inline bool IsFiltered() { return filtered; }
+
 
 		void Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint = Color::White);
 
 	private:
 		GLuint ID = TEXTURE_ID_NONE;
-		int width, height;
+		uint32_t width, height;
 		bool filtered;
 		std::string path;
 

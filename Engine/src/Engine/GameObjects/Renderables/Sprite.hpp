@@ -18,11 +18,15 @@ namespace Sharpheus {
 		inline void SetTint(const Color& tint) { this->tint = tint; }
 		void SetImageFromPath(const std::string& path, bool filtered);
 
+		virtual bool Load(FileLoader& fl) override;
+
 		SPH_DECL_GAMEOBJECT(Sprite)
 
 	protected:
 		Image* image = nullptr;
 		Color tint = Color::White;
+
+		virtual bool Save(FileSaver& fs) override;
 
 		virtual void RecalcOffsets() override;
 		virtual void Tick(float deltaTime) override;

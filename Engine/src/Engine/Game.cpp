@@ -11,18 +11,42 @@ namespace Sharpheus {
 
 	GameBase::GameBase()
 	{
-		win = new OpenGL_Window();
 	}
 
 
 	GameBase::~GameBase()
 	{
-		delete win;
 		delete level;
 	}
 
 
-	void GameBase::Run()
+	Game::Game() : GameBase()
+	{
+		Logger::Init();
+		SPH_INFO("Welcome to Sharpheus!");
+
+		ResourceManager::Init();
+		EventHandler::Init(SPH_BIND(Game::WindowClosed));
+		Renderer::Init();
+
+		level = new Level("Level");
+		win = new OpenGL_Window();
+	}
+
+
+	Game::~Game()
+	{
+		delete win;
+		Renderer::Clear();
+		ResourceManager::Clear();
+		EventHandler::Clear();
+
+		SPH_INFO("Game successfully exited");
+		Logger::Clear();
+	}
+
+
+	void Game::Run()
 	{
 		while (isRunning) {
 			win->PollEvents();
@@ -34,37 +58,15 @@ namespace Sharpheus {
 	}
 
 
-	void GameBase::Stop()
+	void Game::Stop()
 	{
 		isRunning = false;
 	}
 
 
-	bool GameBase::IsRunning()
+	bool Game::IsRunning()
 	{
 		return isRunning;
-	}
-
-
-	Game::Game() : GameBase()
-	{
-		Logger::Init();
-		SPH_INFO("Welcome to Sharpheus!");
-
-		ResourceManager::Init();
-		EventHandler::Init(SPH_BIND(Game::WindowClosed));
-
-		level = new Level("Level");
-	}
-
-
-	Game::~Game()
-	{
-		ResourceManager::Clear();
-		EventHandler::Clear();
-
-		SPH_INFO("Game successfully exited");
-		Logger::Clear();
 	}
 
 
@@ -74,4 +76,4 @@ namespace Sharpheus {
 		Stop();
 	}
 
-} // namespace Sharpheus
+}

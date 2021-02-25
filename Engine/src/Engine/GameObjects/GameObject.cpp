@@ -180,6 +180,41 @@ namespace Sharpheus {
 	}
 
 
+	bool GameObject::SaveAll(FileSaver& fs)
+	{
+		bool success = true;
+		success &= Save(fs);
+		success &= fs.WriteEnd();
+
+		uint32_t i = 0;
+		while (i < children.size() && success) {
+			success &= children[i]->SaveAll(fs);
+			++i;
+		}
+
+		SPH_ASSERT(success, "Error during saving GameObject \"{0}\"", name);
+		return success;
+	}
+
+
+	bool GameObject::Load(FileLoader& fl)
+	{
+		fl.Read(trafo);
+		SetTrafo(trafo);
+		return fl.GetStatus();
+	}
+
+
+	bool GameObject::Save(FileSaver& fs)
+	{
+		fs.Write((uint8_t)GetType());
+		fs.Write(name);
+		fs.Write((uint32_t)children.size());
+		fs.Write(trafo);
+		return fs.GetStatus();
+	}
+
+
 	void GameObject::RenderSelection()
 	{
 		ResourceManager::GetCicrle()->Render(worldTrafo.pos + Point(-selectCircleRadius, -selectCircleRadius), worldTrafo.pos + Point(selectCircleRadius, -selectCircleRadius),

@@ -1,6 +1,8 @@
 #include "editor_pch.h"
 #include "EditorWindow.hpp"
 #include "Editor/Registry/EditorData.hpp"
+#include "Editor/Registry/ProjectData.hpp"
+#include "Engine/ResourceManager/ResourceManager.hpp"
 
 
 namespace Sharpheus {
@@ -34,6 +36,12 @@ namespace Sharpheus {
 		sizer->AddGrowableRow(3);
 
 		SetSizerAndFit(sizer);
+
+		menuBar = new MenuBar();
+		menuBar->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::LevelChanged));
+		SetMenuBar(menuBar);
+
+		ProjectData::SetWinProps(Window::Props());
 	}
 
 
@@ -46,6 +54,15 @@ namespace Sharpheus {
 	void EditorWindow::InitContent()
 	{
 		levelHierarchy->FillWith(EditorData::GetLevel()->GetRoot());
+	}
+
+
+	void EditorWindow::LevelChanged()
+	{
+		levelHierarchy->FillWith(EditorData::GetLevel()->GetRoot());
+		viewPort->Refresh();
+		details->CurrentChanged(nullptr);
+		EditorData::SetCurrent(nullptr);
 	}
 
 
@@ -75,18 +92,53 @@ namespace Sharpheus {
 
 	void EditorWindow::StartGame()
 	{
+		bool success;
+		if (!EditorData::GetLevel()->HasPath()) {
+			wxMessageBox("Level needs to be saved before starting the GamePreview", "Warning", wxICON_WARNING | wxOK | wxCENTRE);
+
+			wxFileDialog saveDialog(this, "Save Level", "../Levels", "",
+				"Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+			if (saveDialog.ShowModal() == wxID_CANCEL) {
+				toolBar->CancelPlay();
+				return;
+			}
+
+			success = EditorData::GetLevel()->Save(wxStr2StdStr(saveDialog.GetPath()));
+		} else {
+			success = EditorData::GetLevel()->Save();
+		}
+
+		if (!success) {
+			SPHE_ERROR("Cannot save level. Check the log files for more information");
+			toolBar->CancelPlay();
+		}
+
 		viewPort->SetPlaying(true);
+		originalCamera = Renderer::GetCamera();
 		delete game;
-		game = new GamePreview(EditorData::GetLevel());
-		game->Run();
+		game = new GamePreview(this, EditorData::GetLevel()->GetPath(), viewPort->GetContext(), ProjectData::GetWinProps());
+		game->Bind(wxEVT_CLOSE_WINDOW, &EditorWindow::OnGamePreviewExit, this);
+		game->Show();
 	}
 
 
 	void EditorWindow::StopGame()
 	{
 		viewPort->SetPlaying(false);
-		delete game;
+		game->Destroy();
 		game = nullptr;
+		originalCamera->SetCurrent();
+		
+		Window::Props props = ProjectData::GetWinProps();
+		Camera::SetStaticRect(props.width, props.height);
+	}
+
+
+	void EditorWindow::OnGamePreviewExit(wxCloseEvent& e)
+	{
+		toolBar->CancelPlay();
+		StopGame();
 	}
 
 }

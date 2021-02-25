@@ -27,3 +27,6 @@
 !external/wxWidgets/*.vcxproj
 !external/wxWidgets/*.vcxproj.filters
 !external/wxWidgets/*.vcxproj.user
+
+# Others
+/Levels

@@ -12,6 +12,7 @@ namespace Sharpheus {
 		virtual ~ToolBar();
 
 		void BindCallbacks(std::function<void()>&& startGame, std::function<void()>&& stopGame);
+		void CancelPlay();
 
 	private:
 		wxBitmapButton* showHideColliders;

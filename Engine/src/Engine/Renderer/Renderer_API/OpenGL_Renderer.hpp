@@ -19,8 +19,6 @@ namespace Sharpheus {
 		void DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
 			const Point& leftDown, const Color& color) override;
 
-	private:
-		float screenWidth, screenHeight;
 	};
 
 }

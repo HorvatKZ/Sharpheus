@@ -5,17 +5,21 @@
 
 namespace Sharpheus {
 
-	std::vector<Collider*> CollisionSystem::colliders;
-	bool CollisionSystem::areCollidersVisible = false;
-
-	void CollisionSystem::Init()
+	CollisionSystem::CollisionSystem()
 	{
 	}
+
+
+	CollisionSystem::~CollisionSystem()
+	{
+	}
+
 
 	void CollisionSystem::Clear()
 	{
 		colliders.clear();
 	}
+
 
 	void CollisionSystem::Tick()
 	{
@@ -38,11 +42,13 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void CollisionSystem::AddCollider(Collider* collider)
 	{
 		colliders.push_back(collider);
 		collider->SetVisible(areCollidersVisible);
 	}
+
 
 	void CollisionSystem::RemoveCollider(Collider* collider)
 	{
@@ -58,6 +64,7 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void CollisionSystem::ShowColliders()
 	{
 		areCollidersVisible = true;
@@ -65,6 +72,7 @@ namespace Sharpheus {
 			collider->Show();
 		}
 	}
+
 
 	void CollisionSystem::HideColliders()
 	{
@@ -74,8 +82,4 @@ namespace Sharpheus {
 		}
 	}
 
-	bool CollisionSystem::AreCollidersVisible()
-	{
-		return areCollidersVisible;
-	}
 }

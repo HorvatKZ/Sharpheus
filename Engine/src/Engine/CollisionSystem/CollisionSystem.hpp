@@ -8,21 +8,23 @@ namespace Sharpheus {
 	class SPH_EXPORT CollisionSystem
 	{
 	public:
-		static void Init();
-		static void Clear();
+		CollisionSystem();
+		virtual ~CollisionSystem();
 
-		static void Tick();
+		void Tick();
 
-		static void AddCollider(class Collider* collider);
-		static void RemoveCollider(class Collider* collider);
+		void Clear();
 
-		static void ShowColliders();
-		static void HideColliders();
-		static bool AreCollidersVisible();
+		void AddCollider(class Collider* collider);
+		void RemoveCollider(class Collider* collider);
+
+		void ShowColliders();
+		void HideColliders();
+		inline bool AreCollidersVisible() { return areCollidersVisible; }
 
 	private:
-		static std::vector<class Collider*> colliders;
-		static bool areCollidersVisible;
+		std::vector<class Collider*> colliders;
+		bool areCollidersVisible = false;
 	};
 
 }

@@ -20,6 +20,7 @@ namespace Sharpheus {
 		void CurrentNameChanged(const std::string& oldName, const std::string& newName);
 
 	private:
+		void Clear();
 		void AddChildren(wxTreeItemId parentID, class GameObject* parent);
 		void DeleteAllChildrenName(class GameObject* parent);
 		void OnSelectionChange(wxTreeEvent& e);

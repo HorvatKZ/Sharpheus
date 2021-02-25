@@ -24,8 +24,6 @@ namespace Sharpheus {
 		SPH_INFO("Window created: {0}x{1}({2})", props.width, props.height, props.fullscreen ? "Fullscreen" : "Windowed");
 		glfwMakeContextCurrent(win);
 
-		Renderer::Init();
-
 		glfwSetWindowUserPointer(win, &callback);
 		SetCallbacks();
 		SetVsync(false);
@@ -38,7 +36,6 @@ namespace Sharpheus {
 	OpenGL_Window::~OpenGL_Window()
 	{
 		glfwDestroyWindow(win);
-		Renderer::Clear();
 	}
 
 
