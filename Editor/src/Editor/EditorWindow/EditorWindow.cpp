@@ -42,6 +42,10 @@ namespace Sharpheus {
 		SetMenuBar(menuBar);
 
 		ProjectData::SetWinProps(Window::Props());
+
+		wxIcon icon;
+		icon.CopyFromBitmap(wxBitmap("../Assets/Editor/Icons/sharpheus_icon.png", wxBITMAP_TYPE_PNG));
+		SetIcon(icon);
 	}
 
 

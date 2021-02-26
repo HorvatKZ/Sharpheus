@@ -15,6 +15,8 @@ namespace Sharpheus {
 
 	private:
 		std::function<void()> levelChangedCallback;
+
+		void NewLevel(wxCommandEvent& e);
 		void SaveLevel(wxCommandEvent& e);
 		void LoadLevel(wxCommandEvent& e);
 	};

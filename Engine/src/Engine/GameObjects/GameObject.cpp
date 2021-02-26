@@ -63,6 +63,15 @@ namespace Sharpheus {
 	}
 
 
+	void GameObject::CopyChildrenTo(GameObject* duplicate)
+	{
+		duplicate->children.clear();
+		for (GameObject* child : children) {
+			duplicate->AddChild(child->Copy());
+		}
+	}
+
+
 	void GameObject::AddChild(GameObject* child)
 	{
 		children.push_back(child);
@@ -148,6 +157,12 @@ namespace Sharpheus {
 	void GameObject::SetName(const std::string& name)
 	{
 		this->name = level->RenameGameObject(this, name);
+	}
+
+
+	void GameObject::SetUpName(const std::string& name)
+	{
+		this->name = level->RenameGameObject(this, name, false);
 	}
 
 

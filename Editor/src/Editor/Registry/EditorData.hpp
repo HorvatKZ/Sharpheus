@@ -11,6 +11,7 @@ namespace Sharpheus {
 
 		static void SetLevel(class Level* _level);
 		static inline class Level* GetLevel() { return level; }
+		static void NewLevel(const std::string& name);
 
 		static void SetCurrent(const std::string& currName);
 		static void SetCurrent(class GameObject* _curr);

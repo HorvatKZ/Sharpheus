@@ -11,6 +11,8 @@ namespace Sharpheus {
 	});
 
 
+	SPH_IMPL_COPY(PhysicsObject);
+
 	PhysicsObject::PhysicsObject(GameObject* parent, const std::string& name) :
 		GameObject(parent, name) {}
 

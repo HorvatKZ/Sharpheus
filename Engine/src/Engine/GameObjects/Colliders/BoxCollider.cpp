@@ -13,6 +13,8 @@ namespace Sharpheus {
 	});
 
 
+	SPH_IMPL_COPY(BoxCollider);
+
 	BoxCollider::BoxCollider(GameObject* parent, const std::string& name)
 		: Collider(parent, name, true)
 	{

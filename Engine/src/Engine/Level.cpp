@@ -79,15 +79,34 @@ namespace Sharpheus {
 	}
 
 
+	void Level::Attach(GameObject* obj)
+	{
+		if (obj->GetParent() == nullptr) {
+			SPH_ERROR("Cannot attach another root GameObject");
+		}
+
+		std::string correctNewName = GenerateUniqueName(obj->GetName());
+		obj->SetUpName(correctNewName);
+		gameObjects[correctNewName] = obj;
+		obj->SetLevel(this);
+
+		for (GameObject* child : obj->GetChildren()) {
+			Attach(child);
+		}
+	}
+
+
 	void Level::Delete(GameObject* obj)
 	{
 		delete obj;
 	}
 
 
-	std::string Level::RenameGameObject(GameObject* obj, const std::string& newName)
+	std::string Level::RenameGameObject(GameObject* obj, const std::string& newName, bool deregisterOld)
 	{
-		Deregister(obj);
+		if (deregisterOld) {
+			Deregister(obj);
+		}
 		std::string correctNewName = GenerateUniqueName(newName);
 		gameObjects[correctNewName] = obj;
 		return correctNewName;
@@ -261,11 +280,19 @@ namespace Sharpheus {
 			return originalName;
 		}
 
+
 		int counter = 1;
 		bool isFree = false;
-		std::string result;
+		std::string result, basename = originalName;
+		size_t position = originalName.find('_');
+		if (position != std::string::npos) {
+			try {
+				counter = std::stoi(originalName.substr(position + 1));
+				basename = originalName.substr(0, position);
+			} catch (...) {}
+		}
 		while (!isFree) {
-			result = originalName + "_" + std::to_string(counter);
+			result = basename + "_" + std::to_string(counter);
 			isFree = IsNameFree(result);
 			if (!isFree) {
 				++counter;

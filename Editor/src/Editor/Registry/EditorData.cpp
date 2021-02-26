@@ -12,10 +12,12 @@ namespace Sharpheus {
 	{
 	}
 
+
 	void EditorData::Clear()
 	{
 		delete level;
 	}
+
 
 	void EditorData::SetLevel(Level* _level)
 	{
@@ -26,10 +28,19 @@ namespace Sharpheus {
 		level = _level;
 	}
 
+
+	void EditorData::NewLevel(const std::string& name)
+	{
+		delete level;
+		level = new Level(name);
+	}
+
+
 	void EditorData::SetCurrent(const std::string& currName)
 	{
 		curr = level->GetGameObject(currName);
 	}
+
 
 	void EditorData::SetCurrent(GameObject* _curr)
 	{

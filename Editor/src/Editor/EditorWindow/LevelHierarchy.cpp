@@ -3,6 +3,7 @@
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/Registry/ClassRegistry.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
+#include <wx/kbdstate.h>
 
 
 namespace Sharpheus {
@@ -128,6 +129,65 @@ namespace Sharpheus {
 	}
 
 
+	void LevelHierarchy::DuplicateCurrent()
+	{
+		wxTreeItemId selected = GetSelection();
+		if (!selected.IsOk()) {
+			return;
+		}
+
+		GameObject* curr = EditorData::GetCurrent();
+		if (curr->GetParent() == nullptr) {
+			SPHE_ERROR("Cannot duplicate root GameObject");
+			return;
+		}
+
+		GameObject* duplicate = curr->Copy();
+		EditorData::GetLevel()->Attach(duplicate);
+
+
+		wxTreeItemId parent = GetItemParent(selected);
+		wxTreeItemId duplicateID = AppendItem(parent, duplicate->GetName(), typeToIcon[duplicate->GetType()]);
+		nameToId[duplicate->GetName()] = duplicateID;
+		SelectItem(duplicateID);
+		AddChildren(duplicateID, duplicate);
+		currChangedCallback();
+	}
+
+
+	void LevelHierarchy::DeselectCurrent()
+	{
+		Unselect();
+		EditorData::SetCurrent(nullptr);
+		currChangedCallback();
+	}
+
+
+	void LevelHierarchy::DeleteCurrent()
+	{
+		GameObject* curr = EditorData::GetCurrent();
+		if (curr->GetParent() == nullptr) {
+			SPHE_ERROR("Cannot delete root GameObject");
+			return;
+		}
+
+		if (curr->IsParentOfCurrentCamera()) {
+			SPHE_ERROR("Cannot delete the current Camera, nor parent of the current Camera");
+			return;
+		}
+
+		wxTreeItemId currItem = GetSelection();
+		nameToId.erase(curr->GetName());
+		DeleteAllChildrenName(curr);
+		SelectItem(nameToId[curr->GetParent()->GetName()]);
+		Delete(currItem);
+
+		EditorData::SetCurrent(curr->GetParent());
+		EditorData::GetLevel()->Delete(curr);
+		currChangedCallback();
+	}
+
+
 	void LevelHierarchy::OnSelectionChange(wxTreeEvent& e)
 	{
 		wxTreeItemId selected = GetSelection();
@@ -138,30 +198,20 @@ namespace Sharpheus {
 
 	void LevelHierarchy::OnKeyPress(wxKeyEvent& e)
 	{
-		if (e.GetKeyCode() == WXK_DELETE) {
-			GameObject* curr = EditorData::GetCurrent();
-			if (curr->GetParent() == nullptr) {
-				SPHE_ERROR("Cannot delete root GameObject");
-				return;
-			}
+		switch (e.GetKeyCode()) {
+			case WXK_DELETE:
+				DeleteCurrent();
+				break;
 
-			if (curr->IsParentOfCurrentCamera()) {
-				SPHE_ERROR("Cannot delete the current Camera, nor parent of the current Camera");
-				return;
-			}
+			case WXK_ESCAPE:
+				DeselectCurrent();
+				break;
 
-			wxTreeItemId currItem = GetSelection();
-			nameToId.erase(curr->GetName());
-			DeleteAllChildrenName(curr);
-			SelectItem(nameToId[curr->GetParent()->GetName()]);
-			Delete(currItem);
-
-			EditorData::SetCurrent(curr->GetParent());
-			EditorData::GetLevel()->Delete(curr);
-		} else if (e.GetKeyCode() == WXK_ESCAPE) {
-			Unselect();
-			EditorData::SetCurrent(nullptr);
-			currChangedCallback();
+			case 'D': case 'd':
+				if (e.ControlDown()) {
+					DuplicateCurrent();
+				}
+				break;
 		}
 	}
 

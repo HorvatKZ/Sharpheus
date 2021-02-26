@@ -11,6 +11,7 @@ namespace Sharpheus {
 	public:
 		Sprite(GameObject* parent, const std::string& name);
 		virtual ~Sprite() = default;
+		virtual GameObject* Copy() override;
 
 		inline Image* GetImage() { return image; }
 		inline const Color& GetTint() { return tint; }

@@ -10,6 +10,7 @@ namespace Sharpheus {
 	public:
 		Camera(GameObject* parent, const std::string& name);
 		virtual ~Camera() = default;
+		virtual GameObject* Copy() override;
 
 		virtual Point Project(const Point& pos);
 		virtual Point ScreenPosToGamePos(const Point& pos);

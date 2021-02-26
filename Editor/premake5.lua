@@ -3,6 +3,7 @@ project "Editor"
     language "C++"
 	cppdialect "C++17"
 	staticruntime "off"
+	icon "sharpheus_icon.png"
 
 	targetdir (bindir)
 	objdir (bintempdir)
@@ -14,8 +15,12 @@ project "Editor"
 	{
         "src/**.h",
         "src/**.hpp",
-		"src/**.cpp"
+		"src/**.cpp",
+		"resource.rc",
+		"sharpheus.ico"
 	}
+
+	vpaths { ['Resources/*'] = "resource.rc" }
 
 	defines
 	{

@@ -23,6 +23,9 @@ namespace Sharpheus {
 		void Clear();
 		void AddChildren(wxTreeItemId parentID, class GameObject* parent);
 		void DeleteAllChildrenName(class GameObject* parent);
+		void DuplicateCurrent();
+		void DeselectCurrent();
+		void DeleteCurrent();
 		void OnSelectionChange(wxTreeEvent& e);
 		void OnKeyPress(wxKeyEvent& e);
 		void OnDragBegin(wxTreeEvent& e);

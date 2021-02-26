@@ -13,6 +13,8 @@ namespace Sharpheus {
 	float Camera::height = 0.f;
 
 
+	SPH_IMPL_COPY(Camera);
+
 	Camera::Camera(GameObject* parent, const std::string& name) :
 		RectGameObject(parent, name)
 	{

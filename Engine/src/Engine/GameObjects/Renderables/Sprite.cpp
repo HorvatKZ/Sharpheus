@@ -11,6 +11,8 @@ namespace Sharpheus {
 	});
 
 
+	SPH_IMPL_COPY(Sprite);
+
 	Sprite::Sprite(GameObject* parent, const std::string& name) :
 		RectGameObject(parent, name) {}
 
