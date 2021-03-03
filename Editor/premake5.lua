@@ -33,6 +33,8 @@ project "Editor"
 	{
         "src",
 		"%{wks.location}/Engine/src",
+		"%{wks.location}/Engine/src/Engine/Gameobjects/Behaviors",
+		"%{wks.location}/Engine/custom",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.spdlog}",

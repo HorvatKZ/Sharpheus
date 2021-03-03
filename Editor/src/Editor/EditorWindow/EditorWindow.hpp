@@ -26,7 +26,8 @@ namespace Sharpheus {
 		void CurrentChanged();
 		void CurrentNameChanged(const std::string& oldName, const std::string& newName);
 		void CurrentDataChanged();
-		void StartGame();
+		void BehaviorChanged(uint32_t subType);
+		void StartGame(bool withCurrent);
 		void StopGame();
 
 	private:
@@ -41,8 +42,12 @@ namespace Sharpheus {
 
 		GamePreview* game = nullptr;
 		Camera* originalCamera = nullptr;
+		std::queue<uint32_t> behviorChangeRequests;
 
 		void OnGamePreviewExit(wxCloseEvent& e);
+		void OnIdle(wxIdleEvent& e);
+
+		void ChangeBehavior(uint32_t subType);
 	};
 
 }

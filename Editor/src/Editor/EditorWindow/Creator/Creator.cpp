@@ -12,7 +12,7 @@ namespace Sharpheus {
 	{
 		InitBitmaps();
 
-		newName = new wxTextCtrl(this, wxID_ANY, "Unnamed", wxPoint(2, 2), wxSize(172, 22));
+		newName = new wxTextCtrl(this, wxID_ANY, "Unnamed", wxPoint(2, 2), wxSize(172, 22), wxTE_PROCESS_ENTER);
 		addButton = new wxBitmapButton(this, wxID_ANY, addButtonBitmap, wxPoint(176, 2), wxSize(22, 22));
 		typeSelector = new wxComboCtrl(this, wxID_ANY, "", wxPoint(2, 26), wxSize(196, 22));
 		typeSelector->SetEditable(false);
@@ -20,14 +20,15 @@ namespace Sharpheus {
 		typeSelector->SetPopupControl(popup);
 		popup->InitContent(SPH_BIND_THIS_2(Creator::TypeSelectorChanged));
 
-		addButton->Bind(wxEVT_BUTTON, &Creator::OnAddButtonPressed, this);
+		addButton->Bind(wxEVT_BUTTON, &Creator::OnAdd, this);
+		newName->Bind(wxEVT_TEXT_ENTER, &Creator::OnAdd, this);
 	}
 
 	Creator::~Creator()
 	{
 	}
 
-	void Creator::OnAddButtonPressed(wxCommandEvent& e)
+	void Creator::OnAdd(wxCommandEvent& e)
 	{
 		if (type == GameObject::Type::None) {
 			typeSelector->SetValue("");

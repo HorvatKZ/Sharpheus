@@ -11,7 +11,7 @@ namespace Sharpheus {
 	public:
 		PhysicsObject(GameObject* parent, const std::string& name);
 		virtual ~PhysicsObject() = default;
-		virtual GameObject* Copy() override;
+		virtual void CopyFrom(GameObject * other) override;
 
 		inline Point& GetVelocity() { return velocity; }
 		inline float GetMass() { return mass; }

@@ -4,6 +4,7 @@
 #include "Editor/ResourceManagement/ImageManager.hpp"
 #include "Engine/CollisionSystem/CollisionSystem.hpp"
 #include "Editor/Registry/EditorData.hpp"
+#include "Editor/Registry/ProjectData.hpp"
 
 
 namespace Sharpheus {
@@ -14,11 +15,13 @@ namespace Sharpheus {
 		InitBitmaps();
 
 		showHideColliders = new wxBitmapButton(this, wxID_ANY, hiddenColliders, wxPoint(3, 3), wxSize(24, 24));
+		playCurrentButton = new wxBitmapButton(this, wxID_ANY, playCurrent, wxPoint(30, 3), wxSize(24, 24));
 		playButton = new wxBitmapButton(this, wxID_ANY, play, wxPoint(59, 2), wxSize(26, 26));
 		gridButton = new wxBitmapButton(this, wxID_ANY, gridOn, wxPoint(90, 3), wxSize(24, 24));;
 		snapToGridButton = new wxBitmapButton(this, wxID_ANY, snapOff, wxPoint(117, 3), wxSize(24, 24));
 
 		showHideColliders->Bind(wxEVT_BUTTON, &ToolBar::OnShowHideCollidersPressed, this);
+		playCurrentButton->Bind(wxEVT_BUTTON, &ToolBar::OnPlayCurrentPressed, this);
 		playButton->Bind(wxEVT_BUTTON, &ToolBar::OnPlayPressed, this);
 		gridButton->Bind(wxEVT_BUTTON, &ToolBar::OnGridPressed, this);
 		snapToGridButton->Bind(wxEVT_BUTTON, &ToolBar::OnSnapToGridPressed, this);
@@ -30,7 +33,7 @@ namespace Sharpheus {
 	}
 
 
-	void ToolBar::BindCallbacks(std::function<void()>&& startGame, std::function<void()>&& stopGame)
+	void ToolBar::BindCallbacks(std::function<void(bool)>&& startGame, std::function<void()>&& stopGame)
 	{
 		this->startGame = std::move(startGame);
 		this->stopGame = std::move(stopGame);
@@ -41,6 +44,21 @@ namespace Sharpheus {
 	{
 		isPlaying = false;
 		playButton->SetBitmap(play);
+		showHideColliders->Enable(true);
+		playCurrentButton->Enable(true);
+		gridButton->Enable(true);
+		snapToGridButton->Enable(true);
+	}
+
+
+	void ToolBar::StartPlay()
+	{
+		isPlaying = true;
+		playButton->SetBitmap(stop);
+		showHideColliders->Enable(false);
+		playCurrentButton->Enable(false);
+		gridButton->Enable(false);
+		snapToGridButton->Enable(false);
 	}
 
 
@@ -48,6 +66,7 @@ namespace Sharpheus {
 	{
 		shownColliders = ImageManager::GetImage("shown_colliders.png", ImageManager::PathType::TOOLBAR);
 		hiddenColliders = ImageManager::GetImage("hidden_colliders.png", ImageManager::PathType::TOOLBAR);
+		playCurrent = ImageManager::GetImage("play_current.png", ImageManager::PathType::TOOLBAR);
 		play = ImageManager::GetImage("play.png", ImageManager::PathType::TOOLBAR);
 		stop = ImageManager::GetImage("stop.png", ImageManager::PathType::TOOLBAR);
 		gridOn = ImageManager::GetImage("grid_on.png", ImageManager::PathType::TOOLBAR);
@@ -59,27 +78,38 @@ namespace Sharpheus {
 
 	void ToolBar::OnShowHideCollidersPressed(wxCommandEvent& e)
 	{
-		if (EditorData::GetLevel()->GetCollSys().AreCollidersVisible()) {
-			EditorData::GetLevel()->GetCollSys().HideColliders();
+		if (ProjectData::GetLevel()->GetCollSys().AreCollidersVisible()) {
+			ProjectData::GetLevel()->GetCollSys().HideColliders();
 			showHideColliders->SetBitmap(hiddenColliders);
 		} else {
-			EditorData::GetLevel()->GetCollSys().ShowColliders();
+			ProjectData::GetLevel()->GetCollSys().ShowColliders();
 			showHideColliders->SetBitmap(shownColliders);
 		}
 		viewPort->Refresh();
 	}
 
 
+	void ToolBar::OnPlayCurrentPressed(wxCommandEvent& e)
+	{
+		if (isPlaying) {
+			CancelPlay();
+			stopGame();
+		}
+		else {
+			StartPlay();
+			startGame(true);
+		}
+	}
+
+
 	void ToolBar::OnPlayPressed(wxCommandEvent& e)
 	{
 		if (isPlaying) {
-			isPlaying = false;
-			playButton->SetBitmap(play);
+			CancelPlay();
 			stopGame();
 		} else {
-			isPlaying = true;
-			playButton->SetBitmap(stop);
-			startGame();
+			StartPlay();
+			startGame(false);
 		}
 	}
 

@@ -16,7 +16,6 @@ namespace Sharpheus {
 
 	GameBase::~GameBase()
 	{
-		delete level;
 	}
 
 
@@ -25,11 +24,11 @@ namespace Sharpheus {
 		Logger::Init();
 		SPH_INFO("Welcome to Sharpheus!");
 
-		ResourceManager::Init();
+		ResourceManager::Init("D:\\Programming\\Sharpheus\\TestProject\\");
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
 		Renderer::Init();
 
-		level = new Level("Level");
+		proj.CreateNewLevel("Level");
 		win = new OpenGL_Window();
 	}
 
@@ -50,9 +49,9 @@ namespace Sharpheus {
 	{
 		while (isRunning) {
 			win->PollEvents();
-			level->Tick(win->GetDeltaTime());
+			proj.Tick(win->GetDeltaTime());
 			win->StartRender();
-			level->Render();
+			proj.Render();
 			win->EndRender();
 		}
 	}

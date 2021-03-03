@@ -11,12 +11,12 @@ namespace Sharpheus {
 
 	void Logger::Init()
 	{
-		spdlog::set_pattern("%^[%T] %n %l: %v%$");
+		spdlog::set_pattern("%^[%D %T] %n %l: %v%$");
 
-		engineLogger = spdlog::rotating_logger_mt("ENGINE", "../logs/engine.log", 5000000, 3);
+		engineLogger = spdlog::rotating_logger_mt("ENGINE", "../logs/engine.log", 50000, 3);
 		engineLogger->set_level(spdlog::level::trace);
 
-		editorLogger = spdlog::rotating_logger_mt("EDITOR", "../logs/editor.log", 5000000, 3);
+		editorLogger = spdlog::rotating_logger_mt("EDITOR", "../logs/editor.log", 50000, 3);
 		editorLogger->set_level(spdlog::level::trace);
 
 		SPH_INFO("Loggers initialized!");

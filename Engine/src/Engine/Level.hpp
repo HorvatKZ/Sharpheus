@@ -18,6 +18,9 @@ namespace Sharpheus {
 		void Render();
 
 		// Contols
+		GameObject* Create(GameObject::Type type, GameObject* parent, const std::string& newName);
+		GameObject* Create(GameObject* other, GameObject* parent, const std::string& newName);
+
 		template <class Class>
 		Class* Create(GameObject* parent, const std::string& newName)
 		{
@@ -39,6 +42,7 @@ namespace Sharpheus {
 		void Move(GameObject* obj, GameObject* newParent);
 		std::string RenameGameObject(GameObject* obj, const std::string& newName, bool deregisterOld = true);
 		void Deregister(class GameObject* obj);
+		void SetRegistry(class GameObject* obj);
 
 		inline CollisionSystem& GetCollSys() { return collSys; }
 		inline class GameObject* GetRoot() { return root; }
@@ -52,16 +56,21 @@ namespace Sharpheus {
 			return gameObjects[name];
 		}
 
+		inline const std::string& GetName() { return name; }
 		inline bool HasPath() { return !path.empty(); }
 		inline const std::string& GetPath() { return path; }
+		inline const std::string& GetFullPath() { return fullPath; }
+		inline const std::string& GetProjectPath() { return projectPath; }
+		inline void SetProjectPath(const std::string& projectPath) { this->projectPath = projectPath; }
 		bool Save();
-		bool Save(const std::string& filepath);
-		bool Load(const std::string& filepath);
+		bool Save(const std::string& base, const std::string& path);
+		bool Load(const std::string& base, const std::string& path);
+		bool LoadLevelData(const std::string& fullpath);
 
 
 	private:
 		std::string name;
-		std::string path;
+		std::string path, projectPath, fullPath, base;
 		class GameObject* root;
 		CollisionSystem collSys;
 		std::unordered_map<std::string, class GameObject*> gameObjects;

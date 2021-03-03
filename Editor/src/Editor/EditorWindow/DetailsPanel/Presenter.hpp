@@ -4,7 +4,7 @@
 #include "InputComponentCtrl.hpp"
 #include <wx/clrpicker.h>
 
-#define wxREMOVE(item) item->Destroy();
+#define wxREMOVE(item) if (item != nullptr) item->Destroy();
 
 
 namespace Sharpheus {
@@ -311,6 +311,30 @@ namespace Sharpheus {
 
 	private:
 		TrafoProvider<Class>* provider;
+
+		virtual void HandleChange(wxCommandEvent& e);
+	};
+
+
+	class BehaviorPresenter : public Presenter
+	{
+	public:
+		BehaviorPresenter(wxWindow* parent, const std::string& title, std::function<void(uint32_t)>& mainSignal, Signal signal, uint32_t& y);
+		virtual ~BehaviorPresenter();
+
+		void SetCurrent(GameObject* curr) override;
+		virtual void Refresh() override;
+		virtual inline void SetDefault() override {
+			Presenter::SetDefault();
+			typeSelector->SelectNone();
+		}
+
+	protected:
+		wxComboBox* typeSelector = nullptr;
+		wxButton* createNewTypeButton;
+
+		std::function<void(uint32_t)> mainSignal;
+		uint32_t y;
 
 		virtual void HandleChange(wxCommandEvent& e);
 	};

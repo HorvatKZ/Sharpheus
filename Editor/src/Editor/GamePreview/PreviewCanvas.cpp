@@ -4,8 +4,8 @@
 
 namespace Sharpheus {
 
-	PreviewCanvas::PreviewCanvas(wxWindow* parent, wxGLContext* other, Level* level)
-		: wxGLCanvas(parent, wxID_ANY), level(level)
+	PreviewCanvas::PreviewCanvas(wxWindow* parent, wxGLContext* other, Project* proj)
+		: wxGLCanvas(parent, wxID_ANY), proj(proj)
 	{
 		glContext = new wxGLContext(this, other);
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -40,7 +40,7 @@ namespace Sharpheus {
 	{
 		Renderer::StartFrame();
 
-		level->Render();
+		proj->Render();
 
 		Renderer::EndFrame();
 		SwapBuffers();

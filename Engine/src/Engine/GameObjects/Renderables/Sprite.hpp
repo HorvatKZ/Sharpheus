@@ -11,13 +11,14 @@ namespace Sharpheus {
 	public:
 		Sprite(GameObject* parent, const std::string& name);
 		virtual ~Sprite() = default;
-		virtual GameObject* Copy() override;
+		virtual void CopyFrom(GameObject * other) override;
 
 		inline Image* GetImage() { return image; }
 		inline const Color& GetTint() { return tint; }
 		inline void SetImage(Image* image) { this->image = image; needToRecalcOffset = true; }
 		inline void SetTint(const Color& tint) { this->tint = tint; }
 		void SetImageFromPath(const std::string& path, bool filtered);
+		void SetImageFromFullPath(const std::string& path, bool filtered);
 
 		virtual bool Load(FileLoader& fl) override;
 

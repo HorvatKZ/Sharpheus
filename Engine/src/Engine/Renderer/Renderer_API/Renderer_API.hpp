@@ -21,12 +21,16 @@ namespace Sharpheus {
 			this->camera = camera;
 		}
 
+		inline const Color& GetBackgroundColor() { return bgColor; }
+		inline void SetBackgroundColor(const Color& color) { bgColor = color; }
+
 		virtual void DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint) = 0;
 		virtual void DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
 			const Point& leftDown, const Color& color) = 0;
 
 	protected:
 		Camera* camera = nullptr;
+		Color bgColor;
 	};
 
 }

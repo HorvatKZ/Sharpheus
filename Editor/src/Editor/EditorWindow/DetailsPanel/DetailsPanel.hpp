@@ -12,7 +12,8 @@ namespace Sharpheus {
 		DetailsPanel(wxFrame* parent, const wxPoint& pos, const wxSize& size);
 		virtual ~DetailsPanel();
 
-		void BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback, std::function<void()>&& currDataChangedCallback);
+		void BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback,
+			std::function<void()>&& currDataChangedCallback, std::function<void(uint32_t)>&& behaviorChangedCallback);
 
 		void CurrentChanged(GameObject* curr);
 		void CurrentNameChanged(const std::string& oldName, const std::string& newName);
@@ -28,13 +29,15 @@ namespace Sharpheus {
 
 		std::function<void(const std::string&, const std::string&)> currNameChangedCallback = nullptr;
 		std::function<void()> currDataChangedCallback = nullptr;
+		std::function<void(uint32_t)> behaviorChangedCallback = nullptr;
 
 		uint32_t freeY;
 		GameObject::Type lastType = GameObject::Type::None;
+		uint32_t lastSubType = 0;
 
 		void ClearPresenters();
 		void SetPresentersToDefault();
-		void CreatePresenters(GameObject::Type type);
+		void CreatePresenters(GameObject* obj);
 		void FillPresenters(GameObject* curr);
 		void RefreshPresenters();
 

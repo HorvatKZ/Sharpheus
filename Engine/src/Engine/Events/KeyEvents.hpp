@@ -50,6 +50,7 @@ namespace Sharpheus {
 	{
 	public:
 		KeyPressedEvent(KeyCode code) : code(code) {}
+		KeyPressedEvent(int code) : code((KeyCode)code) {}
 		virtual ~KeyPressedEvent() = default;
 
 		inline std::string ToStr() const override { return "KeyPressedEvent " + std::to_string((int)code); }
@@ -64,6 +65,7 @@ namespace Sharpheus {
 	{
 	public:
 		KeyRepeatEvent(KeyCode code) : code(code) {}
+		KeyRepeatEvent(int code) : code((KeyCode)code) {}
 		virtual ~KeyRepeatEvent() = default;
 
 		inline std::string ToStr() const override { return "KeyRepeatEvent " + std::to_string((int)code); }
@@ -78,6 +80,7 @@ namespace Sharpheus {
 	{
 	public:
 		KeyReleasedEvent(KeyCode code) : code(code) {}
+		KeyReleasedEvent(int code) : code((KeyCode)code) {}
 		virtual ~KeyReleasedEvent() = default;
 
 		inline std::string ToStr() const override { return "KeyReleasedEvent " + std::to_string((int)code); }

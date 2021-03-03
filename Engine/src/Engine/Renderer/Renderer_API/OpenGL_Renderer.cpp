@@ -24,7 +24,7 @@ namespace Sharpheus {
 	{
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 
-		glClearColor(0.125f, 0.25f, 0.5f, 1.0f);
+		glClearColor(bgColor.GetRed(), bgColor.GetGreen(), bgColor.GetBlue(), 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glEnable(GL_TEXTURE_2D);   // textures

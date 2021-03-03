@@ -36,6 +36,37 @@ namespace Sharpheus {
 	}
 
 
+	GameObject::GameObject(GameObject&& other)
+		: parent(other.parent), name(other.name), trafo(other.trafo), worldTrafo(other.worldTrafo), level(other.level)
+	{
+		for (GameObject* child : other.children) {
+			AddChild(child);
+		}
+		
+		if (parent != nullptr) {
+			parent->SetChildByName(this);
+		}
+		
+		level->SetRegistry(this);
+
+		other.children.clear();
+		other.parent = nullptr;
+		other.level = nullptr;
+	}
+
+
+	void GameObject::CopyFrom(GameObject* other)
+	{
+		trafo = other->trafo;
+		worldTrafo = other->worldTrafo;
+
+		for (GameObject* child : other->children) {
+			GameObject* newChild = level->Create(child, this, child->name);
+			newChild->CopyFrom(child);
+		}
+	}
+
+
 	void GameObject::TickAll(float deltaTime)
 	{
 		Tick(deltaTime);
@@ -60,15 +91,6 @@ namespace Sharpheus {
 	{
 		Render();
 		RenderSelection();
-	}
-
-
-	void GameObject::CopyChildrenTo(GameObject* duplicate)
-	{
-		duplicate->children.clear();
-		for (GameObject* child : children) {
-			duplicate->AddChild(child->Copy());
-		}
 	}
 
 
@@ -154,6 +176,40 @@ namespace Sharpheus {
 	}
 
 
+	GameObject* GameObject::GetFirstChildOfType(Type type)
+	{
+		uint32_t i = 0;
+		while (i < children.size() && type != children[i]->GetType()) {
+			++i;
+		}
+
+		if (i < children.size()) {
+			return children[i];
+		}
+
+		return nullptr;
+	}
+
+
+	GameObject* GameObject::GetLastChildOfType(Type type)
+	{
+		if (children.empty()) {
+			return nullptr;
+		}
+
+		uint32_t i = children.size() - 1;
+		while (i > 0 && type != children[i]->GetType()) {
+			--i;
+		}
+
+		if (type == children[i]->GetType()) {
+			return children[i];
+		}
+
+		return nullptr;
+	}
+
+
 	void GameObject::SetName(const std::string& name)
 	{
 		this->name = level->RenameGameObject(this, name);
@@ -163,6 +219,21 @@ namespace Sharpheus {
 	void GameObject::SetUpName(const std::string& name)
 	{
 		this->name = level->RenameGameObject(this, name, false);
+	}
+
+
+	void GameObject::SetChildByName(GameObject* newChild)
+	{
+		uint32_t i = 0;
+		while (i < children.size() && children[i]->name != newChild->name) {
+			++i;
+		}
+
+		if (i < children.size()) {
+			children[i] = newChild;
+		}
+
+		SPH_ASSERT(i != children.size(), "SetChildByName called to non children object. \"{0}\" has no child \"{1}\"", name, newChild->name);
 	}
 
 

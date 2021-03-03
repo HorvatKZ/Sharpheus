@@ -13,7 +13,7 @@ namespace Sharpheus {
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, STRING
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, STRING, BEHAVIOR
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -24,6 +24,16 @@ namespace Sharpheus {
 
 	protected:
 		std::string name;
+	};
+
+
+	class BehaviorProvider : public CommonProvider
+	{
+	public:
+		BehaviorProvider(const std::string& name) : CommonProvider(name) {}
+		virtual ~BehaviorProvider() = default;
+
+		virtual inline Type GetType() override { return Type::BEHAVIOR; }
 	};
 
 

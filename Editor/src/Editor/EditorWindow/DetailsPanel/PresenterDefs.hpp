@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Presenter.hpp"
+#include "Editor/Registry/ProjectData.hpp"
+#include "Editor/FileUtils/RelativeFileDialog.hpp"
 #include <wx/valnum.h>
 
 
@@ -475,7 +477,7 @@ namespace Sharpheus {
 			std::string path = image->GetPath();
 			if (path != lastPath) {
 				this->path->SetLabel(path);
-				wxImage bitmap(path, wxBITMAP_TYPE_PNG);
+				wxImage bitmap(image->GetFullPath(), wxBITMAP_TYPE_PNG);
 				bitmap.Rescale(50, 50);
 				preview->SetBitmap(bitmap);
 				lastPath = path;
@@ -506,14 +508,13 @@ namespace Sharpheus {
 	inline void ImagePresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
-			wxFileDialog browseDialog(parent, "Browse for image", "../Assets", "",
-				"Image files(*.png, *.jpg, *.jpeg, *.bmp; *.gif) | *.png; *.jpg; *.jpeg; *.bmp; *.gif", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+			RelativeOpenDialog browseDialog(parent, "Browse for image", ProjectData::GetPath() + "Assets\\",
+				"Image files(*.png, *.jpg, *.jpeg, *.bmp; *.gif) | *.png; *.jpg; *.jpeg; *.bmp; *.gif");
 			
-			if (browseDialog.ShowModal() == wxID_CANCEL)
+			if (!browseDialog.Show())
 				return;
 
-			lastPath = browseDialog.GetPath();
-			provider->SetPath((Class*)curr, wxStr2StdStr(lastPath), false);
+			provider->SetPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()), false);
 			signal();
 		}
 	}

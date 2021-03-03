@@ -1,6 +1,7 @@
 #include "editor_pch.h"
 #include "Presenter.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
+#include "BehaviorCreator.hpp"
 
 
 namespace Sharpheus {
@@ -196,6 +197,56 @@ namespace Sharpheus {
 			}
 			signal();
 		}
+	}
+
+
+	// BehaviorPresenter
+
+	BehaviorPresenter::BehaviorPresenter(wxWindow* parent, const std::string& title, std::function<void(uint32_t)>& mainSignal, Signal signal, uint32_t& y)
+		: Presenter(parent, title, signal, y), mainSignal(mainSignal), y(y)
+	{
+		y += 22;
+		wxSize extent = this->title->GetTextExtent(title);
+		uint32_t parentWidth = parent->GetSize().x;
+		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(border, y), wxSize(parentWidth - 3 * border - 22, 22));
+		createNewTypeButton = new wxButton(parent, wxID_ANY, "+", wxPoint(parentWidth - 22 - border, y), wxSize(22, 22));
+		y += 30;
+	}
+
+	BehaviorPresenter::~BehaviorPresenter()
+	{
+		wxREMOVE(typeSelector);
+		wxREMOVE(createNewTypeButton);
+	}
+
+	void BehaviorPresenter::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+
+		wxREMOVE(typeSelector);
+
+		uint32_t parentWidth = parent->GetSize().x;
+		wxArrayString arr;
+		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
+			if (BehaviorCreator::IsCompatibleWithParent((*it).first, curr->GetParent())) {
+				arr.Add(wxString::Format("%d - %s", (*it).first, (*it).second));
+			}
+		}
+		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(border, y + 22), wxSize(parentWidth - 3 * border - 22, 22), arr);
+		typeSelector->Bind(wxEVT_COMBOBOX, &BehaviorPresenter::HandleChange, this);
+	}
+
+	void BehaviorPresenter::Refresh()
+	{
+		SetCurrent(curr);
+	}
+
+	void BehaviorPresenter::HandleChange(wxCommandEvent& e)
+	{
+		wxString value = typeSelector->GetValue();
+		unsigned long subType;
+		value.Left(value.find(' ')).ToULong(&subType);
+		mainSignal(subType);
 	}
 
 }

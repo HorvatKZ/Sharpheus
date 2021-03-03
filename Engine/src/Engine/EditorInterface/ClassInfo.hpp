@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	class ClassInfo
+	class SPH_EXPORT ClassInfo
 	{
 	public:
 		ClassInfo(const std::string& name, const std::string& iconPath, const std::vector<CommonProvider*>& providers)

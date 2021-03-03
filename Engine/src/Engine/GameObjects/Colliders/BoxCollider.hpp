@@ -10,7 +10,7 @@ namespace Sharpheus {
 	public:
 		BoxCollider(GameObject* parent, const std::string& name);
 		virtual ~BoxCollider();
-		virtual GameObject* Copy() override;
+		virtual void CopyFrom(GameObject* other) override;
 
 		virtual std::pair<Point, Point> CalcCollision(Collider* other) override;
 		virtual void OnCollision(const CollisionEvent& e) override;

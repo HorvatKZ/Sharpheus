@@ -37,6 +37,10 @@ namespace Sharpheus {
 
 	void RectGameObject::RenderSelection()
 	{
+		if (needToRecalcOffset) {
+			RecalcOffsets();
+		}
+
 		if (useRect) {
 			Renderer::DrawMonocromeQuad(worldTrafo.pos + offsets[0], worldTrafo.pos + offsets[1],
 				worldTrafo.pos + offsets[2], worldTrafo.pos + offsets[3], selectColor);

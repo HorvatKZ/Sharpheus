@@ -23,6 +23,10 @@ namespace Sharpheus {
 
 	void CollisionSystem::Tick()
 	{
+		if (colliders.empty()) {
+			return;
+		}
+
 		for (uint32_t i = 0; i < colliders.size() - 1; ++i) {
 			for (uint32_t j = i + 1; j < colliders.size(); ++j) {
 				if (!colliders[i]->WasStill() || !colliders[j]->WasStill()) {

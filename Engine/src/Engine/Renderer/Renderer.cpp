@@ -53,4 +53,14 @@ namespace Sharpheus {
 		renderer->SetCamera(camera);
 	}
 
+	const Color& Renderer::GetBackgroundColor()
+	{
+		return renderer->GetBackgroundColor();
+	}
+
+	void Renderer::SetBackgroundColor(const Color& color)
+	{
+		renderer->SetBackgroundColor(color);
+	}
+
 }

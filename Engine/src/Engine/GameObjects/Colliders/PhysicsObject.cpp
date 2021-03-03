@@ -11,10 +11,20 @@ namespace Sharpheus {
 	});
 
 
-	SPH_IMPL_COPY(PhysicsObject);
-
 	PhysicsObject::PhysicsObject(GameObject* parent, const std::string& name) :
 		GameObject(parent, name) {}
+
+
+	void PhysicsObject::CopyFrom(GameObject* other)
+	{
+		SPH_CHECKTYPE(other, PhysicsObject);
+
+		GameObject::CopyFrom(other);
+		PhysicsObject* trueOther = (PhysicsObject*)other;
+		velocity = trueOther->velocity;
+		gravity = trueOther->gravity;
+		mass = trueOther->mass;
+	}
 
 
 	bool PhysicsObject::Save(FileSaver& fs)

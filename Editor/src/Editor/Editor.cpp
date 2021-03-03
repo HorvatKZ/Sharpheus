@@ -1,6 +1,7 @@
 #include "editor_pch.h"
 #include "Editor.hpp"
 #include "Registry/EditorData.hpp"
+#include "Registry/ProjectData.hpp"
 #include "Registry/ClassRegistry.hpp"
 #include "Engine/Renderer/Renderer.hpp"
 #include "ResourceManagement/ImageManager.hpp"
@@ -16,13 +17,14 @@ namespace Sharpheus {
 		Logger::Init();
 		EditorData::Init();
 		ClassRegistry::Init();
-		SPHE_INFO("Welcome to Sherpheus Editor");
+		SPHE_INFO("Welcome to Sharpheus Editor");
 	}
 
 	Editor::~Editor()
 	{
 		Logger::Clear();
 		EditorData::Clear();
+		ProjectData::Clear();
 		ImageManager::Clear();
 		ResourceManager::Clear();
 		SPHE_INFO("Exiting editor. Thanks for using Sharpheus");
@@ -32,10 +34,16 @@ namespace Sharpheus {
 	bool Editor::OnInit()
 	{
 		ImageManager::Init();
+		win = new EditorWindow("", 1280, 720);
+		if (argc == 2) {
+			ProjectData::Init(wxStr2StdStr(argv[1]));
+		}
+		else {
+			ProjectData::InitNew("Test Project", "D:\\Programming\\Sharpheus\\TestProject\\TestProject.proj.sharpheus",
+				"Level", "Level.lvl.sharpheus");
+		}
+		win->SetTitle("Sharpheus Editor - " + ProjectData::GetProj()->GetName());
 
-		win = new EditorWindow("Sharpheus Editor", 1800, 1000);
-		ResourceManager::Init();
-		EditorData::SetLevel(new Level("Level"));
 		win->InitContent();
 		win->Show();
 

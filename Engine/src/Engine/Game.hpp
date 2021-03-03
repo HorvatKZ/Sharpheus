@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Events/WindowEvents.hpp"
-#include "Level.hpp"
+#include "Project.hpp"
 
 
 namespace Sharpheus {
@@ -15,7 +15,7 @@ namespace Sharpheus {
 		virtual void WindowClosed(const WindowClosedEvent& e) = 0;
 
 	protected:
-		Level* level;
+		Project proj;
 	};
 
 

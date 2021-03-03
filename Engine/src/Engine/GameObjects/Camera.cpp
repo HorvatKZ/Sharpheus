@@ -13,12 +13,21 @@ namespace Sharpheus {
 	float Camera::height = 0.f;
 
 
-	SPH_IMPL_COPY(Camera);
-
 	Camera::Camera(GameObject* parent, const std::string& name) :
 		RectGameObject(parent, name)
 	{
 		Subscribe<WindowResizedEvent>(SPH_BIND(Camera::WindowResized));
+	}
+
+
+	void Camera::CopyFrom(GameObject* other)
+	{
+		SPH_CHECKTYPE(other, Camera);
+
+		GameObject::CopyFrom(other);
+		Camera* trueOther = (Camera*)other;
+		customWidth = trueOther->customWidth;
+		customHeight = trueOther->customHeight;
 	}
 
 
@@ -34,6 +43,7 @@ namespace Sharpheus {
 		Point fromCenter = Point(pos.x - GetWidth() / 2, pos.y - GetHeight() / 2).Rotate(worldTrafo.rot);
 		return Point(worldTrafo.pos.x + fromCenter.x * worldTrafo.scale.x, worldTrafo.pos.y + fromCenter.y * worldTrafo.scale.y);
 	}
+
 
 	Point Camera::GamePosToScreenPos(const Point& pos)
 	{
@@ -122,12 +132,10 @@ namespace Sharpheus {
 		RecalcOffsetsCommon(GetWidth() * worldTrafo.scale.x, GetHeight() * worldTrafo.scale.y, worldTrafo.rot);
 	}
 
+
 	void Camera::RenderSelection()
 	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
-
+		needToRecalcOffset = true;
 		RectGameObject::RenderSelection();
 	}
 

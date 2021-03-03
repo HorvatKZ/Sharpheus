@@ -10,7 +10,7 @@ namespace Sharpheus {
 	class GamePreview : public GameBase, public wxFrame
 	{
 	public:
-		GamePreview(wxWindow* parent, const std::string& levelFilePath, wxGLContext* glContext, const Window::Props& winProps);
+		GamePreview(wxWindow* parent, const std::string& projectPath, wxGLContext* glContext, const Window::Props& winProps);
 		virtual ~GamePreview();
 
 		void OnIdle(wxIdleEvent& e);
@@ -20,8 +20,12 @@ namespace Sharpheus {
 	private:
 		PreviewCanvas* canvas;
 		wxLongLong lastTick;
+		std::unordered_set<int> pressedKeys;
 
 		void OnResize(wxSizeEvent& e);
+		void OnClose(wxCloseEvent& e);
+		void OnKeyDown(wxKeyEvent& e);
+		void OnKeyUp(wxKeyEvent& e);
 	};
 
 }

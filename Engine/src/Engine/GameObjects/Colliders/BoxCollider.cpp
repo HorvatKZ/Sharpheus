@@ -13,8 +13,6 @@ namespace Sharpheus {
 	});
 
 
-	SPH_IMPL_COPY(BoxCollider);
-
 	BoxCollider::BoxCollider(GameObject* parent, const std::string& name)
 		: Collider(parent, name, true)
 	{
@@ -24,6 +22,17 @@ namespace Sharpheus {
 
 	BoxCollider::~BoxCollider()
 	{
+	}
+
+
+	void BoxCollider::CopyFrom(GameObject* other)
+	{
+		SPH_CHECKTYPE(other, BoxCollider);
+
+		Collider::CopyFrom(other);
+		BoxCollider* trueOther = (BoxCollider*)other;
+		width = trueOther->width;
+		height = trueOther->height;
 	}
 
 

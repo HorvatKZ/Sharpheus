@@ -1,6 +1,7 @@
 #include "editor_pch.h"
 #include "LevelHierarchy.hpp"
 #include "Editor/Registry/EditorData.hpp"
+#include "Editor/Registry/ProjectData.hpp"
 #include "Editor/Registry/ClassRegistry.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
 #include <wx/kbdstate.h>
@@ -44,28 +45,10 @@ namespace Sharpheus {
 		if (!selected.IsOk()) {
 			selected = GetRootItem();
 		}
-		GameObject* parent = EditorData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(selected)));
+		GameObject* parent = ProjectData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(selected)));
 
-		GameObject* newObj = nullptr;
-		switch (type) {
-			case GameObject::Type::Collection:
-				newObj = EditorData::GetLevel()->Create<Collection>(parent, name);
-				break;
-			case GameObject::Type::Camera:
-				newObj = EditorData::GetLevel()->Create<Camera>(parent, name);
-				break;
-			case GameObject::Type::Sprite:
-				newObj = EditorData::GetLevel()->Create<Sprite>(parent, name);
-				break;
-			case GameObject::Type::PhysicsObject:
-				newObj = EditorData::GetLevel()->Create<PhysicsObject>(parent, name);
-				break;
-			case GameObject::Type::BoxCollider:
-				newObj = EditorData::GetLevel()->Create<BoxCollider>(parent, name);
-				break;
-			default:
-				SPHE_ERROR("Cannot create GameObject from unexpected type {0}", type);
-		}
+		GameObject* newObj = ProjectData::GetLevel()->Create(type, parent, name);
+		SPHE_ASSERT(newObj != nullptr, "Cannot create GameObject from unexpected type");
 
 		if (newObj != nullptr) {
 			wxTreeItemId childID = AppendItem(selected, newObj->GetName(), typeToIcon[newObj->GetType()]);
@@ -142,9 +125,8 @@ namespace Sharpheus {
 			return;
 		}
 
-		GameObject* duplicate = curr->Copy();
-		EditorData::GetLevel()->Attach(duplicate);
-
+		GameObject* duplicate = ProjectData::GetLevel()->Create(curr, curr->GetParent(), curr->GetName());
+		duplicate->CopyFrom(curr);
 
 		wxTreeItemId parent = GetItemParent(selected);
 		wxTreeItemId duplicateID = AppendItem(parent, duplicate->GetName(), typeToIcon[duplicate->GetType()]);
@@ -183,7 +165,7 @@ namespace Sharpheus {
 		Delete(currItem);
 
 		EditorData::SetCurrent(curr->GetParent());
-		EditorData::GetLevel()->Delete(curr);
+		ProjectData::GetLevel()->Delete(curr);
 		currChangedCallback();
 	}
 
@@ -218,7 +200,7 @@ namespace Sharpheus {
 
 	void LevelHierarchy::OnDragBegin(wxTreeEvent& e)
 	{
-		dragTarget = EditorData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(e.GetItem())));
+		dragTarget = ProjectData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(e.GetItem())));
 		if (dragTarget->GetParent() == nullptr) {
 			dragTarget = nullptr;
 		} else {
@@ -231,12 +213,12 @@ namespace Sharpheus {
 	{
 		if (dragTarget != nullptr) {
 			wxTreeItemId newParentID = e.GetItem();
-			GameObject* newParent = EditorData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(newParentID)));
+			GameObject* newParent = ProjectData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(newParentID)));
 			if (newParent == nullptr || newParent == dragTarget) {
 				return;
 			}
 
-			EditorData::GetLevel()->Move(dragTarget, newParent);
+			ProjectData::GetLevel()->Move(dragTarget, newParent);
 
 			Delete(nameToId[dragTarget->GetName()]);
 			

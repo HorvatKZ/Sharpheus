@@ -6,7 +6,7 @@ namespace Sharpheus {
 
 	EditingArrow::EditingArrow(Camera* camera) : sprite(new Sprite(nullptr, "EditingArrow")), camera(camera)
 	{
-		sprite->SetImageFromPath("../Assets/Editor/Icons/ViewPort/editing_arrow.png", true);
+		sprite->SetImageFromPath("Editor\\editing_arrow.png", true);
 	}
 
 

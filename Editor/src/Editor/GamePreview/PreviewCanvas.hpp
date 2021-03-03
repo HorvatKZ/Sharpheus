@@ -9,7 +9,7 @@ namespace Sharpheus {
 	class PreviewCanvas : public wxGLCanvas
 	{
 	public:
-		PreviewCanvas(wxWindow* parent, wxGLContext* other, Level* level);
+		PreviewCanvas(wxWindow* parent, wxGLContext* other, Project* proj);
 		virtual ~PreviewCanvas();
 
 		void OnPaintEvent(wxPaintEvent& evt);
@@ -17,7 +17,7 @@ namespace Sharpheus {
 
 	private:
 		wxGLContext* glContext = nullptr;
-		Level* level;
+		Project* proj;
 
 		void Render(wxDC& dc);
 	};

@@ -16,6 +16,7 @@ namespace Sharpheus {
 		virtual ~ViewPort();
 
 		void BindCallbacks(std::function<void()>&& currChangedCallback, std::function<void()>&& currDataChangedCallback);
+		void InitEditingArrow();
 
 		void OnPaintEvent(wxPaintEvent& evt);
 		void PaintNow();

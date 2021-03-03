@@ -10,12 +10,10 @@
 	virtual inline Type GetType() override { return Type::type; } \
 	static inline Type GetStaticType() { return Type::type; };
 
-#define SPH_IMPL_COPY(Class) \
-	GameObject* Class::Copy() { \
-		GameObject* duplicate = new Class(*this); \
-		CopyChildrenTo(duplicate); \
-		GetParent()->AddChild(duplicate); \
-		return duplicate; \
+#define SPH_CHECKTYPE(variable, type) \
+	if (variable->GetType() != Type::type) { \
+		SPH_ERROR("\"{0}\" tries to copy from different type \"{1}\"", name, variable->GetName()); \
+		return; \
 	}
 
 
@@ -37,7 +35,9 @@ namespace Sharpheus {
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = default;
 		GameObject& operator=(const GameObject& other) = default;
-		virtual GameObject* Copy() = 0;
+		GameObject(GameObject&& other);
+
+		virtual void CopyFrom(GameObject* other);
 
 		void					TickAll(float deltaTime);
 		void					RenderAll();
@@ -55,10 +55,14 @@ namespace Sharpheus {
 
 		void									AddChild(GameObject* child);
 		GameObject*								GetChild(const std::string& name);
+		GameObject*								GetFirstChildOfType(Type type);
+		GameObject*								GetLastChildOfType(Type type);
 		inline const std::vector<GameObject*>&	GetChildren() { return children; }
+
 		inline const std::string&				GetName() { return name; }
 		void									SetName(const std::string& name);
 		void									SetUpName(const std::string& name);
+		void									SetChildByName(GameObject* newChild);
 
 		virtual inline Type		GetType() { return Type::None; }
 		static inline Type		GetStaticType() { return Type::None; }
@@ -81,7 +85,6 @@ namespace Sharpheus {
 		static float selectCircleRadius;
 		static Color selectColor;
 
-		void CopyChildrenTo(GameObject* duplicate);
 		void RemoveChild(GameObject* child);
 
 		virtual bool Save(FileSaver& file);

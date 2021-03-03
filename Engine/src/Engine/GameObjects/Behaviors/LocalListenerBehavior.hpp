@@ -10,6 +10,7 @@ namespace Sharpheus {
 	class SPH_EXPORT LocalListenerBehavior : public Behavior
 	{
 	public:
+		LocalListenerBehavior(Behavior* other) : Behavior(other) {}
 		LocalListenerBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name) {}
 		virtual ~LocalListenerBehavior() {
 			for (auto it = subscribedColliders.begin(); it != subscribedColliders.end(); ++it) {

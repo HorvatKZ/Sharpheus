@@ -1,5 +1,6 @@
 #include "editor_pch.h"
 #include "ImageManager.hpp"
+#include "Editor/Registry/EditorData.hpp"
 
 
 namespace Sharpheus {
@@ -30,16 +31,16 @@ namespace Sharpheus {
 		wxString fullPath;
 		switch (type) {
 			case PathType::RELATIVE_PATH:
-				fullPath = "../Assets/Editor/" + path;
+				fullPath = EditorData::GetPath() + "Assets\\Editor\\" + path;
 				break;
 			case PathType::DETAILSPANEL:
-				fullPath = "../Assets/Editor/Icons/DetailsPanel/" + path;
+				fullPath = EditorData::GetPath() + "Assets\\Editor\\Icons\\DetailsPanel\\" + path;
 				break;
 			case PathType::TOOLBAR:
-				fullPath = "../Assets/Editor/Icons/ToolBar/" + path;
+				fullPath = EditorData::GetPath() + "Assets\\Editor\\Icons\\ToolBar\\" + path;
 				break;
 			case PathType::GAMEOBJECTS:
-				fullPath = "../Assets/Editor/Icons/GameObjects/" + path;
+				fullPath = EditorData::GetPath() + "Assets\\Editor\\Icons\\GameObjects\\" + path;
 				break;
 			default:
 				fullPath = path;

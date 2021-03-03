@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <queue>
+#include <unordered_set>
 
 // Engine
 #include <Engine.h>

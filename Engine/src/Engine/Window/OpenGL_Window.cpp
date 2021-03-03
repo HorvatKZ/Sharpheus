@@ -26,10 +26,13 @@ namespace Sharpheus {
 
 		glfwSetWindowUserPointer(win, &callback);
 		SetCallbacks();
-		SetVsync(false);
+		SetVsync(props.vsync);
 
 		lastTime = glfwGetTime();
 		lastSecond = lastTime;
+
+		Renderer::SetBackgroundColor(props.background);
+		Camera::SetStaticRect(props.width, props.height);
 	}
 
 

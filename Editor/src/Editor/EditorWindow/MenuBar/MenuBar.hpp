@@ -8,17 +8,24 @@ namespace Sharpheus {
 	class MenuBar : public wxMenuBar
 	{
 	public:
-		MenuBar();
+		MenuBar(wxWindow* parent);
 		virtual ~MenuBar();
 
 		void BindCallbacks(std::function<void()>&& levelChangedCallback);
 
 	private:
+		wxWindow* parent;
 		std::function<void()> levelChangedCallback;
 
+		void ProjectSettings(wxCommandEvent& e);
+		void WindowSettings(wxCommandEvent& e);
 		void NewLevel(wxCommandEvent& e);
-		void SaveLevel(wxCommandEvent& e);
 		void LoadLevel(wxCommandEvent& e);
+		void SaveLevel(wxCommandEvent& e);
+		void SaveLevelAs(wxCommandEvent& e);
+		void EditorSettings(wxCommandEvent& e);
+		void GridSettings(wxCommandEvent& e);
+		void ExportGame(wxCommandEvent& e);
 	};
 
 }

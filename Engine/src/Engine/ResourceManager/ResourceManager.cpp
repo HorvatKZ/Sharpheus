@@ -4,17 +4,17 @@
 
 namespace Sharpheus {
 
+	std::string ResourceManager::assetsRoot;
 	std::unordered_map<std::string, Image*> ResourceManager::images;
 	Image* ResourceManager::circle;
-	std::unordered_map<std::string, Image*> ResourceManager::imagesSecondary;
-	Image* ResourceManager::circleSecondary;
-	bool ResourceManager::isPrimary = true;
 
 
-	void ResourceManager::Init()
+	void ResourceManager::Init(const std::string& projectPath)
 	{
-		circle = new Image("../Assets/Shapes/circle.png", true);
+		assetsRoot = projectPath + "Assets\\";
+		circle = new Image("Shapes\\circle.png", true);
 	}
+
 
 	void ResourceManager::Clear()
 	{
@@ -22,44 +22,22 @@ namespace Sharpheus {
 			delete (*it).second;
 		}
 		delete circle;
-
-		ClearSecondary();
 	}
 
 
-	void ResourceManager::UseSecondary()
+	std::string ResourceManager::FullPathToPath(const std::string& fullPath)
 	{
-		ClearSecondary();
-		isPrimary = false;
-	}
+		if (fullPath.length() > assetsRoot.length() && fullPath.substr(0, assetsRoot.length()) == assetsRoot) {
+			return fullPath.substr(assetsRoot.length());
+		}
 
-
-	void ResourceManager::UsePrimary()
-	{
-		isPrimary = true;
+		return "";
 	}
 
 
 	Image* ResourceManager::GetImage(const std::string& path, bool filtered)
 	{
-		return GetImageFrom(isPrimary ? images : imagesSecondary, path, filtered);
-	}
-
-
-	void ResourceManager::ClearSecondary()
-	{
-		for (auto it = imagesSecondary.begin(); it != imagesSecondary.end(); ++it) {
-			delete (*it).second;
-		}
-		imagesSecondary.clear();
-		delete circleSecondary;
-		circleSecondary = nullptr;
-	}
-
-
-	Image* ResourceManager::GetImageFrom(std::unordered_map<std::string, Image*>& images, const std::string& path, bool filtered)
-	{
-		std::unordered_map<std::string, Image*>::iterator it = images.find(path);
+		auto it = images.find(path);
 		if (it != images.end()) {
 			return (*it).second;
 		}

@@ -3,6 +3,7 @@
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/Registry/ProjectData.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
+#include "BehaviorCreator.hpp"
 
 
 namespace Sharpheus {
@@ -19,9 +20,9 @@ namespace Sharpheus {
 		toolBar = new ToolBar(this, wxPoint(0, 0), wxSize(144, 30), viewPort);
 
 		levelHierarchy->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::CurrentChanged));
-		details->BindCallbacks(SPH_BIND_THIS_2(EditorWindow::CurrentNameChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged));
+		details->BindCallbacks(SPH_BIND_THIS_2(EditorWindow::CurrentNameChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged), SPH_BIND_THIS_1(EditorWindow::BehaviorChanged));
 		viewPort->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::CurrentChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged));
-		toolBar->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::StartGame), SPH_BIND_THIS_0(EditorWindow::StopGame));
+		toolBar->BindCallbacks(SPH_BIND_THIS_1(EditorWindow::StartGame), SPH_BIND_THIS_0(EditorWindow::StopGame));
 
 		sizer = new wxGridBagSizer(4, 4);
 		sizer->Add(creator, wxGBPosition(0, 0), wxGBSpan(2, 1), wxEXPAND);
@@ -37,15 +38,15 @@ namespace Sharpheus {
 
 		SetSizerAndFit(sizer);
 
-		menuBar = new MenuBar();
+		menuBar = new MenuBar(this);
 		menuBar->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::LevelChanged));
 		SetMenuBar(menuBar);
 
-		ProjectData::SetWinProps(Window::Props());
-
 		wxIcon icon;
-		icon.CopyFromBitmap(wxBitmap("../Assets/Editor/Icons/sharpheus_icon.png", wxBITMAP_TYPE_PNG));
+		icon.CopyFromBitmap(wxBitmap(EditorData::GetPath() + "Assets\\Editor\\Icons\\sharpheus_icon.png", wxBITMAP_TYPE_PNG));
 		SetIcon(icon);
+
+		Bind(wxEVT_IDLE, &EditorWindow::OnIdle, this);
 	}
 
 
@@ -57,13 +58,14 @@ namespace Sharpheus {
 
 	void EditorWindow::InitContent()
 	{
-		levelHierarchy->FillWith(EditorData::GetLevel()->GetRoot());
+		levelHierarchy->FillWith(ProjectData::GetLevel()->GetRoot());
+		viewPort->InitEditingArrow();
 	}
 
 
 	void EditorWindow::LevelChanged()
 	{
-		levelHierarchy->FillWith(EditorData::GetLevel()->GetRoot());
+		levelHierarchy->FillWith(ProjectData::GetLevel()->GetRoot());
 		viewPort->Refresh();
 		details->CurrentChanged(nullptr);
 		EditorData::SetCurrent(nullptr);
@@ -94,23 +96,28 @@ namespace Sharpheus {
 	}
 
 
-	void EditorWindow::StartGame()
+	void EditorWindow::BehaviorChanged(uint32_t subType)
+	{
+		behviorChangeRequests.push(subType);
+	}
+
+
+	void EditorWindow::StartGame(bool withCurrent)
 	{
 		bool success;
-		if (!EditorData::GetLevel()->HasPath()) {
+		if (!ProjectData::GetLevel()->HasPath()) {
 			wxMessageBox("Level needs to be saved before starting the GamePreview", "Warning", wxICON_WARNING | wxOK | wxCENTRE);
 
-			wxFileDialog saveDialog(this, "Save Level", "../Levels", "",
-				"Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+			RelativeSaveDialog saveDialog(this, "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
 
-			if (saveDialog.ShowModal() == wxID_CANCEL) {
+			if (!saveDialog.Show()) {
 				toolBar->CancelPlay();
 				return;
 			}
 
-			success = EditorData::GetLevel()->Save(wxStr2StdStr(saveDialog.GetPath()));
+			success = ProjectData::GetProj()->SaveLevel(wxStr2StdStr(saveDialog.GetPath()));
 		} else {
-			success = EditorData::GetLevel()->Save();
+			success = ProjectData::GetLevel()->Save();
 		}
 
 		if (!success) {
@@ -121,7 +128,8 @@ namespace Sharpheus {
 		viewPort->SetPlaying(true);
 		originalCamera = Renderer::GetCamera();
 		delete game;
-		game = new GamePreview(this, EditorData::GetLevel()->GetPath(), viewPort->GetContext(), ProjectData::GetWinProps());
+		game = new GamePreview(this, withCurrent ? ProjectData::GetLevel()->GetFullPath() : ProjectData::GetProjectPath(),
+			viewPort->GetContext(), ProjectData::GetWinProps());
 		game->Bind(wxEVT_CLOSE_WINDOW, &EditorWindow::OnGamePreviewExit, this);
 		game->Show();
 	}
@@ -143,6 +151,39 @@ namespace Sharpheus {
 	{
 		toolBar->CancelPlay();
 		StopGame();
+	}
+
+	void EditorWindow::OnIdle(wxIdleEvent& e)
+	{
+		if (!behviorChangeRequests.empty()) {
+			ChangeBehavior(behviorChangeRequests.front());
+			behviorChangeRequests.pop();
+		}
+		e.Skip();
+	}
+
+
+	void EditorWindow::ChangeBehavior(uint32_t subType)
+	{
+		GameObject* curr = EditorData::GetCurrent();
+		if (!BehaviorCreator::IsCompatibleWithParent(subType, curr->GetParent())) {
+			SPHE_ERROR("This Behavior type is not compatible with its parent!");
+			return;
+		}
+
+		if (curr->GetType() != GameObject::Type::Behavior) {
+			SPHE_ERROR("Wrong signal... The current GameObject is not a Behavior");
+			return;
+		}
+
+		if (((Behavior*)curr)->GetSubType() != 0) {
+			SPHE_ERROR("Wrong signal... The current Behavior is not a PlaceholderBehavior, so its type cannot be changed");
+			return;
+		}
+
+		GameObject* behavior = BehaviorCreator::Create(subType, (PlaceholderBehavior*)curr);
+		EditorData::SetCurrent(behavior);
+		CurrentChanged();
 	}
 
 }

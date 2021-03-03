@@ -19,7 +19,6 @@ namespace Sharpheus {
 
 		camera = new Camera(nullptr, "ViewPort camera");
 		camera->SetCustomRect(size.x, size.y);
-		editArrow = new EditingArrow(camera);
 
 		prevMousePos = wxGetMousePosition() - this->GetScreenPosition();
 
@@ -44,6 +43,12 @@ namespace Sharpheus {
 	{
 		this->currChangedCallback = std::move(currChangedCallback);
 		this->currDataChangedCallback = std::move(currDataChangedCallback);
+	}
+
+
+	void ViewPort::InitEditingArrow()
+	{
+		editArrow = new EditingArrow(camera);
 	}
 
 
@@ -179,7 +184,7 @@ namespace Sharpheus {
 
 		if (editType == EditingArrow::EditType::NONE) {
 			Point gamePos = camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y));
-			GameObject* selected = EditorData::GetLevel()->GetRoot()->GetUpperMostSelected(gamePos);
+			GameObject* selected = ProjectData::GetLevel()->GetRoot()->GetUpperMostSelected(gamePos);
 			if (selected != nullptr) {
 				EditorData::SetCurrent(selected);
 				currChangedCallback();
@@ -207,7 +212,7 @@ namespace Sharpheus {
 		}
 
 		// Render
-		EditorData::GetLevel()->Render();
+		ProjectData::GetLevel()->Render();
 
 		if (isGridOn && isGridInForeground) {
 			RenderGrid();

@@ -1,11 +1,12 @@
 #include "editor_pch.h"
 #include "EditorData.hpp"
+#include "ProjectData.hpp"
 
 
 namespace Sharpheus {
 
-	Level* EditorData::level = nullptr;
 	GameObject* EditorData::curr = nullptr;
+	std::string EditorData::path = "D:\\Programming\\Sharpheus\\";
 
 
 	void EditorData::Init()
@@ -15,30 +16,12 @@ namespace Sharpheus {
 
 	void EditorData::Clear()
 	{
-		delete level;
-	}
-
-
-	void EditorData::SetLevel(Level* _level)
-	{
-		if (_level != level) {
-			delete level;
-		}
-
-		level = _level;
-	}
-
-
-	void EditorData::NewLevel(const std::string& name)
-	{
-		delete level;
-		level = new Level(name);
 	}
 
 
 	void EditorData::SetCurrent(const std::string& currName)
 	{
-		curr = level->GetGameObject(currName);
+		curr = ProjectData::GetLevel()->GetGameObject(currName);
 	}
 
 

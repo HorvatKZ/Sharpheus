@@ -2,6 +2,7 @@
 #include "DetailsPanel.hpp"
 #include "Editor/Registry/ClassRegistry.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
+#include "BehaviorCreator.hpp"
 
 
 namespace Sharpheus {
@@ -27,19 +28,29 @@ namespace Sharpheus {
 	}
 
 
-	void DetailsPanel::BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback, std::function<void()>&& currDataChangedCallback)
+	void DetailsPanel::BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback,
+		std::function<void()>&& currDataChangedCallback, std::function<void(uint32_t)>&& behaviorChangedCallback)
 	{
 		this->currNameChangedCallback = std::move(currNameChangedCallback);
 		this->currDataChangedCallback = std::move(currDataChangedCallback);
+		this->behaviorChangedCallback = std::move(behaviorChangedCallback);
 	}
 
 
 	void DetailsPanel::CurrentChanged(GameObject* curr)
 	{
 		if (curr != nullptr) {
-			if (curr->GetType() != lastType) {
-				lastType = curr->GetType();
-				CreatePresenters(lastType);
+			if (curr->GetType() == GameObject::Type::Behavior) {
+				if (lastType != GameObject::Type::Behavior || lastSubType != ((Behavior*)curr)->GetSubType()) {
+					lastType = GameObject::Type::Behavior;
+					lastSubType = ((Behavior*)curr)->GetSubType();
+					CreatePresenters(curr);
+				}
+			} else {
+				if (curr->GetType() != lastType) {
+					lastType = curr->GetType();
+					CreatePresenters(curr);
+				}
 			}
 			FillPresenters(curr);
 		} else {
@@ -57,11 +68,12 @@ namespace Sharpheus {
 		RefreshPresenters();
 	}
 
-	void DetailsPanel::CreatePresenters(GameObject::Type type)
+	void DetailsPanel::CreatePresenters(GameObject* obj)
 	{
 		ClearPresenters();
 
-		ClassInfo* classInfo = ClassRegistry::GetClassInfo(type);
+		ClassInfo* classInfo = ClassRegistry::GetClassInfo(obj);
+		GameObject::Type type = obj->GetType();
 		if (classInfo == nullptr) {
 			SPHE_ERROR("Class Registry: Unexpected GameObject type {0}", type);
 			return;
@@ -85,6 +97,9 @@ namespace Sharpheus {
 				case GameObject::Type::BoxCollider:
 					CreatePresenterFrom<BoxCollider>(provider, y);
 					break;
+				case GameObject::Type::Behavior:
+					SPH_PRESENT_BEHAVIOR(obj);
+					break;
 				default:
 					SPHE_WARN("Details Panel: Unexpected GameObject type {0}", type);
 			}
@@ -103,7 +118,7 @@ namespace Sharpheus {
 
 	void DetailsPanel::FillPresenters(GameObject* curr)
 	{
-		ClassInfo* classInfo = ClassRegistry::GetClassInfo(curr->GetType());
+		ClassInfo* classInfo = ClassRegistry::GetClassInfo(curr);
 		if (classInfo == nullptr) {
 			SPHE_ERROR("Class Registry: Unexpected GameObject type {0}", curr->GetType());
 			return;
@@ -176,6 +191,9 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::TRAFO:
 				presenters.push_back(new TrafoPresenter<Class>(this, (TrafoProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::BEHAVIOR:
+				presenters.push_back(new BehaviorPresenter(this, provider->GetName(), behaviorChangedCallback, currDataChangedCallback, y));
 				break;
 			default:
 				SPHE_WARN("Details Panel: Unexpected provider type {0}", provider->GetType());

@@ -7,3 +7,4 @@
 #include "Colliders/PhysicsObject.hpp"
 #include "Behaviors/Behavior.hpp"
 #include "Behaviors/LocalListenerBehavior.hpp"
+#include "Behaviors/PlaceholderBehavior.hpp"

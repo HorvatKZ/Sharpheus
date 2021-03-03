@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "Level.hpp"
 #include "GameObjects/GameObjects.h"
-#include "GameObjects/Behaviors/DebugBehavior.hpp"
-#include "GameObjects/Behaviors/PlayerController.hpp"
 #include "FileUnits/FileLoader.hpp"
 #include "FileUnits/FileSaver.hpp"
+#include "BehaviorCreator.hpp"
 
 
 namespace Sharpheus {
@@ -22,38 +21,7 @@ namespace Sharpheus {
 		root->SetLevel(this);
 
 		Camera* camera = Create<Camera>(root, "Camera");
-		//camera->SetUpRect(1280, 720);
 		camera->SetCurrent();
-
-		// For testing
-		PhysicsObject* player = Create<PhysicsObject>(root, "Player");
-		player->SetGravity(500);
-
-		Sprite* playerSprite = Create<Sprite>(player, "Sprite");
-		playerSprite->SetTrafo({ { 0, 0 }, {3, 3}, 0 });
-		playerSprite->SetImageFromPath("../Assets/Testing/test.png", false);
-
-		BoxCollider* playerCol = Create<BoxCollider>(player, "Box");
-		playerCol->SetTrafo({ { 0, 0 }, {3, 3}, 0 });
-		playerCol->SetRect(20, 32);
-
-		//Create<PlayerController>(player, "Controller");
-
-		Sprite* ground = Create<Sprite>(root, "Sprite2");
-		ground->SetTrafo({ { 0, 300 }, {1, .1}, 0 });
-		ground->SetImageFromPath("../Assets/Branding/sharpheus_promo.png", true);
-
-		BoxCollider* box1 = Create<BoxCollider>(ground, "GroundBox1");
-		box1->SetTrafo({ {0, 0}, {1, 1}, 0 });
-		box1->SetRect(800, 600);
-		BoxCollider* box2 = Create<BoxCollider>(ground, "GroundBox2");
-		box2->SetTrafo({{-400, 0}, {1, 1}, 0 });
-		box2->SetRect(60, 5000);
-		BoxCollider* box3 = Create<BoxCollider>(ground, "GroundBox3");
-		box3->SetTrafo({ {400, 0}, {1, 1}, 0 });
-		box3->SetRect(60, 5000);
-
-		//Create<DebugBehavior>(root, "Debug");
 	}
 
 
@@ -79,16 +47,55 @@ namespace Sharpheus {
 	}
 
 
+	GameObject* Level::Create(GameObject::Type type, GameObject* parent, const std::string& newName)
+	{
+		switch (type) {
+			case GameObject::Type::Collection:
+				return Create<Collection>(parent, newName);
+			case GameObject::Type::Camera:
+				return Create<Camera>(parent, newName);
+			case GameObject::Type::Sprite:
+				return Create<Sprite>(parent, newName);
+			case GameObject::Type::PhysicsObject:
+				return Create<PhysicsObject>(parent, newName);
+			case GameObject::Type::BoxCollider:
+				return Create<BoxCollider>(parent, newName);
+			case GameObject::Type::Behavior:
+				return Create<PlaceholderBehavior>(parent, newName);
+		}
+
+		return nullptr;
+	}
+
+
+	GameObject* Level::Create(GameObject* other, GameObject* parent, const std::string& newName)
+	{
+		GameObject::Type type = other->GetType();
+		if (type == GameObject::Type::Behavior) {
+			GameObject* behavior = BehaviorCreator::Create(((Behavior*)other)->GetSubType(), parent, newName);
+			Attach(behavior);
+			return behavior;
+		}
+		return Create(type, parent, newName);
+	}
+
+
 	void Level::Attach(GameObject* obj)
 	{
+		if (obj == nullptr) {
+			SPH_ERROR("Cannot attach nullptr");
+			return;
+		}
+
 		if (obj->GetParent() == nullptr) {
 			SPH_ERROR("Cannot attach another root GameObject");
+			return;
 		}
 
 		std::string correctNewName = GenerateUniqueName(obj->GetName());
+		obj->SetLevel(this);
 		obj->SetUpName(correctNewName);
 		gameObjects[correctNewName] = obj;
-		obj->SetLevel(this);
 
 		for (GameObject* child : obj->GetChildren()) {
 			Attach(child);
@@ -123,41 +130,59 @@ namespace Sharpheus {
 	bool Level::Save()
 	{
 		SPH_ASSERT(HasPath(), "File not specified for saving level \"{0}\"", name);
-		return Save(path);
+		return Save(base, path);
 	}
 
 
-	bool Level::Save(const std::string& filepath)
+	bool Level::Save(const std::string& base, const std::string& path)
 	{
-		FileSaver fs(filepath.c_str());
+		FileSaver fs((base + path).c_str());
 
 		bool success = true;
 		success &= SaveLevelData(fs);
 		success &= root->SaveAll(fs);
 
 		if (!HasPath() && success) {
-			path = filepath;
+			this->path = path;
+			this->base = base;
+			fullPath = base + path;
 		}
 
-		SPH_ASSERT(success, "An error occured during saving level \"{0}\" to \"{1}\"", name, filepath);
+		SPH_ASSERT(success, "An error occured during saving level \"{0}\" to \"{1}{2}\"", name, base, path);
 		return success;
 	}
 
 
-	bool Level::Load(const std::string& filepath)
+	bool Level::Load(const std::string& base, const std::string& path)
 	{
 		Renderer::SetCamera(nullptr);
 		delete root;
 		collSys.Clear();
 
-		FileLoader fl(filepath.c_str());
-		path = filepath;
+		FileLoader fl((base + path).c_str());
 
 		bool success = true;
 		success &= LoadLevelData(fl);
 		success &= LoadRoot(fl);
 
-		SPH_ASSERT(success, "An error occured during loading level \"{0}\" from \"{1}\"", name, filepath);
+		if (success) {
+			this->path = path;
+			this->base = base;
+			fullPath = base + path;
+		}
+
+		SPH_ASSERT(success, "An error occured during loading level \"{0}\" from \"{1}{2}\"", name, base, path);
+		return success;
+	}
+
+
+	bool Level::LoadLevelData(const std::string& fullpath)
+	{
+		FileLoader fl(fullpath.c_str());
+
+		bool success = LoadLevelData(fl);
+
+		SPH_ASSERT(success, "An error occured during loading level data from \"{1}\"", name, fullpath);
 		return success;
 	}
 
@@ -165,6 +190,7 @@ namespace Sharpheus {
 	bool Level::SaveLevelData(FileSaver& fs)
 	{
 		fs.Write(name);
+		fs.Write(projectPath);
 		fs.WriteEnd();
 		return fs.GetStatus();
 	}
@@ -173,6 +199,7 @@ namespace Sharpheus {
 	bool Level::LoadLevelData(FileLoader& fl)
 	{
 		fl.Read(name);
+		fl.Read(projectPath);
 		return fl.TryReadingEnd();
 	}
 
@@ -185,7 +212,10 @@ namespace Sharpheus {
 
 		bool success = true;
 		success &= fl.Read(type);
-		SPH_ASSERT(type == (uint8_t)GameObject::Type::Collection, "Wrong root object type");
+		if (type != (uint8_t)GameObject::Type::Collection) {
+			SPH_ERROR("Wrong root object type");
+			return false;
+		}
 
 		success &= fl.Read(rootName);
 		root = new Collection(nullptr, rootName);
@@ -219,25 +249,16 @@ namespace Sharpheus {
 		realType = (GameObject::Type)type;
 
 		success &= fl.Read(objName);
-		GameObject* obj = nullptr;
-
-		switch (realType) {
-			case GameObject::Type::Collection:
-				obj = Create<Collection>(parent, objName);
-				break;
-			case GameObject::Type::Camera:
-				obj = Create<Camera>(parent, objName);
-				break;
-			case GameObject::Type::Sprite:
-				obj = Create<Sprite>(parent, objName);
-				break;
-			case GameObject::Type::PhysicsObject:
-				obj = Create<PhysicsObject>(parent, objName);
-				break;
-			case GameObject::Type::BoxCollider:
-				obj = Create<BoxCollider>(parent, objName);
-				break;
+		GameObject* obj;
+		if (realType != GameObject::Type::Behavior) {
+			obj = Create(realType, parent, objName);
+		} else {
+			uint32_t subType;
+			success &= fl.Read(subType);
+			obj = BehaviorCreator::Create(subType, parent, objName);
+			Attach(obj);
 		}
+		
 
 		if (obj == nullptr) {
 			SPH_ERROR("Could not create GameObject \"{0}\" with type {1}", objName, realType);
@@ -274,6 +295,12 @@ namespace Sharpheus {
 	}
 
 
+	void Level::SetRegistry(GameObject* obj)
+	{
+		gameObjects[obj->GetName()] = obj;
+	}
+
+
 	std::string Level::GenerateUniqueName(const std::string& originalName)
 	{
 		if (IsNameFree(originalName)) {
@@ -284,7 +311,7 @@ namespace Sharpheus {
 		int counter = 1;
 		bool isFree = false;
 		std::string result, basename = originalName;
-		size_t position = originalName.find('_');
+		size_t position = originalName.find_last_of('_');
 		if (position != std::string::npos) {
 			try {
 				counter = std::stoi(originalName.substr(position + 1));

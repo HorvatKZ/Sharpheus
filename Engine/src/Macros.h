@@ -7,6 +7,8 @@
 #endif
 
 
+#define SPH_BREAK __debugbreak
+
 // Binds
 #define SPH_BIND_0(x) std::bind(&x)
 #define SPH_BIND_1(x) std::bind(&x, std::placeholders::_1)
@@ -29,4 +31,4 @@
 #define SPH_WARN(...) ::Sharpheus::Logger::GetEngineLogger()->warn(__VA_ARGS__)
 #define SPH_ERROR(...) ::Sharpheus::Logger::GetEngineLogger()->error(__VA_ARGS__)
 #define SPH_FATAL(...) ::Sharpheus::Logger::GetEngineLogger()->critical(__VA_ARGS__)
-#define SPH_ASSERT(cond, ...) { if (!(cond)) SPH_ERROR(__VA_ARGS__); }
+#define SPH_ASSERT(cond, ...) { if (!(cond)) { SPH_ERROR(__VA_ARGS__); SPH_BREAK(); } }

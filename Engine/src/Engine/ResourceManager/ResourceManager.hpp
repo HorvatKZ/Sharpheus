@@ -8,29 +8,21 @@ namespace Sharpheus {
 	class SPH_EXPORT ResourceManager
 	{
 	public:
-		static void Init();
+		static void Init(const std::string& projectPath);
 		static void Clear();
 
-		static void UseSecondary();
-		static void UsePrimary();
+		static inline const std::string& GetAssetsRoot() { return assetsRoot; }
+
+		static std::string FullPathToPath(const std::string& fullPath);
+		static inline std::string PathToFullPath(const std::string& path) { return assetsRoot + path; }
 
 		static Image* GetImage(const std::string& path, bool filtered = false);
-		static inline Image* GetCicrle() { return isPrimary ? circle : circleSecondary; }
+		static inline Image* GetCicrle() { return circle; }
 
 	private:
-		// Primary
+		static std::string assetsRoot;
 		static std::unordered_map<std::string, Image*> images;
 		static Image* circle;
-
-		// Secondary
-		static std::unordered_map<std::string, Image*> imagesSecondary;
-		static Image* circleSecondary;
-
-		// Other
-		static bool isPrimary;
-
-		static void ClearSecondary();
-		static Image* GetImageFrom(std::unordered_map<std::string, Image*>& images, const std::string& path, bool filtered);
 	};
 
 }

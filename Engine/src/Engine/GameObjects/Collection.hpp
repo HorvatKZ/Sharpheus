@@ -10,7 +10,6 @@ namespace Sharpheus {
 	public:
 		Collection(GameObject* parent, const std::string& name);
 		virtual ~Collection();
-		virtual GameObject* Copy() override;
 
 		SPH_DECL_GAMEOBJECT(Collection)
 

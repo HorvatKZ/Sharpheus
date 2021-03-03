@@ -14,7 +14,10 @@ namespace Sharpheus {
 			uint32_t width = 1280;
 			uint32_t height = 720;
 			bool fullscreen = false;
+			bool vsync = false;
+			Color background = Color(32, 64, 128);
 		};
+
 
 		Window(const Props& props = Props()) : props(props), callback(SPH_BIND_STATIC(EventHandler::Handle)) {}
 		virtual ~Window() = default;
@@ -40,4 +43,5 @@ namespace Sharpheus {
 		EventFunc callback;
 	};
 
+	typedef Window::Props WinProps;
 }
