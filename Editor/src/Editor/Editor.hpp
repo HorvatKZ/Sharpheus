@@ -12,7 +12,7 @@ namespace Sharpheus {
 		Editor();
 		virtual ~Editor();
 
-		virtual bool OnInit();
+		virtual bool OnInit() override;
 
 	private:
 		EditorWindow* win = nullptr;

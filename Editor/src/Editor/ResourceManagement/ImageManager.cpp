@@ -42,6 +42,9 @@ namespace Sharpheus {
 			case PathType::GAMEOBJECTS:
 				fullPath = EditorData::GetPath() + "Assets\\Editor\\Icons\\GameObjects\\" + path;
 				break;
+			case PathType::EXPLORER:
+				fullPath = EditorData::GetPath() + "Assets\\Editor\\Icons\\Explorer\\" + path;
+				break;
 			default:
 				fullPath = path;
 		}

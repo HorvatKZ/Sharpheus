@@ -14,4 +14,9 @@ namespace Sharpheus {
 		delete[] c_str;
 		return result;
 	}
+
+
+	uint32_t UI::border = 5;
+	wxSize UI::buttonSize(90, 26);
+	wxFont UI::titleFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 }

@@ -4,6 +4,7 @@
 #include "Editor/Registry/ProjectData.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
 #include "BehaviorCreator.hpp"
+#include <wx/stdpaths.h>
 
 
 namespace Sharpheus {
@@ -46,6 +47,7 @@ namespace Sharpheus {
 		icon.CopyFromBitmap(wxBitmap(EditorData::GetPath() + "Assets\\Editor\\Icons\\sharpheus_icon.png", wxBITMAP_TYPE_PNG));
 		SetIcon(icon);
 
+		Bind(wxEVT_CLOSE_WINDOW, &EditorWindow::OnClose, this);
 		Bind(wxEVT_IDLE, &EditorWindow::OnIdle, this);
 	}
 
@@ -60,6 +62,7 @@ namespace Sharpheus {
 	{
 		levelHierarchy->FillWith(ProjectData::GetLevel()->GetRoot());
 		viewPort->InitEditingArrow();
+		explorer->SetPath(ProjectData::GetPath());
 	}
 
 
@@ -152,6 +155,14 @@ namespace Sharpheus {
 		toolBar->CancelPlay();
 		StopGame();
 	}
+
+
+	void EditorWindow::OnClose(wxCloseEvent& e)
+	{
+		menuBar->SaveLevel(wxCommandEvent());
+		e.Skip();
+	}
+
 
 	void EditorWindow::OnIdle(wxIdleEvent& e)
 	{

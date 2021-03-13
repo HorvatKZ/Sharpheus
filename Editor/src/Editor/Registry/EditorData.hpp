@@ -6,7 +6,7 @@ namespace Sharpheus {
 	class EditorData
 	{
 	public:
-		static void Init();
+		static void Init(const std::string& path);
 		static void Clear();
 
 		static inline class GameObject* GetCurrent() { return curr; }

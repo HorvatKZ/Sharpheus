@@ -14,10 +14,6 @@ namespace Sharpheus {
 	protected:
 		wxButton* okButton;
 		wxButton* cancelButton;
-
-		static uint32_t border;
-		static wxSize buttonSize;
-		static wxFont titleFont;
 	};
 
 }

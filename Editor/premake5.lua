@@ -26,7 +26,8 @@ project "Editor"
 	{
 		"_CRT_SECURE_NO_WARNINGS",
 		"_UNICODE",
-		"GLEW_STATIC"
+		"GLEW_STATIC",
+		"SPH_DEV"
 	}
 
 	includedirs

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Logger.hpp"
 #include <spdlog/sinks/rotating_file_sink.h>
+#include "Engine/FileUnits/OSPaths.hpp"
 
 
 namespace Sharpheus {
@@ -13,10 +14,12 @@ namespace Sharpheus {
 	{
 		spdlog::set_pattern("%^[%D %T] %n %l: %v%$");
 
-		engineLogger = spdlog::rotating_logger_mt("ENGINE", "../logs/engine.log", 50000, 3);
+		std::string logFolder = OSPaths::Get(OSPaths::Folder::APPDATA_ROAMING) + "\\Sharpheus\\logs\\";
+
+		engineLogger = spdlog::rotating_logger_mt("ENGINE", logFolder + "engine.log", 50000, 3);
 		engineLogger->set_level(spdlog::level::trace);
 
-		editorLogger = spdlog::rotating_logger_mt("EDITOR", "../logs/editor.log", 50000, 3);
+		editorLogger = spdlog::rotating_logger_mt("EDITOR", logFolder + "editor.log", 50000, 3);
 		editorLogger->set_level(spdlog::level::trace);
 
 		SPH_INFO("Loggers initialized!");

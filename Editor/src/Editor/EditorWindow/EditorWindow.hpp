@@ -45,6 +45,7 @@ namespace Sharpheus {
 		std::queue<uint32_t> behviorChangeRequests;
 
 		void OnGamePreviewExit(wxCloseEvent& e);
+		void OnClose(wxCloseEvent& e);
 		void OnIdle(wxIdleEvent& e);
 
 		void ChangeBehavior(uint32_t subType);

@@ -6,6 +6,8 @@
 #include "Engine/Renderer/Renderer.hpp"
 #include "ResourceManagement/ImageManager.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
+#include <wx/stdpaths.h>
+#include <wx/dir.h>
 
 
 wxIMPLEMENT_APP(Sharpheus::Editor);
@@ -15,7 +17,10 @@ namespace Sharpheus {
 	Editor::Editor()
 	{
 		Logger::Init();
-		EditorData::Init();
+
+		wxFileName binFolder(wxStandardPaths::Get().GetDataDir());
+		binFolder.SetName("");
+		EditorData::Init(wxStr2StdStr(binFolder.GetFullPath()));
 		ClassRegistry::Init();
 		SPHE_INFO("Welcome to Sharpheus Editor");
 	}
@@ -39,8 +44,27 @@ namespace Sharpheus {
 			ProjectData::Init(wxStr2StdStr(argv[1]));
 		}
 		else {
+#ifdef SPH_DEV
 			ProjectData::InitNew("Test Project", "D:\\Programming\\Sharpheus\\TestProject\\TestProject.proj.sharpheus",
 				"Level", "Level.lvl.sharpheus");
+#else
+			wxFileName binFolder(wxStandardPaths::Get().GetDataDir());
+			binFolder.SetName("");
+			wxDir dir(binFolder.GetFullPath());
+			bool found;
+			wxString name;
+			found = dir.GetFirst(&name);
+			while (found && name.Right(15) != ".proj.sharpheus") {
+				found = dir.GetNext(&name);
+			}
+
+			if (name.Right(15) != ".proj.sharpheus") {
+				SPHE_ERROR("Could not locate the relevant *.proj.sharpheus file");
+				wxExit();
+			}
+
+			ProjectData::Init(wxStr2StdStr(binFolder.GetFullPath() + name));
+#endif
 		}
 		win->SetTitle("Sharpheus Editor - " + ProjectData::GetProj()->GetName());
 

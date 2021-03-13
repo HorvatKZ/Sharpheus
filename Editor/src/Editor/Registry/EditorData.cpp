@@ -6,11 +6,12 @@
 namespace Sharpheus {
 
 	GameObject* EditorData::curr = nullptr;
-	std::string EditorData::path = "D:\\Programming\\Sharpheus\\";
+	std::string EditorData::path;
 
 
-	void EditorData::Init()
+	void EditorData::Init(const std::string& _path)
 	{
+		path = _path;
 	}
 
 

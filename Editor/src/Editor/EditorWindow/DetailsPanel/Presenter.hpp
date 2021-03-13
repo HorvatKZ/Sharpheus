@@ -28,8 +28,6 @@ namespace Sharpheus {
 		wxStaticText* title;
 		Signal signal;
 
-		static uint32_t border;
-		static wxFont titleFont;
 		static wxColour redish;
 		static wxColour greenish;
 		static wxColour blueish;
@@ -311,30 +309,6 @@ namespace Sharpheus {
 
 	private:
 		TrafoProvider<Class>* provider;
-
-		virtual void HandleChange(wxCommandEvent& e);
-	};
-
-
-	class BehaviorPresenter : public Presenter
-	{
-	public:
-		BehaviorPresenter(wxWindow* parent, const std::string& title, std::function<void(uint32_t)>& mainSignal, Signal signal, uint32_t& y);
-		virtual ~BehaviorPresenter();
-
-		void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
-		virtual inline void SetDefault() override {
-			Presenter::SetDefault();
-			typeSelector->SelectNone();
-		}
-
-	protected:
-		wxComboBox* typeSelector = nullptr;
-		wxButton* createNewTypeButton;
-
-		std::function<void(uint32_t)> mainSignal;
-		uint32_t y;
 
 		virtual void HandleChange(wxCommandEvent& e);
 	};

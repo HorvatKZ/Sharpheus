@@ -3,6 +3,7 @@
 #include "Editor/Registry/ClassRegistry.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
 #include "BehaviorCreator.hpp"
+#include "BehaviorPicker.hpp"
 
 
 namespace Sharpheus {
@@ -193,7 +194,7 @@ namespace Sharpheus {
 				presenters.push_back(new TrafoPresenter<Class>(this, (TrafoProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::BEHAVIOR:
-				presenters.push_back(new BehaviorPresenter(this, provider->GetName(), behaviorChangedCallback, currDataChangedCallback, y));
+				presenters.push_back(new BehaviorPicker(this, provider->GetName(), behaviorChangedCallback, currDataChangedCallback, y));
 				break;
 			default:
 				SPHE_WARN("Details Panel: Unexpected provider type {0}", provider->GetType());

@@ -133,7 +133,8 @@ namespace Sharpheus {
 	void MenuBar::SaveLevel(wxCommandEvent& e)
 	{
 		if (ProjectData::GetLevel()->HasPath()) {
-			ProjectData::GetLevel()->Save();
+			bool success = ProjectData::GetLevel()->Save();
+			SPHE_ASSERT(success, "Cannot save level. Check the log files for more information");
 		}
 		else {
 			SaveLevelAs(e);

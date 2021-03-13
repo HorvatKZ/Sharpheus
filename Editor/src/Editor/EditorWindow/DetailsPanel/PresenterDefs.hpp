@@ -292,10 +292,10 @@ namespace Sharpheus {
 	inline PointPresenter<Class>::PointPresenter(wxWindow* parent, PointProvider<Class>* provider, Signal signal, uint32_t& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = (parent->GetSize().x - 3 * border) / 2;
+		uint32_t width = (parent->GetSize().x - 3 * UI::border) / 2;
 		y += 22;
-		xField = new FloatComponentCtrl(parent, "X", wxPoint(border, y), width, redish);
-		yField = new FloatComponentCtrl(parent, "Y", wxPoint(2 * border + width, y), width, blueish);
+		xField = new FloatComponentCtrl(parent, "X", wxPoint(UI::border, y), width, redish);
+		yField = new FloatComponentCtrl(parent, "Y", wxPoint(2 * UI::border + width, y), width, blueish);
 		xField->Bind(wxEVT_TEXT_ENTER, &PointPresenter<Class>::HandleChange, this);
 		yField->Bind(wxEVT_TEXT_ENTER, &PointPresenter<Class>::HandleChange, this);
 		y += 35;
@@ -350,18 +350,18 @@ namespace Sharpheus {
 	{
 		lastColor = *wxBLACK;
 
-		uint32_t width = (parent->GetSize().x - 4 * border) / 3;
+		uint32_t width = (parent->GetSize().x - 4 * UI::border) / 3;
 		y += 22;
-		rField = new ByteComponentCtrl(parent, "R", wxPoint(border, y), width, redish);
-		gField = new ByteComponentCtrl(parent, "G", wxPoint(2 * border + width, y), width, greenish);
-		bField = new ByteComponentCtrl(parent, "B", wxPoint(3 * border + 2 * width, y), width, blueish);
+		rField = new ByteComponentCtrl(parent, "R", wxPoint(UI::border, y), width, redish);
+		gField = new ByteComponentCtrl(parent, "G", wxPoint(2 * UI::border + width, y), width, greenish);
+		bField = new ByteComponentCtrl(parent, "B", wxPoint(3 * UI::border + 2 * width, y), width, blueish);
 		rField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
 		gField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
 		bField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
 		y += 30;
-		aField = new ByteComponentCtrl(parent, "A", wxPoint(border, y), width, greyish);
+		aField = new ByteComponentCtrl(parent, "A", wxPoint(UI::border, y), width, greyish);
 		aField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
-		color = new wxColourPickerCtrl(parent, wxID_ANY, *wxBLACK, wxPoint(2 * border + width, y), wxSize(2 * width + border, 24));
+		color = new wxColourPickerCtrl(parent, wxID_ANY, *wxBLACK, wxPoint(2 * UI::border + width, y), wxSize(2 * width + UI::border, 24));
 		color->Bind(wxEVT_COLOURPICKER_CHANGED, &ColorPresenter<Class>::HandlePickerChange, this);
 		y += 35;
 	}
@@ -449,13 +449,13 @@ namespace Sharpheus {
 	{
 		lastPath = "";
 
-		uint32_t width = parent->GetSize().x - 3 * border - 50;
+		uint32_t width = parent->GetSize().x - 3 * UI::border - 50;
 		y += 22;
-		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(border, y), wxSize(width, 22), wxST_ELLIPSIZE_START);
+		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22), wxST_ELLIPSIZE_START);
 		path->SetMaxSize(wxSize(width, 22));
-		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * border + width, y), wxSize(50, 50));
+		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * UI::border + width, y), wxSize(50, 50));
 		y += 22;
-		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(border, y), wxSize(75, 25));
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(UI::border, y), wxSize(75, 25));
 		browse->Bind(wxEVT_BUTTON, &ImagePresenter<Class>::HandleChange, this);
 		y += 33;
 	}
