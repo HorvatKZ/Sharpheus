@@ -17,10 +17,7 @@ namespace Sharpheus {
 	Editor::Editor()
 	{
 		Logger::Init();
-
-		wxFileName binFolder(wxStandardPaths::Get().GetDataDir());
-		binFolder.SetName("");
-		EditorData::Init(wxStr2StdStr(binFolder.GetFullPath()));
+		EditorData::Init(wxStr2StdStr(wxStandardPaths::Get().GetUserConfigDir() + "\\Sharpheus\\editorConfig.txt"));
 		ClassRegistry::Init();
 		SPHE_INFO("Welcome to Sharpheus Editor");
 	}

@@ -118,6 +118,11 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(Image* data)
 	{
+		if (data == nullptr) {
+			Write("nullptr");
+			return GetStatus();
+		}
+
 		Write(data->GetPath());
 		Write(data->IsFiltered());
 		return GetStatus();

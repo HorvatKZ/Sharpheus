@@ -31,7 +31,6 @@ namespace Sharpheus {
 		bool IsClassNameFree(const wxString& className);
 		void CreateFiles(const wxString& className, const wxString& parentClassName, const wxString& folder, uint32_t ID);
 		void RegenerateProject();
-		void SaveLevel();
 	};
 
 }

@@ -82,7 +82,7 @@ namespace Sharpheus {
 	bool FileLoader::Read(std::string& data)
 	{
 		if (file) {
-			uint32_t len;
+			uint32_t len = 0;
 			file.read((char*)&len, sizeof(len));
 			char* str = new char[len + 1];
 			file.read(str, sizeof(char) * (len + 1));
@@ -125,6 +125,10 @@ namespace Sharpheus {
 		std::string path;
 		bool filtered;
 		Read(path);
+		if (path == "nullptr") {
+			*data = nullptr;
+			return GetStatus();
+		}
 		Read(filtered);
 		*data = ResourceManager::GetImage(path, filtered);
 		return GetStatus();

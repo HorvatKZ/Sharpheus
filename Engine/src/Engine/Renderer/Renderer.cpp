@@ -43,11 +43,6 @@ namespace Sharpheus {
 		renderer->DrawMonocromeQuad(leftUp, rightUp, rightDown, leftDown, color);
 	}
 
-	inline Camera* Renderer::GetCamera()
-	{
-		return renderer->GetCamera();
-	}
-
 	void Renderer::SetCamera(class Camera* camera)
 	{
 		renderer->SetCamera(camera);

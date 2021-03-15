@@ -20,20 +20,19 @@ namespace Sharpheus {
 		void EndRender() override;
 
 		float GetDeltaTime() override;
-		uint32_t GetWidth() override;
-		uint32_t GetHeight() override;
-		std::string GetTitle() override;
-		bool IsVsync() override;
 
 		void SetWidth(uint32_t width) override;
 		void SetHeight(uint32_t height) override;
 		void SetTitle(const std::string& title) override;
 		void SetVsync(bool vsync) override;
+		void SetFullscreen(bool fullscreen) override;
+		void SetBackground(const Color& backgroun) override;
 
 	private:
 		GLFWwindow* win;
 		float lastTime, lastSecond;
 		uint32_t fps = 0;
+		int lastPos[2], lastSize[2];
 
 		void SetCallbacks();
 	};

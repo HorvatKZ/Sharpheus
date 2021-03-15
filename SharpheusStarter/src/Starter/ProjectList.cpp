@@ -18,7 +18,9 @@ namespace Sharpheus {
 		Bind(wxEVT_MOTION, &ProjectList::OnMouseMove, this);
 
 		wxTextFile file;
-		file.Open(projectsFile);
+		if (!file.Open(projectsFile)) {
+			file.Create(projectsFile);
+		}
 		wxString line = file.GetFirstLine();
 		AddProject(line);
 		

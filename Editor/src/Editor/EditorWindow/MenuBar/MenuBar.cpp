@@ -5,6 +5,7 @@
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
+#include "Editor/Exporting/Exporter.hpp"
 
 
 namespace Sharpheus {
@@ -168,7 +169,13 @@ namespace Sharpheus {
 
 	void MenuBar::ExportGame(wxCommandEvent& e)
 	{
-		wxMessageBox("Exporting is under construction..", "Info");
+		int response = wxMessageBox("Do you want to save the current level before exporting?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
+
+		if (response == wxYES) {
+			SaveLevel(e);
+		}
+
+		Exporter exp;
 	}
 
 }

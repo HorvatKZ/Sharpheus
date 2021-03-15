@@ -1,17 +1,21 @@
 #include "editor_pch.h"
 #include "EditorData.hpp"
 #include "ProjectData.hpp"
+#include <wx/textfile.h>
 
 
 namespace Sharpheus {
 
 	GameObject* EditorData::curr = nullptr;
-	std::string EditorData::path;
+	wxString EditorData::path;
 
 
-	void EditorData::Init(const std::string& _path)
+	void EditorData::Init(const wxString& configFile)
 	{
-		path = _path;
+		wxTextFile config;
+		bool success = config.Open(configFile);
+		SPHE_ASSERT(success, "Cannot find editor config file");
+		path = config.GetFirstLine();
 	}
 
 
@@ -20,9 +24,9 @@ namespace Sharpheus {
 	}
 
 
-	void EditorData::SetCurrent(const std::string& currName)
+	void EditorData::SetCurrent(const wxString& currName)
 	{
-		curr = ProjectData::GetLevel()->GetGameObject(currName);
+		curr = ProjectData::GetLevel()->GetGameObject(wxStr2StdStr(currName));
 	}
 
 

@@ -22,7 +22,7 @@ namespace Sharpheus {
 
 
 	template<bool isSave>
-	inline RelativeFileDialog<isSave>::RelativeFileDialog(wxWindow* parent, const wxString& title, const wxString& dir, const wxString& type)
+	inline RelativeFileDialog<isSave>::RelativeFileDialog(wxWindow* parent, const wxString& title, const wxString& dir, const wxString& types)
 		: parent(parent), title(title), dir(dir), types(types)
 	{
 	}

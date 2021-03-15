@@ -12,17 +12,34 @@ namespace Sharpheus {
 	}
 
 
-	Project::Project(const std::string& name, const std::string& path, const std::string& defaultLevelName, const std::string& defaultLevelPath)
-		: name(name), path(path), defaultLevelPath(defaultLevelPath)
+	Project::Project(const Data& data, const std::string& basePath)
+		: data(data), basePath(basePath)
 	{
-		size_t pos = path.find_last_of('\\'); // windows only
+		if (basePath[basePath.size() - 1] != '\\') {
+			this->basePath += '\\';
+		}
+		ResourceManager::Init(this->basePath);
+
+		level = new Level();
+		level->Load(this->basePath + "Levels\\", data.defaultLevelPath);
+		SetWinProps(data.winProps);
+	}
+
+
+	Project::Project(const std::string& name, const std::string& path, const std::string& defaultLevelName, const std::string& defaultLevelPath)
+		: path(path)
+	{
+		data.name = name;
+		data.defaultLevelPath = defaultLevelPath;
+
+		size_t pos = path.find_last_of('\\');
 		basePath = path.substr(0, pos + 1);
 		ResourceManager::Init(basePath);
 
 		level = new Level(defaultLevelName);
 		level->SetProjectPath(path);
 		level->Save(basePath + "Levels\\", defaultLevelPath);
-		SetWinProps(winProps);
+		SetWinProps(data.winProps);
 		SaveProjectData();	
 	}
 
@@ -75,7 +92,7 @@ namespace Sharpheus {
 			bool success = true;
 			success &= LoadProjectData(path);
 			level = new Level();
-			success &= level->Load(basePath + "Levels\\", defaultLevelPath);
+			success &= level->Load(basePath + "Levels\\", data.defaultLevelPath);
 			level->SetProjectPath(path);
 			return success;
 		}
@@ -99,17 +116,44 @@ namespace Sharpheus {
 	{
 		bool success = true;
 		FileSaver fs(path);
-		success &= fs.Write(name);
+		success &= fs.Write(data.name);
 		success &= fs.WriteEnd();
-		success &= fs.Write(winProps.title);
-		success &= fs.Write(winProps.width);
-		success &= fs.Write(winProps.height);
-		success &= fs.Write(winProps.fullscreen);
-		success &= fs.Write(winProps.vsync);
-		success &= fs.Write(winProps.background);
+		success &= fs.Write(data.winProps.title);
+		success &= fs.Write(data.winProps.width);
+		success &= fs.Write(data.winProps.height);
+		success &= fs.Write(data.winProps.fullscreen);
+		success &= fs.Write(data.winProps.vsync);
+		success &= fs.Write(data.winProps.background);
 		success &= fs.WriteEnd();
-		success &= fs.Write(defaultLevelPath);
+		success &= fs.Write(data.defaultLevelPath);
 		success &= fs.WriteEnd();
+		SPH_ASSERT(success, "Cannot save project data to \"{0}\"", path);
+		return success;
+	}
+
+
+	bool Project::SaveProjectDataToHpp(const std::string& path)
+	{
+		bool success = true;
+		std::ofstream f(path);
+		success &= !f.fail();
+		f << "#pragma once\n";
+		f << "\n";
+		f << "#include \"Project.hpp\"\n";
+		f << "\n";
+		std::string defLevel = data.defaultLevelPath;
+		for (char& character : defLevel) {
+			if (character == '\\') {
+				character = '/';
+			}
+		}
+		f << "namespace Sharpheus {\n";
+		f << "Project::Data projectData(\"" << data.name << "\", \"" << defLevel << "\", "
+			<< "WinProps(\"" << data.name << "\", " << data.winProps.width << ", " << data.winProps.height << ", "
+			<< data.winProps.fullscreen << ", " << data.winProps.vsync << ", Color(" << (uint32_t)data.winProps.background.r << ", "
+			<< (uint32_t)data.winProps.background.g << ", " << (uint32_t)data.winProps.background.b << ")));\n";
+		f << "}\n";
+		f.close();
 		SPH_ASSERT(success, "Cannot save project data to \"{0}\"", path);
 		return success;
 	}
@@ -117,7 +161,7 @@ namespace Sharpheus {
 
 	void Project::SetWinProps(const WinProps& winProps)
 	{
-		this->winProps = winProps;
+		data.winProps = winProps;
 		Renderer::SetBackgroundColor(winProps.background);
 		Camera::SetStaticRect(winProps.width, winProps.height);
 	}
@@ -132,19 +176,20 @@ namespace Sharpheus {
 		this->path = path;
 		bool success = true;
 		FileLoader fl(path);
-		success &= fl.Read(name);
+		success &= fl.Read(data.name);
 		success &= fl.TryReadingEnd();
-		success &= fl.Read(winProps.title);
-		success &= fl.Read(winProps.width);	
-		success &= fl.Read(winProps.height);	
-		success &= fl.Read(winProps.fullscreen);	
-		success &= fl.Read(winProps.vsync);
-		success &= fl.Read(winProps.background);
+		success &= fl.Read(data.winProps.title);
+		success &= fl.Read(data.winProps.width);
+		success &= fl.Read(data.winProps.height);
+		success &= fl.Read(data.winProps.fullscreen);
+		success &= fl.Read(data.winProps.vsync);
+		success &= fl.Read(data.winProps.background);
 		success &= fl.TryReadingEnd();
-		success &= fl.Read(defaultLevelPath);
+		success &= fl.Read(data.defaultLevelPath);
 		success &= fl.TryReadingEnd();
-		SetWinProps(winProps);
+		SetWinProps(data.winProps);
 		SPH_ASSERT(success, "Cannot read project data from \"{0}\"", path);
 		return success;
 	}
+
 }

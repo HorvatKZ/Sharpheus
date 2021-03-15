@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "OpenGL_Window.hpp"
+#include "stb_image.h"
 
 #define SPH_PROPAGATE(e) \
 	EventFunc callback = *(EventFunc*)glfwGetWindowUserPointer(win); \
@@ -31,8 +32,15 @@ namespace Sharpheus {
 		lastTime = glfwGetTime();
 		lastSecond = lastTime;
 
+		Renderer::Init();
 		Renderer::SetBackgroundColor(props.background);
 		Camera::SetStaticRect(props.width, props.height);
+
+		GLFWimage icons[1];
+		int channels;
+		icons[0].pixels = stbi_load("Assets/Icons/pngicon.png", &icons[0].width, &icons[0].height, &channels, 0);
+		glfwSetWindowIcon(win, 1, icons);
+		stbi_image_free(icons[0].pixels);
 	}
 
 
@@ -77,30 +85,6 @@ namespace Sharpheus {
 	}
 
 
-	uint32_t OpenGL_Window::GetWidth()
-	{
-		return props.width;
-	}
-
-
-	uint32_t OpenGL_Window::GetHeight()
-	{
-		return props.height;
-	}
-
-
-	std::string OpenGL_Window::GetTitle()
-	{
-		return props.title;
-	}
-
-
-	bool OpenGL_Window::IsVsync()
-	{
-		return isVsync;
-	}
-
-
 	void OpenGL_Window::SetWidth(uint32_t width)
 	{
 		props.width = width;
@@ -124,8 +108,34 @@ namespace Sharpheus {
 
 	void OpenGL_Window::SetVsync(bool vsync)
 	{
+		props.vsync = vsync;
 		glfwSwapInterval(vsync ? 1 : 0);
-		isVsync = vsync;
+	}
+
+
+	void OpenGL_Window::SetFullscreen(bool fullscreen)
+	{
+		if (props.fullscreen == fullscreen) {
+			return;
+		}
+
+		props.fullscreen = fullscreen;
+		if (fullscreen) {
+			glfwGetWindowPos(win, &lastPos[0], &lastPos[1]);
+			glfwGetWindowSize(win, &lastSize[0], &lastSize[1]);
+
+			GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+			glfwSetWindowMonitor(win, monitor, 0, 0, mode->width, mode->height, 0);
+		} else {
+			glfwSetWindowMonitor(win, nullptr, lastPos[0], lastPos[1], lastSize[0], lastSize[1], 0);
+		}
+	}
+
+	void OpenGL_Window::SetBackground(const Color& background)
+	{
+		props.background = background;
+		Renderer::SetBackgroundColor(background);
 	}
 
 

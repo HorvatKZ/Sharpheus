@@ -11,6 +11,8 @@ namespace Sharpheus {
 		switch (folder) {
 			case Folder::APPDATA_ROAMING:
 				return GetWin(FOLDERID_RoamingAppData);
+			case Folder::EXEC_FOLDER:
+				return GetExecFolderWin();
 			default:
 				return "";
 		}
@@ -33,6 +35,15 @@ namespace Sharpheus {
 		CoTaskMemFree(path);
 
 		return result;
+	}
+
+
+	std::string OSPaths::GetExecFolderWin()
+	{
+		char execPath[MAX_PATH];
+		GetModuleFileNameA(NULL, execPath, sizeof(execPath));
+		std::string result(execPath);
+		return result.substr(0, result.find_last_of('\\'));
 	}
 
 }

@@ -86,13 +86,6 @@ namespace Sharpheus {
 
 		CreateFiles(dialog.GetName(), dialog.GetParentName(), dialog.GetFolder(), dialog.GetID());
 		RegenerateProject();
-		
-		int response = wxMessageBox("Do you want to save the current level before exiting?", "Warning", wxICON_WARNING | wxYES | wxNO | wxCENTRE);
-		if (response == wxYES) {
-			SaveLevel();
-		}
-
-		wxExit();
 	}
 
 
@@ -141,24 +134,6 @@ namespace Sharpheus {
 		else {
 			wxExecute(ProjectData::GetPath() + "Solution\\" + name, wxEXEC_SYNC);
 			wxMessageBox("The new files are created. Now you can edit them.\nYou need to rebuild the solution before using the new Behavior.", "Behavior generation");
-		}
-	}
-
-
-	void BehaviorPicker::SaveLevel()
-	{
-		if (ProjectData::GetLevel()->HasPath()) {
-			bool success = ProjectData::GetLevel()->Save();
-			SPHE_ASSERT(success, "Cannot save level. Check the log files for more information");
-		}
-		else {
-			RelativeSaveDialog saveDialog(parent, "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
-
-			if (!saveDialog.Show())
-				return;
-
-			bool success = ProjectData::GetProj()->SaveLevel(wxStr2StdStr(saveDialog.GetPath()));
-			SPHE_ASSERT(success, "Cannot save level. Check the log files for more information");
 		}
 	}
 

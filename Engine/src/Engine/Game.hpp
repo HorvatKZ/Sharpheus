@@ -15,7 +15,7 @@ namespace Sharpheus {
 		virtual void WindowClosed(const WindowClosedEvent& e) = 0;
 
 	protected:
-		Project proj;
+		Project* proj = nullptr;
 	};
 
 

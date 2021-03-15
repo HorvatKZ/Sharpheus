@@ -173,7 +173,7 @@ namespace Sharpheus {
 	void LevelHierarchy::OnSelectionChange(wxTreeEvent& e)
 	{
 		wxTreeItemId selected = GetSelection();
-		EditorData::SetCurrent(wxStr2StdStr(GetItemText(selected)));
+		EditorData::SetCurrent(GetItemText(selected));
 		currChangedCallback();
 	}
 

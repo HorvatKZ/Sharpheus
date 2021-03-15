@@ -247,6 +247,14 @@ namespace Sharpheus {
 			success &= genSlnBat.Write();
 		}
 
+		wxTextFile genExportBat;
+		wxString exportingCommand = "\"" + commonFolder + "\\external\\Premake\\premake5.exe\" --file=\"" + solutionFolder + "\\Exported\\premake5.lua\" " + ide;
+		success &= genExportBat.Create(solutionFolder + "\\Exported\\GenSolution.bat");
+		if (success) {
+			genExportBat.AddLine("call " + exportingCommand);
+			success &= genExportBat.Write();
+		}
+
 		success &= wxExecute(command, wxEXEC_SYNC) == 0;
 
 		return success;

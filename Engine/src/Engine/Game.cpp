@@ -6,6 +6,11 @@
 #include "Events/EventHandler.hpp"
 #include "Events/EventListener.hpp"
 
+#ifdef SPH_EXPORTED
+	#include "ExportedProjectData.hpp"
+	#include "FileUnits/OSPaths.hpp"
+#endif
+
 
 namespace Sharpheus {
 
@@ -24,18 +29,21 @@ namespace Sharpheus {
 		Logger::Init();
 		SPH_INFO("Welcome to Sharpheus!");
 
+		win = new OpenGL_Window();
 		ResourceManager::Init("D:\\Programming\\Sharpheus\\TestProject\\");
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
-		Renderer::Init();
 
-		proj.CreateNewLevel("Level");
-		win = new OpenGL_Window();
+#ifdef SPH_EXPORTED
+		proj = new Project(projectData, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER));
+		win->SetProps(proj->GetWinProps());
+#endif 
 	}
 
 
 	Game::~Game()
 	{
 		delete win;
+		delete proj;
 		Renderer::Clear();
 		ResourceManager::Clear();
 		EventHandler::Clear();
@@ -49,9 +57,9 @@ namespace Sharpheus {
 	{
 		while (isRunning) {
 			win->PollEvents();
-			proj.Tick(win->GetDeltaTime());
+			proj->Tick(win->GetDeltaTime());
 			win->StartRender();
-			proj.Render();
+			proj->Render();
 			win->EndRender();
 		}
 	}

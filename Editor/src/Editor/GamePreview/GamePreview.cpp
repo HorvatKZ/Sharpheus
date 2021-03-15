@@ -9,10 +9,11 @@ namespace Sharpheus {
 	{
 		EventHandler::Init(SPH_BIND(GamePreview::WindowClosed));
 
-		bool success = proj.Load(projectPath);
+		proj = new Project();
+		bool success = proj->Load(projectPath);
 		SPHE_ASSERT(success, "Cannot start GamePreview, because the .lvl file is damaged");
 
-		canvas = new PreviewCanvas(this, glContext, &proj);
+		canvas = new PreviewCanvas(this, glContext, proj);
 		lastTick = wxGetLocalTimeMillis();
 
 		if (winProps.fullscreen) {
@@ -29,6 +30,7 @@ namespace Sharpheus {
 
 	GamePreview::~GamePreview()
 	{
+		delete proj;
 		EventHandler::Clear();
 	}
 
@@ -40,7 +42,7 @@ namespace Sharpheus {
 		}
 
 		wxLongLong currTick = wxGetLocalTimeMillis();
-		proj.Tick((currTick - lastTick).ToDouble() / 1000);
+		proj->Tick((currTick - lastTick).ToDouble() / 1000);
 		canvas->Refresh();
 		lastTick = currTick;
 	}

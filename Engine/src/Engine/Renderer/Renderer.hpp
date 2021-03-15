@@ -18,7 +18,7 @@ namespace Sharpheus {
 		static void DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
 			const Point& leftDown, const Color& color);
 
-		static inline class Camera* GetCamera();
+		static inline class Camera* GetCamera() { return renderer->GetCamera(); }
 		static void SetCamera(class Camera* camera);
 
 		static const Color& GetBackgroundColor();
