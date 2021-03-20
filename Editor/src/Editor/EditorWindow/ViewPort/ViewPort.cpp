@@ -233,7 +233,6 @@ namespace Sharpheus {
 
 	void ViewPort::RenderGrid()
 	{
-		camera->SetNeedToRecalc(true);
 		float minX = camera->GetXMin();
 		float maxX = camera->GetXMax();
 		float minY = camera->GetYMin();
@@ -244,16 +243,14 @@ namespace Sharpheus {
 		float firstYGrid = ceil(minY / gridSize) * gridSize;
 		float lastYGrid = floor(maxY / gridSize) * gridSize;
 
-		float relativeXGridThickness = gridThickness * camera->GetWorldTrafo().scale.x / 2;
-		float relativeYGridThickness = gridThickness * camera->GetWorldTrafo().scale.y / 2;
+		float relativeXGridThickness = gridThickness * camera->GetWorldTrafo().scale.x;
+		float relativeYGridThickness = gridThickness * camera->GetWorldTrafo().scale.y;
 		while (firstXGrid <= lastXGrid) {
-			Renderer::DrawMonocromeQuad(Point(firstXGrid - relativeXGridThickness, minY), Point(firstXGrid + relativeXGridThickness, minY),
-				Point(firstXGrid + relativeXGridThickness, maxY), Point(firstXGrid - relativeXGridThickness, maxY), gridColor);
+			Renderer::DrawVerticalLine(minY, maxY, firstXGrid, relativeXGridThickness, gridColor);
 			firstXGrid += gridSize;
 		}
 		while (firstYGrid <= lastYGrid) {
-			Renderer::DrawMonocromeQuad(Point(minX, firstYGrid - relativeYGridThickness), Point(maxX, firstYGrid - relativeYGridThickness),
-				Point(maxX, firstYGrid + relativeYGridThickness), Point(minX, firstYGrid + relativeYGridThickness), gridColor);
+			Renderer::DrawHorizontalLine(minX, maxX, firstYGrid, relativeYGridThickness, gridColor);
 			firstYGrid += gridSize;
 		}
 	}

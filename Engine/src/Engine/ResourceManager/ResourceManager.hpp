@@ -17,7 +17,7 @@ namespace Sharpheus {
 		static inline std::string PathToFullPath(const std::string& path) { return assetsRoot + path; }
 
 		static Image* GetImage(const std::string& path, bool filtered = false);
-		static inline Image* GetCicrle() { return circle; }
+		static inline Image* GetCircle() { return circle; }
 
 	private:
 		static std::string assetsRoot;

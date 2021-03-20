@@ -45,19 +45,24 @@ namespace Sharpheus {
 		cw.WriteConstructorDecl("Sharpheus::Behavior* other");
 		cw.WriteConstructorDecl("Sharpheus::GameObject* parent, const std::string& name");
 		cw.WriteDestructorDecl();
+		cw.WriteFunctionDecl("void", "CopyFrom", "Sharpheus::GameObject* other", "virtual", true);
+		cw.WriteEmptyLine();
+		cw.WriteFunctionDecl("bool", "Load", "Sharpheus::FileLoader& fl", "virtual", true);
 		cw.WriteEmptyLine();
 		cw.WriteLine(1, "SPH_DECL_BEHAVIOR(" + className + ", " + wxString::Format("%d", subType) + ");");
 		cw.WriteEmptyLine();
 
 		cw.WriteVisibility("protected");
-		cw.WriteFunctionDecl("void", "Tick", "float deltaTime", "", true);
-		cw.WriteFunctionDecl("void", "Init");
+		cw.WriteFunctionDecl("bool", "Save", "Sharpheus::FileSaver& fs", "virtual", true);
+		cw.WriteEmptyLine();
+		cw.WriteFunctionDecl("void", "Tick", "float deltaTime", "virtual", true);
+		cw.WriteFunctionDecl("void", "Init", "", "virtual");
 		cw.EndClass();
 		cw.WriteEmptyLine();
 	}
 
 
-	void ClassWriter::CreateBehaviorSource(const wxString& filePath, const wxString& headerInclude, const wxString& className, const wxString& parent)
+	void ClassWriter::CreateBehaviorSource(const wxString& filePath, const wxString& headerInclude, const wxString& className, const wxString& parent, uint32_t subType)
 	{
 		ClassWriter cw(filePath, className, parent, false);
 		cw.Include("pch.h");
@@ -67,7 +72,9 @@ namespace Sharpheus {
 		cw.UsingNamespace("Sharpheus");
 		cw.WriteEmptyLines(2);
 
-		cw.WriteLine("ClassInfo " + className + "::classInfo(\"" + className + "\", \"behavior.png\", {});");
+		cw.WriteLine("ClassInfo " + className + "::classInfo(\"" + className + "\", \"behavior.png\", {");
+		cw.WriteLine(1, "// Provide necessary data members here for the Editor to present them");
+		cw.WriteLine("});");
 		cw.WriteEmptyLines(2);
 
 		cw.StartConstructorDefWithParent("Sharpheus::Behavior* other", "other");
@@ -81,6 +88,28 @@ namespace Sharpheus {
 		cw.WriteEmptyLines(2);
 
 		cw.StartDestructorDef();
+		cw.EndFunctionDef();
+		cw.WriteEmptyLines(2);
+
+		cw.StartFunctionDef("void", "CopyFrom", "GameObject* other");
+		cw.WriteLine(1, "SPH_COPY_HEADER(" + wxString::Format("%d", subType) + ");");
+		cw.WriteEmptyLine();
+		cw.WriteLine(1, className + "* trueOther = (" + className + "*)other;");
+		cw.WriteLine(1, "// Copy data members here");
+		cw.EndFunctionDef();
+		cw.WriteEmptyLines(2);
+
+		cw.StartFunctionDef("bool", "Load", "FileLoader& fl");
+		cw.WriteLine(1, parent + "::Load(fl);");
+		cw.WriteLine(1, "// Read data members here");
+		cw.WriteLine(1, "return fl.GetStatus();");
+		cw.EndFunctionDef();
+		cw.WriteEmptyLines(2);
+
+		cw.StartFunctionDef("bool", "Save", "FileSaver& fs");
+		cw.WriteLine(1, parent + "::Save(fs);");
+		cw.WriteLine(1, "// Write data members here");
+		cw.WriteLine(1, "return fs.GetStatus();");
 		cw.EndFunctionDef();
 		cw.WriteEmptyLines(2);
 

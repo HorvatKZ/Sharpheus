@@ -1,11 +1,11 @@
 #pragma once
 
-#include "RectGameObject.hpp"
+#include "ShapedGameObject.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT Camera : public RectGameObject
+	class SPH_EXPORT Camera : public ShapedGameObject
 	{
 	public:
 		Camera(GameObject* parent, const std::string& name);
@@ -28,7 +28,7 @@ namespace Sharpheus {
 
 		inline float GetWidth() { return customWidth == 0.f ? width : customWidth; }
 		inline float GetHeight() { return customHeight == 0.f ? height : customHeight; }
-		inline void SetCustomRect(float width, float height) { customWidth = width; customHeight = height; needToRecalcOffset = true; }
+		inline void SetCustomRect(float width, float height) { customWidth = width; customHeight = height; SetSizer(width, height); }
 
 		static inline float GetStaticWidth() { return width; }
 		static inline float GetStaticHeight() { return height; }
@@ -54,7 +54,6 @@ namespace Sharpheus {
 
 		virtual bool Save(FileSaver& fs) override;
 
-		virtual void RecalcOffsets() override;
 		virtual void RenderSelection() override;
 		virtual inline bool IsCurrentCamera() override { return isCurrent; }
 

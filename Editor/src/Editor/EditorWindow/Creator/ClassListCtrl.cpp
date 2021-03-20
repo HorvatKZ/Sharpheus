@@ -72,6 +72,8 @@ namespace Sharpheus {
             Info("PhysicsObject", "physicsobj.png", GameObject::Type::PhysicsObject, 2),
             Info("Colliders", "colliders.png", GameObject::Type::None, 2),
             Info("BoxCollider", "boxcollider.png", GameObject::Type::BoxCollider, 3),
+            Info("CircleCollider", "circlecollider.png", GameObject::Type::CircleCollider, 3),
+            Info("CapsuleCollider", "capsulecollider.png", GameObject::Type::CapsuleCollider, 3),
             Info("Behavior", "behavior.png", GameObject::Type::Behavior, 1)
         };
 

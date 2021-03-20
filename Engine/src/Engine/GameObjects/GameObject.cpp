@@ -303,8 +303,13 @@ namespace Sharpheus {
 
 	void GameObject::RenderSelection()
 	{
-		ResourceManager::GetCicrle()->Render(worldTrafo.pos + Point(-selectCircleRadius, -selectCircleRadius), worldTrafo.pos + Point(selectCircleRadius, -selectCircleRadius),
-			worldTrafo.pos + Point(selectCircleRadius, selectCircleRadius), worldTrafo.pos + Point(-selectCircleRadius, selectCircleRadius), selectColor);
+		Point coords[] = {
+			worldTrafo.pos + Point(-selectCircleRadius, -selectCircleRadius),
+			worldTrafo.pos + Point(selectCircleRadius, -selectCircleRadius),
+			worldTrafo.pos + Point(selectCircleRadius, selectCircleRadius),
+			worldTrafo.pos + Point(-selectCircleRadius, selectCircleRadius)
+		};
+		ResourceManager::GetCircle()->Render(coords, selectColor);
 	}
 
 

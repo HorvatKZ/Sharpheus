@@ -9,7 +9,7 @@ namespace Sharpheus {
 	Color Collider::shapeColor = Color(0, 255, 64, 127);
 
 
-	Collider::Collider(GameObject* parent, const std::string& name, bool useRect) : RectGameObject(parent, name, useRect)
+	Collider::Collider(GameObject* parent, const std::string& name, Shape* shape) : ShapedGameObject(parent, name, shape)
 	{
 		prevPos = worldTrafo.pos;
 	}

@@ -14,8 +14,11 @@ namespace Sharpheus {
 
 
 	Camera::Camera(GameObject* parent, const std::string& name) :
-		RectGameObject(parent, name)
+		ShapedGameObject(parent, name, new Rect())
 	{
+		SetSizer(width, height);
+		shape->ForceRefresh();
+
 		Subscribe<WindowResizedEvent>(SPH_BIND(Camera::WindowResized));
 	}
 
@@ -28,6 +31,7 @@ namespace Sharpheus {
 		Camera* trueOther = (Camera*)other;
 		customWidth = trueOther->customWidth;
 		customHeight = trueOther->customHeight;
+		SetSizer(GetWidth(), GetHeight());
 	}
 
 
@@ -55,7 +59,6 @@ namespace Sharpheus {
 	void Camera::Zoom(float scale)
 	{
 		worldTrafo.scale *= scale;
-		needToRecalcOffset = true;
 		SetWorldTrafo(worldTrafo);
 	}
 
@@ -73,7 +76,6 @@ namespace Sharpheus {
 		Point newScreenCenter(newScreenCenterDiff.x + GetWidth() / 2, newScreenCenterDiff.y + GetHeight() / 2);
 		worldTrafo.pos = ScreenPosToGamePos(newScreenCenter);
 		worldTrafo.scale *= scale;
-		needToRecalcOffset = true;
 		SetWorldTrafo(worldTrafo);
 	}
 
@@ -122,34 +124,27 @@ namespace Sharpheus {
 		if (isCurrent) {
 			SetCurrent();
 		}
-		needToRecalcOffset = true;
+		SetSizer(GetWidth(), GetHeight());
 		return fl.GetStatus();
-	}
-
-
-	void Camera::RecalcOffsets()
-	{
-		RecalcOffsetsCommon(GetWidth() * worldTrafo.scale.x, GetHeight() * worldTrafo.scale.y, worldTrafo.rot);
 	}
 
 
 	void Camera::RenderSelection()
 	{
-		needToRecalcOffset = true;
-		RectGameObject::RenderSelection();
+		SetSizer(GetWidth(), GetHeight());
+		ShapedGameObject::RenderSelection();
 	}
 
 
 	float Camera::GetXMin()
 	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
+		SetSizer(GetWidth(), GetHeight());
+		Point* corners = shape->GetCorners();
 
-		float minX = worldTrafo.pos.x + offsets[0].x;
+		float minX = corners[0].x;
 		for (uint32_t i = 1; i < 4; ++i) {
-			if (offsets[i].x < minX) {
-				minX = worldTrafo.pos.x + offsets[i].x;
+			if (corners[i].x < minX) {
+				minX = corners[i].x;
 			}
 		}
 		return minX;
@@ -158,14 +153,13 @@ namespace Sharpheus {
 
 	float Camera::GetXMax()
 	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
+		SetSizer(GetWidth(), GetHeight());
+		Point* corners = shape->GetCorners();
 
-		float maxX = worldTrafo.pos.x + offsets[0].x;
+		float maxX = corners[0].x;
 		for (uint32_t i = 1; i < 4; ++i) {
-			if (offsets[i].x > maxX) {
-				maxX = worldTrafo.pos.x + offsets[i].x;
+			if (corners[i].x > maxX) {
+				maxX = corners[i].x;
 			}
 		}
 		return maxX;
@@ -174,14 +168,13 @@ namespace Sharpheus {
 
 	float Camera::GetYMin()
 	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
+		SetSizer(GetWidth(), GetHeight());
+		Point* corners = shape->GetCorners();
 
-		float minY = worldTrafo.pos.y + offsets[0].y;
+		float minY = corners[0].y;
 		for (uint32_t i = 1; i < 4; ++i) {
-			if (offsets[i].y < minY) {
-				minY = worldTrafo.pos.y + offsets[i].y;
+			if (corners[i].y < minY) {
+				minY = corners[i].y;
 			}
 		}
 		return minY;
@@ -190,14 +183,13 @@ namespace Sharpheus {
 
 	float Camera::GetYMax()
 	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
+		SetSizer(GetWidth(), GetHeight());
+		Point* corners = shape->GetCorners();
 
-		float maxY = worldTrafo.pos.y + offsets[0].y;
+		float maxY = corners[0].y;
 		for (uint32_t i = 1; i < 4; ++i) {
-			if (offsets[i].y > maxY) {
-				maxY = worldTrafo.pos.y + offsets[i].y;
+			if (corners[i].y > maxY) {
+				maxY = corners[i].y;
 			}
 		}
 		return maxY;
@@ -208,7 +200,7 @@ namespace Sharpheus {
 	{
 		width = e.newWidth;
 		height = e.newHeight;
-		needToRecalcOffset = true;
+		SetSizer(GetWidth(), GetHeight());
 	}
 
 

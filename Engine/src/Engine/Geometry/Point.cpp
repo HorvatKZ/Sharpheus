@@ -91,13 +91,25 @@ namespace Sharpheus {
 
 	float Point::Length() const
 	{
-		return sqrt(x * x + y * y);
+		return sqrt(LengthSquared());
+	}
+
+
+	float Point::LengthSquared() const
+	{
+		return x * x + y * y;
 	}
 
 
 	float Point::Distance(const Point& other) const
 	{
-		return sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
+		return sqrt(DistanceSquared(other));
+	}
+
+
+	float Point::DistanceSquared(const Point& other) const
+	{
+		return (x - other.x) * (x - other.x) + (y - other.y) * (y - other.y);
 	}
 
 
@@ -126,6 +138,13 @@ namespace Sharpheus {
 	float Point::GetAngle(const Point& other) const
 	{
 		return glm::degrees(glm::acos((*this * other) / (this->Length() * other.Length())));
+	}
+
+
+	Point Point::GetUnit(float angle)
+	{
+		float angleInRad = glm::radians(-angle); // Because y axis is inverted
+		return Point(glm::cos(angleInRad), glm::sin(angleInRad));
 	}
 
 

@@ -12,7 +12,7 @@ namespace Sharpheus {
 		virtual ~ClassWriter();
 
 		static void CreateBehaviorHeader(const wxString& filePath, const wxString& className, const wxString& parent, uint32_t subType);
-		static void CreateBehaviorSource(const wxString& filePath, const wxString& headerInclude, const wxString& className, const wxString& parent);
+		static void CreateBehaviorSource(const wxString& filePath, const wxString& headerInclude, const wxString& className, const wxString& parent, uint32_t subType);
 		static void UpdateCreateBehaviorHeader(const wxString& filePath, const wxString& newClassPath, const wxString& newClassName, uint32_t newSubType, std::unordered_map<uint32_t, std::string>& oldClasses);
 		static void UpdateCreateBehaviorSource(const wxString& filePath, const wxString& newClassName, uint32_t newSubType, std::unordered_map<uint32_t, std::string>& oldClasses);
 

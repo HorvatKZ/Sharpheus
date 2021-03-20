@@ -14,9 +14,8 @@ namespace Sharpheus {
 
 
 	BoxCollider::BoxCollider(GameObject* parent, const std::string& name)
-		: Collider(parent, name, true)
+		: Collider(parent, name, new Rect())
 	{
-		RecalcOffsets();
 	}
 
 
@@ -33,6 +32,7 @@ namespace Sharpheus {
 		BoxCollider* trueOther = (BoxCollider*)other;
 		width = trueOther->width;
 		height = trueOther->height;
+		SetSizer(width, height);
 	}
 
 
@@ -42,12 +42,12 @@ namespace Sharpheus {
 			case Type::BoxCollider:
 				BoxCollider* otherBox = (BoxCollider*)other;
 
-				if (worldTrafo.pos.Distance(otherBox->worldTrafo.pos) > radius + otherBox->radius) {
+				if (worldTrafo.pos.Distance(otherBox->worldTrafo.pos) > furthest + otherBox->furthest) {
 					return { Point::Zero, Point::Zero };
 				}
 
 				uint32_t i = 0;
-				while (i < 4) {
+				/*while (i < 4) {
 					uint32_t j = 0;
 					while (j < 4) {
 						if (Point::DoSectionsIntersect(worldTrafo.pos + offsets[i], worldTrafo.pos + offsets[(i + 1) % 4],
@@ -62,7 +62,7 @@ namespace Sharpheus {
 						++j;
 					}
 					++i;
-				}
+				}*/
 				return { Point::Zero, Point::Zero };
 		}
 		return { Point::Zero, Point::Zero };
@@ -98,11 +98,7 @@ namespace Sharpheus {
 
 	void BoxCollider::RenderSelection()
 	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
-
-		RectGameObject::RenderSelection();
+		ShapedGameObject::RenderSelection();
 	}
 
 
@@ -120,33 +116,14 @@ namespace Sharpheus {
 		GameObject::Load(fl);
 		fl.Read(width);
 		fl.Read(height);
-		needToRecalcOffset = true;
+		SetSizer(width, height);
 		return fl.GetStatus();
 	}
 
 
-	void BoxCollider::RecalcOffsets()
-	{
-		RecalcOffsetsCommon(width * worldTrafo.scale.x, height * worldTrafo.scale.y, worldTrafo.rot);
-		radius = offsets[0].Length();
-	}
-
-
-	void BoxCollider::Tick(float deltaTime)
-	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
-	}
-
 	void BoxCollider::RenderShape()
 	{
-		if (needToRecalcOffset) {
-			RecalcOffsets();
-		}
-
-		Renderer::DrawMonocromeQuad(worldTrafo.pos + offsets[0], worldTrafo.pos + offsets[1],
-			worldTrafo.pos + offsets[2], worldTrafo.pos + offsets[3], shapeColor);
+		Renderer::DrawMonocromeQuad(shape->GetCorners(), shapeColor);
 	}
 
 }

@@ -32,15 +32,26 @@ namespace Sharpheus {
 	}
 
 
-	void Renderer::DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint)
+	void Renderer::DrawHorizontalLine(float begin, float end, float place, float thickness, const Color& color)
 	{
-		renderer->DrawQuad(leftUp, rightUp, rightDown, leftDown, tint);
+		renderer->DrawHorizontalLine(begin, end, place, thickness, color);
+	}
+	
+	
+	void Renderer::DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color)
+	{
+		renderer->DrawVerticalLine(begin, end, place, thickness, color);
 	}
 
-	void Renderer::DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
-		const Point& leftDown, const Color& color)
+
+	void Renderer::DrawQuad(Point coords[4], Point texCoords[4], const Color& tint)
 	{
-		renderer->DrawMonocromeQuad(leftUp, rightUp, rightDown, leftDown, color);
+		renderer->DrawQuad(coords, texCoords, tint);
+	}
+
+	void Renderer::DrawMonocromeQuad(Point coords[4], const Color& color)
+	{
+		renderer->DrawMonocromeQuad(coords, color);
 	}
 
 	void Renderer::SetCamera(class Camera* camera)

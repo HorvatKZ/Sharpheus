@@ -19,10 +19,10 @@ namespace Sharpheus {
 			this->basePath += '\\';
 		}
 		ResourceManager::Init(this->basePath);
+		SetWinProps(data.winProps);
 
 		level = new Level();
 		level->Load(this->basePath + "Levels\\", data.defaultLevelPath);
-		SetWinProps(data.winProps);
 	}
 
 
@@ -31,6 +31,7 @@ namespace Sharpheus {
 	{
 		data.name = name;
 		data.defaultLevelPath = defaultLevelPath;
+		SetWinProps(data.winProps);
 
 		size_t pos = path.find_last_of('\\');
 		basePath = path.substr(0, pos + 1);
@@ -39,7 +40,6 @@ namespace Sharpheus {
 		level = new Level(defaultLevelName);
 		level->SetProjectPath(path);
 		level->Save(basePath + "Levels\\", defaultLevelPath);
-		SetWinProps(data.winProps);
 		SaveProjectData();	
 	}
 
@@ -169,7 +169,7 @@ namespace Sharpheus {
 
 	bool Project::LoadProjectData(const std::string& path)
 	{
-		size_t pos = path.find_last_of('\\'); // windows only
+		size_t pos = path.find_last_of('\\');
 		basePath = path.substr(0, pos + 1);
 		ResourceManager::Init(basePath);
 

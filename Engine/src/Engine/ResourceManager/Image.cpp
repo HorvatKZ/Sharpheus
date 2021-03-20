@@ -6,6 +6,8 @@
 
 namespace Sharpheus {
 
+	Point Image::fullTexCoords[] = { Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1) };
+
 	Image::Image(const std::string& path, bool filtered) : Resource(path), filtered(filtered)
 	{
 		LoadImg();
@@ -20,10 +22,17 @@ namespace Sharpheus {
 	}
 
 
-	void Image::Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint)
+	void Image::Render(Point coords[4], const Color& tint)
 	{
 		glBindTexture(GL_TEXTURE_2D, ID);
-		Renderer::DrawQuad(leftUp, rightUp, rightDown, leftDown, tint);
+		Renderer::DrawQuad(coords, fullTexCoords, tint);
+	}
+
+
+	void Image::RenderPart(Point coords[4], Point texCoords[4], const Color& tint)
+	{
+		glBindTexture(GL_TEXTURE_2D, ID);
+		Renderer::DrawQuad(coords, texCoords, tint);
 	}
 
 

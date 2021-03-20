@@ -12,7 +12,7 @@ namespace Sharpheus {
 
 
 	Sprite::Sprite(GameObject* parent, const std::string& name) :
-		RectGameObject(parent, name) {}
+		ShapedGameObject(parent, name, new Rect()) {}
 
 
 	void Sprite::CopyFrom(GameObject* other)
@@ -21,23 +21,14 @@ namespace Sharpheus {
 
 		GameObject::CopyFrom(other);
 		Sprite* trueOther = (Sprite*)other;
-		image = trueOther->image;
+		SetImage(trueOther->image);
 		tint = trueOther->tint;
 	}
 
 
 	void Sprite::SetImageFromPath(const std::string& path, bool filtered)
 	{
-		image = ResourceManager::GetImage(path, filtered);
-		needToRecalcOffset = true;
-	}
-
-
-	void Sprite::SetImageFromFullPath(const std::string& fullPath, bool filtered)
-	{
-		std::string path = ResourceManager::FullPathToPath(fullPath);
-		SPH_ASSERT(!path.empty(), "The given path \"{0}\" is not under the assets root \"{1}\"", fullPath, ResourceManager::GetAssetsRoot());
-		SetImageFromPath(path, filtered);
+		SetImage(ResourceManager::GetImage(path, filtered));
 	}
 
 
@@ -47,12 +38,7 @@ namespace Sharpheus {
 	void Sprite::Render()
 	{
 		if (image != nullptr) {
-			if (needToRecalcOffset) {
-				RecalcOffsets();
-			}
-
-			image->Render(worldTrafo.pos + offsets[0], worldTrafo.pos + offsets[1], worldTrafo.pos + offsets[2],
-				worldTrafo.pos + offsets[3], tint);
+			image->Render(shape->GetCorners(), tint);
 		}
 	}
 
@@ -69,17 +55,11 @@ namespace Sharpheus {
 	bool Sprite::Load(FileLoader& fl)
 	{
 		GameObject::Load(fl);
-		fl.Read(&image);
+		Image* img;
+		fl.Read(&img);
+		SetImage(img);
 		fl.Read(tint);
-		needToRecalcOffset = true;
 		return fl.GetStatus();
 	}
 
-
-	void Sprite::RecalcOffsets()
-	{
-		if (image != nullptr) {
-			RecalcOffsetsCommon(image->GetWidth() * worldTrafo.scale.x, image->GetHeight() * worldTrafo.scale.y, worldTrafo.rot);
-		}
-	}
 }

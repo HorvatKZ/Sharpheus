@@ -98,6 +98,12 @@ namespace Sharpheus {
 				case GameObject::Type::BoxCollider:
 					CreatePresenterFrom<BoxCollider>(provider, y);
 					break;
+				case GameObject::Type::CircleCollider:
+					CreatePresenterFrom<CircleCollider>(provider, y);
+					break;
+				case GameObject::Type::CapsuleCollider:
+					CreatePresenterFrom<CapsuleCollider>(provider, y);
+					break;
 				case GameObject::Type::Behavior:
 					SPH_PRESENT_BEHAVIOR(obj);
 					break;

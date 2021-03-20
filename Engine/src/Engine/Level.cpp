@@ -60,6 +60,10 @@ namespace Sharpheus {
 				return Create<PhysicsObject>(parent, newName);
 			case GameObject::Type::BoxCollider:
 				return Create<BoxCollider>(parent, newName);
+			case GameObject::Type::CircleCollider:
+				return Create<CircleCollider>(parent, newName);
+			case GameObject::Type::CapsuleCollider:
+				return Create<CapsuleCollider>(parent, newName);
 			case GameObject::Type::Behavior:
 				return Create<PlaceholderBehavior>(parent, newName);
 		}

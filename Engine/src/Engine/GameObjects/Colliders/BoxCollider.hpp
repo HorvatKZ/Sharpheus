@@ -17,9 +17,9 @@ namespace Sharpheus {
 
 		inline float GetWidth() { return width; }
 		inline float GetHeight() { return height; }
-		inline void SetWidth(float width) { this->width = width; needToRecalcOffset = true; }
-		inline void SetHeight(float height) { this->height = height; needToRecalcOffset = true; }
-		inline void SetRect(float width, float height) { this->width = width; this->height = height; needToRecalcOffset = true; }
+		inline void SetWidth(float width) { this->width = width; SetSizer(width, height); }
+		inline void SetHeight(float height) { this->height = height; SetSizer(width, height); }
+		inline void SetRect(float width, float height) { this->width = width; this->height = height; SetSizer(width, height); }
 
 		virtual bool Load(FileLoader& fl) override;
 
@@ -30,8 +30,6 @@ namespace Sharpheus {
 
 		virtual bool Save(FileSaver& fs) override;
 
-		virtual void RecalcOffsets() override;
-		virtual void Tick(float deltaTime) override;
 		virtual void RenderShape() override;
 		virtual void RenderSelection() override;
 	};

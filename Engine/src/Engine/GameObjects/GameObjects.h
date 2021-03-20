@@ -4,6 +4,8 @@
 #include "Collection.hpp"
 #include "Renderables/Sprite.hpp"
 #include "Colliders/BoxCollider.hpp"
+#include "Colliders/CircleCollider.hpp"
+#include "Colliders/CapsuleCollider.hpp"
 #include "Colliders/PhysicsObject.hpp"
 #include "Behaviors/Behavior.hpp"
 #include "Behaviors/LocalListenerBehavior.hpp"

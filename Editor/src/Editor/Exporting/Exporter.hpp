@@ -14,6 +14,7 @@ namespace Sharpheus {
 		bool CopyFolderContent(const wxString& folder);
 		bool CopyFolderContent(class wxDir& from, const wxString& toUnder);
 		bool CopyItem(const wxString& from, const wxString& to);
+		bool RegenerateMainProject();
 	};
 
 }

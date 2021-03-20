@@ -24,9 +24,10 @@ namespace Sharpheus {
 		inline const Color& GetBackgroundColor() { return bgColor; }
 		inline void SetBackgroundColor(const Color& color) { bgColor = color; }
 
-		virtual void DrawQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint) = 0;
-		virtual void DrawMonocromeQuad(const Point& leftUp, const Point& rightUp, const Point& rightDown,
-			const Point& leftDown, const Color& color) = 0;
+		virtual void DrawHorizontalLine(float begin, float end, float place, float thickness, const Color& color) = 0;
+		virtual void DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color) = 0;
+		virtual void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint) = 0;
+		virtual void DrawMonocromeQuad(Point coords[4], const Color& color) = 0;
 
 	protected:
 		Camera* camera = nullptr;

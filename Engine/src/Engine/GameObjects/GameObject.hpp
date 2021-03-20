@@ -27,7 +27,7 @@ namespace Sharpheus {
 			Collection,
 			Camera,
 			Sprite,
-			PhysicsObject, BoxCollider,
+			PhysicsObject, BoxCollider, CircleCollider, CapsuleCollider,
 			Behavior
 		};
 

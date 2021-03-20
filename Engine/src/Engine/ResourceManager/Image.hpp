@@ -20,12 +20,15 @@ namespace Sharpheus {
 		inline uint32_t GetHeight() { return height; }
 		inline bool IsFiltered() { return filtered; }
 
-		void Render(const Point& leftUp, const Point& rightUp, const Point& rightDown, const Point& leftDown, const Color& tint = Color::White);
+		void Render(Point coords[4], const Color& tint = Color::White);
+		void RenderPart(Point coords[4], Point texCoords[4], const Color& tint = Color::White);
 
 	private:
 		GLuint ID = TEXTURE_ID_NONE;
 		uint32_t width, height;
 		bool filtered;
+
+		static Point fullTexCoords[4];
 
 		void LoadImg();
 	};

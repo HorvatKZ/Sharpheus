@@ -28,5 +28,9 @@
 !external/wxWidgets/*.vcxproj.filters
 !external/wxWidgets/*.vcxproj.user
 
+# Exporting
+**/Exported
+**/ExportedProjectData.hpp
+
 # Others
 /Levels

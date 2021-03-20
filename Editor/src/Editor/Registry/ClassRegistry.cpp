@@ -14,6 +14,8 @@ namespace Sharpheus {
 		classInfos[GameObject::Type::Sprite]					= &Sprite::classInfo;
 		classInfos[GameObject::Type::PhysicsObject]				= &PhysicsObject::classInfo;
 		classInfos[GameObject::Type::BoxCollider]				= &BoxCollider::classInfo;
+		classInfos[GameObject::Type::CircleCollider]			= &CircleCollider::classInfo;
+		classInfos[GameObject::Type::CapsuleCollider]			= &CapsuleCollider::classInfo;
 	}
 
 	void ClassRegistry::Clear()
