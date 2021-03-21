@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Point.hpp"
 
 
@@ -135,7 +135,30 @@ namespace Sharpheus {
 	}
 
 
-	float Point::GetAngle(const Point& other) const
+	float Point::GetAngle() const
+	{
+		if (x == 0) {
+			return (y > 0) ? 270 : (y == 0) ? 0 : 90;
+		}
+		
+		if (y == 0) {
+			return (x >= 0) ? 0 : 180;
+		}
+
+		int angle = glm::degrees(glm::atan(-y / x));
+		if (x < 0 && y < 0) {
+			return angle - 180;
+		}
+		
+		if (x < 0) {
+			return 180 + angle;
+		}
+
+		return angle;
+	}
+
+
+	float Point::GetAngleWith(const Point& other) const
 	{
 		return glm::degrees(glm::acos((*this * other) / (this->Length() * other.Length())));
 	}

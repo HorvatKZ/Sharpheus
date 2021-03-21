@@ -7,7 +7,9 @@ namespace Sharpheus {
 	ClassInfo PhysicsObject::classInfo("PhysicsObject", "physicsobj.png", {
 		new PointProvider<PhysicsObject>("Velocity", SPH_BIND_GETTER(PhysicsObject::GetVelocity), SPH_BIND_SETTER(PhysicsObject::SetVelocity)),
 		new UFloatProvider<PhysicsObject>("Mass", SPH_BIND_GETTER(PhysicsObject::GetMass), SPH_BIND_SETTER(PhysicsObject::SetMass)),
-		new FloatProvider<PhysicsObject>("Gravity", SPH_BIND_GETTER(PhysicsObject::GetGravity), SPH_BIND_SETTER(PhysicsObject::SetGravity))
+		new FloatProvider<PhysicsObject>("Gravity", SPH_BIND_GETTER(PhysicsObject::GetGravity), SPH_BIND_SETTER(PhysicsObject::SetGravity)),
+		new UFloatProvider<PhysicsObject>("Bounce", SPH_BIND_GETTER(PhysicsObject::GetBounce), SPH_BIND_SETTER(PhysicsObject::SetBounce)),
+		new UFloatProvider<PhysicsObject>("Friction", SPH_BIND_GETTER(PhysicsObject::GetFriction), SPH_BIND_SETTER(PhysicsObject::SetFriction))
 	});
 
 
@@ -24,6 +26,26 @@ namespace Sharpheus {
 		velocity = trueOther->velocity;
 		gravity = trueOther->gravity;
 		mass = trueOther->mass;
+		bounce = trueOther->bounce;
+		friction = trueOther->friction;
+	}
+
+
+	void PhysicsObject::ResolveCollision(const CollData& cd)
+	{
+		// Correction
+		worldTrafo.pos -= cd.geom.depth * cd.geom.normal;
+		SetWorldTrafo(worldTrafo);
+
+		// Impulse
+		Point vR = cd.vOther - velocity;
+		float imp = -(1.f + bounce) * (vR * cd.geom.normal);
+		if (cd.mOther > 0.f) {
+			velocity -= (imp * cd.mOther / (mass + cd.mOther)) * cd.geom.normal;
+		}
+		else {
+			velocity -= imp * cd.geom.normal;
+		}
 	}
 
 
@@ -33,6 +55,8 @@ namespace Sharpheus {
 		fs.Write(velocity);
 		fs.Write(mass);
 		fs.Write(gravity);
+		fs.Write(bounce);
+		fs.Write(friction);
 		return fs.GetStatus();
 	}
 
@@ -43,6 +67,8 @@ namespace Sharpheus {
 		fl.Read(velocity);
 		fl.Read(mass);
 		fl.Read(gravity);
+		fl.Read(bounce);
+		fl.Read(friction);
 		return fl.GetStatus();
 	}
 
@@ -51,7 +77,10 @@ namespace Sharpheus {
 		trafo.pos += velocity * deltaTime;
 		SetTrafo(trafo);
 		velocity += gravity * deltaTime * Point::Down;
+		velocity *= 1.f - friction * deltaTime;
 	}
 
+
 	void PhysicsObject::Render() {}
+
 }

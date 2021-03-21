@@ -12,7 +12,9 @@ namespace Sharpheus {
 		Capsule(const Point& pos, const Point& dim, float rot);
 		virtual ~Capsule();
 
-		virtual bool IsInside(const Point& p);
+		virtual inline Type GetType() override { return Type::CAPSULE; }
+		virtual bool IsInside(const Point& p) override;
+		virtual Point GetLocalPerpendicularAt(const Point& surfaceP) override;
 
 		inline Point* GetInnerCorners() { CheckInnerCorners(); return innerCorners; }
 
@@ -56,9 +58,9 @@ namespace Sharpheus {
 			}
 		}
 
-		CollData GetCollWith(const class Oval& other);
-		CollData GetCollWith(const class Rect& other);
-		CollData GetCollWith(const class Capsule& other);
+		virtual Intersection GetIntersectionWith(class Oval* other) override;
+		virtual Intersection GetIntersectionWith(class Rect* other) override;
+		virtual Intersection GetIntersectionWith(class Capsule* other) override;
 
 	protected:
 		Point innerCorners[4];

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../GameObject.hpp"
+#include "Engine/CollisionSystem/CollData.hpp"
+
 
 namespace Sharpheus {
 
@@ -16,17 +18,27 @@ namespace Sharpheus {
 		inline Point& GetVelocity() { return velocity; }
 		inline float GetMass() { return mass; }
 		inline float GetGravity() { return gravity; }
+		inline float GetBounce() { return bounce; }
+		inline float GetFriction() { return friction; }
 
 		inline void AddVelocity(const Point& velocity) { this->velocity += velocity; }
 		inline void SetVelocity(const Point& velocity) { this->velocity = velocity; }
 		inline void SetVelocityX(float x) { velocity.x = x; }
 		inline void SetVelocityY(float y) { velocity.y = y; }
-		inline void Reflect(float angle, bool clockwise) {
-			velocity = velocity.Rotate((clockwise ? 2 : -2) * angle) * abs(glm::cos(glm::radians(angle)));
+		inline void SetGravity(float gravity) { this->gravity = gravity; }
+		inline void SetMass(float mass) {
+			if (mass > 0.f) {
+				this->mass = mass;
+			}
+		}
+		inline void SetBounce(float bounce) {
+			this->bounce = glm::clamp(bounce, 0.f, 1.f);
+		}
+		inline void SetFriction(float friction) {
+			this->friction = glm::clamp(friction, 0.f, 1.f);
 		}
 
-		inline void SetMass(float mass) { this->mass = mass; }
-		inline void SetGravity(float gravity) { this->gravity = gravity; }
+		void ResolveCollision(const CollData& cd);
 
 		virtual bool Load(FileLoader& fl) override;
 
@@ -35,7 +47,9 @@ namespace Sharpheus {
 	protected:
 		Point velocity = Point(0, 0);
 		float mass = 1.f;
-		float gravity = 1.f;
+		float gravity = 0.f;
+		float bounce = 1.f;
+		float friction = 0.f;
 
 		virtual bool Save(FileSaver& fs) override;
 

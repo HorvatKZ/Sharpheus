@@ -36,7 +36,8 @@ namespace Sharpheus {
 		glm::vec2		ToVec2() const;
 
 		Point			Rotate(float angle) const;
-		float			GetAngle(const Point& other = Right) const;
+		float			GetAngle() const;
+		float			GetAngleWith(const Point& other) const;
 
 		static Point Zero;
 		static Point Up;

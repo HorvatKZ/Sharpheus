@@ -12,9 +12,6 @@ namespace Sharpheus {
 		virtual ~CircleCollider();
 		virtual void CopyFrom(GameObject* other) override;
 
-		virtual std::pair<Point, Point> CalcCollision(Collider* other) override;
-		virtual void OnCollision(const CollisionEvent& e) override;
-
 		inline float GetRadius() { return radius; }
 		inline void SetRadius(float radius) { this->radius = radius; SetSizer(radius, radius); }
 

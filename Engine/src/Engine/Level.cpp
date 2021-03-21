@@ -36,8 +36,8 @@ namespace Sharpheus {
 
 	void Level::Tick(float deltaTime)
 	{
-		collSys.Tick();
 		root->TickAll(deltaTime);
+		collSys.Tick();
 	}
 
 

@@ -12,9 +12,6 @@ namespace Sharpheus {
 		virtual ~CapsuleCollider();
 		virtual void CopyFrom(GameObject* other) override;
 
-		virtual std::pair<Point, Point> CalcCollision(Collider* other) override;
-		virtual void OnCollision(const CollisionEvent& e) override;
-
 		virtual void SetWorldTrafo(const Transform& trafo) override;
 
 		inline float GetWidth() { return width; }

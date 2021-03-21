@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ShapedGameObject.hpp"
+#include "Engine/CollisionSystem/CollData.hpp"
 
 
 namespace Sharpheus {
@@ -17,12 +18,22 @@ namespace Sharpheus {
 		Collider(GameObject* parent, const std::string& name, Shape* shape);
 		virtual ~Collider();
 
-		virtual std::pair<Point, Point> CalcCollision(Collider* other) = 0;
-		virtual void OnCollision(const CollisionEvent& e) = 0;
-		void UpdatePrevPos();
+		virtual CollDataPair CalcCollision(Collider* other);
+		virtual void OnCollision(const CollData& cd, Collider* other);
+		inline void UpdatePrevPos() { prevPos = worldTrafo.pos; }
 
-		void SetLevel(Level* level) override;
+		void SetLevel(class Level* level) override;
 
+		inline Point GetVelocity() {
+			if (lastDeltaTime == 0) {
+				return Point();
+			}
+
+			Point diff = worldTrafo.pos - prevPos;
+			return Point(diff.x / lastDeltaTime, diff.y / lastDeltaTime);
+		}
+
+		inline bool IsDynamic() { return parent->GetType() == Type::PhysicsObject; }
 		inline bool WasStill() { return prevPos == worldTrafo.pos; }
 		inline bool IsVisible() { return visible; }
 		inline void SetVisible(bool visible) { this->visible = visible; }
@@ -45,6 +56,7 @@ namespace Sharpheus {
 		Point prevPos;
 		bool visible = false;
 		float furthest = 0.f;
+		float lastDeltaTime = 0.f;
 		std::unordered_map<ID, std::pair<CollisionEventFunc, LocalSourceDestroyedEventFunc>> subscribers;
 
 		static Color shapeColor;

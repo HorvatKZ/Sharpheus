@@ -22,21 +22,43 @@ namespace Sharpheus {
 	}
 
 
-	CollData Rect::GetCollWith(const Oval& other)
+	Point Rect::GetLocalPerpendicularAt(const Point& surfaceP)
 	{
-		return CollData();
+		Point scaled(surfaceP.x * dim.y, surfaceP.y * dim.x);
+		if (scaled.x > scaled.y) {
+			if (scaled.x > -scaled.y) {
+				return Point(1, 0);
+			}
+			else {
+				return Point(0, -1);
+			}
+		}
+		else {
+			if (scaled.x > -scaled.y) {
+				return Point(0, 1);
+			}
+			else {
+				return Point(-1, 0);
+			}
+		}
 	}
 
 
-	CollData Rect::GetCollWith(const Rect& other)
+	Shape::Intersection Rect::GetIntersectionWith(Oval* other)
 	{
-		return CollData();
+		Intersection inter = other->GetIntersectionWith((Shape*)this);
+		inter.normal *= -1;
+		return inter;
 	}
 
-
-	CollData Rect::GetCollWith(const Capsule& other)
+	Shape::Intersection Rect::GetIntersectionWith(Rect* other)
 	{
-		return CollData();
+		return Intersection();
+	}
+
+	Shape::Intersection Rect::GetIntersectionWith(Capsule* other)
+	{
+		return Intersection();
 	}
 
 }

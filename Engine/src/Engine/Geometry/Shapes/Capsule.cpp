@@ -35,6 +35,12 @@ namespace Sharpheus {
 	}
 
 
+	Point Capsule::GetLocalPerpendicularAt(const Point& surfaceP)
+	{
+		return surfaceP; // TODO
+	}
+
+
 	void Capsule::ForceRefresh()
 	{
 		Shape::ForceRefresh();
@@ -44,23 +50,20 @@ namespace Sharpheus {
 	}
 
 
-	CollData Capsule::GetCollWith(const Oval& other)
+	Shape::Intersection Capsule::GetIntersectionWith(Oval* other)
 	{
-		return CollData();
+		return Intersection();
 	}
 
-
-	CollData Capsule::GetCollWith(const Rect& other)
+	Shape::Intersection Capsule::GetIntersectionWith(Rect* other)
 	{
-		return CollData();
+		return Intersection();
 	}
 
-
-	CollData Capsule::GetCollWith(const Capsule& other)
+	Shape::Intersection Capsule::GetIntersectionWith(Capsule* other)
 	{
-		return CollData();
+		return Intersection();
 	}
-
 
 	void Capsule::CheckInnerCorners()
 	{

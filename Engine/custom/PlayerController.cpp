@@ -102,7 +102,7 @@ void PlayerController::OnKeyReleased(const Sharpheus::KeyReleasedEvent& e)
 
 void PlayerController::OnCollision(const Sharpheus::CollisionEvent& e)
 {
-	if (e.direction == Point::Up) {
+	if (e.cd.geom.normal == Point::Up) {
 		canJump = true;
 	}
 }

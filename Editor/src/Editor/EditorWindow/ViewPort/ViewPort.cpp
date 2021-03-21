@@ -112,9 +112,6 @@ namespace Sharpheus {
 						Point clickInGame = camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y));
 						Point relativeClick = clickInGame - currTrafo.pos;
 						float angle = relativeClick.GetAngle();
-						if (relativeClick.y > 0) {
-							angle *= -1;
-						}
 						angle += 135;
 						if (angle > 180) {
 							angle -= 360;

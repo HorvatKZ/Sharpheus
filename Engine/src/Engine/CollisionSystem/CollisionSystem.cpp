@@ -30,12 +30,12 @@ namespace Sharpheus {
 		for (uint32_t i = 0; i < colliders.size() - 1; ++i) {
 			for (uint32_t j = i + 1; j < colliders.size(); ++j) {
 				if (!colliders[i]->WasStill() || !colliders[j]->WasStill()) {
-					auto collision = colliders[i]->CalcCollision(colliders[j]);
-					if (collision.first != Point::Zero && collision.second != Point::Zero) {
-						CollisionEvent e1(colliders[i], colliders[j], collision.second);
-						colliders[i]->OnCollision(e1);
-						CollisionEvent e2(colliders[j], colliders[i], collision.first);
-						colliders[j]->OnCollision(e2);
+					CollDataPair cds = colliders[i]->CalcCollision(colliders[j]);
+					if (cds.first.Is()) {
+						colliders[i]->OnCollision(cds.first, colliders[j]);
+					}
+					if (cds.second.Is()) {
+						colliders[j]->OnCollision(cds.second, colliders[i]);
 					}
 				}
 			}

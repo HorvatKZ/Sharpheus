@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../CollData.hpp"
+#include "../Point.hpp"
 
 
 namespace Sharpheus {
@@ -8,11 +8,22 @@ namespace Sharpheus {
 	class Shape
 	{
 	public:
+		enum class Type {
+			OVAL, RECT, CAPSULE
+		};
+
+		struct Intersection {
+			Point contact, normal;
+			float depth = 0.f;
+		};
+
 		Shape();
 		Shape(const Point& pos, const Point& dim, float rot);
 		virtual ~Shape();
 
+		virtual inline Type GetType() = 0;
 		virtual bool IsInside(const Point& p) = 0;
+		virtual Point GetLocalPerpendicularAt(const Point& surfaceP) = 0;
 
 		inline Point* GetCorners() { CheckCorners(); return corners; }
 
@@ -20,7 +31,7 @@ namespace Sharpheus {
 
 		inline bool IsTooFarFrom(Shape* other) { return IsTooFarFrom(*other); }
 		inline bool IsTooFarFrom(const Shape& other) {
-			float closestDist = furthest * other.furthest;
+			float closestDist = furthest + other.furthest;
 			return pos.DistanceSquared(other.pos) > closestDist * closestDist;
 		}
 
@@ -29,6 +40,8 @@ namespace Sharpheus {
 		inline const Point& GetYAxis() { return yAxis; }
 		inline const Point& GetDim() { return dim; }
 		inline float GetRot() { return rot; }
+
+		Point GetRelativePos(const Point& p);
 
 		virtual inline void SetPos(const Point& pos) {
 			if (pos != this->pos) {
@@ -53,6 +66,17 @@ namespace Sharpheus {
 			}
 		}
 
+		virtual inline Intersection GetIntersectionWith(Shape* other) {
+			switch (other->GetType()) {
+				case Type::OVAL:
+					return GetIntersectionWith((class Oval*)other);
+				case Type::RECT:
+					return GetIntersectionWith((class Rect*)other);
+				case Type::CAPSULE:
+					return GetIntersectionWith((class Capsule*)other);
+			}
+		}
+
 	protected:
 		Point xAxis, yAxis;
 		Point pos, dim;
@@ -62,7 +86,10 @@ namespace Sharpheus {
 
 		void RecalcAxes();
 		void CheckCorners();
-		Point GetRelativePos(const Point& p);
+
+		virtual Intersection GetIntersectionWith(class Oval* other) = 0;
+		virtual Intersection GetIntersectionWith(class Rect* other) = 0;
+		virtual Intersection GetIntersectionWith(class Capsule* other) = 0;
 	};
 
 }
