@@ -1,2 +1,2 @@
 ProjectName = "TestProject"
-CommonSource = "D:/Programming/Sharpheus";
+CommonSource = "D:/Programming/Sharpheus"

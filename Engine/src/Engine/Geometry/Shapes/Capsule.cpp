@@ -41,6 +41,12 @@ namespace Sharpheus {
 	}
 
 
+	Point Capsule::GetLocalClosestTo(const Point& p)
+	{
+		return p; // TODO
+	}
+
+
 	void Capsule::ForceRefresh()
 	{
 		Shape::ForceRefresh();

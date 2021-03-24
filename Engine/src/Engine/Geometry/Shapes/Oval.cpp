@@ -33,6 +33,13 @@ namespace Sharpheus {
 	}
 
 
+	Point Oval::GetLocalClosestTo(const Point& p)
+	{
+		Point closestUnit = p.Normalize();
+		return Point(closestUnit.x * dim.x, closestUnit.y * dim.y);
+	}
+
+
 	Shape::Intersection Oval::GetIntersectionWith(Oval* other)
 	{
 		if (other->IsCircle()) {
@@ -57,38 +64,18 @@ namespace Sharpheus {
 	}
 
 
-	Shape::Intersection Oval::GetIntersectionAsCircleWith(Oval* other)
+	Shape::Intersection Oval::GetIntersectionAsCircleWith(Shape* other)
 	{
-		if (other->IsCircle()) {
-			return GetIntersectionAsCircleWithCircle(other);
+		if (other->GetType() == Type::OVAL) {
+			Oval* otherOval = (Oval*)other;
+			if (otherOval->IsCircle()) {
+				return GetIntersectionAsCircleWithCircle(otherOval);
+			}
 		}
 
 		Point center = other->GetRelativePos(pos);
-		Point closest = center.Normalize();
-		closest = Point(closest.x * other->dim.x, closest.y * other->dim.y);
+		Point closest = other->GetLocalClosestTo(center);
 		return GetIntersectionAsCircleFromClosest(other, closest, center);
-	}
-
-
-	Shape::Intersection Oval::GetIntersectionAsCircleWith(Rect* other)
-	{
-		Point center = other->GetRelativePos(pos);
-		Point closest;
-		Point otherDim = other->GetDim();
-
-		closest.x = glm::clamp(center.x, -otherDim.x, otherDim.x);
-		closest.y = glm::clamp(center.y, -otherDim.y, otherDim.y);
-		if (closest == center) {
-			return GetIntersectionAsInside(other, center);
-		}
-
-		return GetIntersectionAsCircleFromClosest(other, closest, center);
-	}
-
-
-	Shape::Intersection Oval::GetIntersectionAsCircleWith(Capsule* other)
-	{
-		return Intersection();
 	}
 
 
@@ -104,55 +91,6 @@ namespace Sharpheus {
 		inter.depth = (rSum - sqrt(dist2)) / 2;
 		inter.normal = (other->pos - pos).Normalize();
 		inter.contact = inter.normal * (dim.x - inter.depth);
-		return inter;
-	}
-
-
-	Shape::Intersection Oval::GetIntersectionAsInside(Oval* other, const Point& center)
-	{
-		Point otherDim = other->GetDim();
-		Point closest = center.Normalize();
-		closest = Point(closest.x * other->dim.x, closest.y * other->dim.y);
-		return GetIntersectionAsCircleFromClosest(other, closest, center);
-	}
-
-
-	Shape::Intersection Oval::GetIntersectionAsInside(Rect* other, const Point& center)
-	{
-		Point otherDim = other->GetDim();
-		uint8_t ind = 0;
-		float dist = center.x + otherDim.x;
-
-		if (center.x - otherDim.x < dist) {
-			dist = center.x - otherDim.x;
-			ind = 1;
-		}
-		if (center.y + otherDim.y < dist) {
-			dist = center.y + otherDim.y;
-			ind = 2;
-		}
-		if (center.y - otherDim.y < dist) {
-			dist = center.y - otherDim.y;
-			ind = 3;
-		}
-
-		Intersection inter;
-		inter.contact = center;
-		inter.depth = (dist + dim.x) / 2;
-		switch (ind) {
-		case 0: // left
-			inter.normal = other->GetXAxis() * -1;
-			break;
-		case 1: // right
-			inter.normal = other->GetXAxis();
-			break;
-		case 2: // top
-			inter.normal = other->GetYAxis() * -1;
-			break;
-		case 3: // bottom
-			inter.normal = other->GetYAxis();
-			break;
-		}
 		return inter;
 	}
 

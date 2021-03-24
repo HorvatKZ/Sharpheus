@@ -24,6 +24,7 @@ namespace Sharpheus {
 		virtual inline Type GetType() = 0;
 		virtual bool IsInside(const Point& p) = 0;
 		virtual Point GetLocalPerpendicularAt(const Point& surfaceP) = 0;
+		virtual Point GetLocalClosestTo(const Point& p) = 0;
 
 		inline Point* GetCorners() { CheckCorners(); return corners; }
 
@@ -53,7 +54,7 @@ namespace Sharpheus {
 		virtual inline void SetDim(const Point& dim) {
 			if (dim != this->dim) {
 				this->dim = dim;
-				furthest = dim.x > dim.y ? dim.x : dim.y;
+				furthest = sqrt(dim.x * dim.x + dim.y * dim.y);
 				needsToRecalc = true;
 			}
 		}

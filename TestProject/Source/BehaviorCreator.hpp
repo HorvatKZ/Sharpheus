@@ -7,15 +7,12 @@
 #include "CustomMacros.h"
 
 // Custom behaviors
-#include "CustomBehaviors/alma.hpp"
+
 
 #define SPH_PRESENT_BEHAVIOR(obj) \
 	SPH_START_PRESENTING(obj) \
 		SPH_PRESENT(PlaceholderBehavior, 0) \
-		SPH_PRESENT(DebugBehavior, 1) \
-		SPH_PRESENT(PlayerContoller, 2) \
-		SPH_PRESENT(alma, 3) \
-	SPH_END_PRESENTING() \
+	SPH_END_PRESENTING()
 
 
 class SPH_EXPORT BehaviorCreator

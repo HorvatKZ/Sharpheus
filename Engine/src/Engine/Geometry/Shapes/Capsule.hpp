@@ -15,6 +15,7 @@ namespace Sharpheus {
 		virtual inline Type GetType() override { return Type::CAPSULE; }
 		virtual bool IsInside(const Point& p) override;
 		virtual Point GetLocalPerpendicularAt(const Point& surfaceP) override;
+		virtual Point GetLocalClosestTo(const Point& p) override;
 
 		inline Point* GetInnerCorners() { CheckInnerCorners(); return innerCorners; }
 
