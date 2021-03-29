@@ -19,6 +19,7 @@ namespace Sharpheus {
 		root = new Collection(nullptr, name);
 		gameObjects[name] = root;
 		root->SetLevel(this);
+		collSys.SetRoot(root);
 
 		Camera* camera = Create<Camera>(root, "Camera");
 		camera->SetCurrent();
@@ -38,6 +39,7 @@ namespace Sharpheus {
 	{
 		root->TickAll(deltaTime);
 		collSys.Tick();
+		root->UpdateLastPosAll();
 	}
 
 
@@ -56,6 +58,8 @@ namespace Sharpheus {
 				return Create<Camera>(parent, newName);
 			case GameObject::Type::Sprite:
 				return Create<Sprite>(parent, newName);
+			case GameObject::Type::Quad:
+				return Create<Quad>(parent, newName);
 			case GameObject::Type::PhysicsObject:
 				return Create<PhysicsObject>(parent, newName);
 			case GameObject::Type::BoxCollider:
@@ -235,6 +239,8 @@ namespace Sharpheus {
 			success &= LoadGameObject(fl, root);
 			++i;
 		}
+
+		collSys.SetRoot(root);
 
 		SPH_ASSERT(success, "Error during loading root GameObject \"{0}\"", rootName);
 		return success;

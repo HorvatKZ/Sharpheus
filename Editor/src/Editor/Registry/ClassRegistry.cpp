@@ -12,6 +12,7 @@ namespace Sharpheus {
 		classInfos[GameObject::Type::Behavior]					= &Behavior::classInfo;
 		classInfos[GameObject::Type::Camera]					= &Camera::classInfo;
 		classInfos[GameObject::Type::Sprite]					= &Sprite::classInfo;
+		classInfos[GameObject::Type::Quad]						= &Quad::classInfo;
 		classInfos[GameObject::Type::PhysicsObject]				= &PhysicsObject::classInfo;
 		classInfos[GameObject::Type::BoxCollider]				= &BoxCollider::classInfo;
 		classInfos[GameObject::Type::CircleCollider]			= &CircleCollider::classInfo;

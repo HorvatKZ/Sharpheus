@@ -27,7 +27,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKTYPE(other, Camera);
 
-		GameObject::CopyFrom(other);
+		ShapedGameObject::CopyFrom(other);
 		Camera* trueOther = (Camera*)other;
 		customWidth = trueOther->customWidth;
 		customHeight = trueOther->customHeight;
@@ -111,7 +111,7 @@ namespace Sharpheus {
 
 	bool Camera::Save(FileSaver& fs)
 	{
-		GameObject::Save(fs);
+		ShapedGameObject::Save(fs);
 		fs.Write(isCurrent);
 		return fs.GetStatus();
 	}
@@ -119,7 +119,7 @@ namespace Sharpheus {
 
 	bool Camera::Load(FileLoader& fl)
 	{
-		GameObject::Load(fl);
+		ShapedGameObject::Load(fl);
 		fl.Read(isCurrent);
 		if (isCurrent) {
 			SetCurrent();

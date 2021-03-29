@@ -13,28 +13,104 @@ namespace Sharpheus {
 		LocalListenerBehavior(Behavior* other) : Behavior(other) {}
 		LocalListenerBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name) {}
 		virtual ~LocalListenerBehavior() {
-			for (auto it = subscribedColliders.begin(); it != subscribedColliders.end(); ++it) {
+			for (auto it = collisionSubscriptions.begin(); it != collisionSubscriptions.end(); ++it) {
 				(*it).second->UnSubscribeCollision(listenerID);
+			}
+			for (auto it = triggerEnterSubscriptions.begin(); it != triggerEnterSubscriptions.end(); ++it) {
+				(*it).second->UnSubscribeTriggerEnter(listenerID);
+			}
+			for (auto it = triggerExitSubscriptions.begin(); it != triggerExitSubscriptions.end(); ++it) {
+				(*it).second->UnSubscribeTriggerExit(listenerID);
 			}
 		}
 
 		inline void SubscribeCollision(Collider* collider, CollisionEventFunc&& func) {
-			collider->SubscribeCollision(listenerID, std::move(func), SPH_BIND(LocalListenerBehavior::OnLocalSourceDestroyed));
-			subscribedColliders[collider->GetID()] = collider;
+			if (!IsSubscribedTo(collider->GetID())) {
+				collider->SubscribeForDestruction(listenerID, SPH_BIND(LocalListenerBehavior::OnLocalSourceDestroyed));
+			}
+			collider->SubscribeCollision(listenerID, std::move(func));
+			collisionSubscriptions[collider->GetID()] = collider;
 		}
 
 		inline void UnSubscribeCollision(Collider* collider) {
 			collider->UnSubscribeCollision(listenerID);
-			auto it = subscribedColliders.find(collider->GetID());
-			if (it != subscribedColliders.end()) subscribedColliders.erase(it);
+			auto it = collisionSubscriptions.find(collider->GetID());
+			if (it != collisionSubscriptions.end()) collisionSubscriptions.erase(it);
+
+			if (!IsSubscribedTo(collider->GetID())) {
+				collider->UnSubscribeForDestruction(listenerID);
+			}
 		}
 
-		void OnLocalSourceDestroyed(const LocalSourceDestroyedEvent& e) {
-			auto it = subscribedColliders.find(e.sourceID);
-			if (it != subscribedColliders.end()) subscribedColliders.erase(it);
+		inline void SubscribeOnTriggerEnter(Collider* collider, OnEnterEventFunc&& func) {
+			if (!IsSubscribedTo(collider->GetID())) {
+				collider->SubscribeForDestruction(listenerID, SPH_BIND(LocalListenerBehavior::OnLocalSourceDestroyed));
+			}
+			collider->SubscribeTriggerEnter(listenerID, std::move(func));
+			triggerEnterSubscriptions[collider->GetID()] = collider;
+		}
+
+		inline void UnSubscribeOnTriggerEnter(Collider* collider) {
+			collider->UnSubscribeTriggerEnter(listenerID);
+			auto it = triggerEnterSubscriptions.find(collider->GetID());
+			if (it != triggerEnterSubscriptions.end()) triggerEnterSubscriptions.erase(it);
+
+			if (!IsSubscribedTo(collider->GetID())) {
+				collider->UnSubscribeForDestruction(listenerID);
+			}
+		}
+
+		inline void SubscribeOnTriggerExit(Collider* collider, OnExitEventFunc&& func) {
+			if (!IsSubscribedTo(collider->GetID())) {
+				collider->SubscribeForDestruction(listenerID, SPH_BIND(LocalListenerBehavior::OnLocalSourceDestroyed));
+			}
+
+			collider->SubscribeTriggerExit(listenerID, std::move(func));
+			triggerExitSubscriptions[collider->GetID()] = collider;
+		}
+
+		inline void UnSubscribeOnTriggerExit(Collider* collider) {
+			collider->UnSubscribeTriggerExit(listenerID);
+			auto it = triggerExitSubscriptions.find(collider->GetID());
+			if (it != triggerExitSubscriptions.end()) triggerExitSubscriptions.erase(it);
+
+			if (!IsSubscribedTo(collider->GetID())) {
+				collider->UnSubscribeForDestruction(listenerID);
+			}
+		}
+
+		void OnLocalSourceDestroyed(const GameObjectDestroyedEvent& e) {
+			ID sourceID = e.source->GetID();
+			auto it0 = collisionSubscriptions.find(sourceID);
+			if (it0 != collisionSubscriptions.end()) collisionSubscriptions.erase(it0);
+			auto it1 = triggerEnterSubscriptions.find(sourceID);
+			if (it1 != triggerEnterSubscriptions.end()) triggerEnterSubscriptions.erase(it1);
+			auto it2 = triggerExitSubscriptions.find(sourceID);
+			if (it2 != triggerExitSubscriptions.end()) triggerExitSubscriptions.erase(it2);
 		}
 
 	protected:
-		std::unordered_map<ID, Collider*> subscribedColliders;
+		std::unordered_map<ID, Collider*> collisionSubscriptions;
+		std::unordered_map<ID, Collider*> triggerEnterSubscriptions;
+		std::unordered_map<ID, Collider*> triggerExitSubscriptions;
+
+		bool IsSubscribedTo(ID id) {
+			auto it0 = collisionSubscriptions.find(id);
+			if (it0 != collisionSubscriptions.end()) {
+				return true;
+			}
+
+			auto it1 = triggerEnterSubscriptions.find(id);
+			if (it1 != triggerEnterSubscriptions.end()) {
+				return true;
+			}
+
+			auto it2 = triggerExitSubscriptions.find(id);
+			if (it2 != triggerExitSubscriptions.end()) {
+				return true;
+			}
+
+			return false;
+		}
 	};
 }

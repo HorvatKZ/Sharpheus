@@ -26,7 +26,12 @@ namespace Sharpheus {
 		virtual Point GetLocalPerpendicularAt(const Point& surfaceP) = 0;
 		virtual Point GetLocalClosestTo(const Point& p) = 0;
 
+		virtual inline uint8_t GetPriority() { return 0; }
+
 		inline Point* GetCorners() { CheckCorners(); return corners; }
+		virtual inline Point* GetSATCorners() { return GetCorners(); }
+		virtual inline uint8_t GetSATCornerNum() { return 4; }
+		virtual inline bool IsSATSymmetrical() { return true; }
 
 		virtual void ForceRefresh();
 
@@ -54,7 +59,7 @@ namespace Sharpheus {
 		virtual inline void SetDim(const Point& dim) {
 			if (dim != this->dim) {
 				this->dim = dim;
-				furthest = sqrt(dim.x * dim.x + dim.y * dim.y);
+				UpdateFurthest();
 				needsToRecalc = true;
 			}
 		}
@@ -67,18 +72,15 @@ namespace Sharpheus {
 			}
 		}
 
-		virtual inline Intersection GetIntersectionWith(Shape* other) {
-			switch (other->GetType()) {
-				case Type::OVAL:
-					return GetIntersectionWith((class Oval*)other);
-				case Type::RECT:
-					return GetIntersectionWith((class Rect*)other);
-				case Type::CAPSULE:
-					return GetIntersectionWith((class Capsule*)other);
-			}
-		}
+		virtual Intersection GetIntersectionWith(Shape* other);
 
 	protected:
+		struct IntersectionData {
+			Point contactPoints[2], normal;
+			float smallestContact = -1.f;
+			bool use2 = false, fromOther = false;
+		};
+
 		Point xAxis, yAxis;
 		Point pos, dim;
 		Point corners[4];
@@ -86,11 +88,11 @@ namespace Sharpheus {
 		bool needsToRecalc = true;
 
 		void RecalcAxes();
-		void CheckCorners();
+		virtual void CheckCorners();
+		virtual void UpdateFurthest() = 0;
 
-		virtual Intersection GetIntersectionWith(class Oval* other) = 0;
-		virtual Intersection GetIntersectionWith(class Rect* other) = 0;
-		virtual Intersection GetIntersectionWith(class Capsule* other) = 0;
+		IntersectionData GetIntersectionDataWithSAT(Shape* other);
+		virtual IntersectionData GetOneWayIntersectionDataWithSAT(Shape* other);
 	};
 
 }

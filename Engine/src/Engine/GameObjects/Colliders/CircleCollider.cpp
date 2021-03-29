@@ -9,6 +9,7 @@
 namespace Sharpheus {
 
 	ClassInfo CircleCollider::classInfo("CircleCollider", "circlecollider.png", {
+		new BoolProvider<CircleCollider>("Only Trigger", SPH_BIND_GETTER(CircleCollider::IsTrigger), SPH_BIND_SETTER(CircleCollider::SetTrigger)),
 		new UFloatProvider<CircleCollider>("Radius", SPH_BIND_GETTER(CircleCollider::GetRadius), SPH_BIND_SETTER(CircleCollider::SetRadius))
 	});
 
@@ -42,7 +43,7 @@ namespace Sharpheus {
 
 	bool CircleCollider::Save(FileSaver& fs)
 	{
-		GameObject::Save(fs);
+		Collider::Save(fs);
 		fs.Write(radius);
 		return fs.GetStatus();
 	}
@@ -50,7 +51,7 @@ namespace Sharpheus {
 
 	bool CircleCollider::Load(FileLoader& fl)
 	{
-		GameObject::Load(fl);
+		Collider::Load(fl);
 		fl.Read(radius);
 		SetRadius(radius);
 		return fl.GetStatus();
@@ -59,7 +60,7 @@ namespace Sharpheus {
 
 	void CircleCollider::RenderShape()
 	{
-		ResourceManager::GetCircle()->Render(shape->GetCorners(), shapeColor);
+		ResourceManager::GetCircle()->Render(shape->GetCorners(), isTrigger ? triggerColor : colliderColor);
 	}
 
 }

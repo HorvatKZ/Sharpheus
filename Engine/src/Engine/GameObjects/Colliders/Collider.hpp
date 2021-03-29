@@ -7,9 +7,11 @@
 namespace Sharpheus {
 
 	class CollisionEvent;
-	class LocalSourceDestroyedEvent;
+	class OnEnterEvent;
+	class OnExitEvent;
 	SPH_DEF_EVENT_FUNC(CollisionEvent);
-	SPH_DEF_EVENT_FUNC(LocalSourceDestroyedEvent);
+	SPH_DEF_EVENT_FUNC(OnEnterEvent);
+	SPH_DEF_EVENT_FUNC(OnExitEvent);
 
 
 	class SPH_EXPORT Collider : public ShapedGameObject
@@ -17,10 +19,12 @@ namespace Sharpheus {
 	public:
 		Collider(GameObject* parent, const std::string& name, Shape* shape);
 		virtual ~Collider();
+		virtual void CopyFrom(GameObject* other) override;
 
 		virtual CollDataPair CalcCollision(Collider* other);
 		virtual void OnCollision(const CollData& cd, Collider* other);
-		inline void UpdatePrevPos() { prevPos = worldTrafo.pos; }
+
+		virtual void CheckTriggering(GameObject* obj);
 
 		void SetLevel(class Level* level) override;
 
@@ -29,41 +33,76 @@ namespace Sharpheus {
 				return Point();
 			}
 
-			Point diff = worldTrafo.pos - prevPos;
+			Point diff = worldTrafo.pos - lastPos;
 			return Point(diff.x / lastDeltaTime, diff.y / lastDeltaTime);
 		}
 
-		inline bool IsDynamic() { return parent->GetType() == Type::PhysicsObject; }
-		inline bool WasStill() { return prevPos == worldTrafo.pos; }
+		inline bool IsTrigger() { return isTrigger; }
+		inline void SetTrigger(bool isTrigger) { this->isTrigger = isTrigger; }
+
+		inline bool IsDynamic() { return parent->Is(Type::PhysicsObject); }
 		inline bool IsVisible() { return visible; }
 		inline void SetVisible(bool visible) { this->visible = visible; }
 		inline void Show() { visible = true; }
 		inline void Hide() { visible = false; }
 
-		inline void SubscribeCollision(ID subscriberID, CollisionEventFunc&& func1, LocalSourceDestroyedEventFunc&& func2) {
-			subscribers[subscriberID] = { func1, func2 };
+		inline void SubscribeCollision(ID subscriberID, CollisionEventFunc&& func) {
+			onCollisionSubscribers[subscriberID] = std::move(func);
+		}
+		inline void UnSubscribeCollision(ID subscriberID) {
+			auto it = onCollisionSubscribers.find(subscriberID);
+			if (it != onCollisionSubscribers.end()) onCollisionSubscribers.erase(it);
+		}
+		inline void SubscribeTriggerEnter(ID subscriberID, OnEnterEventFunc&& func) {
+			onTriggerEnterSubscribers[subscriberID] = std::move(func);
+		}
+		inline void UnSubscribeTriggerEnter(ID subscriberID) {
+			auto it = onTriggerEnterSubscribers.find(subscriberID);
+			if (it != onTriggerEnterSubscribers.end()) onTriggerEnterSubscribers.erase(it);
+		}
+		inline void SubscribeTriggerExit(ID subscriberID, OnExitEventFunc&& func) {
+			onTriggerExitSubscribers[subscriberID] = std::move(func);
+		}
+		inline void UnSubscribeTriggerExit(ID subscriberID) {
+			auto it = onTriggerExitSubscribers.find(subscriberID);
+			if (it != onTriggerExitSubscribers.end()) onTriggerExitSubscribers.erase(it);
 		}
 
-		inline void UnSubscribeCollision(ID subscriberID) {
-			auto it = subscribers.find(subscriberID);
-			if (it != subscribers.end()) subscribers.erase(it);
+		inline void SwapMaps() {
+			auto tmp = lastInside;
+			lastInside = currInside;
+			currInside = tmp;
+			currInside->clear();
 		}
 
 		inline bool operator==(const Collider& other) { return listenerID == other.listenerID; }
 		inline bool operator!=(const Collider& other) { return listenerID != other.listenerID; }
 
+		virtual bool Load(FileLoader& fl) override;
+
 	protected:
-		Point prevPos;
 		bool visible = false;
+		bool isTrigger = false;
 		float furthest = 0.f;
 		float lastDeltaTime = 0.f;
-		std::unordered_map<ID, std::pair<CollisionEventFunc, LocalSourceDestroyedEventFunc>> subscribers;
+		std::unordered_map<ID, CollisionEventFunc> onCollisionSubscribers;
+		std::unordered_map<ID, OnEnterEventFunc> onTriggerEnterSubscribers;
+		std::unordered_map<ID, OnExitEventFunc> onTriggerExitSubscribers;
 
-		static Color shapeColor;
+		std::unordered_map<ID, GameObject*> insideTriggerA, insideTriggerB, *currInside, *lastInside;
+
+		static Color colliderColor;
+		static Color triggerColor;
+
+		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
 		virtual void Render() override;
 		virtual void RenderShape() = 0;
+
+		virtual void OnObjectDestroyed(const GameObjectDestroyedEvent& e);
+		virtual void OnTriggerEnter(GameObject* obj);
+		virtual void OnTriggerExit(GameObject* obj, bool objDestroyed = false);
 	};
 
 }

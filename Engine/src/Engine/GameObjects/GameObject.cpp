@@ -8,6 +8,7 @@ namespace Sharpheus {
 
 	float GameObject::selectCircleRadius = 20.f;
 	Color GameObject::selectColor(255, 255, 0, 128);
+	ID GameObject::nextFreeSafeObjectID = 1;
 
 
 	GameObject::GameObject(GameObject* parent, const std::string& name) : parent(parent), name(name)
@@ -24,6 +25,14 @@ namespace Sharpheus {
 	{
 		while (!children.empty()) {
 			delete children[0];
+		}
+
+		GameObjectDestroyedEvent e(this);
+		for (auto it = safeObjects.begin(); it != safeObjects.end(); ++it) {
+			(*it).second(e);
+		}
+		for (auto it = onDestroySubscribers.begin(); it != onDestroySubscribers.end(); ++it) {
+			(*it).second(e);
 		}
 
 		if (parent != nullptr) {
@@ -179,7 +188,7 @@ namespace Sharpheus {
 	GameObject* GameObject::GetFirstChildOfType(Type type)
 	{
 		uint32_t i = 0;
-		while (i < children.size() && type != children[i]->GetType()) {
+		while (i < children.size() && !children[i]->Is(type)) {
 			++i;
 		}
 
@@ -198,11 +207,45 @@ namespace Sharpheus {
 		}
 
 		uint32_t i = children.size() - 1;
-		while (i > 0 && type != children[i]->GetType()) {
+		while (i > 0 && !children[i]->Is(type)) {
 			--i;
 		}
 
-		if (type == children[i]->GetType()) {
+		if (children[i]->Is(type)) {
+			return children[i];
+		}
+
+		return nullptr;
+	}
+
+
+	GameObject* GameObject::GetFirstChildOfMask(TypeMasks mask)
+	{
+		uint32_t i = 0;
+		while (i < children.size() && !children[i]->Is(mask)) {
+			++i;
+		}
+
+		if (i < children.size()) {
+			return children[i];
+		}
+
+		return nullptr;
+	}
+
+
+	GameObject* GameObject::GetLastChildOfMask(TypeMasks mask)
+	{
+		if (children.empty()) {
+			return nullptr;
+		}
+
+		uint32_t i = children.size() - 1;
+		while (i > 0 && !children[i]->Is(mask)) {
+			--i;
+		}
+
+		if (children[i]->Is(mask)) {
 			return children[i];
 		}
 
@@ -263,6 +306,16 @@ namespace Sharpheus {
 		}
 
 		return IsSelected(pos) ? this : nullptr;
+	}
+
+
+	void GameObject::UpdateLastPosAll()
+	{
+		lastPos = worldTrafo.pos;
+
+		for (GameObject* child : children) {
+			child->UpdateLastPosAll();
+		}
 	}
 
 

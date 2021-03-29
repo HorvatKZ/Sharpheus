@@ -37,13 +37,39 @@ namespace Sharpheus {
 
 	Point Capsule::GetLocalPerpendicularAt(const Point& surfaceP)
 	{
-		return surfaceP; // TODO
+		if (surfaceP.y < -dim.y + domeHeight) { // Upper half circle
+			return Point(surfaceP.x * domeHeight / dim.x, (surfaceP.y + dim.y - domeHeight) * dim.x / domeHeight);
+		}
+		else if (surfaceP.y > dim.y - domeHeight) { // Lower half circle
+			return Point(surfaceP.x * domeHeight / dim.x, (surfaceP.y - dim.y + domeHeight) * dim.x / domeHeight);
+		}
+		else if (surfaceP.x > 0) {
+			return Point(1, 0);
+		}
+		else {
+			return Point(-1, 0);
+		}
 	}
 
 
 	Point Capsule::GetLocalClosestTo(const Point& p)
 	{
-		return p; // TODO
+		if (p.y < -dim.y + domeHeight) { // Upper half circle
+			Point toCenter(p.x, p.y + dim.y - domeHeight);
+			toCenter = toCenter.Normalize();
+			return Point(toCenter.x * dim.x, toCenter.y * domeHeight - dim.y + domeHeight);
+		}
+		else if (p.y > dim.y - domeHeight) { // Lower half circle
+			Point toCenter(p.x, p.y - dim.y + domeHeight);
+			toCenter = toCenter.Normalize();
+			return Point(toCenter.x * dim.x, toCenter.y * domeHeight + dim.y - domeHeight);
+		}
+		else if (p.x > 0) {
+			return Point(dim.x, p.y);
+		}
+		else {
+			return Point(-dim.x, p.y);
+		}
 	}
 
 
@@ -56,20 +82,26 @@ namespace Sharpheus {
 	}
 
 
-	Shape::Intersection Capsule::GetIntersectionWith(Oval* other)
+	void Capsule::CheckCorners()
 	{
-		return Intersection();
+		if (needsToRecalc) {
+			Point smallHeight = yAxis * (dim.y - domeHeight * 0.66f);
+			Point smallWidth = xAxis * dim.x * 0.33f;
+			Point height = yAxis * dim.y;
+			Point width = xAxis * dim.x;
+			satCorners[0] = pos - height - smallWidth;
+			satCorners[1] = pos - height + smallWidth;
+			satCorners[2] = pos - smallHeight + width;
+			satCorners[3] = pos + smallHeight + width;
+			satCorners[4] = pos + height + smallWidth;
+			satCorners[5] = pos + height - smallWidth;
+			satCorners[6] = pos + smallHeight - width;
+			satCorners[7] = pos - smallHeight - width;
+		}
+
+		Shape::CheckCorners();
 	}
 
-	Shape::Intersection Capsule::GetIntersectionWith(Rect* other)
-	{
-		return Intersection();
-	}
-
-	Shape::Intersection Capsule::GetIntersectionWith(Capsule* other)
-	{
-		return Intersection();
-	}
 
 	void Capsule::CheckInnerCorners()
 	{
@@ -82,6 +114,12 @@ namespace Sharpheus {
 			innerCorners[3] = pos + height - width;
 			needsToRecalcInner = false;
 		}
+	}
+
+
+	void Capsule::UpdateFurthest()
+	{
+		furthest = dim.y;
 	}
 
 }

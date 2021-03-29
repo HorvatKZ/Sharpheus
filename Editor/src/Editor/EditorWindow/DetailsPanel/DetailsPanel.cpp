@@ -59,15 +59,18 @@ namespace Sharpheus {
 		}
 	}
 
+
 	void DetailsPanel::CurrentNameChanged(const std::string& oldName, const std::string& newName)
 	{
 		namePresenter->Refresh();
 	}
 
+
 	void DetailsPanel::CurrentDataChanged(GameObject* curr)
 	{
 		RefreshPresenters();
 	}
+
 
 	void DetailsPanel::CreatePresenters(GameObject* obj)
 	{
@@ -90,7 +93,10 @@ namespace Sharpheus {
 					CreatePresenterFrom<Camera>(provider, y);
 					break;
 				case GameObject::Type::Sprite:
-					CreatePresenterFrom<Collection>(provider, y);
+					CreatePresenterFrom<Sprite>(provider, y);
+					break;
+				case GameObject::Type::Quad:
+					CreatePresenterFrom<Quad>(provider, y);
 					break;
 				case GameObject::Type::PhysicsObject:
 					CreatePresenterFrom<PhysicsObject>(provider, y);

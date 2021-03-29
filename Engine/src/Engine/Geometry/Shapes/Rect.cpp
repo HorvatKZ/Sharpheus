@@ -74,101 +74,80 @@ namespace Sharpheus {
 		return closest;
 	}
 
-
-	Shape::Intersection Rect::GetIntersectionWith(Oval* other)
+	
+	void Rect::UpdateFurthest()
 	{
-		Intersection inter = other->GetIntersectionWith((Shape*)this);
-		inter.normal *= -1;
-		return inter;
+		furthest = sqrt(dim.x * dim.x + dim.y * dim.y);
 	}
 
 
-	Shape::Intersection Rect::GetIntersectionWith(Rect* other)
+	Shape::IntersectionData Rect::GetOneWayIntersectionDataWithSAT(Shape* other)
 	{
-		IntersectionData thisData = GetIntesectionDataWith(other);
-		IntersectionData otherData = other->GetIntesectionDataWith(this);
-		IntersectionData usedData;
-		bool otherIsUsed = false;
-
-		if (thisData.smallestContact == -1.f) {
-			if (otherData.smallestContact == -1.f) {
-				Point* otherC = other->GetCorners();
-				for (uint8_t i = 0; i < 4; ++i) {
-					if (IsInside(otherC[i])) {
-						int i = 5;
-					}
-				}
-				for (uint8_t i = 0; i < 4; ++i) {
-					if (other->IsInside(corners[i])) {
-						int i = 5;
-					}
-				}
-				return Intersection();
-			}
-			else {
-				usedData = otherData;
-				otherIsUsed = true;
-			}
-		}
-		else {
-			if (otherData.smallestContact == -1.f) {
-				usedData = thisData;
-			}
-			else {
-				otherIsUsed = thisData.smallestContact > otherData.smallestContact;
-				usedData = otherIsUsed ? otherData : thisData;
-			}
+		if (other->GetType() != Type::RECT) {
+			return Shape::GetOneWayIntersectionDataWithSAT(other);
 		}
 
-		Intersection inter;
-		inter.normal = usedData.normal;
-		if (otherIsUsed) {
-			inter.normal *= -1;
-		}
-		inter.depth = usedData.smallestContact / 2;
-		Point mostInside = usedData.use2 ? (usedData.contactPoints[0] + usedData.contactPoints[1]) / 2 : usedData.contactPoints[0];
-		inter.contact = mostInside + usedData.normal * inter.depth;
-		return inter;
-	}
-
-
-	Shape::Intersection Rect::GetIntersectionWith(Capsule* other)
-	{
-		return Intersection();
-	}
-
-
-	Rect::IntersectionData Rect::GetIntesectionDataWith(Rect* other)
-	{
-		IntersectionData data;
 		Point* otherCorners = other->GetCorners();
+		Point relCorners[4];
 		for (uint8_t i = 0; i < 4; ++i) {
-			Point relP = GetRelativePos(otherCorners[i]);
-			if (-dim.x <= relP.x && relP.x < dim.x && -dim.y <= relP.y && relP.y < dim.y) {
-				UpdateSmallestContact(dim.x - relP.x, otherCorners[i], xAxis, data);
-				UpdateSmallestContact(dim.x + relP.x, otherCorners[i], xAxis * -1, data);
-				UpdateSmallestContact(dim.y - relP.y, otherCorners[i], yAxis, data);
-				UpdateSmallestContact(dim.y + relP.y, otherCorners[i], yAxis * -1, data);
+			relCorners[i] = GetRelativePos(otherCorners[i]);
+		}
+
+		float minX = relCorners[0].x, minY = relCorners[0].y;
+		float maxX = minX, maxY = minY;
+		for (uint8_t i = 1; i < 4; ++i) {
+			if (relCorners[i].x < minX) {
+				minX = relCorners[i].x;
+			}
+			if (relCorners[i].x > maxX) {
+				maxX = relCorners[i].x;
+			}
+			if (relCorners[i].y < minY) {
+				minY = relCorners[i].y;
+			}
+			if (relCorners[i].y > maxY) {
+				maxY = relCorners[i].y;
 			}
 		}
 
+		if (maxX < -dim.x || dim.x < minX || maxY < -dim.y || dim.y < minY) {
+			return IntersectionData();
+		}
+
+		float relevantCoord = maxX;
+		bool isXCoord = true;
+		IntersectionData data;
+		data.smallestContact = dim.x + maxX;
+		data.normal = xAxis * -1;
+		if (dim.x - minX < data.smallestContact) {
+			data.smallestContact = dim.x - minX;
+			relevantCoord = minX;
+			data.normal = xAxis;
+		}
+
+		if (dim.y + maxY < data.smallestContact) {
+			data.smallestContact = dim.y + maxY;
+			relevantCoord = maxY;
+			data.normal = yAxis * -1;
+			isXCoord = false;
+		}
+
+		if (dim.y - minY < data.smallestContact) {
+			data.smallestContact = dim.y - minY;
+			relevantCoord = minY;
+			data.normal = yAxis;
+			isXCoord = false;
+		}
+
+		float tolerance = 0.01f;
+		uint8_t found = 0;
+		for (uint8_t i = 0; i < 4; ++i) {
+			if (isXCoord && abs(relCorners[i].x - relevantCoord) < tolerance ||
+				!isXCoord && abs(relCorners[i].y - relevantCoord) < tolerance) {
+				data.contactPoints[found++] = otherCorners[i];
+			}
+		}
+		data.use2 = found == 2;
 		return data;
 	}
-
-
-	void Rect::UpdateSmallestContact(float diff, const Point& newP, const Point& newNormal, IntersectionData& data)
-	{
-		float tolerance = 0.01f;
-		if (data.smallestContact == -1.f || diff < data.smallestContact * (1.f - tolerance)) {
-			data.smallestContact = diff;
-			data.contactPoints[0] = newP;
-			data.use2 = false;
-			data.normal = newNormal;
-		}
-		else if (data.smallestContact * (1.f - tolerance) <= diff && diff <= data.smallestContact * (1.f + tolerance)) {
-			data.contactPoints[1] = newP;
-			data.use2 = true;
-		}
-	}
-
 }

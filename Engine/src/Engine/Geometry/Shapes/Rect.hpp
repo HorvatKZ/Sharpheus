@@ -17,18 +17,9 @@ namespace Sharpheus {
 		virtual Point GetLocalClosestTo(const Point& p) override;
 
 	protected:
-		struct IntersectionData {
-			Point contactPoints[2], normal;
-			float smallestContact = -1.f;
-			bool use2;
-		};
+		virtual void UpdateFurthest() override;
 
-		virtual Intersection GetIntersectionWith(class Oval* other) override;
-		virtual Intersection GetIntersectionWith(class Rect* other) override;
-		virtual Intersection GetIntersectionWith(class Capsule* other) override;
-
-		virtual IntersectionData GetIntesectionDataWith(Rect* other);
-		virtual void UpdateSmallestContact(float diff, const Point& newP, const Point& newNormal, IntersectionData& data);
+		virtual IntersectionData GetOneWayIntersectionDataWithSAT(Shape* other) override;
 	};
 
 }

@@ -18,7 +18,7 @@ namespace Sharpheus {
 	bool Oval::IsInside(const Point& p)
 	{
 		Point relP = GetRelativePos(p);
-		Point unscaledP(relP.x * relP.x / dim.x * dim.x, relP.y * relP.y / dim.y * dim.y);
+		Point unscaledP(relP.x * relP.x / (dim.x * dim.x), relP.y * relP.y / (dim.y * dim.y));
 		return unscaledP.LengthSquared() <= 1.f;
 	}
 
@@ -40,27 +40,46 @@ namespace Sharpheus {
 	}
 
 
-	Shape::Intersection Oval::GetIntersectionWith(Oval* other)
+	Shape::Intersection Oval::GetIntersectionWith(Shape* other)
 	{
-		if (other->IsCircle()) {
-			Intersection inter = other->GetIntersectionAsCircleWith(this);
+		if (other->GetPriority() > GetPriority()) {
+			Intersection inter = other->GetIntersectionWith(this);
 			inter.normal *= -1;
 			return inter;
 		}
 
-		return Intersection();
+		if (IsCircle()) {
+			return GetIntersectionAsCircleWith(other);
+		}
+
+		return Shape::GetIntersectionWith(other);
 	}
 
 
-	Shape::Intersection Oval::GetIntersectionWith(Rect* other)
+	void Oval::CheckCorners()
 	{
-		return Intersection();
+		if (needsToRecalc) {
+			Point smallHeight = yAxis * dim.y * 0.33f;
+			Point smallWidth = xAxis * dim.x * 0.33f;
+			Point height = yAxis * dim.y;
+			Point width = xAxis * dim.x;
+			satCorners[0] = pos - height - smallWidth;
+			satCorners[1] = pos - height + smallWidth;
+			satCorners[2] = pos - smallHeight + width;
+			satCorners[3] = pos + smallHeight + width;
+			satCorners[4] = pos + height + smallWidth;
+			satCorners[5] = pos + height - smallWidth;
+			satCorners[6] = pos + smallHeight - width;
+			satCorners[7] = pos - smallHeight - width;
+		}
+
+		Shape::CheckCorners();
 	}
 
 
-	Shape::Intersection Oval::GetIntersectionWith(Capsule* other)
+	void Oval::UpdateFurthest()
 	{
-		return Intersection();
+		furthest = glm::max(dim.x, dim.y);
 	}
 
 

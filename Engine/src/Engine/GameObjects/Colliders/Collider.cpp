@@ -6,12 +6,14 @@
 
 namespace Sharpheus {
 
-	Color Collider::shapeColor = Color(0, 255, 64, 127);
+	Color Collider::colliderColor = Color(0, 255, 64, 127);
+	Color Collider::triggerColor = Color(167, 15, 255, 127);
 
 
 	Collider::Collider(GameObject* parent, const std::string& name, Shape* shape) : ShapedGameObject(parent, name, shape)
 	{
-		prevPos = worldTrafo.pos;
+		currInside = &insideTriggerA;
+		lastInside = &insideTriggerB;
 	}
 
 
@@ -19,10 +21,22 @@ namespace Sharpheus {
 	{
 		level->GetCollSys().RemoveCollider(this);
 
-		LocalSourceDestroyedEvent e(GetID());
-		for (auto it = subscribers.begin(); it != subscribers.end(); ++it) {
-			(*it).second.second(e);
+		for (auto it = currInside->begin(); it != currInside->end(); ++it) {
+			(*it).second->UnSubscribeForDestruction(GetID());
 		}
+		for (auto it = lastInside->begin(); it != lastInside->end(); ++it) {
+			(*it).second->UnSubscribeForDestruction(GetID());
+		}
+	}
+
+
+	void Collider::CopyFrom(GameObject* other)
+	{
+		SPH_CHECKMASK(other, Collider);
+
+		ShapedGameObject::CopyFrom(other);
+		Collider* trueOther = (Collider*)other;
+		isTrigger = trueOther->isTrigger;
 	}
 
 
@@ -68,8 +82,28 @@ namespace Sharpheus {
 		}
 
 		CollisionEvent e(this, other, cd);
-		for (auto it = subscribers.begin(); it != subscribers.end(); ++it) {
-			(*it).second.first(e);
+		for (auto it = onCollisionSubscribers.begin(); it != onCollisionSubscribers.end(); ++it) {
+			(*it).second(e);
+		}
+	}
+
+
+	void Collider::CheckTriggering(GameObject* obj)
+	{
+		if (obj != this && shape->IsInside(obj->GetWorldTrafo().pos)) {
+			currInside->insert({ obj->GetID(), obj });
+			if (lastInside->find(obj->GetID()) == lastInside->end()) {
+				obj->SubscribeForDestruction(GetID(), SPH_BIND(Collider::OnObjectDestroyed));
+				OnTriggerEnter(obj);
+			}
+		}
+		else if (lastInside->find(obj->GetID()) != lastInside->end()) {
+			obj->UnSubscribeForDestruction(GetID());
+			OnTriggerExit(obj);
+		}
+
+		for (GameObject* child : obj->GetChildren()) {
+			CheckTriggering(child);
 		}
 	}
 
@@ -78,6 +112,22 @@ namespace Sharpheus {
 	{
 		GameObject::SetLevel(level);
 		level->GetCollSys().AddCollider(this);
+	}
+
+
+	bool Collider::Load(FileLoader& fl)
+	{
+		ShapedGameObject::Load(fl);
+		fl.Read(isTrigger);
+		return fl.GetStatus();
+	}
+
+
+	bool Collider::Save(FileSaver& fs)
+	{
+		ShapedGameObject::Save(fs);
+		fs.Write(isTrigger);
+		return fs.GetStatus();
 	}
 
 
@@ -93,4 +143,32 @@ namespace Sharpheus {
 			RenderShape();
 		}
 	}
+
+
+	void Collider::OnObjectDestroyed(const GameObjectDestroyedEvent& e)
+	{
+		ID objID = e.source->GetID();
+		currInside->erase(objID);
+		lastInside->erase(objID);
+		OnTriggerExit(e.source, true);
+	}
+
+
+	void Collider::OnTriggerEnter(GameObject* obj)
+	{
+		OnEnterEvent e(this, obj);
+		for (auto it = onTriggerEnterSubscribers.begin(); it != onTriggerEnterSubscribers.end(); ++it) {
+			(*it).second(e);
+		}
+	}
+
+
+	void Collider::OnTriggerExit(GameObject* obj, bool objDestroyed)
+	{
+		OnExitEvent e(this, obj, objDestroyed);
+		for (auto it = onTriggerExitSubscribers.begin(); it != onTriggerExitSubscribers.end(); ++it) {
+			(*it).second(e);
+		}
+	}
+
 }

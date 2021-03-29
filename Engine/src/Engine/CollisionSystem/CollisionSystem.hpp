@@ -12,6 +12,7 @@ namespace Sharpheus {
 		virtual ~CollisionSystem();
 
 		void Tick();
+		inline void SetRoot(GameObject* root) { this->root = root; }
 
 		void Clear();
 
@@ -25,6 +26,7 @@ namespace Sharpheus {
 	private:
 		std::vector<class Collider*> colliders;
 		bool areCollidersVisible = false;
+		GameObject* root;
 	};
 
 }

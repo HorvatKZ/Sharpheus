@@ -9,6 +9,7 @@
 namespace Sharpheus {
 
 	ClassInfo CapsuleCollider::classInfo("CapsuleCollider", "capsulecollider.png", {
+		new BoolProvider<CapsuleCollider>("Only Trigger", SPH_BIND_GETTER(CapsuleCollider::IsTrigger), SPH_BIND_SETTER(CapsuleCollider::SetTrigger)),
 		new UFloatProvider<CapsuleCollider>("Width", SPH_BIND_GETTER(CapsuleCollider::GetWidth), SPH_BIND_SETTER(CapsuleCollider::SetWidth)),
 		new UFloatProvider<CapsuleCollider>("Height", SPH_BIND_GETTER(CapsuleCollider::GetHeight), SPH_BIND_SETTER(CapsuleCollider::SetHeight))
 		});
@@ -55,7 +56,7 @@ namespace Sharpheus {
 
 	bool CapsuleCollider::Save(FileSaver& fs)
 	{
-		GameObject::Save(fs);
+		Collider::Save(fs);
 		fs.Write(width);
 		fs.Write(height);
 		return fs.GetStatus();
@@ -64,7 +65,7 @@ namespace Sharpheus {
 
 	bool CapsuleCollider::Load(FileLoader& fl)
 	{
-		GameObject::Load(fl);
+		Collider::Load(fl);
 		fl.Read(width);
 		fl.Read(height);
 		SetSizer(width, height);
@@ -73,7 +74,7 @@ namespace Sharpheus {
 
 	void CapsuleCollider::RenderShape()
 	{
-		RenderCapsule(shapeColor);
+		RenderCapsule(isTrigger ? triggerColor : colliderColor);
 	}
 
 

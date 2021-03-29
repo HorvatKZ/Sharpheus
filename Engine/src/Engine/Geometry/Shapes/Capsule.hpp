@@ -19,6 +19,9 @@ namespace Sharpheus {
 
 		inline Point* GetInnerCorners() { CheckInnerCorners(); return innerCorners; }
 
+		virtual inline Point* GetSATCorners() override { CheckCorners(); return satCorners; }
+		virtual inline uint8_t GetSATCornerNum() override { return 8; }
+
 		virtual void ForceRefresh() override;
 
 		inline float GetDomeHeight() { return domeHeight; }
@@ -38,6 +41,7 @@ namespace Sharpheus {
 				if (domeHeight > dim.y) {
 					domeHeight = dim.y;
 				}
+				UpdateFurthest();
 				needsToRecalc = true;
 				needsToRecalcInner = true;
 			}
@@ -59,16 +63,15 @@ namespace Sharpheus {
 			}
 		}
 
-		virtual Intersection GetIntersectionWith(class Oval* other) override;
-		virtual Intersection GetIntersectionWith(class Rect* other) override;
-		virtual Intersection GetIntersectionWith(class Capsule* other) override;
-
 	protected:
 		Point innerCorners[4];
+		Point satCorners[8];
 		float domeHeight = 0.f;
 		bool needsToRecalcInner = true;
 
+		void CheckCorners() override;
 		void CheckInnerCorners();
+		virtual void UpdateFurthest() override;
 	};
 
 }

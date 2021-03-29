@@ -19,7 +19,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKTYPE(other, Sprite);
 
-		GameObject::CopyFrom(other);
+		ShapedGameObject::CopyFrom(other);
 		Sprite* trueOther = (Sprite*)other;
 		SetImage(trueOther->image);
 		tint = trueOther->tint;
@@ -45,7 +45,7 @@ namespace Sharpheus {
 
 	bool Sprite::Save(FileSaver& fs)
 	{
-		GameObject::Save(fs);
+		ShapedGameObject::Save(fs);
 		fs.Write(image);
 		fs.Write(tint);
 		return fs.GetStatus();
@@ -54,7 +54,7 @@ namespace Sharpheus {
 
 	bool Sprite::Load(FileLoader& fl)
 	{
-		GameObject::Load(fl);
+		ShapedGameObject::Load(fl);
 		Image* img;
 		fl.Read(&img);
 		SetImage(img);

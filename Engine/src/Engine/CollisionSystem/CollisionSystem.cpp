@@ -42,7 +42,13 @@ namespace Sharpheus {
 		}
 
 		for (Collider* collider : colliders) {
-			collider->UpdatePrevPos();
+			if (collider->IsTrigger()) {
+				collider->CheckTriggering(root);
+			}
+		}
+
+		for (Collider* collider : colliders) {
+			collider->SwapMaps();
 		}
 	}
 

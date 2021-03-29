@@ -8,6 +8,7 @@
 namespace Sharpheus {
 
 	ClassInfo BoxCollider::classInfo("BoxCollider", "boxcollider.png", {
+		new BoolProvider<BoxCollider>("Only Trigger", SPH_BIND_GETTER(BoxCollider::IsTrigger), SPH_BIND_SETTER(BoxCollider::SetTrigger)),
 		new UFloatProvider<BoxCollider>("Width", SPH_BIND_GETTER(BoxCollider::GetWidth), SPH_BIND_SETTER(BoxCollider::SetWidth)),
 		new UFloatProvider<BoxCollider>("Height", SPH_BIND_GETTER(BoxCollider::GetHeight), SPH_BIND_SETTER(BoxCollider::SetHeight))
 	});
@@ -44,7 +45,7 @@ namespace Sharpheus {
 
 	bool BoxCollider::Save(FileSaver& fs)
 	{
-		GameObject::Save(fs);
+		Collider::Save(fs);
 		fs.Write(width);
 		fs.Write(height);
 		return fs.GetStatus();
@@ -53,7 +54,7 @@ namespace Sharpheus {
 
 	bool BoxCollider::Load(FileLoader& fl)
 	{
-		GameObject::Load(fl);
+		Collider::Load(fl);
 		fl.Read(width);
 		fl.Read(height);
 		SetSizer(width, height);
@@ -63,7 +64,7 @@ namespace Sharpheus {
 
 	void BoxCollider::RenderShape()
 	{
-		Renderer::DrawMonocromeQuad(shape->GetCorners(), shapeColor);
+		Renderer::DrawMonocromeQuad(shape->GetCorners(), isTrigger ? triggerColor : colliderColor);
 	}
 
 }

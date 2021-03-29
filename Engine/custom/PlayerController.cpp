@@ -19,7 +19,7 @@ PlayerController::PlayerController(Sharpheus::Behavior* other) : LocalListenerBe
 
 PlayerController::PlayerController(GameObject* parent, const std::string& name) : LocalListenerBehavior(parent, name)
 {
-	SPH_ASSERT(parent->GetType() == Type::PhysicsObject, "Parent \"{0}\" is not a PhysicsObject", parent->GetName());
+	SPH_ASSERT(parent->Is(Type::PhysicsObject), "Parent \"{0}\" is not a PhysicsObject", parent->GetName());
 	DoSubscriptions();
 }
 
@@ -102,7 +102,7 @@ void PlayerController::OnKeyReleased(const Sharpheus::KeyReleasedEvent& e)
 
 void PlayerController::OnCollision(const Sharpheus::CollisionEvent& e)
 {
-	if (e.cd.geom.normal == Point::Up) {
+	if (e.cd.geom.normal.GetAngleWith(Point::Down) < 10.f) {
 		canJump = true;
 	}
 }
@@ -118,7 +118,7 @@ void PlayerController::DoSubscriptions()
 	Subscribe<KeyPressedEvent>(SPH_BIND(PlayerController::OnKeyPressed));
 	Subscribe<KeyRepeatEvent>(SPH_BIND(PlayerController::OnKeyRepeat));
 	Subscribe<KeyReleasedEvent>(SPH_BIND(PlayerController::OnKeyReleased));
-	SubscribeCollision((Collider*)parent->GetFirstChildOfType(Type::BoxCollider), SPH_BIND(PlayerController::OnCollision));
+	SubscribeCollision((Collider*)parent->GetFirstChildOfType(Type::CapsuleCollider), SPH_BIND(PlayerController::OnCollision));
 }
 
 
@@ -128,11 +128,11 @@ bool PlayerController::IsCompatibleWithParent(GameObject* parent)
 		return false;
 	}
 
-	if (parent->GetType() != Type::PhysicsObject) {
+	if (!parent->Is(Type::PhysicsObject)) {
 		return false;
 	}
 
-	if (parent->GetFirstChildOfType(Type::BoxCollider) == nullptr) {
+	if (parent->GetFirstChildOfType(Type::CapsuleCollider) == nullptr) {
 		return false;
 	}
 	
