@@ -12,9 +12,6 @@ namespace Sharpheus {
 		virtual ~PlaceholderBehavior() = default;
 
 		SPH_DECL_BEHAVIOR(PlaceholderBehavior, 0);
-
-	protected:
-		virtual void Tick(float deltaTime) override {}
 	};
 
 }

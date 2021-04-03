@@ -3,6 +3,7 @@
 #include "Presenter.hpp"
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
+#include "Editor/ResourceManagement/ImageManager.hpp"
 #include <wx/valnum.h>
 
 
@@ -477,7 +478,7 @@ namespace Sharpheus {
 			std::string path = image->GetPath();
 			if (path != lastPath) {
 				this->path->SetLabel(path);
-				wxImage bitmap(image->GetFullPath(), wxBITMAP_TYPE_PNG);
+				wxImage bitmap = ImageManager::GetImage(image->GetFullPath());
 				bitmap.Rescale(50, 50);
 				preview->SetBitmap(bitmap);
 				lastPath = path;
@@ -514,7 +515,90 @@ namespace Sharpheus {
 			if (!browseDialog.Show())
 				return;
 
-			provider->SetPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()), false);
+			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()), false);
+			signal();
+		}
+	}
+
+
+	// FontPresenter
+
+	template<class Class>
+	inline FontPresenter<Class>::FontPresenter(wxWindow* parent, FontProvider<Class>* provider, Signal signal, uint32_t& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		uint32_t width = parent->GetSize().x - 3 * UI::border - 22;
+		y += 22;
+		fontPicker = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22));
+		fontPicker->Bind(wxEVT_COMBOBOX, &FontPresenter<Class>::HandleChange, this);
+		fontPicker->SetEditable(false);
+		addButton = new wxButton(parent, wxID_ANY, "+", wxPoint(2 * UI::border + width, y), wxSize(22, 22));
+		addButton->Bind(wxEVT_BUTTON, &FontPresenter<Class>::OnAdd, this);
+		y += 33;
+	}
+
+	template<class Class>
+	inline FontPresenter<Class>::~FontPresenter()
+	{
+		wxREMOVE(fontPicker);
+		wxREMOVE(addButton);
+	}
+
+	template<class Class>
+	inline void FontPresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+
+		fontPicker->Clear();
+		auto fontTable = provider->GetAllFonts();
+		for (auto it = fontTable->begin(); it != fontTable->end(); ++it) {
+			fontPicker->Append((*it).first);
+		}
+		
+		Font* font = provider->Get((Class*)curr);
+		if (font != nullptr) {
+			fontPicker->SetValue(font->GetName());
+		}
+		else {
+			fontPicker->SetValue("None");
+		}
+	}
+
+	template<class Class>
+	inline void FontPresenter<Class>::SetDefault()
+	{
+		fontPicker->Clear();
+		fontPicker->SetValue("");
+	}
+
+	template<class Class>
+	inline void FontPresenter<Class>::Refresh()
+	{
+		SetCurrent(curr);
+	}
+
+	template<class Class>
+	inline void FontPresenter<Class>::HandleChange(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			provider->SetByName((Class*)curr, wxStr2StdStr(fontPicker->GetValue()));
+			signal();
+		}
+	}
+
+	template<class Class>
+	inline void FontPresenter<Class>::OnAdd(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			RelativeOpenDialog browseDialog(parent, "Add new Font", ProjectData::GetPath() + "Assets\\Fonts\\",
+				"Font file(*.fnt) | *.fnt");
+
+			if (!browseDialog.Show())
+				return;
+
+			wxString fontFile = "Fonts\\" + browseDialog.GetPath();
+			wxString imgFile = fontFile.Left(fontFile.find_last_of('.')) + ".png";
+			provider->SetByPath((Class*)curr, wxStr2StdStr(fontFile), wxStr2StdStr(imgFile));
 			signal();
 		}
 	}

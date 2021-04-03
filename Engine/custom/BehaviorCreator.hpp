@@ -10,6 +10,7 @@
 #include "DebugBehavior.hpp"
 #include "PlayerController.hpp"
 #include "TriggerTester.hpp"
+#include "MoueTester.hpp"
 
 #define SPH_PRESENT_BEHAVIOR(obj) \
 	SPH_START_PRESENTING(obj) \
@@ -17,6 +18,7 @@
 		SPH_PRESENT(DebugBehavior, 1) \
 		SPH_PRESENT(PlayerController, 2) \
 		SPH_PRESENT(TriggerTester, 3) \
+		SPH_PRESENT(MoueTester, 4) \
 	SPH_END_PRESENTING()
 
 

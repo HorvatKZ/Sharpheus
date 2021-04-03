@@ -22,7 +22,8 @@ namespace Sharpheus {
 			None,
 			Local,
 			WindowClosed, WindowResized,
-			KeyPressed, KeyRepeat, KeyReleased
+			KeyPressed, KeyRepeat, KeyReleased,
+			MousePressed, MouseReleased, MouseMoved, MouseScrolled
 		};
 
 		virtual ~Event() = default;

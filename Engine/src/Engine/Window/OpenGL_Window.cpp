@@ -173,5 +173,46 @@ namespace Sharpheus {
 					break;
 			}
 		});
+
+		glfwSetCursorPosCallback(win, [](GLFWwindow* win, double x, double y) {
+			Camera* camera = Renderer::GetCamera();
+			Point screenPos(x, y);
+			Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
+			MouseMovedEvent e(screenPos, gamePos);
+			SPH_PROPAGATE(e);
+		});
+
+		glfwSetMouseButtonCallback(win, [](GLFWwindow* win, int button, int action, int mods) {
+			double x, y;
+			glfwGetCursorPos(win, &x, &y);
+			Camera* camera = Renderer::GetCamera();
+			Point screenPos(x, y);
+			Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
+			switch (action) {
+				case GLFW_PRESS:
+					{
+						MousePressedEvent e(screenPos, gamePos, (MouseButton)button);
+						SPH_PROPAGATE(e);
+					}
+					break;
+				case GLFW_RELEASE:
+					{
+						MouseReleasedEvent e(screenPos, gamePos, (MouseButton)button);
+						SPH_PROPAGATE(e);
+					}
+					break;
+			}
+		});
+
+		glfwSetScrollCallback(win, [](GLFWwindow* win, double xoffset, double yoffset) {
+			double x, y;
+			glfwGetCursorPos(win, &x, &y);
+			Camera* camera = Renderer::GetCamera();
+			Point screenPos(x, y);
+			Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
+			Point offset(xoffset, yoffset);
+			MouseScrolledEvent e(screenPos, gamePos, offset);
+			SPH_PROPAGATE(e);
+		});
 	}
 }

@@ -79,6 +79,7 @@ namespace Sharpheus {
 	{
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 
+		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 
 		glColor4f(tint.GetRed(), tint.GetGreen(), tint.GetBlue(), tint.GetAlpha());
@@ -104,7 +105,6 @@ namespace Sharpheus {
 		}
 
 		glEnd();
-		glEnable(GL_TEXTURE_2D);
 	}
 
 }

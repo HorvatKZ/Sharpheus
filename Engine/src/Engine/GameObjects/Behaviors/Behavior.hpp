@@ -36,8 +36,6 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(Behavior);
 
 	protected:
-		virtual void Render() override {}
-
 		virtual bool Save(FileSaver& file);
 	};
 }

@@ -2,6 +2,7 @@
 #include "MenuBar.hpp"
 #include "ProjectSettingsDialog.hpp"
 #include "WindowSettingsDialog.hpp"
+#include "AnimationCreatorDialog.hpp"
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
@@ -27,6 +28,7 @@ namespace Sharpheus {
 		wxMenu* editor = new wxMenu;
 		editor->Append(10201, wxT("Editor Settings\tCtrl+Alt+E"));
 		editor->Append(10202, wxT("Grid Settings\tCtrl+Alt+G"));
+		editor->Append(10203, wxT("Animation Creator"));
 		Append(editor, "Editor");
 
 		wxMenu* exporting = new wxMenu;
@@ -41,6 +43,7 @@ namespace Sharpheus {
 		Connect(10104, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveLevelAs));
 		Connect(10201, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::EditorSettings));
 		Connect(10202, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::GridSettings));
+		Connect(10203, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AnimatorCreator));
 		Connect(10301, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportGame));
 	}
 
@@ -164,6 +167,15 @@ namespace Sharpheus {
 	void MenuBar::GridSettings(wxCommandEvent& e)
 	{
 		wxMessageBox("Grid settings is under construction..", "Info");
+	}
+
+
+	void MenuBar::AnimatorCreator(wxCommandEvent& e)
+	{
+		AnimationCreatorDialog creator(parent);
+
+		if (creator.ShowModal() != wxID_CANCEL)
+			return;
 	}
 
 

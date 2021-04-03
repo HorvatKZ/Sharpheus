@@ -98,6 +98,9 @@ namespace Sharpheus {
 				case GameObject::Type::Quad:
 					CreatePresenterFrom<Quad>(provider, y);
 					break;
+				case GameObject::Type::Text:
+					CreatePresenterFrom<Text>(provider, y);
+					break;
 				case GameObject::Type::PhysicsObject:
 					CreatePresenterFrom<PhysicsObject>(provider, y);
 					break;
@@ -201,6 +204,9 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::IMAGE:
 				presenters.push_back(new ImagePresenter<Class>(this, (ImageProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::FONT:
+				presenters.push_back(new FontPresenter<Class>(this, (FontProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::TRAFO:
 				presenters.push_back(new TrafoPresenter<Class>(this, (TrafoProvider<Class>*)provider, currDataChangedCallback, y));

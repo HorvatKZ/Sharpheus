@@ -56,9 +56,6 @@ namespace Sharpheus {
 
 		virtual void RenderSelection() override;
 		virtual inline bool IsCurrentCamera() override { return isCurrent; }
-
-		virtual void Tick(float deltaTime) override;
-		virtual void Render() override;
 	};
 
 }

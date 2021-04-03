@@ -338,8 +338,9 @@ namespace Sharpheus {
 
 	bool GameObject::Load(FileLoader& fl)
 	{
-		fl.Read(trafo);
-		SetTrafo(trafo);
+		Transform newTrafo;
+		fl.Read(newTrafo);
+		SetTrafo(newTrafo);
 		return fl.GetStatus();
 	}
 
@@ -351,6 +352,16 @@ namespace Sharpheus {
 		fs.Write((uint32_t)children.size());
 		fs.Write(trafo);
 		return fs.GetStatus();
+	}
+
+
+	void GameObject::Tick(float deltaTime)
+	{
+	}
+
+
+	void GameObject::Render()
+	{
 	}
 
 

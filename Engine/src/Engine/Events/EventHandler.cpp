@@ -8,18 +8,32 @@ namespace Sharpheus {
 	std::unordered_map<ID, KeyPressedEventFunc> EventHandler::keyPressedListeners;
 	std::unordered_map<ID, KeyRepeatEventFunc> EventHandler::keyRepeatListeners;
 	std::unordered_map<ID, KeyReleasedEventFunc> EventHandler::keyReleasedListeners;
+	std::unordered_map<ID, MousePressedEventFunc> EventHandler::mousePressedListeners;
+	std::unordered_map<ID, MouseReleasedEventFunc> EventHandler::mouseReleasedListeners;
+	std::unordered_map<ID, MouseMovedEventFunc> EventHandler::mouseMovedListeners;
+	std::unordered_map<ID, MouseScrolledEventFunc> EventHandler::mouseScrolledListeners;
 	WindowClosedEventFunc EventHandler::closeGame;
 
 
 	void EventHandler::Init(const WindowClosedEventFunc& _closeGame)
 	{
+		Clear();
+
 		closeGame = _closeGame;
 	}
 
 
 	void EventHandler::Clear()
 	{
-
+		windowClosedListeners.clear();
+		windowResizedListeners.clear();
+		keyPressedListeners.clear();
+		keyRepeatListeners.clear();
+		keyReleasedListeners.clear();
+		mousePressedListeners.clear();
+		mouseReleasedListeners.clear();
+		mouseMovedListeners.clear();
+		mouseScrolledListeners.clear();
 	}
 
 	
@@ -44,6 +58,18 @@ namespace Sharpheus {
 			case Event::Type::KeyReleased:
 				HandleKeyReleased(static_cast<const KeyReleasedEvent&>(e));
 				break;
+			case Event::Type::MousePressed:
+				HandleMousePressed(static_cast<const MousePressedEvent&>(e));
+				break;
+			case Event::Type::MouseReleased:
+				HandleMouseReleased(static_cast<const MouseReleasedEvent&>(e));
+				break;
+			case Event::Type::MouseMoved:
+				HandleMouseMoved(static_cast<const MouseMovedEvent&>(e));
+				break;
+			case Event::Type::MouseScrolled:
+				HandleMouseScrolled(static_cast<const MouseScrolledEvent&>(e));
+				break;
 			default:
 				SPH_WARN("Uknown typed event catched: {0}", e.ToStr());
 		}
@@ -57,42 +83,57 @@ namespace Sharpheus {
 		SPH_UNSUBSCRIBE_EVENTS_IN(keyPressedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(keyRepeatListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(keyReleasedListeners);
+		SPH_UNSUBSCRIBE_EVENTS_IN(mousePressedListeners);
+		SPH_UNSUBSCRIBE_EVENTS_IN(mouseReleasedListeners);
+		SPH_UNSUBSCRIBE_EVENTS_IN(mouseMovedListeners);
+		SPH_UNSUBSCRIBE_EVENTS_IN(mouseScrolledListeners);
 	}
 
 
 	void EventHandler::HandleWindowsClosed(const WindowClosedEvent& e)
 	{
-		for (auto it = windowClosedListeners.begin(); it != windowClosedListeners.end(); ++it) {
-			(*it).second(e);
-		}
+		SPH_NOTIFY_LISTENERS(windowClosedListeners);
 		closeGame(e);
 	}
 
 	void EventHandler::HandleWindowsResized(const WindowResizedEvent& e)
 	{
-		for (auto it = windowResizedListeners.begin(); it != windowResizedListeners.end(); ++it) {
-			(*it).second(e);
-		}
+		SPH_NOTIFY_LISTENERS(windowResizedListeners);
 	}
 
 	void EventHandler::HandleKeyPressed(const KeyPressedEvent& e)
 	{
-		for (auto it = keyPressedListeners.begin(); it != keyPressedListeners.end(); ++it) {
-			(*it).second(e);
-		}
+		SPH_NOTIFY_LISTENERS(keyPressedListeners);
 	}
 
 	void EventHandler::HandleKeyRepeat(const KeyRepeatEvent& e)
 	{
-		for (auto it = keyRepeatListeners.begin(); it != keyRepeatListeners.end(); ++it) {
-			(*it).second(e);
-		}
+		SPH_NOTIFY_LISTENERS(keyRepeatListeners);
 	}
 
 	void EventHandler::HandleKeyReleased(const KeyReleasedEvent& e)
 	{
-		for (auto it = keyReleasedListeners.begin(); it != keyReleasedListeners.end(); ++it) {
-			(*it).second(e);
-		}
+		SPH_NOTIFY_LISTENERS(keyReleasedListeners);
 	}
+
+	void EventHandler::HandleMousePressed(const MousePressedEvent& e)
+	{
+		SPH_NOTIFY_LISTENERS(mousePressedListeners);
+	}
+
+	void EventHandler::HandleMouseReleased(const MouseReleasedEvent& e)
+	{
+		SPH_NOTIFY_LISTENERS(mouseReleasedListeners);
+	}
+
+	void EventHandler::HandleMouseMoved(const MouseMovedEvent& e)
+	{
+		SPH_NOTIFY_LISTENERS(mouseMovedListeners);
+	}
+
+	void EventHandler::HandleMouseScrolled(const MouseScrolledEvent& e)
+	{
+		SPH_NOTIFY_LISTENERS(mouseScrolledListeners);
+	}
+
 }

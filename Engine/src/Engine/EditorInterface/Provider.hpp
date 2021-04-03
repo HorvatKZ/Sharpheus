@@ -13,7 +13,7 @@ namespace Sharpheus {
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, STRING, BEHAVIOR
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, STRING, BEHAVIOR
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -116,10 +116,32 @@ namespace Sharpheus {
 			: Provider<Class, class Image*, Type::IMAGE>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
 		virtual ~ImageProvider() = default;
 
-		virtual inline void SetPath(Class* obj, const std::string& path, bool filtered) { pathSetter(obj, path, filtered); }
+		virtual inline void SetByPath(Class* obj, const std::string& path, bool filtered) { pathSetter(obj, path, filtered); }
 
 	protected:
 		std::function<void(Class*, const std::string&, bool)> pathSetter;
+	};
+
+
+	template <class Class>
+	class FontProvider : public Provider<Class, class Font*, CommonProvider::Type::FONT>
+	{
+	public:
+		FontProvider(const std::string& name, Getter<Class, class Font*>&& getter, Setter<Class, class Font*>&& setter,
+			std::function<void(Class*, const std::string&)>&& setByName, std::function<void(Class*, const std::string&, const std::string&)>&& setByPath,
+			const std::unordered_map<std::string, Font*>* fontTable)
+			: Provider<Class, class Font*, CommonProvider::Type::FONT>(name, std::move(getter), std::move(setter)),
+			setByName(std::move(setByName)), setByPath(std::move(setByPath)), fontTable(fontTable) {}
+		virtual ~FontProvider() = default;
+
+		virtual inline void SetByName(Class* obj, const std::string& name) { setByName(obj, name); }
+		virtual inline void SetByPath(Class* obj, const std::string& fontFile, const std::string& imgFile) { setByPath(obj, fontFile, imgFile); }
+		virtual inline const std::unordered_map<std::string, Font*>* GetAllFonts() { return fontTable; }
+
+	protected:
+		std::function<void(Class*, const std::string&)> setByName;
+		std::function<void(Class*, const std::string&, const std::string&)> setByPath;
+		const std::unordered_map<std::string, Font*>* fontTable;
 	};
 
 

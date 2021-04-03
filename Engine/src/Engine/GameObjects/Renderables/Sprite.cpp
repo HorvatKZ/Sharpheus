@@ -32,9 +32,6 @@ namespace Sharpheus {
 	}
 
 
-	void Sprite::Tick(float deltaTime) {}
-
-
 	void Sprite::Render()
 	{
 		if (image != nullptr) {

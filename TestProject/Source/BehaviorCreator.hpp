@@ -7,11 +7,18 @@
 #include "CustomMacros.h"
 
 // Custom behaviors
-
+#include "CustomBehaviors/DebugBehavior.hpp"
+#include "CustomBehaviors/PlayerController.hpp"
+#include "CustomBehaviors/TriggerTester.hpp"
+#include "CustomBehaviors/MoueTester.hpp"
 
 #define SPH_PRESENT_BEHAVIOR(obj) \
 	SPH_START_PRESENTING(obj) \
 		SPH_PRESENT(PlaceholderBehavior, 0) \
+		SPH_PRESENT(DebugBehavior, 1) \
+		SPH_PRESENT(PlayerController, 2) \
+		SPH_PRESENT(TriggerTester, 3) \
+		SPH_PRESENT(MoueTester, 4) \
 	SPH_END_PRESENTING()
 
 

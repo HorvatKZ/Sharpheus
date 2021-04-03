@@ -34,8 +34,9 @@ namespace Sharpheus {
 	void PhysicsObject::ResolveCollision(const CollData& cd)
 	{
 		// Correction
-		worldTrafo.pos -= cd.geom.depth * cd.geom.normal;
-		SetWorldTrafo(worldTrafo);
+		Transform newTrafo = worldTrafo;
+		newTrafo.pos -= cd.geom.depth * cd.geom.normal;
+		SetWorldTrafo(newTrafo);
 
 		// Impulse
 		Point vR = cd.vOther - velocity;
@@ -74,13 +75,11 @@ namespace Sharpheus {
 
 
 	void PhysicsObject::Tick(float deltaTime) {
-		trafo.pos += velocity * deltaTime;
-		SetTrafo(trafo);
+		Transform newTrafo = trafo;
+		newTrafo.pos += velocity * deltaTime;
+		SetTrafo(newTrafo);
 		velocity += gravity * deltaTime * Point::Down;
 		velocity *= 1.f - friction * deltaTime;
 	}
-
-
-	void PhysicsObject::Render() {}
 
 }

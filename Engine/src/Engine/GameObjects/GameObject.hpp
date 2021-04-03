@@ -44,6 +44,7 @@ namespace Sharpheus {
 			// Renderables
 			Sprite = 0x20,
 			Quad = 0x21,
+			Text = 0x22,
 
 			// Basic physics
 			PhysicsObject = 0x30,
@@ -158,8 +159,8 @@ namespace Sharpheus {
 
 		virtual inline bool IsCurrentCamera() { return false; }
 
-		virtual void Tick(float deltaTime) = 0;
-		virtual void Render() = 0;
+		virtual void Tick(float deltaTime);
+		virtual void Render();
 		virtual void RenderSelection();
 
 		virtual void UpdateWorldTrafo(const Transform& parentWorldTrafo);
@@ -186,6 +187,34 @@ namespace Sharpheus {
 			if (target != nullptr) {
 				target->SubscribeAsSafeObject(id, SPH_BIND(SafeObject<T>::OnDestroyed));
 			}
+		}
+
+		SafeObject<T>& operator=(const SafeObject<T>& other) {
+			target = other.target;
+			id = GameObject::GetNextFreeSafeObjectID();
+			if (target != nullptr) {
+				target->SubscribeAsSafeObject(id, SPH_BIND(SafeObject<T>::OnDestroyed));
+			}
+			return *this;
+		}
+
+		SafeObject(SafeObject<T>&& other) : target(other.target), id(other.id) {
+			if (target != nullptr) {
+				target->SubscribeAsSafeObject(id, SPH_BIND(SafeObject<T>::OnDestroyed));
+			}
+			other.target = nullptr;
+			other.id = 0;
+		}
+
+		SafeObject<T>& operator=(SafeObject<T>&& other) {
+			target = other.target;
+			id = other.id;
+			if (target != nullptr) {
+				target->SubscribeAsSafeObject(id, SPH_BIND(SafeObject<T>::OnDestroyed));
+			}
+			other.target = nullptr;
+			other.id = 0;
+			return *this;
 		}
 
 		operator bool() const {

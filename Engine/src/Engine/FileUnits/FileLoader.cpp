@@ -135,6 +135,21 @@ namespace Sharpheus {
 	}
 
 
+	bool FileLoader::Read(Font** data)
+	{
+		std::string path;
+		Image* img;
+		Read(path);
+		if (path == "nullptr") {
+			*data = nullptr;
+			return GetStatus();
+		}
+		Read(&img);
+		*data = ResourceManager::GetFont(path, img);
+		return GetStatus();
+	}
+
+
 	bool FileLoader::TryReadingEnd()
 	{
 		char data;

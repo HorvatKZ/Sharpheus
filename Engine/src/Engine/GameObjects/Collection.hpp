@@ -12,10 +12,6 @@ namespace Sharpheus {
 		virtual ~Collection();
 
 		SPH_DECL_GAMEOBJECT(Collection)
-
-	protected:
-		virtual void Tick(float deltaTime) override {}
-		virtual void Render() override {}
 	};
 
 }

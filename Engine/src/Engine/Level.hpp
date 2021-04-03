@@ -74,11 +74,14 @@ namespace Sharpheus {
 		class GameObject* root;
 		CollisionSystem collSys;
 		std::unordered_map<std::string, class GameObject*> gameObjects;
+		std::queue<class GameObject*> objsToDelete;
 
 		bool SaveLevelData(FileSaver& file);
 		bool LoadLevelData(FileLoader& file);
 		bool LoadRoot(FileLoader& file);
 		bool LoadGameObject(FileLoader& file, GameObject* parent);
+
+		void DeleteObjects();
 
 		void RegisterWithUniqueName(class GameObject* newObject);
 

@@ -123,7 +123,7 @@ namespace Sharpheus {
 	FloatComponentCtrl::FloatComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, uint32_t precision)
 		: InputComponentCtrl(parent, title, pos, width, color)
 	{
-		input->SetValidator(wxFloatingPointValidator<float>(precision, &value, wxNUM_VAL_ZERO_AS_BLANK));
+		input->SetValidator(wxFloatingPointValidator<float>(precision, &value));
 		formater = wxT("%." + std::to_string(precision) + "f");
 	}
 
@@ -142,7 +142,7 @@ namespace Sharpheus {
 	AngleComponentCtrl::AngleComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, uint32_t precision)
 		: InputComponentCtrl(parent, title, pos, width, color)
 	{
-		wxFloatingPointValidator validator = wxFloatingPointValidator<float>(precision, &value, wxNUM_VAL_ZERO_AS_BLANK);
+		wxFloatingPointValidator validator = wxFloatingPointValidator<float>(precision, &value);
 		validator.SetRange(-180.f, 180.f);
 		input->SetValidator(validator);
 		formater = wxT("%." + std::to_string(precision) + "f");

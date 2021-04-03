@@ -40,6 +40,8 @@ namespace Sharpheus {
 		root->TickAll(deltaTime);
 		collSys.Tick();
 		root->UpdateLastPosAll();
+
+		DeleteObjects();
 	}
 
 
@@ -60,6 +62,8 @@ namespace Sharpheus {
 				return Create<Sprite>(parent, newName);
 			case GameObject::Type::Quad:
 				return Create<Quad>(parent, newName);
+			case GameObject::Type::Text:
+				return Create<Text>(parent, newName);
 			case GameObject::Type::PhysicsObject:
 				return Create<PhysicsObject>(parent, newName);
 			case GameObject::Type::BoxCollider:
@@ -113,7 +117,7 @@ namespace Sharpheus {
 
 	void Level::Delete(GameObject* obj)
 	{
-		delete obj;
+		objsToDelete.push(obj);
 	}
 
 
@@ -287,6 +291,16 @@ namespace Sharpheus {
 
 		SPH_ASSERT(success, "Error during loading GameObject \"{0}\"", objName);
 		return success;
+	}
+
+
+	void Level::DeleteObjects()
+	{
+		while (!objsToDelete.empty()) {
+			GameObject* obj = objsToDelete.front();
+			objsToDelete.pop();
+			delete obj;
+		}
 	}
 
 

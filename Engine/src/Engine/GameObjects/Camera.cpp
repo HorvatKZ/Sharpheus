@@ -58,8 +58,9 @@ namespace Sharpheus {
 
 	void Camera::Zoom(float scale)
 	{
-		worldTrafo.scale *= scale;
-		SetWorldTrafo(worldTrafo);
+		Transform newTrafo = worldTrafo;
+		newTrafo.scale *= scale;
+		SetWorldTrafo(newTrafo);
 	}
 
 
@@ -74,23 +75,26 @@ namespace Sharpheus {
 		Point diff(keepInPlace.x - GetWidth() / 2, keepInPlace.y - GetHeight() / 2);
 		Point newScreenCenterDiff = (1.f - scale) * diff;
 		Point newScreenCenter(newScreenCenterDiff.x + GetWidth() / 2, newScreenCenterDiff.y + GetHeight() / 2);
-		worldTrafo.pos = ScreenPosToGamePos(newScreenCenter);
-		worldTrafo.scale *= scale;
-		SetWorldTrafo(worldTrafo);
+		Transform newTrafo = worldTrafo;
+		newTrafo.pos = ScreenPosToGamePos(newScreenCenter);
+		newTrafo.scale *= scale;
+		SetWorldTrafo(newTrafo);
 	}
 
 
 	void Camera::MoveBy(const Point& delta)
 	{
-		trafo.pos += delta;
-		SetTrafo(trafo);
+		Transform newTrafo = trafo;
+		newTrafo.pos += delta;
+		SetTrafo(newTrafo);
 	}
 
 
 	void Camera::MoveByScreen(const Point& delta)
 	{
-		trafo.pos += Point(delta.x * trafo.scale.x, delta.y * trafo.scale.y);
-		SetTrafo(trafo);
+		Transform newTrafo = trafo;
+		newTrafo.pos += Point(delta.x * trafo.scale.x, delta.y * trafo.scale.y);
+		SetTrafo(newTrafo);
 	}
 
 
@@ -202,11 +206,5 @@ namespace Sharpheus {
 		height = e.newHeight;
 		SetSizer(GetWidth(), GetHeight());
 	}
-
-
-	void Camera::Tick(float deltaTime) {}
-
-
-	void Camera::Render() {}
 
 }

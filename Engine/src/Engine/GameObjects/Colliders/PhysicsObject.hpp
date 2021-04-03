@@ -54,7 +54,6 @@ namespace Sharpheus {
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
-		virtual void Render() override;
 	};
 
 }

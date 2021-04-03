@@ -29,9 +29,6 @@ namespace Sharpheus {
 	}
 
 
-	void Quad::Tick(float deltaTime) {}
-
-
 	void Quad::Render()
 	{
 		Renderer::DrawMonocromeQuad(shape->GetCorners(), color);

@@ -24,6 +24,7 @@ namespace Sharpheus {
 		bool Write(const Color& data);
 		bool Write(const Transform& data);
 		bool Write(class Image* data);
+		bool Write(class Font* data);
 
 		bool WriteEnd();
 

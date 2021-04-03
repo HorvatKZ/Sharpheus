@@ -26,6 +26,18 @@ namespace Sharpheus {
 		void OnClose(wxCloseEvent& e);
 		void OnKeyDown(wxKeyEvent& e);
 		void OnKeyUp(wxKeyEvent& e);
+		void OnLeftDown(wxMouseEvent& e);
+		void OnLeftUp(wxMouseEvent& e);
+		void OnRightDown(wxMouseEvent& e);
+		void OnRightUp(wxMouseEvent& e);
+		void OnMiddleDown(wxMouseEvent& e);
+		void OnMiddleUp(wxMouseEvent& e);
+		void On4Down(wxMouseEvent& e);
+		void On4Up(wxMouseEvent& e);
+		void On5Down(wxMouseEvent& e);
+		void On5Up(wxMouseEvent& e);
+		void OnMove(wxMouseEvent& e);
+		void OnScroll(wxMouseEvent& e);
 	};
 
 }

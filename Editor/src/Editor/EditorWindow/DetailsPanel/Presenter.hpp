@@ -239,6 +239,26 @@ namespace Sharpheus {
 		virtual void HandleChange(wxCommandEvent& e);
 	};
 
+	template <class Class>
+	class FontPresenter : public Presenter
+	{
+	public:
+		FontPresenter(wxWindow* parent, FontProvider<Class>* provider, Signal signal, uint32_t& y);
+		virtual ~FontPresenter();
+
+		virtual void SetCurrent(GameObject* curr) override;
+		virtual inline void SetDefault() override;
+		virtual void Refresh() override;
+
+	protected:
+		FontProvider<Class>* provider;
+		wxComboBox* fontPicker;
+		wxButton* addButton;
+
+		virtual void HandleChange(wxCommandEvent& e);
+		virtual void OnAdd(wxCommandEvent& e);
+	};
+
 
 	class TrafoPresenterBase : public Presenter
 	{

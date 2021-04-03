@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "FileSaver.hpp"
-#include "Engine/ResourceManager/Image.hpp"
+#include "Engine/ResourceManager/Font.hpp"
 
 
 namespace Sharpheus {
@@ -125,6 +125,19 @@ namespace Sharpheus {
 
 		Write(data->GetPath());
 		Write(data->IsFiltered());
+		return GetStatus();
+	}
+
+
+	bool FileSaver::Write(Font* data)
+	{
+		if (data == nullptr) {
+			Write("nullptr");
+			return GetStatus();
+		}
+
+		Write(data->GetPath());
+		Write(data->GetImage());
 		return GetStatus();
 	}
 

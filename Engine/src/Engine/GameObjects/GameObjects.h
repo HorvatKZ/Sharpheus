@@ -4,6 +4,7 @@
 #include "Collection.hpp"
 #include "Renderables/Sprite.hpp"
 #include "Renderables/Quad.hpp"
+#include "Renderables/Text.hpp"
 #include "Colliders/BoxCollider.hpp"
 #include "Colliders/CircleCollider.hpp"
 #include "Colliders/CapsuleCollider.hpp"
