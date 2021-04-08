@@ -59,6 +59,7 @@ bool PlayerController::Load(FileLoader& fl)
 
 void PlayerController::OnKeyPressed(const Sharpheus::KeyPressedEvent& e)
 {
+	Transform trafo = anim->GetTrafo();
 	switch (e.code) {
 		case KeyCode::W:
 			if (canJump) {
@@ -68,9 +69,15 @@ void PlayerController::OnKeyPressed(const Sharpheus::KeyPressedEvent& e)
 			break;
 		case KeyCode::A:
 			((PhysicsObject*)parent)->SetVelocityX(-speed);
+			anim->SetCurrentByName("Walk");
+			trafo.scale.x = -1;
+			anim->SetTrafo(trafo);
 			break;
 		case KeyCode::D:
 			((PhysicsObject*)parent)->SetVelocityX(speed);
+			anim->SetCurrentByName("Walk");
+			trafo.scale.x = 1;
+			anim->SetTrafo(trafo);
 			break;
 	}
 }
@@ -95,6 +102,7 @@ void PlayerController::OnKeyReleased(const Sharpheus::KeyReleasedEvent& e)
 		case KeyCode::A:
 		case KeyCode::D:
 			((PhysicsObject*)parent)->SetVelocityX(0);
+			anim->SetCurrentByName("Idle");
 			break;
 	}
 }
@@ -119,6 +127,7 @@ void PlayerController::DoSubscriptions()
 	Subscribe<KeyRepeatEvent>(SPH_BIND(PlayerController::OnKeyRepeat));
 	Subscribe<KeyReleasedEvent>(SPH_BIND(PlayerController::OnKeyReleased));
 	SubscribeCollision((Collider*)parent->GetFirstChildOfType(Type::CapsuleCollider), SPH_BIND(PlayerController::OnCollision));
+	anim = (AnimationPlayer*)parent->GetFirstChildOfType(Type::AnimationPlayer);
 }
 
 
@@ -133,6 +142,10 @@ bool PlayerController::IsCompatibleWithParent(GameObject* parent)
 	}
 
 	if (parent->GetFirstChildOfType(Type::CapsuleCollider) == nullptr) {
+		return false;
+	}
+
+	if (parent->GetFirstChildOfType(Type::AnimationPlayer) == nullptr) {
 		return false;
 	}
 	

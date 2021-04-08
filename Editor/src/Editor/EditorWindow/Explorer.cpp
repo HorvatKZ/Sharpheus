@@ -20,6 +20,7 @@ namespace Sharpheus {
 		txtImg			(ImageManager::GetImage("txt.png", ImageManager::PathType::EXPLORER)),
 		logImg			(ImageManager::GetImage("log.png", ImageManager::PathType::EXPLORER)),
 		imgImg			(ImageManager::GetImage("img.png", ImageManager::PathType::EXPLORER)),
+		animImg			(ImageManager::GetImage("anim.png", ImageManager::PathType::EXPLORER)),
 		lvlImg			(ImageManager::GetImage("lvl.png", ImageManager::PathType::EXPLORER)),
 		projImg			(ImageManager::GetImage("proj.png", ImageManager::PathType::EXPLORER)),
 		unknownImg		(ImageManager::GetImage("unknown.png", ImageManager::PathType::EXPLORER))
@@ -137,9 +138,13 @@ namespace Sharpheus {
 					if (subExt == "lvl") {
 						DrawIcon(dc, lvlImg, col, row);
 					}
+					else if (subExt == "anim") {
+						DrawIcon(dc, animImg, col, row);
+					}
 					else if (subExt == "proj") {
 						DrawIcon(dc, projImg, col, row);
-					} else {
+					}
+					else {
 						DrawIcon(dc, unknownImg, col, row);
 					}
 				}

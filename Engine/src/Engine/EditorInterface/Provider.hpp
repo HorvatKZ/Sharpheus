@@ -13,7 +13,7 @@ namespace Sharpheus {
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, STRING, BEHAVIOR
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, ANIM, STRING, STRINGLIST, BEHAVIOR
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -146,6 +146,22 @@ namespace Sharpheus {
 
 
 	template <class Class>
+	class AnimationProvider : public Provider<Class, class Animation*, CommonProvider::Type::ANIM>
+	{
+	public:
+		AnimationProvider(const std::string& name, Getter<Class, class Animation*>&& getter, Setter<Class, class Animation*>&& setter,
+			std::function<void(Class*, const std::string&)>&& pathSetter)
+			: Provider<Class, class Animation*, Type::ANIM>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
+		virtual ~AnimationProvider() = default;
+
+		virtual inline void SetByPath(Class* obj, const std::string& path) { pathSetter(obj, path); }
+
+	protected:
+		std::function<void(Class*, const std::string&)> pathSetter;
+	};
+
+
+	template <class Class>
 	class OneWayBoolProvider : public Provider<Class, bool, CommonProvider::Type::ONEWAYBOOL>
 	{
 	public:
@@ -160,4 +176,43 @@ namespace Sharpheus {
 	protected:
 		bool way;
 	};
+
+
+	template <class Class>
+	class StringListProvider : public CommonProvider
+	{
+	public:
+		StringListProvider(const std::string& name,
+			std::function<uint32_t(Class*)>&& getCount,
+			std::function<uint32_t(Class*)>&& getCurr,
+			std::function<const std::string& (Class*, uint32_t)>&& getString,
+			std::function<void(Class*, uint32_t)>&& setCurr,
+			std::function<void(Class*, uint32_t, const std::string&)>&& setString,
+			std::function<void(Class*, const std::string&)>&& addString,
+			std::function<void(Class*, uint32_t)>&& removeString)
+			: CommonProvider(name),
+			getCount(std::move(getCount)), getCurr(std::move(getCurr)), getString(std::move(getString)), setCurr(std::move(setCurr)),
+			setString(std::move(setString)), addString(std::move(addString)), removeString(std::move(removeString)) {}
+		virtual ~StringListProvider() = default;
+
+		virtual inline Type GetType() override { return Type::STRINGLIST; }
+
+		virtual inline uint32_t GetCount(Class* obj) { return getCount(obj); }
+		virtual inline uint32_t GetCurr(Class* obj) { return getCurr(obj); }
+		virtual inline const std::string& GetString(Class* obj, uint32_t ind) { return getString(obj, ind); }
+		virtual inline void SetCurr(Class* obj, uint32_t ind) { return setCurr(obj, ind); }
+		virtual inline void SetString(Class* obj, uint32_t ind, const std::string& str) { return setString(obj, ind, str); }
+		virtual inline void AddString(Class* obj, const std::string& str) { return addString(obj, str); }
+		virtual inline void RemoveString(Class* obj, uint32_t ind) { return removeString(obj, ind); }
+
+	private:
+		std::function<uint32_t(Class*)> getCount;
+		std::function<uint32_t(Class*)> getCurr;
+		std::function<const std::string& (Class*, uint32_t)> getString;
+		std::function<void(Class*, uint32_t)> setCurr;
+		std::function<void(Class*, uint32_t, const std::string&)> setString;
+		std::function<void(Class*, const std::string&)> addString;
+		std::function<void(Class*, uint32_t)> removeString;
+	};
+
 }

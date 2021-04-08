@@ -604,6 +604,196 @@ namespace Sharpheus {
 	}
 
 
+	// AnimationPresenter
+
+	template<class Class>
+	inline AnimationPresenter<Class>::AnimationPresenter(wxWindow* parent, AnimationProvider<Class>* provider, Signal signal, uint32_t& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		lastPath = "";
+
+		uint32_t width = parent->GetSize().x - 3 * UI::border - 50;
+		y += 22;
+		name = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22), wxST_ELLIPSIZE_START);
+		name->SetMaxSize(wxSize(width, 22));
+		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * UI::border + width, y), wxSize(50, 50));
+		y += 22;
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(UI::border, y), wxSize(75, 25));
+		browse->Bind(wxEVT_BUTTON, &AnimationPresenter<Class>::HandleChange, this);
+		y += 33;
+	}
+
+	template<class Class>
+	inline AnimationPresenter<Class>::~AnimationPresenter()
+	{
+		wxREMOVE(name);
+		wxREMOVE(browse);
+		wxREMOVE(preview);
+	}
+
+	template<class Class>
+	inline void AnimationPresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+		Animation* anim = provider->Get((Class*)curr);
+		if (anim != nullptr) {
+			std::string path = anim->GetPath();
+			if (path != lastPath) {
+				name->SetLabel(anim->GetName());
+				wxImage bitmap = ImageManager::GetImage(anim->GetAtlas()->GetFullPath());
+				uint32_t startFrame = anim->GetStartFrame(), frameCols = anim->GetFrameCols();
+				uint32_t frameWidth = anim->GetFrameWidth(), frameHeight = anim->GetFrameHeight();
+				uint32_t currCol = startFrame % frameCols, currRow = startFrame / frameCols;
+				bitmap.Resize(bitmap.GetSize(), wxPoint(-1 * frameWidth * currCol, -1 * frameHeight * currRow));
+				bitmap.Resize(wxSize(frameWidth, frameHeight), wxPoint());
+				bitmap.Rescale(50, 50);
+				preview->SetBitmap(bitmap);
+				lastPath = path;
+			}
+		}
+		else {
+			name->SetLabel("");
+			preview->SetBitmap(wxNullBitmap);
+			lastPath = "";
+		}
+	}
+
+	template<class Class>
+	inline void AnimationPresenter<Class>::SetDefault()
+	{
+		Presenter::SetDefault();
+		name->SetLabel("");
+		preview->SetBitmap(wxNullBitmap);
+		lastPath = "";
+	}
+
+	template<class Class>
+	inline void AnimationPresenter<Class>::Refresh()
+	{
+		SetCurrent(curr);
+	}
+
+	template<class Class>
+	inline void AnimationPresenter<Class>::HandleChange(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			RelativeOpenDialog browseDialog(parent, "Browse for animation", ProjectData::GetPath() + "Assets\\",
+				"Sharpheus animation files(*.anim.sharpheus) | *.anim.sharpheus");
+
+			if (!browseDialog.Show())
+				return;
+
+			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+			signal();
+		}
+	}
+
+
+	// StringListPresenter
+
+	template<class Class>
+	inline StringListPresenter<Class>::StringListPresenter(wxWindow* parent, StringListProvider<Class>* provider, Signal signal, uint32_t& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		uint32_t width = parent->GetSize().x - 2 * UI::border;
+		y += 22;
+
+		list = new wxListView(parent, wxID_ANY, wxPoint(UI::border, y), wxSize(width, 100), wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL);
+		list->Bind(wxEVT_LEFT_DOWN, &StringListPresenter<Class>::OnListClicked, this);
+		list->Bind(wxEVT_LIST_ITEM_SELECTED, &StringListPresenter<Class>::OnSelectionChanged, this);
+		secondColStart = width - 50;
+		list->AppendColumn("Name", wxLIST_FORMAT_CENTRE, secondColStart);
+		list->AppendColumn("", wxLIST_FORMAT_LEFT, width - secondColStart);
+		wxImageList* imgs = new wxImageList(20, 20);
+		imgs->Add(ImageManager::GetImage("delete.png", ImageManager::PathType::DETAILSPANEL));
+		list->AssignImageList(imgs, wxIMAGE_LIST_SMALL);
+		y += 100 + UI::border;
+
+		addButton = new wxButton(parent, wxID_ANY, "+ Add new", wxPoint(UI::border, y), wxSize(75, 25));
+		addButton->Bind(wxEVT_BUTTON, &StringListPresenter<Class>::OnAdd, this);
+		y += 33;
+	}
+
+	template<class Class>
+	inline StringListPresenter<Class>::~StringListPresenter()
+	{
+		wxREMOVE(list);
+		wxREMOVE(addButton);
+	}
+
+	template<class Class>
+	inline void StringListPresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+
+		list->DeleteAllItems();
+		uint32_t strCount = provider->GetCount((Class*)curr);
+		for (uint32_t i = 0; i < strCount; ++i) {
+			long ind = list->InsertItem(i, provider->GetString((Class*)curr, i), -1);
+			list->SetItem(ind, 1, "", 0);
+		}
+
+		uint32_t selected = provider->GetCurr((Class*)curr);
+		if (selected < strCount) {
+			list->Select(selected);
+		}
+	}
+
+	template<class Class>
+	inline void StringListPresenter<Class>::SetDefault()
+	{
+		Presenter::SetDefault();
+	}
+
+	template<class Class>
+	inline void StringListPresenter<Class>::Refresh()
+	{
+		SetCurrent(curr);
+	}
+
+	template<class Class>
+	inline void StringListPresenter<Class>::OnAdd(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			RelativeOpenDialog browseDialog(parent, "Browse for animation", ProjectData::GetPath() + "Assets\\",
+				"Sharpheus animation files(*.anim.sharpheus) | *.anim.sharpheus");
+
+			if (!browseDialog.Show())
+				return;
+
+			provider->AddString((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+			signal();
+		}
+	}
+
+	template<class Class>
+	inline void StringListPresenter<Class>::OnSelectionChanged(wxListEvent& e)
+	{
+		if (curr != nullptr) {
+			long selected = list->GetFirstSelected();
+			if (selected >= 0 && selected < provider->GetCount((Class*)curr)) {
+				if (deleteSelected) {
+					provider->RemoveString((Class*)curr, selected);
+					deleteSelected = false;
+					signal();
+				}
+				else if (selected != provider->GetCurr((Class*)curr)) {
+					provider->SetCurr((Class*)curr, selected);
+				}
+			}
+		}
+	}
+
+	template<class Class>
+	inline void StringListPresenter<Class>::OnListClicked(wxMouseEvent& e)
+	{
+		if (wxGetMousePosition().x - list->GetScreenPosition().x > secondColStart) {
+			deleteSelected = true;
+		}
+		e.Skip();
+	}
+
+
 	// TrafoPresenter
 
 	template<class Class>

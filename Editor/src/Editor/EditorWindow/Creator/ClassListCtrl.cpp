@@ -70,6 +70,8 @@ namespace Sharpheus {
             Info("Sprite", "sprite.png", GameObject::Type::Sprite, 2),
             Info("Quad", "quad.png", GameObject::Type::Quad, 2),
             Info("Text", "text.png", GameObject::Type::Text, 2),
+            Info("AnimatedSprite", "animsprite.png", GameObject::Type::AnimatedSprite, 2),
+            Info("AnimationPlayer", "animplayer.png", GameObject::Type::AnimationPlayer, 2),
             Info("Physics", "physics.png", GameObject::Type::None, 1),
             Info("PhysicsObject", "physicsobj.png", GameObject::Type::PhysicsObject, 2),
             Info("Colliders", "colliders.png", GameObject::Type::None, 2),

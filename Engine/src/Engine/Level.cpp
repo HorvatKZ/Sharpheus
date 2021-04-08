@@ -64,6 +64,10 @@ namespace Sharpheus {
 				return Create<Quad>(parent, newName);
 			case GameObject::Type::Text:
 				return Create<Text>(parent, newName);
+			case GameObject::Type::AnimatedSprite:
+				return Create<AnimatedSprite>(parent, newName);
+			case GameObject::Type::AnimationPlayer:
+				return Create<AnimationPlayer>(parent, newName);
 			case GameObject::Type::PhysicsObject:
 				return Create<PhysicsObject>(parent, newName);
 			case GameObject::Type::BoxCollider:
@@ -115,9 +119,13 @@ namespace Sharpheus {
 	}
 
 
-	void Level::Delete(GameObject* obj)
+	void Level::Delete(GameObject* obj, bool forceNow)
 	{
-		objsToDelete.push(obj);
+		if (forceNow) {
+			delete obj;
+		} else {
+			objsToDelete.push(obj);
+		}
 	}
 
 

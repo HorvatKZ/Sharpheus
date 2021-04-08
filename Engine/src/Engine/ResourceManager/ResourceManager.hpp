@@ -2,6 +2,7 @@
 
 #include "Image.hpp"
 #include "Font.hpp"
+#include "Animation.hpp"
 
 
 namespace Sharpheus {
@@ -25,11 +26,14 @@ namespace Sharpheus {
 		static Image* GetImage(const std::string& path, bool filtered = false);
 		static inline Image* GetCircle() { return circle; }
 
+		static Animation* GetAnimation(const std::string& path);
+
 	private:
 		static std::string assetsRoot;
 		static std::unordered_map<std::string, Image*> images;
 		static std::unordered_map<std::string, Font*> fontsByPaths;
 		static std::unordered_map<std::string, Font*> fontsByNames;
+		static std::unordered_map<std::string, Animation*> animations;
 		static Image* circle;
 
 		static std::string Concat(const std::string& first, const std::string& second);

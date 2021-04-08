@@ -4,6 +4,7 @@
 #include "Editor/ResourceManagement/ImageManager.hpp"
 #include "BehaviorCreator.hpp"
 #include "BehaviorPicker.hpp"
+#include "PresenterDefs.hpp"
 
 
 namespace Sharpheus {
@@ -100,6 +101,12 @@ namespace Sharpheus {
 					break;
 				case GameObject::Type::Text:
 					CreatePresenterFrom<Text>(provider, y);
+					break;
+				case GameObject::Type::AnimatedSprite:
+					CreatePresenterFrom<AnimatedSprite>(provider, y);
+					break;
+				case GameObject::Type::AnimationPlayer:
+					CreatePresenterFrom<AnimationPlayer>(provider, y);
 					break;
 				case GameObject::Type::PhysicsObject:
 					CreatePresenterFrom<PhysicsObject>(provider, y);
@@ -207,6 +214,12 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::FONT:
 				presenters.push_back(new FontPresenter<Class>(this, (FontProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::ANIM:
+				presenters.push_back(new AnimationPresenter<Class>(this, (AnimationProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::STRINGLIST:
+				presenters.push_back(new StringListPresenter<Class>(this, (StringListProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::TRAFO:
 				presenters.push_back(new TrafoPresenter<Class>(this, (TrafoProvider<Class>*)provider, currDataChangedCallback, y));

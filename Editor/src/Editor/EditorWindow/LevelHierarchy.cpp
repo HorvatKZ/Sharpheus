@@ -165,7 +165,7 @@ namespace Sharpheus {
 		Delete(currItem);
 
 		EditorData::SetCurrent(curr->GetParent());
-		ProjectData::GetLevel()->Delete(curr);
+		ProjectData::GetLevel()->Delete(curr, true);
 		currChangedCallback();
 	}
 

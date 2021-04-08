@@ -8,6 +8,7 @@ namespace Sharpheus {
 	std::unordered_map<std::string, Image*> ResourceManager::images;
 	std::unordered_map<std::string, Font*> ResourceManager::fontsByPaths;
 	std::unordered_map<std::string, Font*> ResourceManager::fontsByNames;
+	std::unordered_map<std::string, Animation*> ResourceManager::animations;
 	Image* ResourceManager::circle;
 
 
@@ -83,6 +84,19 @@ namespace Sharpheus {
 		Image* newImage = new Image(path, filtered);
 		images[path] = newImage;
 		return newImage;
+	}
+
+
+	Animation* ResourceManager::GetAnimation(const std::string& path)
+	{
+		auto it = animations.find(path);
+		if (it != animations.end()) {
+			return (*it).second;
+		}
+
+		Animation* newAnim = new Animation(path);
+		animations[path] = newAnim;
+		return newAnim;
 	}
 
 

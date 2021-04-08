@@ -150,6 +150,20 @@ namespace Sharpheus {
 	}
 
 
+	bool FileLoader::Read(Animation** data)
+	{
+		std::string path;
+		Read(path);
+		if (path == "nullptr") {
+			*data = nullptr;
+			return GetStatus();
+		}
+
+		*data = ResourceManager::GetAnimation(path);
+		return GetStatus();
+	}
+
+
 	bool FileLoader::TryReadingEnd()
 	{
 		char data;

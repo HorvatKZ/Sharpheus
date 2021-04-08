@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "FileSaver.hpp"
 #include "Engine/ResourceManager/Font.hpp"
+#include "Engine/ResourceManager/Animation.hpp"
 
 
 namespace Sharpheus {
@@ -138,6 +139,18 @@ namespace Sharpheus {
 
 		Write(data->GetPath());
 		Write(data->GetImage());
+		return GetStatus();
+	}
+
+
+	bool FileSaver::Write(Animation* data)
+	{
+		if (data == nullptr) {
+			Write("nullptr");
+			return GetStatus();
+		}
+
+		Write(data->GetPath());
 		return GetStatus();
 	}
 

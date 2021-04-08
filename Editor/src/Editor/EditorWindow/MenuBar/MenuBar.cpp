@@ -7,6 +7,7 @@
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
 #include "Editor/Exporting/Exporter.hpp"
+#include "Engine/ResourceManager/ResourceManager.hpp"
 
 
 namespace Sharpheus {
@@ -174,8 +175,17 @@ namespace Sharpheus {
 	{
 		AnimationCreatorDialog creator(parent);
 
-		if (creator.ShowModal() != wxID_CANCEL)
+		if (creator.ShowModal() == wxID_CANCEL)
 			return;
+
+		Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), false);
+		Animation* anim = new Animation(atlas, creator.GetFrameWidth(), creator.GetFrameHeight(), creator.GetStartFrame(), creator.GetEndFrame());
+		anim->SetName(wxStr2StdStr(creator.GetName()));
+		anim->SetFrameTime(creator.GetFrameTime());
+		bool success = anim->Save(wxStr2StdStr(creator.GetPath()));
+		delete anim;
+
+		SPHE_ASSERT(success, "Cannot save animation. Check the log files for more information");
 	}
 
 

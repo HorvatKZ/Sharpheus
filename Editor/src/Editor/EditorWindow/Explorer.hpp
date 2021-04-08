@@ -21,7 +21,7 @@ namespace Sharpheus {
 	private:
 		wxString basePath;
 		wxFileName folder;
-		wxBitmap backFolderImg, folderImg, cImg, hImg, cppImg, hppImg, txtImg, logImg, imgImg, lvlImg, projImg, unknownImg;
+		wxBitmap backFolderImg, folderImg, cImg, hImg, cppImg, hppImg, txtImg, logImg, imgImg, animImg, lvlImg, projImg, unknownImg;
 		static uint32_t oneWidth;
 
 		void OnDoubleClick(wxMouseEvent& e);

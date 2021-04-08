@@ -5,6 +5,11 @@
 
 namespace Sharpheus {
 
+	Resource::Resource()
+	{
+	}
+
+
 	Resource::Resource(const std::string& path) : path(path)
 	{
 		fullPath = ResourceManager::PathToFullPath(path);
@@ -13,6 +18,13 @@ namespace Sharpheus {
 
 	Resource::~Resource()
 	{
+	}
+
+
+	void Resource::SetPath(const std::string& path)
+	{
+		this->path = path;
+		fullPath = ResourceManager::PathToFullPath(path);
 	}
 
 }

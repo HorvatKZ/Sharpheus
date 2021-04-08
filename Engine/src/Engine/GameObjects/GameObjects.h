@@ -5,6 +5,8 @@
 #include "Renderables/Sprite.hpp"
 #include "Renderables/Quad.hpp"
 #include "Renderables/Text.hpp"
+#include "Renderables/AnimatedSprite.hpp"
+#include "Renderables/AnimationPlayer.hpp"
 #include "Colliders/BoxCollider.hpp"
 #include "Colliders/CircleCollider.hpp"
 #include "Colliders/CapsuleCollider.hpp"

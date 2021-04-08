@@ -2,6 +2,7 @@
 
 #include "LocalListenerBehavior.hpp"
 #include "Engine/Events/KeyEvents.hpp"
+#include "Engine/GameObjects/Renderables/AnimationPlayer.hpp"
 
 
 class SPH_EXPORT PlayerController : public Sharpheus::LocalListenerBehavior
@@ -24,6 +25,7 @@ public:
 protected:
 	float jumpForce = 0.f, speed = 0.f;
 	bool canJump = false;
+	Sharpheus::SafeObject<Sharpheus::AnimationPlayer> anim;
 
 	void Tick(float deltaTime) override;
 	void DoSubscriptions();

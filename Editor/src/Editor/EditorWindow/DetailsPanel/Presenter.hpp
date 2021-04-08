@@ -3,6 +3,7 @@
 #include "editor_pch.h"
 #include "InputComponentCtrl.hpp"
 #include <wx/clrpicker.h>
+#include <wx/listctrl.h>
 
 #define wxREMOVE(item) if (item != nullptr) item->Destroy();
 
@@ -257,6 +258,52 @@ namespace Sharpheus {
 
 		virtual void HandleChange(wxCommandEvent& e);
 		virtual void OnAdd(wxCommandEvent& e);
+	};
+
+
+	template <class Class>
+	class AnimationPresenter : public Presenter
+	{
+	public:
+		AnimationPresenter(wxWindow* parent, AnimationProvider<Class>* provider, Signal signal, uint32_t& y);
+		virtual ~AnimationPresenter();
+
+		virtual void SetCurrent(GameObject* curr) override;
+		virtual inline void SetDefault() override;
+		virtual void Refresh() override;
+
+	protected:
+		AnimationProvider<Class>* provider;
+		wxStaticText* name;
+		wxStaticBitmap* preview;
+		wxButton* browse;
+		wxString lastPath;
+
+		virtual void HandleChange(wxCommandEvent& e);
+	};
+
+
+	template <class Class>
+	class StringListPresenter : public Presenter
+	{
+	public:
+		StringListPresenter(wxWindow* parent, StringListProvider<Class>* provider, Signal signal, uint32_t& y);
+		virtual ~StringListPresenter();
+
+		virtual void SetCurrent(GameObject* curr) override;
+		virtual inline void SetDefault() override;
+		virtual void Refresh() override;
+
+	protected:
+		StringListProvider<Class>* provider;
+		wxListView* list;
+		wxButton* addButton;
+		uint32_t secondColStart;
+		bool deleteSelected = false;
+
+		virtual void OnAdd(wxCommandEvent& e);
+		virtual void OnSelectionChanged(wxListEvent& e);
+		virtual void OnListClicked(wxMouseEvent& e);
 	};
 
 
