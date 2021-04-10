@@ -120,6 +120,9 @@ namespace Sharpheus {
 				case GameObject::Type::CapsuleCollider:
 					CreatePresenterFrom<CapsuleCollider>(provider, y);
 					break;
+				case GameObject::Type::MusicPlayer:
+					CreatePresenterFrom<MusicPlayer>(provider, y);
+					break;
 				case GameObject::Type::Behavior:
 					SPH_PRESENT_BEHAVIOR(obj);
 					break;
@@ -217,6 +220,9 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::ANIM:
 				presenters.push_back(new AnimationPresenter<Class>(this, (AnimationProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::SOUND:
+				presenters.push_back(new SoundPresenter<Class>(this, (SoundProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::STRINGLIST:
 				presenters.push_back(new StringListPresenter<Class>(this, (StringListProvider<Class>*)provider, currDataChangedCallback, y));

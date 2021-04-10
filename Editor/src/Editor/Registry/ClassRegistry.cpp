@@ -20,6 +20,7 @@ namespace Sharpheus {
 		classInfos[GameObject::Type::BoxCollider]				= &BoxCollider::classInfo;
 		classInfos[GameObject::Type::CircleCollider]			= &CircleCollider::classInfo;
 		classInfos[GameObject::Type::CapsuleCollider]			= &CapsuleCollider::classInfo;
+		classInfos[GameObject::Type::MusicPlayer]				= &MusicPlayer::classInfo;
 	}
 
 	void ClassRegistry::Clear()

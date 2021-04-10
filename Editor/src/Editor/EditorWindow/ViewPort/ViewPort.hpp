@@ -38,11 +38,8 @@ namespace Sharpheus {
 		EditingArrow::EditType editType = EditingArrow::EditType::NONE;
 		std::function<void()> currChangedCallback;
 		std::function<void()> currDataChangedCallback;
-		float gridSize = 64, gridY = 64, gridThickness = 2;
-		Color gridColor = Color(240, 240, 240, 200);
 		bool isGridOn = true;
 		bool isSnapToGrid = false;
-		bool isGridInForeground = false;
 		bool isPlaying = false;
 
 		void OnResize(wxSizeEvent& e);

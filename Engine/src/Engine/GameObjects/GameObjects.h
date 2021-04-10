@@ -11,6 +11,7 @@
 #include "Colliders/CircleCollider.hpp"
 #include "Colliders/CapsuleCollider.hpp"
 #include "Colliders/PhysicsObject.hpp"
+#include "Sounds/MusicPlayer.hpp"
 #include "Behaviors/Behavior.hpp"
 #include "Behaviors/LocalListenerBehavior.hpp"
 #include "Behaviors/PlaceholderBehavior.hpp"

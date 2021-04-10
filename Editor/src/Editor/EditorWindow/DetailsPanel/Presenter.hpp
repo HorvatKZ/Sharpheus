@@ -284,6 +284,26 @@ namespace Sharpheus {
 
 
 	template <class Class>
+	class SoundPresenter : public Presenter
+	{
+	public:
+		SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32_t& y);
+		virtual ~SoundPresenter();
+
+		virtual void SetCurrent(GameObject* curr) override;
+		virtual inline void SetDefault() override;
+		virtual void Refresh() override;
+
+	protected:
+		SoundProvider<Class>* provider;
+		wxStaticText* path;
+		wxButton* browse;
+
+		virtual void HandleChange(wxCommandEvent& e);
+	};
+
+
+	template <class Class>
 	class StringListPresenter : public Presenter
 	{
 	public:

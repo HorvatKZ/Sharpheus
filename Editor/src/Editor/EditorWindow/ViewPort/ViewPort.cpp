@@ -101,7 +101,8 @@ namespace Sharpheus {
 					{
 						if (isGridOn && isSnapToGrid) {
 							Point clickInGame = camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y));
-							currTrafo.pos = Point(round(clickInGame.x / gridSize) * gridSize, round(clickInGame.y / gridSize) * gridSize);
+							ViewPortGridProps grid = EditorData::GetGridProps();
+							currTrafo.pos = Point(round(clickInGame.x / grid.size) * grid.size, round(clickInGame.y / grid.size) * grid.size);
 						} else {
 							currTrafo.pos += Point(diff.x * camScale.x, diff.y * camScale.y);
 						}
@@ -203,15 +204,16 @@ namespace Sharpheus {
 
 		wxGLCanvas::SetCurrent(*glContext);
 		Renderer::StartFrame();
-		
-		if (isGridOn && !isGridInForeground) {
+
+		ViewPortGridProps grid = EditorData::GetGridProps();
+		if (isGridOn && !grid.isInForeground) {
 			RenderGrid();
 		}
 
 		// Render
 		ProjectData::GetLevel()->Render();
 
-		if (isGridOn && isGridInForeground) {
+		if (isGridOn && grid.isInForeground) {
 			RenderGrid();
 		}
 
@@ -230,25 +232,26 @@ namespace Sharpheus {
 
 	void ViewPort::RenderGrid()
 	{
+		ViewPortGridProps grid = EditorData::GetGridProps();
 		float minX = camera->GetXMin();
 		float maxX = camera->GetXMax();
 		float minY = camera->GetYMin();
 		float maxY = camera->GetYMax();
 
-		float firstXGrid = ceil(minX / gridSize) * gridSize;
-		float lastXGrid = floor(maxX / gridSize) * gridSize;
-		float firstYGrid = ceil(minY / gridSize) * gridSize;
-		float lastYGrid = floor(maxY / gridSize) * gridSize;
+		float firstXGrid = ceil(minX / grid.size) * grid.size;
+		float lastXGrid = floor(maxX / grid.size) * grid.size;
+		float firstYGrid = ceil(minY / grid.size) * grid.size;
+		float lastYGrid = floor(maxY / grid.size) * grid.size;
 
-		float relativeXGridThickness = gridThickness * camera->GetWorldTrafo().scale.x;
-		float relativeYGridThickness = gridThickness * camera->GetWorldTrafo().scale.y;
+		float relativeXGridThickness = grid.thickness * camera->GetWorldTrafo().scale.x;
+		float relativeYGridThickness = grid.thickness * camera->GetWorldTrafo().scale.y;
 		while (firstXGrid <= lastXGrid) {
-			Renderer::DrawVerticalLine(minY, maxY, firstXGrid, relativeXGridThickness, gridColor);
-			firstXGrid += gridSize;
+			Renderer::DrawVerticalLine(minY, maxY, firstXGrid, relativeXGridThickness, grid.color);
+			firstXGrid += grid.size;
 		}
 		while (firstYGrid <= lastYGrid) {
-			Renderer::DrawHorizontalLine(minX, maxX, firstYGrid, relativeYGridThickness, gridColor);
-			firstYGrid += gridSize;
+			Renderer::DrawHorizontalLine(minX, maxX, firstYGrid, relativeYGridThickness, grid.color);
+			firstYGrid += grid.size;
 		}
 	}
 }

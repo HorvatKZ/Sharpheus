@@ -24,10 +24,10 @@ namespace Sharpheus {
 
 		void ProjectSettings(wxCommandEvent& e);
 		void WindowSettings(wxCommandEvent& e);
-		void EditorSettings(wxCommandEvent& e);
 		void GridSettings(wxCommandEvent& e);
 		void AnimatorCreator(wxCommandEvent& e);
 		void ExportGame(wxCommandEvent& e);
+		void About(wxCommandEvent& e);
 	};
 
 }

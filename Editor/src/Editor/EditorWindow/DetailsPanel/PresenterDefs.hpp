@@ -689,6 +689,64 @@ namespace Sharpheus {
 	}
 
 
+	// SoundPresenter
+
+	template<class Class>
+	inline SoundPresenter<Class>::SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32_t& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		uint32_t width = parent->GetSize().x - 3 * UI::border - 75;
+		y += 22;
+		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22), wxST_ELLIPSIZE_START);
+		path->SetMaxSize(wxSize(width, 22));
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(2 * UI::border + width, y - 3), wxSize(75, 25));
+		browse->Bind(wxEVT_BUTTON, &SoundPresenter<Class>::HandleChange, this);
+		y += 30;
+	}
+
+	template<class Class>
+	inline SoundPresenter<Class>::~SoundPresenter()
+	{
+		wxREMOVE(path);
+		wxREMOVE(browse);
+	}
+
+	template<class Class>
+	inline void SoundPresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+		path->SetLabel(provider->Get((Class*)curr));
+	}
+
+	template<class Class>
+	inline void SoundPresenter<Class>::SetDefault()
+	{
+		Presenter::SetDefault();
+		this->path->SetLabel("");
+	}
+
+	template<class Class>
+	inline void SoundPresenter<Class>::Refresh()
+	{
+		SetCurrent(curr);
+	}
+
+	template<class Class>
+	inline void SoundPresenter<Class>::HandleChange(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			RelativeOpenDialog browseDialog(parent, "Browse for sound file", ProjectData::GetPath() + "Assets\\",
+				"Wave file(*.wav) | *.wav");
+
+			if (!browseDialog.Show())
+				return;
+
+			provider->Set((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+			signal();
+		}
+	}
+
+
 	// StringListPresenter
 
 	template<class Class>

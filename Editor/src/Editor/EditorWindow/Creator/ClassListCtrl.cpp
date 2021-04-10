@@ -78,6 +78,8 @@ namespace Sharpheus {
             Info("BoxCollider", "boxcollider.png", GameObject::Type::BoxCollider, 3),
             Info("CircleCollider", "circlecollider.png", GameObject::Type::CircleCollider, 3),
             Info("CapsuleCollider", "capsulecollider.png", GameObject::Type::CapsuleCollider, 3),
+            Info("Sounds", "sounds.png", GameObject::Type::None, 1),
+            Info("MusicPlayer", "musicplayer.png", GameObject::Type::MusicPlayer, 2),
             Info("Behavior", "behavior.png", GameObject::Type::Behavior, 1)
         };
 

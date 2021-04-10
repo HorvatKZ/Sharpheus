@@ -2,6 +2,7 @@
 #include "MenuBar.hpp"
 #include "ProjectSettingsDialog.hpp"
 #include "WindowSettingsDialog.hpp"
+#include "GridSettingsDialog.hpp"
 #include "AnimationCreatorDialog.hpp"
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/Registry/ProjectData.hpp"
@@ -27,14 +28,18 @@ namespace Sharpheus {
 		Append(level, "Level");
 
 		wxMenu* editor = new wxMenu;
-		editor->Append(10201, wxT("Editor Settings\tCtrl+Alt+E"));
-		editor->Append(10202, wxT("Grid Settings\tCtrl+Alt+G"));
-		editor->Append(10203, wxT("Animation Creator"));
+		editor->Append(10201, wxT("Grid Settings\tCtrl+Alt+G"));
+		editor->AppendSeparator();
+		editor->Append(10202, wxT("Animation Creator"));
 		Append(editor, "Editor");
 
 		wxMenu* exporting = new wxMenu;
 		exporting->Append(10301, wxT("Export the Game"));
 		Append(exporting, "Export");
+
+		wxMenu* about = new wxMenu;
+		about->Append(10401, wxT("About Sharpheus"));
+		Append(about, "About");
 
 		Connect(10001, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ProjectSettings));
 		Connect(10002, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::WindowSettings));
@@ -42,10 +47,10 @@ namespace Sharpheus {
 		Connect(10102, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::LoadLevel));
 		Connect(10103, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveLevel));
 		Connect(10104, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveLevelAs));
-		Connect(10201, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::EditorSettings));
-		Connect(10202, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::GridSettings));
-		Connect(10203, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AnimatorCreator));
+		Connect(10201, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::GridSettings));
+		Connect(10202, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AnimatorCreator));
 		Connect(10301, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportGame));
+		Connect(10401, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::About));
 	}
 
 
@@ -159,15 +164,17 @@ namespace Sharpheus {
 	}
 
 
-	void MenuBar::EditorSettings(wxCommandEvent& e)
-	{
-		wxMessageBox("Editor settings is under construction..", "Info");
-	}
-
-
 	void MenuBar::GridSettings(wxCommandEvent& e)
 	{
-		wxMessageBox("Grid settings is under construction..", "Info");
+		GridSettingsDialog dialog(parent);
+		dialog.FillWithData(EditorData::GetGridProps());
+
+		if (dialog.ShowModal() == wxID_CANCEL) {
+			return;
+		}
+
+		EditorData::SetGridProps(dialog.GetGridProps());
+		parent->Refresh();
 	}
 
 
@@ -198,6 +205,12 @@ namespace Sharpheus {
 		}
 
 		Exporter exp;
+	}
+
+
+	void MenuBar::About(wxCommandEvent& e)
+	{
+		wxMessageBox("SHARPHEUS ENGINE & EDITOR\nCreator: HorvatKZ\nVersion: beta 1.0\nThe website will be available soon", "Sharpheus Info", wxICON_NONE | wxOK | wxCENTRE);
 	}
 
 }

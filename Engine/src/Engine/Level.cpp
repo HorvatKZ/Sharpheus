@@ -76,6 +76,8 @@ namespace Sharpheus {
 				return Create<CircleCollider>(parent, newName);
 			case GameObject::Type::CapsuleCollider:
 				return Create<CapsuleCollider>(parent, newName);
+			case GameObject::Type::MusicPlayer:
+				return Create<MusicPlayer>(parent, newName);
 			case GameObject::Type::Behavior:
 				return Create<PlaceholderBehavior>(parent, newName);
 		}

@@ -54,7 +54,10 @@ namespace Sharpheus {
 			// Colliders
 			BoxCollider = 0x40,
 			CircleCollider = 0x41,
-			CapsuleCollider = 0x42
+			CapsuleCollider = 0x42,
+
+			// Sounds
+			MusicPlayer = 0x50
 		};
 
 		enum class TypeMasks : uint8_t {
@@ -63,6 +66,7 @@ namespace Sharpheus {
 			Renderables = 0x20,
 			Physics = 0x30,
 			Collider = 0x40,
+			Sounds = 0x50,
 
 			MASK = 0xF0
 		};
