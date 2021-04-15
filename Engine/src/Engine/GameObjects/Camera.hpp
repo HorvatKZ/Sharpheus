@@ -54,6 +54,7 @@ namespace Sharpheus {
 
 		virtual bool Save(FileSaver& fs) override;
 
+		virtual bool IsSelected(const Point& pos) override { return false; } // Camera cannot be selected by clicking on it
 		virtual void RenderSelection() override;
 		virtual inline bool IsCurrentCamera() override { return isCurrent; }
 	};

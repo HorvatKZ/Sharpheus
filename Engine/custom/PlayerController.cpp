@@ -11,13 +11,13 @@ ClassInfo PlayerController::classInfo("PlayerController", "behavior.png", {
 });
 
 
-PlayerController::PlayerController(Sharpheus::Behavior* other) : LocalListenerBehavior(other)
+PlayerController::PlayerController(Sharpheus::Behavior* other) : Behavior(other), ColliderListener(GetID())
 {
 	DoSubscriptions();
 }
 
 
-PlayerController::PlayerController(GameObject* parent, const std::string& name) : LocalListenerBehavior(parent, name)
+PlayerController::PlayerController(GameObject* parent, const std::string& name) : Behavior(parent, name), ColliderListener(GetID())
 {
 	SPH_ASSERT(parent->Is(Type::PhysicsObject), "Parent \"{0}\" is not a PhysicsObject", parent->GetName());
 	DoSubscriptions();

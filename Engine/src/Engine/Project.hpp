@@ -31,7 +31,7 @@ namespace Sharpheus {
 		bool SaveLevel(const std::string& path);
 		void CreateNewLevel(const std::string& name);
 
-		inline void Tick(float deltaTime) { level->Tick(deltaTime); }
+		void Tick(float deltaTime);
 		inline void Render() { level->Render(); }
 
 		inline const std::string& GetName() const { return data.name; }

@@ -12,9 +12,7 @@ namespace Sharpheus {
 			SPH_BIND_SETTER(Text::SetFontByName), SPH_BIND_3(Text::SetFontByPath), ResourceManager::GetFontTable()),
 		new ColorProvider<Text>("Color", SPH_BIND_GETTER(Text::GetColor), SPH_BIND_SETTER(Text::SetColor)),
 		new UFloatProvider<Text>("Size", SPH_BIND_GETTER(Text::GetSize), SPH_BIND_SETTER(Text::SetSize)),
-		new BoolProvider<Text>("Bold", SPH_BIND_GETTER(Text::IsBold), SPH_BIND_SETTER(Text::SetBold)),
-		new BoolProvider<Text>("Italic", SPH_BIND_GETTER(Text::IsItalic), SPH_BIND_SETTER(Text::SetItalic)),
-		new BoolProvider<Text>("Underlined", SPH_BIND_GETTER(Text::IsUnderlined), SPH_BIND_SETTER(Text::SetUnderlined))
+		new FontStyleProvider<Text>("Style", SPH_BIND_GETTER(Text::GetStyle), SPH_BIND_SETTER(Text::SetStyle))
 	});
 
 

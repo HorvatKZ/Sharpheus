@@ -297,6 +297,7 @@ namespace Sharpheus {
 		success &= WriteBinary(lvl, 1.f);
 		success &= WriteBinary(lvl, 1.f);
 		success &= WriteBinary(lvl, 0.f);
+		success &= WriteBinary(lvl, (uint8_t)1);
 		success &= WriteBinaryEOLN(lvl);
 		success &= WriteBinary(lvl, (uint8_t)16);
 		success &= WriteBinary(lvl, wxString("Camera"));
@@ -306,6 +307,7 @@ namespace Sharpheus {
 		success &= WriteBinary(lvl, 1.f);
 		success &= WriteBinary(lvl, 1.f);
 		success &= WriteBinary(lvl, 0.f);
+		success &= WriteBinary(lvl, (uint8_t)1);
 		success &= WriteBinary(lvl, true);
 		success &= WriteBinaryEOLN(lvl);
 		success &= lvl.Close();

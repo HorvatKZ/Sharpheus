@@ -7,6 +7,7 @@ namespace Sharpheus {
 
 	ClassInfo MusicPlayer::classInfo("MusicPlayer", "musicplayer.png", {
 		new SoundProvider<MusicPlayer>("Music", SPH_BIND_GETTER(MusicPlayer::GetMusicPath), SPH_BIND_SETTER(MusicPlayer::SetMusicPath)),
+		new BoolProvider<MusicPlayer>("Default start", SPH_BIND_GETTER(MusicPlayer::DoesStartByDefault), SPH_BIND_SETTER(MusicPlayer::SetStartByDefault)),
 		new BoolProvider<MusicPlayer>("Looping", SPH_BIND_GETTER(MusicPlayer::IsLooping), SPH_BIND_SETTER(MusicPlayer::SetLooping))
 		});
 
@@ -31,6 +32,8 @@ namespace Sharpheus {
 		MusicPlayer* trueOther = (MusicPlayer*)other;
 		musicPath = trueOther->musicPath;
 		loop = trueOther->loop;
+		startByDefault = trueOther->startByDefault;
+		wantToStart = startByDefault;
 	}
 
 
@@ -51,6 +54,8 @@ namespace Sharpheus {
 		GameObject::Load(fl);
 		fl.Read(musicPath);
 		fl.Read(loop);
+		fl.Read(startByDefault);
+		wantToStart = startByDefault;
 		return fl.GetStatus();
 	}
 
@@ -60,6 +65,7 @@ namespace Sharpheus {
 		GameObject::Save(fs);
 		fs.Write(musicPath);
 		fs.Write(loop);
+		fs.Write(startByDefault);
 		return fs.GetStatus();
 	}
 

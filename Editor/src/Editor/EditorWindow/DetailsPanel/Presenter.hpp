@@ -49,19 +49,27 @@ namespace Sharpheus {
 	};
 
 
-	class NamePresenter : public FieldPresenter
+	class HeaderPresenter : public FieldPresenter
 	{
 	public:
-		NamePresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32_t& y);
-		virtual ~NamePresenter();
+		HeaderPresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32_t& y);
+		virtual ~HeaderPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual void Refresh() override;
 
-	protected:
-		NameSignal nameSignal;
+		virtual inline void SetDefault() override { FieldPresenter::SetDefault(); visibilityButton->SetBitmap(wxNullBitmap); }
 
-		virtual void HandleChange(wxCommandEvent& e);
+	protected:
+		wxBitmapButton* visibilityButton;
+
+		NameSignal nameSignal;
+		wxBitmap visibleBitmap, invisibleBitmap;
+
+		void InitBitmaps();
+
+		virtual void OnNameChanged(wxCommandEvent& e);
+		virtual void OnVisibilityChanged(wxCommandEvent& e);
 	};
 
 
@@ -258,6 +266,26 @@ namespace Sharpheus {
 
 		virtual void HandleChange(wxCommandEvent& e);
 		virtual void OnAdd(wxCommandEvent& e);
+	};
+
+
+	template <class Class>
+	class FontStylePresenter : public Presenter
+	{
+	public:
+		FontStylePresenter(wxWindow* parent, FontStyleProvider<Class>* provider, Signal signal, uint32_t& y);
+		virtual ~FontStylePresenter();
+
+		virtual void SetCurrent(GameObject* curr) override;
+		virtual inline void SetDefault() override;
+		virtual void Refresh() override;
+
+	protected:
+		FontStyleProvider<Class>* provider;
+		wxStaticText* boldLabel, * italicLabel, * underlinedLabel;
+		wxCheckBox* boldCheckBox, * italicCheckBox, * underlinedCheckBox;
+
+		virtual void HandleChange(wxCommandEvent& e);
 	};
 
 

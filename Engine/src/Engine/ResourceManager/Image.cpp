@@ -40,6 +40,7 @@ namespace Sharpheus {
 	{
 		SPH_LOG("Importing image: \"{0}\"", fullPath);
 		glGenTextures(1, &ID);
+		SPH_ASSERT(ID != TEXTURE_ID_NONE, "Error: {0}. Could not create texture", glGetError());
 		glBindTexture(GL_TEXTURE_2D, ID);
 		glActiveTexture(ID);
 

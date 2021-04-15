@@ -13,6 +13,9 @@ workspace "Exported"
 	{
 		"MultiProcessorCompile"
 	}
+	
+	configuration "vs*"
+		buildoptions { "/bigobj" } 
 
 outputdir = "%{cfg.buildcfg}"
 bindir = "%{wks.location}/../../Exported/"
@@ -83,7 +86,8 @@ project "Exported"
 		"GLEW",
 		"spdlog",
 		"opengl32.lib",
-		"Glu32.lib"
+		"Glu32.lib",
+		"Winmm.lib"
 	}
 	
 	defines

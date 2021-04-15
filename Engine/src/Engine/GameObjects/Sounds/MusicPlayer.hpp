@@ -14,10 +14,11 @@ namespace Sharpheus {
 
 		inline bool IsPlaying() { return !musicPath.empty() && SoundPlayer::GetCurrent() == musicPath; }
 		inline bool IsLooping() { return loop; }
+		inline bool DoesStartByDefault() { return startByDefault; }
 		inline const std::string& GetMusicPath() { return musicPath; }
 		inline void SetLooping(bool loop) { this->loop = loop; }
+		inline void SetStartByDefault(bool startByDefault) { this->startByDefault = startByDefault; }
 		inline void SetMusicPath(const std::string& musicPath) { this->musicPath = musicPath; }
-
 
 		void Play();
 		void Stop();
@@ -29,7 +30,7 @@ namespace Sharpheus {
 	protected:
 		std::string musicPath;
 		bool wantToStart = true;
-		bool loop = false;
+		bool loop = false, startByDefault = true;
 
 		virtual bool Save(FileSaver& fs) override;
 

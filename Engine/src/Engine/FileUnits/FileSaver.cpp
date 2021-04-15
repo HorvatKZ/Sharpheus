@@ -120,7 +120,7 @@ namespace Sharpheus {
 	bool FileSaver::Write(Image* data)
 	{
 		if (data == nullptr) {
-			Write("nullptr");
+			Write(std::string("nullptr"));
 			return GetStatus();
 		}
 
@@ -133,7 +133,7 @@ namespace Sharpheus {
 	bool FileSaver::Write(Font* data)
 	{
 		if (data == nullptr) {
-			Write("nullptr");
+			Write(std::string("nullptr"));
 			return GetStatus();
 		}
 
@@ -146,7 +146,7 @@ namespace Sharpheus {
 	bool FileSaver::Write(Animation* data)
 	{
 		if (data == nullptr) {
-			Write("nullptr");
+			Write(std::string("nullptr"));
 			return GetStatus();
 		}
 

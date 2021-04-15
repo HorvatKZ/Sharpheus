@@ -26,7 +26,6 @@ namespace Sharpheus {
 		uint32_t maxId = 0;
 		wxArrayString parentClasses;
 		parentClasses.Add("Sharpheus::Behavior");
-		parentClasses.Add("Sharpheus::LocalListenerBehavior");
 		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
 			parentClasses.Add((*it).second);
 			

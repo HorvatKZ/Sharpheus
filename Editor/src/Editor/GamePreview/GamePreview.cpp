@@ -1,5 +1,6 @@
 #include "editor_pch.h"
 #include "GamePreview.hpp"
+#include "Engine/ProjectControl.hpp"
 
 
 namespace Sharpheus {
@@ -7,6 +8,7 @@ namespace Sharpheus {
 	GamePreview::GamePreview(wxWindow* parent, const std::string& projectPath, wxGLContext* glContext, const Window::Props& winProps)
 		: wxFrame(parent, wxID_ANY, winProps.title, wxPoint(0, 0), wxSize(winProps.width, winProps.height))
 	{
+		ProjectControl::ResetExit();
 		EventHandler::Init(SPH_BIND(GamePreview::WindowClosed));
 
 		proj = new Project();
@@ -57,6 +59,11 @@ namespace Sharpheus {
 		proj->Tick((currTick - lastTick).ToDouble() / 1000);
 		canvas->Refresh();
 		lastTick = currTick;
+
+		if (ProjectControl::NeedToExit()) {
+			EventHandler::Handle(WindowClosedEvent());
+			Close();
+		}
 	}
 
 

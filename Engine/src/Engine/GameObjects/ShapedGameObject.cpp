@@ -33,6 +33,10 @@ namespace Sharpheus {
 
 	bool ShapedGameObject::IsSelected(const Point& pos)
 	{
+		if (!isVisible) {
+			return false;
+		}
+
 		return shape->IsInside(pos);
 	}
 
@@ -49,6 +53,10 @@ namespace Sharpheus {
 		shape->SetPos(worldTrafo.pos);
 		shape->SetDim(Point(sizer.x / 2 * worldTrafo.scale.x, sizer.y / 2 * worldTrafo.scale.y));
 		shape->SetRot(worldTrafo.rot);
+
+		if (shape->GetType() == Shape::Type::CAPSULE) {
+			((Capsule*)shape)->SetDomeHeight(sizer.x / 2 * worldTrafo.scale.y);
+		}
 	}
 
 }

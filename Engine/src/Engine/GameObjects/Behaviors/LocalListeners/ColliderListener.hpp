@@ -1,18 +1,16 @@
 #pragma once
 
-#include "Behavior.hpp"
 #include "../Colliders/Collider.hpp"
 #include "Engine/CollisionSystem/CollisionEvent.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT LocalListenerBehavior : public Behavior
+	class SPH_EXPORT ColliderListener
 	{
 	public:
-		LocalListenerBehavior(Behavior* other) : Behavior(other) {}
-		LocalListenerBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name) {}
-		virtual ~LocalListenerBehavior() {
+		ColliderListener(ID listenerID) : listenerID(listenerID) {}
+		virtual ~ColliderListener() {
 			for (auto it = collisionSubscriptions.begin(); it != collisionSubscriptions.end(); ++it) {
 				(*it).second->UnSubscribeCollision(listenerID);
 			}
@@ -26,7 +24,7 @@ namespace Sharpheus {
 
 		inline void SubscribeCollision(Collider* collider, CollisionEventFunc&& func) {
 			if (!IsSubscribedTo(collider->GetID())) {
-				collider->SubscribeForDestruction(listenerID, SPH_BIND(LocalListenerBehavior::OnLocalSourceDestroyed));
+				collider->SubscribeForDestruction(listenerID, SPH_BIND(ColliderListener::OnLocalSourceDestroyed));
 			}
 			collider->SubscribeCollision(listenerID, std::move(func));
 			collisionSubscriptions[collider->GetID()] = collider;
@@ -44,7 +42,7 @@ namespace Sharpheus {
 
 		inline void SubscribeOnTriggerEnter(Collider* collider, OnEnterEventFunc&& func) {
 			if (!IsSubscribedTo(collider->GetID())) {
-				collider->SubscribeForDestruction(listenerID, SPH_BIND(LocalListenerBehavior::OnLocalSourceDestroyed));
+				collider->SubscribeForDestruction(listenerID, SPH_BIND(ColliderListener::OnLocalSourceDestroyed));
 			}
 			collider->SubscribeTriggerEnter(listenerID, std::move(func));
 			triggerEnterSubscriptions[collider->GetID()] = collider;
@@ -62,7 +60,7 @@ namespace Sharpheus {
 
 		inline void SubscribeOnTriggerExit(Collider* collider, OnExitEventFunc&& func) {
 			if (!IsSubscribedTo(collider->GetID())) {
-				collider->SubscribeForDestruction(listenerID, SPH_BIND(LocalListenerBehavior::OnLocalSourceDestroyed));
+				collider->SubscribeForDestruction(listenerID, SPH_BIND(ColliderListener::OnLocalSourceDestroyed));
 			}
 
 			collider->SubscribeTriggerExit(listenerID, std::move(func));
@@ -90,6 +88,7 @@ namespace Sharpheus {
 		}
 
 	protected:
+		ID listenerID;
 		std::unordered_map<ID, Collider*> collisionSubscriptions;
 		std::unordered_map<ID, Collider*> triggerEnterSubscriptions;
 		std::unordered_map<ID, Collider*> triggerExitSubscriptions;

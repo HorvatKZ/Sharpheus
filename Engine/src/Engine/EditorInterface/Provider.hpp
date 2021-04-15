@@ -13,7 +13,7 @@ namespace Sharpheus {
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, ANIM, SOUND, STRING, STRINGLIST, BEHAVIOR
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, SOUND, STRING, STRINGLIST, BEHAVIOR
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -82,12 +82,13 @@ namespace Sharpheus {
 	template <class Class> using UIntProvider	= RangableProvider<Class, uint32_t,		CommonProvider::Type::UINT>;
 	template <class Class> using FloatProvider	= RangableProvider<Class, float,		CommonProvider::Type::FLOAT>;
 
-	template <class Class> using BoolProvider	= Provider<Class, bool,					CommonProvider::Type::BOOL>;
-	template <class Class> using PointProvider	= Provider<Class, const Point&,			CommonProvider::Type::POINT>;
-	template <class Class> using TrafoProvider	= Provider<Class, const Transform&,		CommonProvider::Type::TRAFO>;
-	template <class Class> using ColorProvider	= Provider<Class, const Color&,			CommonProvider::Type::COLOR>;
-	template <class Class> using StringProvider = Provider<Class, const std::string&,	CommonProvider::Type::STRING>;
-	template <class Class> using SoundProvider	= Provider<Class, const std::string&,	CommonProvider::Type::SOUND>;
+	template <class Class> using BoolProvider		= Provider<Class, bool,					CommonProvider::Type::BOOL>;
+	template <class Class> using FontStyleProvider	= Provider<Class, uint8_t,				CommonProvider::Type::FONTSTYLE>;
+	template <class Class> using PointProvider		= Provider<Class, const Point&,			CommonProvider::Type::POINT>;
+	template <class Class> using TrafoProvider		= Provider<Class, const Transform&,		CommonProvider::Type::TRAFO>;
+	template <class Class> using ColorProvider		= Provider<Class, const Color&,			CommonProvider::Type::COLOR>;
+	template <class Class> using StringProvider		= Provider<Class, const std::string&,	CommonProvider::Type::STRING>;
+	template <class Class> using SoundProvider		= Provider<Class, const std::string&,	CommonProvider::Type::SOUND>;
 
 
 	template <class Class>

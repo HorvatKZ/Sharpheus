@@ -25,7 +25,8 @@ namespace Sharpheus {
 		projImg			(ImageManager::GetImage("proj.png", ImageManager::PathType::EXPLORER)),
 		unknownImg		(ImageManager::GetImage("unknown.png", ImageManager::PathType::EXPLORER))
 	{
-		//ShowScrollbars(wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS);
+		scrollHeight = GetClientSize().y;
+
 		Bind(wxEVT_PAINT, &Explorer::OnPaintEvent, this);
 		Bind(wxEVT_LEFT_DCLICK, &Explorer::OnDoubleClick, this);
 		Bind(wxEVT_SIZE, &Explorer::OnResize, this);
@@ -61,7 +62,7 @@ namespace Sharpheus {
 
 	void Explorer::OnDoubleClick(wxMouseEvent& e)
 	{
-		wxPoint pos = e.GetPosition();
+		wxPoint pos = e.GetPosition() + GetViewStart();
 		uint32_t col = pos.x / (UI::border + oneWidth);
 		uint32_t row = pos.y / (UI::border + 120);
 		uint32_t perRow = (GetClientSize().x - UI::border) / (UI::border + oneWidth);
@@ -94,7 +95,11 @@ namespace Sharpheus {
 			folder.AppendDir(name);
 			Refresh();
 		}
+		else {
+			wxMessageBox("Cannot open " + name, "Error", wxICON_ERROR | wxOK | wxCENTRE);
+		}
 	}
+
 
 	void Explorer::OnResize(wxSizeEvent& e)
 	{
@@ -104,6 +109,7 @@ namespace Sharpheus {
 
 	void Explorer::Draw(wxClientDC& dc)
 	{
+		PrepareDC(dc);
 		dc.Clear();
 
 		uint32_t i = 0;
@@ -177,6 +183,17 @@ namespace Sharpheus {
 			DrawText(dc, displayName, col, row);
 			found = dir.GetNext(&name);
 			++i;
+		}
+
+		uint32_t heightNeeded = i / perRow * (120 + UI::border);
+		uint32_t realHeight = GetClientSize().y;
+		if (heightNeeded < realHeight && scrollHeight != realHeight) {
+			scrollHeight = realHeight;
+			SetScrollbars(1, 1, GetClientSize().x, scrollHeight);
+		}
+		else if (heightNeeded > realHeight && heightNeeded != scrollHeight) {
+			scrollHeight = heightNeeded;
+			SetScrollbars(1, 1, GetClientSize().x, scrollHeight);
 		}
 	}
 

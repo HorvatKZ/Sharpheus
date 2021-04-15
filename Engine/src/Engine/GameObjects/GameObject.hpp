@@ -57,7 +57,13 @@ namespace Sharpheus {
 			CapsuleCollider = 0x42,
 
 			// Sounds
-			MusicPlayer = 0x50
+			MusicPlayer = 0x50,
+
+			// Controls
+			Button = 0x60,
+			ImageButton = 0x61,
+			CheckBox = 0x62,
+			RadioButton = 0x63
 		};
 
 		enum class TypeMasks : uint8_t {
@@ -67,6 +73,7 @@ namespace Sharpheus {
 			Physics = 0x30,
 			Collider = 0x40,
 			Sounds = 0x50,
+			Control = 0x60,
 
 			MASK = 0xF0
 		};
@@ -96,6 +103,10 @@ namespace Sharpheus {
 		inline Transform&		GetWorldTrafo() { return worldTrafo; }
 		virtual void			SetTrafo(const Transform& trafo);
 		virtual void			SetWorldTrafo(const Transform& trafo);
+
+		inline bool				IsVisible() { return isVisible; }
+		inline void				SetVisible(bool visibility) { isVisible = visibility; }
+		inline void				SwitchVisiblity() { isVisible = !isVisible; }
 
 		void									AddChild(GameObject* child);
 		GameObject*								GetChild(const std::string& name);
@@ -144,6 +155,7 @@ namespace Sharpheus {
 		std::string name;
 		Transform trafo;
 		Transform worldTrafo;
+		bool isVisible = true;
 		
 		class Level* level = nullptr;
 		GameObject* parent = nullptr;

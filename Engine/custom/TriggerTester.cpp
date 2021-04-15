@@ -10,13 +10,13 @@ using namespace Sharpheus;
 ClassInfo TriggerTester::classInfo("TriggerTester", "behavior.png", {});
 
 
-TriggerTester::TriggerTester(Behavior* other) : LocalListenerBehavior(other)
+TriggerTester::TriggerTester(Behavior* other) : Behavior(other), ColliderListener(GetID())
 {
 	DoSubscriptions();
 }
 
 
-TriggerTester::TriggerTester(GameObject* parent, const std::string& name) : LocalListenerBehavior(parent, name)
+TriggerTester::TriggerTester(GameObject* parent, const std::string& name) : Behavior(parent, name), ColliderListener(GetID())
 {
 	DoSubscriptions();
 }

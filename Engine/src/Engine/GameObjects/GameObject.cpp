@@ -66,8 +66,8 @@ namespace Sharpheus {
 
 	void GameObject::CopyFrom(GameObject* other)
 	{
-		trafo = other->trafo;
-		worldTrafo = other->worldTrafo;
+		SetTrafo(other->trafo);
+		SetWorldTrafo(other->worldTrafo);
 
 		for (GameObject* child : other->children) {
 			GameObject* newChild = level->Create(child, this, child->name);
@@ -88,10 +88,12 @@ namespace Sharpheus {
 
 	void GameObject::RenderAll()
 	{
-		Render();
-		
-		for (GameObject* child : children) {
-			child->RenderAll();
+		if (isVisible) {
+			Render();
+
+			for (GameObject* child : children) {
+				child->RenderAll();
+			}
 		}
 	}
 
@@ -122,8 +124,13 @@ namespace Sharpheus {
 		}
 	}
 
+
 	bool GameObject::IsSelected(const Point& pos)
 	{
+		if (!isVisible) {
+			return false;
+		}
+
 		return (pos - worldTrafo.pos).Length() <= selectCircleRadius;
 	}
 
@@ -296,16 +303,27 @@ namespace Sharpheus {
 
 	GameObject* GameObject::GetUpperMostSelected(const Point& pos)
 	{
-		int32_t i = children.size() - 1;
-		while (i >= 0) {
-			GameObject* childSelected = children[i]->GetUpperMostSelected(pos);
-			if (childSelected != nullptr) {
-				return childSelected;
-			}
-			--i;
+		if (!isVisible) {
+			return nullptr;
 		}
 
-		return IsSelected(pos) ? this : nullptr;
+		if (IsSelected(pos)) {
+			return this;
+		}
+
+		if (!children.empty()) {
+			uint32_t i = children.size() - 1;
+			while (i > 0) {
+				GameObject* childSelected = children[i]->GetUpperMostSelected(pos);
+				if (childSelected != nullptr) {
+					return childSelected;
+				}
+				--i;
+			}
+			return children[0]->GetUpperMostSelected(pos);
+		}
+
+		return nullptr;
 	}
 
 
@@ -341,6 +359,7 @@ namespace Sharpheus {
 		Transform newTrafo;
 		fl.Read(newTrafo);
 		SetTrafo(newTrafo);
+		fl.Read(isVisible);
 		return fl.GetStatus();
 	}
 
@@ -351,6 +370,7 @@ namespace Sharpheus {
 		fs.Write(name);
 		fs.Write((uint32_t)children.size());
 		fs.Write(trafo);
+		fs.Write(isVisible);
 		return fs.GetStatus();
 	}
 

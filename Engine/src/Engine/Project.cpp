@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Project.hpp"
+#include "ProjectControl.hpp"
 #include "FileUnits/FileLoader.hpp"
 #include "FileUnits/FileSaver.hpp"
 #include "ResourceManager/ResourceManager.hpp"
@@ -9,6 +10,7 @@ namespace Sharpheus {
 
 	Project::Project()
 	{
+		ProjectControl::Init();
 	}
 
 
@@ -46,6 +48,7 @@ namespace Sharpheus {
 
 	Project::~Project()
 	{
+		ProjectControl::Clear();
 		delete level;
 	}
 
@@ -73,6 +76,16 @@ namespace Sharpheus {
 		delete level;
 		level = new Level(name);
 		level->SetProjectPath(path);
+	}
+
+
+	void Project::Tick(float deltaTime)
+	{
+		std::string loadLevel = ProjectControl::GetLoadLevelPath();
+		if (!loadLevel.empty()) {
+			level->Load(basePath + "Levels\\", loadLevel);
+		}
+		level->Tick(deltaTime);
 	}
 
 

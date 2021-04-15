@@ -11,8 +11,9 @@ namespace Sharpheus {
 	class UI
 	{
 	public:
-		static uint32_t UI::border;
-		static wxSize UI::buttonSize;
+		static uint32_t border;
+		static uint32_t scrollSpeed;
+		static wxSize buttonSize;
 		static wxFont titleFont;
 	};
 

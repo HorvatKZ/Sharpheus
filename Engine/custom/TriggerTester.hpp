@@ -1,9 +1,10 @@
 #pragma once
 
-#include "LocalListenerBehavior.hpp"
+#include "Behavior.hpp"
+#include "LocalListeners/ColliderListener.hpp"
 
 
-class SPH_EXPORT TriggerTester : public Sharpheus::LocalListenerBehavior
+class SPH_EXPORT TriggerTester : public Sharpheus::Behavior, public Sharpheus::ColliderListener
 {
 public:
 	TriggerTester(Sharpheus::Behavior* other);

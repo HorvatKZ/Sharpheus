@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	class DetailsPanel : public wxPanel
+	class DetailsPanel : public wxScrolledWindow
 	{
 	public:
 		DetailsPanel(wxFrame* parent, const wxPoint& pos, const wxSize& size);
@@ -23,7 +23,7 @@ namespace Sharpheus {
 		wxStaticText* title;
 		wxStaticText* typeName;
 		MainTrafoPresenter* mainTrafo;
-		NamePresenter* namePresenter;
+		HeaderPresenter* headerPresenter;
 		wxStaticBitmap* typeIcon;
 		std::vector<Presenter*> presenters;
 

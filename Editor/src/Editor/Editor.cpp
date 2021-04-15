@@ -6,6 +6,7 @@
 #include "Engine/Renderer/Renderer.hpp"
 #include "ResourceManagement/ImageManager.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
+#include "Engine/ResourceManager/SoundPlayer.hpp"
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
 
@@ -19,6 +20,7 @@ namespace Sharpheus {
 		Logger::Init();
 		EditorData::Init(wxStr2StdStr(wxStandardPaths::Get().GetUserConfigDir() + "\\Sharpheus\\editorConfig.txt"));
 		ClassRegistry::Init();
+		SoundPlayer::Init();
 		SPHE_INFO("Welcome to Sharpheus Editor");
 	}
 
@@ -29,6 +31,7 @@ namespace Sharpheus {
 		ProjectData::Clear();
 		ImageManager::Clear();
 		ResourceManager::Clear();
+		SoundPlayer::Clear();
 		SPHE_INFO("Exiting editor. Thanks for using Sharpheus");
 	}
 

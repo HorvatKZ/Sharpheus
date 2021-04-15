@@ -15,6 +15,7 @@ namespace Sharpheus {
 
 
 	uint32_t UI::border = 5;
+	uint32_t UI::scrollSpeed = 10;
 	wxSize UI::buttonSize(90, 26);
 	wxFont UI::titleFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 }

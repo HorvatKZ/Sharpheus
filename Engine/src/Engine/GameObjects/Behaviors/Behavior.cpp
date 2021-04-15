@@ -14,6 +14,7 @@ namespace Sharpheus {
 		fs.Write(GetSubType());
 		fs.Write((uint32_t)children.size());
 		fs.Write(trafo);
+		fs.Write(isVisible);
 		return fs.GetStatus();
 	}
 

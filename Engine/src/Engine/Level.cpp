@@ -78,6 +78,14 @@ namespace Sharpheus {
 				return Create<CapsuleCollider>(parent, newName);
 			case GameObject::Type::MusicPlayer:
 				return Create<MusicPlayer>(parent, newName);
+			case GameObject::Type::Button:
+				return Create<Button>(parent, newName);
+			case GameObject::Type::ImageButton:
+				return Create<ImageButton>(parent, newName);
+			case GameObject::Type::CheckBox:
+				return Create<CheckBox>(parent, newName);
+			case GameObject::Type::RadioButton:
+				return Create<RadioButton>(parent, newName);
 			case GameObject::Type::Behavior:
 				return Create<PlaceholderBehavior>(parent, newName);
 		}

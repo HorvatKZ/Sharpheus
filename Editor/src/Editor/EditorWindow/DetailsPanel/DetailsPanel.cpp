@@ -10,14 +10,16 @@
 namespace Sharpheus {
 
 	DetailsPanel::DetailsPanel(wxFrame* parent, const wxPoint& pos, const wxSize& size)
-		: wxPanel(parent, wxID_ANY, pos, size), freeY(60)
+		: wxScrolledWindow(parent, wxID_ANY, pos, size), freeY(60)
 	{
+		ShowScrollbars(wxSHOW_SB_NEVER, wxSHOW_SB_NEVER);
+
 		title = new wxStaticText(this, wxID_ANY, "Details", wxPoint(10, 10));
 		title->SetFont(wxFont(15, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 
 		typeName = new wxStaticText(this, wxID_ANY, "", wxPoint(30, 35));
 		typeIcon = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap, wxPoint(10, 35), wxSize(16, 16));
-		namePresenter = new NamePresenter(this, "Name", std::move(currDataChangedCallback), std::move(currNameChangedCallback), freeY);
+		headerPresenter = new HeaderPresenter(this, "Name", std::move(currDataChangedCallback), std::move(currNameChangedCallback), freeY);
 		mainTrafo = new MainTrafoPresenter(this, "Transform", std::move(currDataChangedCallback), freeY);
 	}
 
@@ -26,7 +28,7 @@ namespace Sharpheus {
 	{
 		ClearPresenters();
 		delete mainTrafo;
-		delete namePresenter;
+		delete headerPresenter;
 	}
 
 
@@ -63,7 +65,7 @@ namespace Sharpheus {
 
 	void DetailsPanel::CurrentNameChanged(const std::string& oldName, const std::string& newName)
 	{
-		namePresenter->Refresh();
+		headerPresenter->Refresh();
 	}
 
 
@@ -84,6 +86,7 @@ namespace Sharpheus {
 			return;
 		}
 
+		Scroll(0, 0);
 		uint32_t y = freeY;
 		for (CommonProvider* provider : classInfo->GetProviders()) {
 			switch (type) {
@@ -123,12 +126,31 @@ namespace Sharpheus {
 				case GameObject::Type::MusicPlayer:
 					CreatePresenterFrom<MusicPlayer>(provider, y);
 					break;
+				case GameObject::Type::Button:
+					CreatePresenterFrom<Button>(provider, y);
+					break;
+				case GameObject::Type::ImageButton:
+					CreatePresenterFrom<ImageButton>(provider, y);
+					break;
+				case GameObject::Type::CheckBox:
+					CreatePresenterFrom<CheckBox>(provider, y);
+					break;
+				case GameObject::Type::RadioButton:
+					CreatePresenterFrom<RadioButton>(provider, y);
+					break;
 				case GameObject::Type::Behavior:
 					SPH_PRESENT_BEHAVIOR(obj);
 					break;
 				default:
 					SPHE_WARN("Details Panel: Unexpected GameObject type {0}", type);
 			}
+		}
+
+		wxSize realSize = GetClientSize();
+		if (y > realSize.y) {
+			SetScrollbars(0, UI::scrollSpeed, realSize.x, y / UI::scrollSpeed);
+		} else {
+			SetScrollbars(0, UI::scrollSpeed, realSize.x, realSize.y / UI::scrollSpeed);
 		}
 	}
 
@@ -153,7 +175,7 @@ namespace Sharpheus {
 		typeName->SetLabel(classInfo->GetName());
 		typeIcon->SetBitmap(ImageManager::GetImage(classInfo->GetIconPath(), ImageManager::PathType::GAMEOBJECTS));
 		mainTrafo->SetCurrent(curr);
-		namePresenter->SetCurrent(curr);
+		headerPresenter->SetCurrent(curr);
 
 		for (Presenter* presenter : presenters) {
 			presenter->SetCurrent(curr);
@@ -166,7 +188,7 @@ namespace Sharpheus {
 		typeName->SetLabel("None");
 		typeIcon->SetBitmap(wxNullBitmap);
 		mainTrafo->SetDefault();
-		namePresenter->SetDefault();
+		headerPresenter->SetDefault();
 		for (Presenter* presenter : presenters) {
 			presenter->SetDefault();
 		}
@@ -175,7 +197,7 @@ namespace Sharpheus {
 
 	void DetailsPanel::RefreshPresenters()
 	{
-		namePresenter->Refresh();
+		headerPresenter->Refresh();
 		mainTrafo->Refresh();
 		for (Presenter* presenter : presenters) {
 			presenter->Refresh();
@@ -217,6 +239,9 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::FONT:
 				presenters.push_back(new FontPresenter<Class>(this, (FontProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::FONTSTYLE:
+				presenters.push_back(new FontStylePresenter<Class>(this, (FontStyleProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::ANIM:
 				presenters.push_back(new AnimationPresenter<Class>(this, (AnimationProvider<Class>*)provider, currDataChangedCallback, y));

@@ -4,6 +4,7 @@
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
+#include "Engine/ResourceManager/Font.hpp"
 #include <wx/valnum.h>
 
 
@@ -197,7 +198,6 @@ namespace Sharpheus {
 	inline BoolPresenter<Class>::BoolPresenter(wxWindow* parent, BoolProvider<Class>* provider, Signal signal, uint32_t& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		wxSize extent = title->GetTextExtent(provider->GetName());
 		checkBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
 		checkBox->Bind(wxEVT_CHECKBOX, &BoolPresenter<Class>::HandleChange, this);
 		y += 30;
@@ -384,7 +384,7 @@ namespace Sharpheus {
 
 		Color c = provider->Get((Class*)curr);
 		wxColour wxC(c.r, c.g, c.b);
-		if (wxC != lastColor) {
+		if (wxC != lastColor || wxC == *wxBLACK) {
 			Color c = provider->Get((Class*)curr);
 			rField->SetValue(c.r);
 			gField->SetValue(c.g);
@@ -599,6 +599,85 @@ namespace Sharpheus {
 			wxString fontFile = "Fonts\\" + browseDialog.GetPath();
 			wxString imgFile = fontFile.Left(fontFile.find_last_of('.')) + ".png";
 			provider->SetByPath((Class*)curr, wxStr2StdStr(fontFile), wxStr2StdStr(imgFile));
+			signal();
+		}
+	}
+
+
+	// FontStylePresenter
+
+	template<class Class>
+	inline FontStylePresenter<Class>::FontStylePresenter(wxWindow* parent, FontStyleProvider<Class>* provider, Signal signal, uint32_t& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		uint32_t width = parent->GetSize().x - 3 * UI::border - 22;
+		y += 22;
+		boldLabel = new wxStaticText(parent, wxID_ANY, "Bold", wxPoint(UI::border, y));
+		boldCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		boldCheckBox->Bind(wxEVT_CHECKBOX, &FontStylePresenter<Class>::HandleChange, this);
+		y += 25;
+		italicLabel = new wxStaticText(parent, wxID_ANY, "Italic", wxPoint(UI::border, y));
+		italicCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		italicCheckBox->Bind(wxEVT_CHECKBOX, &FontStylePresenter<Class>::HandleChange, this);
+		y += 25;
+		underlinedLabel = new wxStaticText(parent, wxID_ANY, "Underlined", wxPoint(UI::border, y));
+		underlinedCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		underlinedCheckBox->Bind(wxEVT_CHECKBOX, &FontStylePresenter<Class>::HandleChange, this);
+		y += 30;
+	}
+
+	template<class Class>
+	inline FontStylePresenter<Class>::~FontStylePresenter()
+	{
+		wxREMOVE(boldLabel);
+		wxREMOVE(boldCheckBox);
+		wxREMOVE(italicLabel);
+		wxREMOVE(italicCheckBox);
+		wxREMOVE(underlinedLabel);
+		wxREMOVE(underlinedCheckBox);
+	}
+
+	template<class Class>
+	inline void FontStylePresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+
+		uint8_t style = provider->Get((Class*)curr);
+		boldCheckBox->SetValue(style & SPH_FONT_BOLD);
+		italicCheckBox->SetValue(style & SPH_FONT_ITALIC);
+		underlinedCheckBox->SetValue(style & SPH_FONT_UNDERLINED);
+	}
+
+	template<class Class>
+	inline void FontStylePresenter<Class>::SetDefault()
+	{
+		boldCheckBox->SetValue(false);
+		italicCheckBox->SetValue(false);
+		underlinedCheckBox->SetValue(false);
+	}
+
+	template<class Class>
+	inline void FontStylePresenter<Class>::Refresh()
+	{
+		SetCurrent(curr);
+	}
+
+	template<class Class>
+	inline void FontStylePresenter<Class>::HandleChange(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			uint8_t style = 0;
+			if (boldCheckBox->GetValue()) {
+				style = style | SPH_FONT_BOLD;
+			}
+			if (italicCheckBox->GetValue()) {
+				style = style | SPH_FONT_ITALIC;
+			}
+			if (underlinedCheckBox->GetValue()) {
+				style = style | SPH_FONT_UNDERLINED;
+			}
+
+			provider->Set((Class*)curr, style);
 			signal();
 		}
 	}

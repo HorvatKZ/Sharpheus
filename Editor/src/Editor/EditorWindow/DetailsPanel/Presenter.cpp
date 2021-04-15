@@ -45,37 +45,63 @@ namespace Sharpheus {
 	}
 
 
-	// NamaPresenter
+	// HeaderPresenter
 
-	NamePresenter::NamePresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32_t& y)
+	HeaderPresenter::HeaderPresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32_t& y)
 		: FieldPresenter(parent, title, signal, y), nameSignal(nameSignal)
 	{
-		input->Bind(wxEVT_TEXT_ENTER, &NamePresenter::HandleChange, this);
+		InitBitmaps();
+		wxSize titleExtent = this->title->GetTextExtent("Name");
+		uint32_t realWidth = parent->GetVirtualSize().x;
+
+		this->title->SetSize(titleExtent);
+		input->SetPosition(wxPoint(2 * UI::border + titleExtent.x, y - 30));
+		input->SetSize(wxSize(realWidth - 4 * UI::border - titleExtent.x - 24, 22));
+		input->Bind(wxEVT_TEXT_ENTER, &HeaderPresenter::OnNameChanged, this);
+
+		visibilityButton = new wxBitmapButton(parent, wxID_ANY, wxNullBitmap, wxPoint(realWidth - UI::border - 24, y - 31), wxSize(24, 24));
+		visibilityButton->Bind(wxEVT_BUTTON, &HeaderPresenter::OnVisibilityChanged, this);
 	}
 
-	NamePresenter::~NamePresenter()
+	HeaderPresenter::~HeaderPresenter()
 	{
+		wxREMOVE(visibilityButton);
 	}
 
-	void NamePresenter::SetCurrent(GameObject* curr)
+	void HeaderPresenter::SetCurrent(GameObject* curr)
 	{
 		Presenter::SetCurrent(curr);
 
 		input->SetLabel(curr->GetName());
+		visibilityButton->SetBitmap(curr->IsVisible() ? visibleBitmap : invisibleBitmap);
 	}
 
-	void NamePresenter::Refresh()
+	void HeaderPresenter::Refresh()
 	{
 		SetCurrent(curr);
 	}
 
-	void NamePresenter::HandleChange(wxCommandEvent& e)
+	void HeaderPresenter::InitBitmaps()
+	{
+		visibleBitmap = wxBitmap(ImageManager::GetImage("visible.png", ImageManager::PathType::DETAILSPANEL));
+		invisibleBitmap = wxBitmap(ImageManager::GetImage("invisible.png", ImageManager::PathType::DETAILSPANEL));
+	}
+
+	void HeaderPresenter::OnNameChanged(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
 			const std::string oldName = curr->GetName();
 			curr->SetName(wxStr2StdStr(input->GetValue()));
 			const std::string newName = curr->GetName();
 			nameSignal(oldName, newName);
+			signal();
+		}
+	}
+
+	void HeaderPresenter::OnVisibilityChanged(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			curr->SwitchVisiblity();
 			signal();
 		}
 	}
