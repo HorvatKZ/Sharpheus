@@ -17,7 +17,7 @@ namespace Sharpheus {
 		SPHE_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
 		Renderer::Init();
 
-		camera = new Camera(nullptr, "ViewPort camera");
+		camera = new ViewPortCamera();
 		camera->SetCustomRect(size.x, size.y);
 
 		prevMousePos = wxGetMousePosition() - this->GetScreenPosition();
@@ -217,6 +217,10 @@ namespace Sharpheus {
 			RenderGrid();
 		}
 
+		if (grid.isCamOutlineVisible) {
+			RenderCameraOutline(currCamera);
+		}
+
 		if (EditorData::GetCurrent() != nullptr) {
 			EditorData::GetCurrent()->RenderAsSelected();
 			Transform currTrafo = EditorData::GetCurrent()->GetWorldTrafo();
@@ -252,6 +256,20 @@ namespace Sharpheus {
 		while (firstYGrid <= lastYGrid) {
 			Renderer::DrawHorizontalLine(minX, maxX, firstYGrid, relativeYGridThickness, grid.color);
 			firstYGrid += grid.size;
+		}
+	}
+
+
+	void ViewPort::RenderCameraOutline(Camera* cam)
+	{
+		if (cam != nullptr) {
+			ViewPortGridProps grid = EditorData::GetGridProps();
+			Point* corners = cam->GetShape()->GetCorners();
+
+			for (uint8_t i = 0; i < 4; ++i) {
+				Renderer::DrawLine(corners[i], corners[(i + 1) % 4], grid.camOutlineThickness * camera->GetWorldTrafo().scale.x,
+					grid.camOutlineColor);
+			}
 		}
 	}
 }

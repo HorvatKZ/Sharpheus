@@ -25,7 +25,6 @@ protected:
 	virtual bool Save(Sharpheus::FileSaver& fs) override;
 
 	virtual void Tick(float deltaTime) override;
-	virtual void Init();
 
 	void OnMousePressed(const Sharpheus::MousePressedEvent& e);
 	void OnMouseReleased(const Sharpheus::MouseReleasedEvent& e);

@@ -21,4 +21,5 @@
 
 // Editor
 #include "editor_macros.h"
-#include "Editor/CommonUtils.hpp"
+#include "Editor/Common/StringUtils.hpp"
+#include "Editor/Common/UIConsts.hpp"

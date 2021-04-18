@@ -7,9 +7,10 @@ namespace Sharpheus {
 	{
 	public:
 		struct GridProps {
-			float size = 64, thickness = 2;
-			bool isInForeground = true;
+			float size = 64, thickness = 2, camOutlineThickness = 5;
+			bool isInForeground = true, isCamOutlineVisible = true;
 			Color color = Color(240, 240, 240, 200);
+			Color camOutlineColor = Color(255, 32, 64, 200);
 		};
 
 		static void Init(const wxString& configFile);

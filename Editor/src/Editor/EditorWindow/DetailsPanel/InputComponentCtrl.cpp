@@ -6,6 +6,7 @@
 namespace Sharpheus {
 
 	wxFont InputComponentCtrl::titleFont(15, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+	uint32_t InputComponentCtrl::border = 3;
 
 
 	// InputComponentCtrl
@@ -18,17 +19,17 @@ namespace Sharpheus {
 
 
 	InputComponentCtrl::InputComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color)
-		: wxPanel(parent, wxID_ANY, pos, wxSize(width, 24))
+		: wxPanel(parent, wxID_ANY, pos, wxSize(width, UI::extUnitHeight))
 	{
 		SetBackgroundColour(color);
 
-		titleText = new wxStaticText(this, wxID_ANY, title, wxPoint(3, 0));
+		titleText = new wxStaticText(this, wxID_ANY, title, wxPoint(border, 0));
 		titleText->SetFont(titleFont);
 		titleText->SetForegroundColour(*wxWHITE);
 		titleText->SetBackgroundColour(color);
 
 		wxSize titleExtent = titleText->GetTextExtent(title);
-		input = new wxTextCtrl(this, wxID_ANY, "", wxPoint(titleExtent.x + 6, 1), wxSize(width - titleExtent.x - 7, 22), wxTE_PROCESS_ENTER);
+		input = new wxTextCtrl(this, wxID_ANY, "", wxPoint(titleExtent.x + 2 * border, 1), wxSize(width - titleExtent.x - 2 * border - 1, UI::unitHeight), wxTE_PROCESS_ENTER);
 	}
 
 
@@ -40,7 +41,7 @@ namespace Sharpheus {
 	{
 		uint32_t currWidth = GetSize().x;
 		input->SetSize(input->GetSize() - wxSize(currWidth - width, 0));
-		SetSize(wxSize(width, 24));
+		SetSize(wxSize(width, UI::extUnitHeight));
 	}
 
 

@@ -5,6 +5,7 @@
 #include <GL/wglew.h>
 #include <wx/glcanvas.h>
 #include "EditingArrow.hpp"
+#include "ViewPortCamera.hpp"
 
 
 namespace Sharpheus {
@@ -30,7 +31,7 @@ namespace Sharpheus {
 		inline wxGLContext* GetContext() { return glContext; }
 
 	private:
-		Camera* camera;
+		ViewPortCamera* camera;
 		EditingArrow* editArrow;
 		wxGLContext* glContext = nullptr;
 
@@ -49,6 +50,7 @@ namespace Sharpheus {
 		void OnMouseUp(wxMouseEvent& e);
 		void Render(wxDC& dc);
 		void RenderGrid();
+		void RenderCameraOutline(Camera* cam);
 	};
 
 }

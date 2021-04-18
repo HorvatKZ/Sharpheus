@@ -11,6 +11,7 @@ namespace Sharpheus {
 
 	float Camera::width = 0.f;
 	float Camera::height = 0.f;
+	float Camera::ogHeight = 0.f;
 
 
 	Camera::Camera(GameObject* parent, const std::string& name) :
@@ -29,30 +30,23 @@ namespace Sharpheus {
 
 		ShapedGameObject::CopyFrom(other);
 		Camera* trueOther = (Camera*)other;
-		customWidth = trueOther->customWidth;
-		customHeight = trueOther->customHeight;
 		SetSizer(GetWidth(), GetHeight());
-	}
-
-
-	Point Camera::Project(const Point& pos)
-	{
-		Point diff = (pos - worldTrafo.pos).Rotate(-worldTrafo.rot);
-		return Point(2 * diff.x / GetWidth() / worldTrafo.scale.x, -2 * diff.y / GetHeight() / worldTrafo.scale.y);
 	}
 
 
 	Point Camera::ScreenPosToGamePos(const Point& pos)
 	{
-		Point fromCenter = Point(pos.x - GetWidth() / 2, pos.y - GetHeight() / 2).Rotate(worldTrafo.rot);
-		return Point(worldTrafo.pos.x + fromCenter.x * worldTrafo.scale.x, worldTrafo.pos.y + fromCenter.y * worldTrafo.scale.y);
+		Point ogPos = pos * GetOGWidth() / GetWidth();
+		Point fromCenter = Point((ogPos.x - GetOGWidth() / 2) * worldTrafo.scale.x, (ogPos.y - GetOGHeight() / 2) * worldTrafo.scale.y).Rotate(worldTrafo.rot);
+		return Point(worldTrafo.pos.x + fromCenter.x, worldTrafo.pos.y + fromCenter.y);
 	}
 
 
 	Point Camera::GamePosToScreenPos(const Point& pos)
 	{
 		Point diff = (pos - worldTrafo.pos).Rotate(-worldTrafo.rot);
-		return Point(diff.x / worldTrafo.scale.x + GetWidth() / 2, diff.y / worldTrafo.scale.y + GetHeight() / 2);
+		Point ogPos(diff.x / worldTrafo.scale.x + GetOGWidth() / 2, diff.y / worldTrafo.scale.y + GetOGHeight() / 2);
+		return ogPos * GetWidth() / GetOGWidth();
 	}
 
 

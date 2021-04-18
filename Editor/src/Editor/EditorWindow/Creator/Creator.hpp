@@ -22,6 +22,9 @@ namespace Sharpheus {
 		GameObject::Type type = GameObject::Type::None;
 		wxBitmap addButtonBitmap;
 
+		static uint32_t border;
+		static uint32_t textCtrlWidth;
+
 		void OnAdd(wxCommandEvent& e);
 
 		void TypeSelectorChanged(const wxString& name, GameObject::Type type);

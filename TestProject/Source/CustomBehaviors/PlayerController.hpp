@@ -1,10 +1,12 @@
 #pragma once
 
-#include "LocalListenerBehavior.hpp"
+#include "Behavior.hpp"
+#include "LocalListeners/ColliderListener.hpp"
 #include "Engine/Events/KeyEvents.hpp"
+#include "Engine/GameObjects/Renderables/AnimationPlayer.hpp"
 
 
-class SPH_EXPORT PlayerController : public Sharpheus::LocalListenerBehavior
+class SPH_EXPORT PlayerController : public Sharpheus::Behavior, public Sharpheus::ColliderListener
 {
 public:
 	PlayerController(Sharpheus::Behavior* other);
@@ -24,9 +26,9 @@ public:
 protected:
 	float jumpForce = 0.f, speed = 0.f;
 	bool canJump = false;
+	Sharpheus::SafeObject<Sharpheus::AnimationPlayer> anim;
 
 	void Tick(float deltaTime) override;
-	void DoSubscriptions();
 	virtual bool Save(Sharpheus::FileSaver& fs) override;
 
 	void OnKeyPressed(const Sharpheus::KeyPressedEvent& e);

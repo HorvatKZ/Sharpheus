@@ -6,16 +6,14 @@ workspace "Exported"
 
 	configurations
 	{
-		"Release"
+		"Release",
+		"Final"
 	}
 
 	flags
 	{
 		"MultiProcessorCompile"
 	}
-	
-	configuration "vs*"
-		buildoptions { "/bigobj" } 
 
 outputdir = "%{cfg.buildcfg}"
 bindir = "%{wks.location}/../../Exported/"
@@ -105,5 +103,10 @@ project "Exported"
 
 	filter "configurations:Release"
 		defines "SPH_RELEASE"
+		runtime "Release"
+		optimize "on"
+	
+	filter "configurations:Final"
+		defines "SPH_FINAL"
 		runtime "Release"
 		optimize "on"

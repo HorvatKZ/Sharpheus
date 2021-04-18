@@ -10,15 +10,13 @@ using namespace Sharpheus;
 ClassInfo TriggerTester::classInfo("TriggerTester", "behavior.png", {});
 
 
-TriggerTester::TriggerTester(Behavior* other) : LocalListenerBehavior(other)
+TriggerTester::TriggerTester(Behavior* other) : Behavior(other), ColliderListener(GetID())
 {
-	DoSubscriptions();
 }
 
 
-TriggerTester::TriggerTester(GameObject* parent, const std::string& name) : LocalListenerBehavior(parent, name)
+TriggerTester::TriggerTester(GameObject* parent, const std::string& name) : Behavior(parent, name), ColliderListener(GetID())
 {
-	DoSubscriptions();
 }
 
 
@@ -32,7 +30,7 @@ void TriggerTester::Tick(float deltaTime)
 }
 
 
-void TriggerTester::DoSubscriptions()
+void TriggerTester::Init()
 {
 	SubscribeOnTriggerEnter((Collider*)parent->GetFirstChildOfType(Type::CircleCollider), SPH_BIND(TriggerTester::OnTriggerEnter));
 	SubscribeOnTriggerExit((Collider*)parent->GetFirstChildOfType(Type::CircleCollider), SPH_BIND(TriggerTester::OnTriggerExit));

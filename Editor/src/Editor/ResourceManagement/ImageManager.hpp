@@ -18,6 +18,8 @@ namespace Sharpheus {
 		static void Clear();
 
 		static wxImage GetImage(const wxString& path, PathType type = PathType::ABSOLUTE_PATH);
+
+		static bool IsSupportedImgFormat(const wxString& format);
 	};
 
 }

@@ -7,9 +7,8 @@
 
 namespace Sharpheus {
 
-	Exporter::Exporter()
+	Exporter::Exporter(bool includeLogging) :includeLogging(includeLogging)
 	{
-		Export();
 	}
 
 	Exporter::~Exporter()
@@ -43,8 +42,9 @@ namespace Sharpheus {
 
 		success &= CopyFolderContent("Assets");
 		success &= CopyFolderContent("Levels");
+		success &= CopyFolderContent("Scenes");
 		if (!success) {
-			wxMessageBox("Could not copy Assets and/or Levels folder", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
+			wxMessageBox("Could not copy resource folders", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
 			return;
 		}
 
@@ -53,7 +53,8 @@ namespace Sharpheus {
 			return;
 		}
 
-		if (wxExecute("MSBuild.exe \"" + ProjectData::GetPath() + "Solution\\Exported\\Exported.sln\"", wxEXEC_SYNC) != 0) {
+		wxString config = includeLogging ? "Release" : "Final";
+		if (wxExecute("MSBuild.exe \"" + ProjectData::GetPath() + "Solution\\Exported\\Exported.sln\" /property:Configuration=" + config, wxEXEC_SYNC) != 0) {
 			wxMessageBox("Could not build Exported project", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
 			return;
 		}
@@ -64,7 +65,8 @@ namespace Sharpheus {
 			return;
 		}
 
-		if (!wxRemoveFile(ProjectData::GetPath() + "Exported\\Exported.pdb")) {
+		wxString pdbPath = ProjectData::GetPath() + "Exported\\Exported.pdb";
+		if (wxFileExists(pdbPath) && !wxRemoveFile(pdbPath)) {
 			wxMessageBox("Could not delete unnecesarry files", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
 			return;
 		}

@@ -4,6 +4,7 @@
 #include "Editor/Registry/ProjectData.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
 #include "BehaviorCreator.hpp"
+#include "Editor/EditorCommands.hpp"
 #include <wx/stdpaths.h>
 
 
@@ -40,7 +41,6 @@ namespace Sharpheus {
 		SetSizerAndFit(sizer);
 
 		menuBar = new MenuBar(this);
-		menuBar->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::LevelChanged));
 		SetMenuBar(menuBar);
 
 		wxIcon icon;
@@ -107,24 +107,9 @@ namespace Sharpheus {
 
 	void EditorWindow::StartGame(bool withCurrent)
 	{
-		bool success;
-		if (!ProjectData::GetLevel()->HasPath()) {
-			wxMessageBox("Level needs to be saved before starting the GamePreview", "Warning", wxICON_WARNING | wxOK | wxCENTRE);
-
-			RelativeSaveDialog saveDialog(this, "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
-
-			if (!saveDialog.Show()) {
-				toolBar->CancelPlay();
-				return;
-			}
-
-			success = ProjectData::GetProj()->SaveLevel(wxStr2StdStr(saveDialog.GetPath()));
-		} else {
-			success = ProjectData::GetLevel()->Save();
-		}
+		bool success = EditorCommands::SaveLevel();
 
 		if (!success) {
-			SPHE_ERROR("Cannot save level. Check the log files for more information");
 			toolBar->CancelPlay();
 		}
 
@@ -147,6 +132,7 @@ namespace Sharpheus {
 		
 		Window::Props props = ProjectData::GetWinProps();
 		Camera::SetStaticRect(props.width, props.height);
+		Camera::SetOGHeight(props.height);
 	}
 
 
@@ -159,7 +145,7 @@ namespace Sharpheus {
 
 	void EditorWindow::OnClose(wxCloseEvent& e)
 	{
-		menuBar->SaveLevel(wxCommandEvent());
+		EditorCommands::SaveLevel();
 		e.Skip();
 	}
 

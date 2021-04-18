@@ -26,6 +26,7 @@ namespace Sharpheus {
 		wxTextCtrl* input;
 
 		static wxFont titleFont;
+		static uint32_t border;
 	};
 
 

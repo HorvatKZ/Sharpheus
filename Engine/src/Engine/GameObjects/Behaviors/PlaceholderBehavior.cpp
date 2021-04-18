@@ -14,4 +14,8 @@ namespace Sharpheus {
 		return parent != nullptr;
 	}
 
+	void PlaceholderBehavior::Init()
+	{
+	}
+
 }

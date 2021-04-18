@@ -30,8 +30,18 @@ namespace Sharpheus {
 		wxTextCtrl* opacityInput;
 		wxStaticText* foregroundLabel;
 		wxCheckBox* foregroundCheckBox;
+		wxStaticText* camOutlineLabel;
+		wxCheckBox* camOutlineCheckBox;
+		wxStaticText* camOutlineThicknessLabel;
+		wxTextCtrl* camOutlineThicknessInput;
+		wxStaticText* camOutlineColorLabel;
+		wxColourPickerCtrl* camOutlineColorPicker;
+		wxStaticText* camOutlineOpacityLabel;
+		wxTextCtrl* camOutlineOpacityInput;
 
 		ViewPortGridProps gridProps;
+
+		static uint32_t labelWidth;
 	};
 
 }

@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Project.hpp"
 #include "ProjectControl.hpp"
-#include "FileUnits/FileLoader.hpp"
-#include "FileUnits/FileSaver.hpp"
+#include "FileUtils/FileLoader.hpp"
+#include "FileUtils/FileSaver.hpp"
 #include "ResourceManager/ResourceManager.hpp"
 
 
@@ -177,6 +177,7 @@ namespace Sharpheus {
 		data.winProps = winProps;
 		Renderer::SetBackgroundColor(winProps.background);
 		Camera::SetStaticRect(winProps.width, winProps.height);
+		Camera::SetOGHeight(winProps.height);
 	}
 
 

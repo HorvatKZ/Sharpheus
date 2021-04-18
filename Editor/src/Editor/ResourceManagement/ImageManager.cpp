@@ -51,4 +51,11 @@ namespace Sharpheus {
 
 		return wxImage(fullPath, format);
 	}
+
+
+	bool ImageManager::IsSupportedImgFormat(const wxString& format)
+	{
+		return format == "png" || format == "jpg" || format == "jpeg" || format == "bmp" || format == "gif";
+	}
+
 }

@@ -34,6 +34,8 @@ namespace Sharpheus {
 		wxString className, parentClassName, folder, projectFolder;
 		uint32_t id;
 
+		static uint32_t labelWidth;
+
 		void OnBrowse(wxCommandEvent& e);
 	};
 

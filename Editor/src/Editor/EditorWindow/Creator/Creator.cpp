@@ -7,14 +7,18 @@
 
 namespace Sharpheus {
 
+	uint32_t Creator::border = 2;
+	uint32_t Creator::textCtrlWidth = 172;
+
+
 	Creator::Creator(wxFrame* parent, const wxPoint& pos, const wxSize& size, LevelHierarchy* levelHierarchy)
 		: wxPanel(parent, wxID_ANY, pos, size), levelHierarchy(levelHierarchy)
 	{
 		InitBitmaps();
 
-		newName = new wxTextCtrl(this, wxID_ANY, "Unnamed", wxPoint(2, 2), wxSize(172, 22), wxTE_PROCESS_ENTER);
-		addButton = new wxBitmapButton(this, wxID_ANY, addButtonBitmap, wxPoint(176, 2), wxSize(22, 22));
-		typeSelector = new wxComboCtrl(this, wxID_ANY, "", wxPoint(2, 26), wxSize(196, 22));
+		newName = new wxTextCtrl(this, wxID_ANY, "Unnamed", wxPoint(border, border), wxSize(textCtrlWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
+		addButton = new wxBitmapButton(this, wxID_ANY, addButtonBitmap, wxPoint(2 * border + textCtrlWidth, border), wxSize(UI::unitHeight, UI::unitHeight));
+		typeSelector = new wxComboCtrl(this, wxID_ANY, "", wxPoint(border, 2 * border + UI::unitHeight), wxSize(textCtrlWidth + border + UI::unitHeight, UI::unitHeight));
 		typeSelector->SetEditable(false);
 		popup = new ClassListCtrl();
 		typeSelector->SetPopupControl(popup);

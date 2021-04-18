@@ -13,13 +13,11 @@ ClassInfo DebugBehavior::classInfo("DebugBehavior", "behavior.png", {});
 
 DebugBehavior::DebugBehavior(Behavior* other) : Behavior(other)
 {
-	DoSubscriptions();
 }
 
 
 DebugBehavior::DebugBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name)
 {
-	DoSubscriptions();
 }
 
 
@@ -33,7 +31,7 @@ void DebugBehavior::Tick(float deltaTime)
 }
 
 
-void DebugBehavior::DoSubscriptions()
+void DebugBehavior::Init()
 {
 	Subscribe<KeyPressedEvent>([&](const KeyPressedEvent& e) {
 		if (e.code == KeyCode::E) level->GetCollSys().ShowColliders();

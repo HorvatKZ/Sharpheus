@@ -43,8 +43,7 @@ namespace Sharpheus {
 		float imp = -(1.f + bounce) * (vR * cd.geom.normal);
 		if (cd.mOther > 0.f) {
 			velocity -= (imp * cd.mOther / (mass + cd.mOther)) * cd.geom.normal;
-		}
-		else {
+		} else {
 			velocity -= imp * cd.geom.normal;
 		}
 	}
@@ -75,9 +74,9 @@ namespace Sharpheus {
 
 
 	void PhysicsObject::Tick(float deltaTime) {
-		Transform newTrafo = trafo;
+		Transform newTrafo = worldTrafo;
 		newTrafo.pos += velocity * deltaTime;
-		SetTrafo(newTrafo);
+		SetWorldTrafo(newTrafo);
 		velocity += gravity * deltaTime * Point::Down;
 		velocity *= 1.f - friction * deltaTime;
 	}

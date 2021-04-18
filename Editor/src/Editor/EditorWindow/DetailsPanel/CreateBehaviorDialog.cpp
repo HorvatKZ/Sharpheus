@@ -7,20 +7,26 @@
 
 namespace Sharpheus {
 
+	uint32_t CreateBehaviorDialog::labelWidth = 60;
+
+
 	CreateBehaviorDialog::CreateBehaviorDialog(wxWindow* parent, const wxString& projectFolder)
 		: wxDialog(parent, wxID_ANY, "Create Behavior", wxPoint(0, 0), wxSize(400, 230)), projectFolder(projectFolder)
 	{
 		wxSize parentSize = parent->GetSize();
-		SetPosition(wxPoint((parentSize.x - 400) / 2, (parentSize.y - 300) / 2));
+		wxSize size = GetClientSize();
+		SetPosition(wxPoint((parentSize.x - size.x) / 2, (parentSize.y - size.y) / 2));
 
 		uint32_t realWidth = GetClientSize().x;
-		classNameLabel = new wxStaticText(this, wxID_ANY, "Name:", wxPoint(UI::border, UI::border + 3), wxSize(60, 22));
+		uint32_t y = UI::border;
+		classNameLabel = new wxStaticText(this, wxID_ANY, "Name:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		classNameLabel->SetFont(UI::titleFont);
 
-		classNameInput = new wxTextCtrl(this, wxID_ANY, "", wxPoint(2 * UI::border + 60, UI::border), wxSize(realWidth - 60 - 3 * UI::border, 22));
+		classNameInput = new wxTextCtrl(this, wxID_ANY, "", wxPoint(2 * UI::border + labelWidth, y), wxSize(realWidth - labelWidth - 3 * UI::border, UI::unitHeight));
 		classNameInput->SetValidator(wxTextValidator(wxFILTER_EMPTY | wxFILTER_ALPHA));
 
-		parentClassLabel = new wxStaticText(this, wxID_ANY, "Parent class:", wxPoint(UI::border, 2 * UI::border + 28), wxSize(120, 22));
+		y += UI::border + UI::unitHeight + UI::shift;
+		parentClassLabel = new wxStaticText(this, wxID_ANY, "Parent class:", wxPoint(UI::border, y + UI::shift), wxSize(2 * labelWidth, UI::unitHeight));
 		parentClassLabel->SetFont(UI::titleFont);
 
 		uint32_t maxId = 0;
@@ -33,23 +39,26 @@ namespace Sharpheus {
 				maxId = (*it).first;
 			}
 		}
-		parentClassPicker = new wxComboBox(this, wxID_ANY, parentClasses[0], wxPoint(2 * UI::border + 120, 2 * UI::border + 25), wxSize(realWidth - 120 - 3 * UI::border, 22), parentClasses);
+		parentClassPicker = new wxComboBox(this, wxID_ANY, parentClasses[0], wxPoint(2 * UI::border + 2 * labelWidth, y), wxSize(realWidth - 2 * labelWidth - 3 * UI::border, UI::unitHeight), parentClasses);
 		parentClassPicker->SetEditable(false);
 			
-		idLabel = new wxStaticText(this, wxID_ANY, "ID:", wxPoint(UI::border, 3 * UI::border + 53), wxSize(60, 22));
+		y += UI::border + UI::unitHeight + UI::shift;
+		idLabel = new wxStaticText(this, wxID_ANY, "ID:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		idLabel->SetFont(UI::titleFont);
 
-		idInput = new wxTextCtrl(this, wxID_ANY, wxString::Format("%d", maxId + 1), wxPoint(2 * UI::border + 60, 3 * UI::border + 50), wxSize(60, 22));
+		idInput = new wxTextCtrl(this, wxID_ANY, wxString::Format("%d", maxId + 1), wxPoint(2 * UI::border + labelWidth, y), wxSize(labelWidth, UI::unitHeight));
 		idInput->SetValidator(wxIntegerValidator<uint32_t>());
 
-		baseFolderLabel = new wxStaticText(this, wxID_ANY, "Folder:", wxPoint(UI::border, 4 * UI::border + 78), wxSize(60, 22));
+		y += UI::border + UI::unitHeight + UI::shift;
+		baseFolderLabel = new wxStaticText(this, wxID_ANY, "Folder:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		baseFolderLabel->SetFont(UI::titleFont);
 
+		y += UI::unitHeight + UI::shift;
 		wxSize pathTextSize(realWidth - 3 * UI::border - UI::buttonSize.x, UI::buttonSize.y);
-		pathText = new wxStaticText(this, wxID_ANY, "Source\\CustomBehaviors\\", wxPoint(UI::border, 4 * UI::border + 103), pathTextSize, wxST_ELLIPSIZE_START);
+		pathText = new wxStaticText(this, wxID_ANY, "Source\\CustomBehaviors\\", wxPoint(UI::border, y + UI::shift), pathTextSize, wxST_ELLIPSIZE_START);
 		pathText->SetMaxSize(pathTextSize);
 
-		browseButton = new wxButton(this, wxID_ANY, "Choose...", wxPoint(realWidth - UI::border - UI::buttonSize.x, 4 * UI::border + 100), UI::buttonSize);
+		browseButton = new wxButton(this, wxID_ANY, "Choose...", wxPoint(realWidth - UI::border - UI::buttonSize.x, y), UI::buttonSize);
 		browseButton->Bind(wxEVT_BUTTON, &CreateBehaviorDialog::OnBrowse, this);
 
 		wxSize clientSize = GetClientSize();

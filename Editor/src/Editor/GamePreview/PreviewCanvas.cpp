@@ -4,6 +4,9 @@
 
 namespace Sharpheus {
 
+	Point PreviewCanvas::renderShift(-8, 8);
+
+
 	PreviewCanvas::PreviewCanvas(wxWindow* parent, wxGLContext* other, Project* proj)
 		: wxGLCanvas(parent, wxID_ANY), proj(proj)
 	{
@@ -38,7 +41,7 @@ namespace Sharpheus {
 
 	void PreviewCanvas::Render(wxDC& dc)
 	{
-		Renderer::StartFrame();
+		Renderer::StartFrame(renderShift);
 
 		proj->Render();
 

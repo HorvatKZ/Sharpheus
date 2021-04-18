@@ -5,11 +5,13 @@ namespace Sharpheus {
 	class Exporter
 	{
 	public:
-		Exporter();
+		Exporter(bool includeLogging);
 		virtual ~Exporter();
 
-	private:
 		void Export();
+
+	private:
+		bool includeLogging;
 
 		bool CopyFolderContent(const wxString& folder);
 		bool CopyFolderContent(class wxDir& from, const wxString& toUnder);

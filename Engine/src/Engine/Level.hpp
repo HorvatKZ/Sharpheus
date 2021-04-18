@@ -44,6 +44,8 @@ namespace Sharpheus {
 		void Deregister(class GameObject* obj);
 		void SetRegistry(class GameObject* obj);
 
+		inline void RequestInit(class Behavior* behavior) { behaviorsToInit.push(behavior); }
+
 		inline CollisionSystem& GetCollSys() { return collSys; }
 		inline class GameObject* GetRoot() { return root; }
 
@@ -62,11 +64,14 @@ namespace Sharpheus {
 		inline const std::string& GetFullPath() { return fullPath; }
 		inline const std::string& GetProjectPath() { return projectPath; }
 		inline void SetProjectPath(const std::string& projectPath) { this->projectPath = projectPath; }
+
 		bool Save();
 		bool Save(const std::string& base, const std::string& path);
 		bool Load(const std::string& base, const std::string& path);
 		bool LoadLevelData(const std::string& fullpath);
 
+		bool SaveAsScene(GameObject* obj, const std::string& path);
+		bool AttachSceneTo(GameObject* obj, const std::string& path);
 
 	private:
 		std::string name;
@@ -75,12 +80,14 @@ namespace Sharpheus {
 		CollisionSystem collSys;
 		std::unordered_map<std::string, class GameObject*> gameObjects;
 		std::queue<class GameObject*> objsToDelete;
+		std::queue<class Behavior*> behaviorsToInit;
 
 		bool SaveLevelData(FileSaver& file);
 		bool LoadLevelData(FileLoader& file);
 		bool LoadRoot(FileLoader& file);
 		bool LoadGameObject(FileLoader& file, GameObject* parent);
 
+		void InitBehaviors();
 		void DeleteObjects();
 
 		void RegisterWithUniqueName(class GameObject* newObject);

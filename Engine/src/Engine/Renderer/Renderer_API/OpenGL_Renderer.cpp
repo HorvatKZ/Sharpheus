@@ -20,14 +20,13 @@ namespace Sharpheus {
 
 	}
 
-	void OpenGL_Renderer::StartFrame()
+	void OpenGL_Renderer::StartFrame(const Point& shift)
 	{
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 
 		glClearColor(bgColor.GetRed(), bgColor.GetGreen(), bgColor.GetBlue(), 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
@@ -38,8 +37,9 @@ namespace Sharpheus {
 		glLoadIdentity();
 
 		Transform camTrafo = camera->GetWorldTrafo();
+		glTranslatef(2 *shift.x / camera->GetOGWidth(), -2 * shift.y / camera->GetOGHeight(), 0);
+		glScalef(2 / (camTrafo.scale.x * camera->GetOGWidth()), -2 / (camTrafo.scale.y * camera->GetOGHeight()), 1);
 		glRotatef(camTrafo.rot, 0, 0, 1);
-		glScalef(2 / (camTrafo.scale.x * camera->GetWidth()), -2 / (camTrafo.scale.y * camera->GetHeight()), 1);
 		glTranslatef(-camTrafo.pos.x, -camTrafo.pos.y, 0);
 	}
 
@@ -70,6 +70,21 @@ namespace Sharpheus {
 			Point(place + halfThickness, begin),
 			Point(place + halfThickness, end),
 			Point(place - halfThickness, end)
+		};
+		DrawMonocromeQuad(coords, color);
+	}
+
+
+	void OpenGL_Renderer::DrawLine(const Point& begin, const Point& end, float thickness, const Color& color)
+	{
+		float halfThickness = thickness / 2;
+		Point unit = (begin - end).Normalize();
+		Point shift(unit.y * halfThickness, -unit.x * halfThickness);
+		Point coords[] = {
+			begin + shift,
+			end + shift,
+			end - shift,
+			begin - shift
 		};
 		DrawMonocromeQuad(coords, color);
 	}

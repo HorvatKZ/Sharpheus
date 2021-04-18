@@ -6,28 +6,24 @@
 
 namespace Sharpheus {
 
-	FileSaver::FileSaver(const std::string& path) : file(path.c_str(), std::ios::out | std::ios::binary)
+	FileSaver::FileSaver(const std::string& path)
 	{
-		SPH_ASSERT(file, "Cannot create/open file \"{0}\" to save", path);
+		file = fopen(path.c_str(), "wb");
+		SPH_ASSERT(file != NULL, "Cannot create/open file \"{0}\" to save", path);
 	}
 
 
 	FileSaver::~FileSaver()
 	{
-		file.close();
-	}
-
-
-	bool FileSaver::GetStatus()
-	{
-		return !file.fail();
+		fclose(file);
 	}
 
 
 	bool FileSaver::Write(uint8_t data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -35,8 +31,9 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(uint32_t data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -44,8 +41,9 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(int32_t data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -53,8 +51,9 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(size_t data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if(file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -62,9 +61,10 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(bool data)
 	{
-		if (file) {
+		if (file != NULL) {
 			char _data = data ? 1 : 0;
-			file.write((const char*)&_data, sizeof(_data));
+			size_t result = fwrite((const char*)&_data, sizeof(_data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -72,8 +72,9 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(float data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -81,10 +82,14 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(const std::string& data)
 	{
-		if (file) {
+		if (file != NULL) {
 			uint32_t len = data.length();
-			file.write((const char*)&len, sizeof(len));
-			file.write((const char*)data.c_str(), sizeof(char) * (len + 1));
+			size_t result = fwrite((const char*)&len, sizeof(len), 1, file);
+			status &= result == 1;
+			if (status) {
+				result = fwrite((const char*)data.c_str(), sizeof(char) * (len + 1), 1, file);
+				status &= result == 1;
+			}
 		}
 		return GetStatus();
 	}
@@ -92,8 +97,9 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(const Point& data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -101,8 +107,9 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(const Color& data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -110,8 +117,9 @@ namespace Sharpheus {
 
 	bool FileSaver::Write(const Transform& data)
 	{
-		if (file) {
-			file.write((const char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -157,9 +165,10 @@ namespace Sharpheus {
 
 	bool FileSaver::WriteEnd()
 	{
-		if (file) {
+		if (file != NULL) {
 			char data = '\n';
-			file.write((const char*)&data, sizeof(data));
+			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}

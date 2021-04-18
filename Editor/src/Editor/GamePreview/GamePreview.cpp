@@ -1,9 +1,13 @@
 #include "editor_pch.h"
 #include "GamePreview.hpp"
 #include "Engine/ProjectControl.hpp"
+#include "Editor/Registry/ProjectData.hpp"
 
 
 namespace Sharpheus {
+
+	wxPoint GamePreview::shift(8, 8 + wxSystemSettings::GetMetric(wxSYS_CAPTION_Y));
+
 
 	GamePreview::GamePreview(wxWindow* parent, const std::string& projectPath, wxGLContext* glContext, const Window::Props& winProps)
 		: wxFrame(parent, wxID_ANY, winProps.title, wxPoint(0, 0), wxSize(winProps.width, winProps.height))
@@ -21,6 +25,10 @@ namespace Sharpheus {
 		if (winProps.fullscreen) {
 			ShowFullScreen(true);
 		}
+
+		wxIcon icon;
+		icon.CopyFromBitmap(wxBitmap(ProjectData::GetPath() + "Assets\\Icon\\pngicon.png", wxBITMAP_TYPE_PNG));
+		SetIcon(icon);
 
 		Bind(wxEVT_IDLE, &GamePreview::OnIdle, this);
 		Bind(wxEVT_SIZE, &GamePreview::OnResize, this);
@@ -109,110 +117,70 @@ namespace Sharpheus {
 
 	void GamePreview::OnLeftDown(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MousePressedEvent(screenPos, gamePos, MouseButton::LEFT));
+		OnMousePressed(MouseButton::LEFT);
 		e.Skip();
 	}
 
 
 	void GamePreview::OnLeftUp(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MouseReleasedEvent(screenPos, gamePos, MouseButton::LEFT));
+		OnMouseReleased(MouseButton::LEFT);
 		e.Skip();
 	}
 
 
 	void GamePreview::OnRightDown(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MousePressedEvent(screenPos, gamePos, MouseButton::RIGHT));
+		OnMousePressed(MouseButton::RIGHT);
 		e.Skip();
 	}
 
 
 	void GamePreview::OnRightUp(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MouseReleasedEvent(screenPos, gamePos, MouseButton::RIGHT));
+		OnMouseReleased(MouseButton::RIGHT);
 		e.Skip();
 	}
 
 
 	void GamePreview::OnMiddleDown(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MousePressedEvent(screenPos, gamePos, MouseButton::MIDDLE));
+		OnMousePressed(MouseButton::MIDDLE);
 		e.Skip();
 	}
 
 
 	void GamePreview::OnMiddleUp(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MouseReleasedEvent(screenPos, gamePos, MouseButton::MIDDLE));
+		OnMouseReleased(MouseButton::MIDDLE);
 		e.Skip();
 	}
 
 
 	void GamePreview::On4Down(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MousePressedEvent(screenPos, gamePos, (MouseButton)4));
+		OnMousePressed(MouseButton::BUTTON_4);
 		e.Skip();
 	}
 
 
 	void GamePreview::On4Up(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MouseReleasedEvent(screenPos, gamePos, (MouseButton)4));
+		OnMouseReleased(MouseButton::BUTTON_4);
 		e.Skip();
 	}
 
 
 	void GamePreview::On5Down(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MousePressedEvent(screenPos, gamePos, (MouseButton)5));
+		OnMousePressed(MouseButton::BUTTON_5);
 		e.Skip();
 	}
 
 
 	void GamePreview::On5Up(wxMouseEvent& e)
 	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		Camera* camera = Renderer::GetCamera();
-		Point screenPos(mousePos.x, mousePos.y);
-		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MouseReleasedEvent(screenPos, gamePos, (MouseButton)5));
+		OnMouseReleased(MouseButton::BUTTON_5);
 		e.Skip();
 	}
 
@@ -234,8 +202,28 @@ namespace Sharpheus {
 		Camera* camera = Renderer::GetCamera();
 		Point screenPos(mousePos.x, mousePos.y);
 		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-		EventHandler::Handle(MouseScrolledEvent(screenPos, gamePos, Point(0, e.GetWheelRotation())));
+		EventHandler::Handle(MouseScrolledEvent(screenPos, gamePos, e.GetWheelRotation() > 0));
 		e.Skip();
+	}
+
+
+	void GamePreview::OnMousePressed(MouseButton button)
+	{
+		wxPoint mousePos = wxGetMousePosition() - GetScreenPosition() - shift;
+		Camera* camera = Renderer::GetCamera();
+		Point screenPos(mousePos.x, mousePos.y);
+		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
+		EventHandler::Handle(MousePressedEvent(screenPos, gamePos, button));
+	}
+
+
+	void GamePreview::OnMouseReleased(MouseButton button)
+	{
+		wxPoint mousePos = wxGetMousePosition() - GetScreenPosition() - shift;
+		Camera* camera = Renderer::GetCamera();
+		Point screenPos(mousePos.x, mousePos.y);
+		Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
+		EventHandler::Handle(MouseReleasedEvent(screenPos, gamePos, button));
 	}
 
 }

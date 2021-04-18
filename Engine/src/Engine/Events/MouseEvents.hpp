@@ -82,21 +82,20 @@ namespace Sharpheus {
 	class SPH_EXPORT MouseScrolledEvent : public Event
 	{
 	public:
-		MouseScrolledEvent(const Point& screenPos, const Point& gamePos, const Point& offset)
-			: screenPos(screenPos), gamePos(gamePos), offset(offset) {}
+		MouseScrolledEvent(const Point& screenPos, const Point& gamePos, bool isUp)
+			: screenPos(screenPos), gamePos(gamePos), isUp(isUp) {}
 		virtual ~MouseScrolledEvent() = default;
 
 		inline std::string ToStr() const override {
 			return "MouseScrolledEvent ScreenPos: (" + std::to_string(screenPos.x) + ", " + std::to_string(screenPos.y) +
-				"), GamePos: (" + std::to_string(gamePos.x) + ", " + std::to_string(gamePos.y) + "), Offset: (" +
-				std::to_string(offset.x) + ", " + std::to_string(offset.y) + ")";
+				"), GamePos: (" + std::to_string(gamePos.x) + ", " + std::to_string(gamePos.y) + "), Dierction: " + std::to_string(isUp);
 		}
 
 		SPH_DECL_EVENT(MouseScrolled);
 
 		Point screenPos;
 		Point gamePos;
-		Point offset;
+		bool isUp;
 	};
 
 }

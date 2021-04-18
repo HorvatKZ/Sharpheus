@@ -29,6 +29,8 @@ namespace Sharpheus {
 		wxStaticText* title;
 		Signal signal;
 
+		static uint32_t previewHeight;
+
 		static wxColour redish;
 		static wxColour greenish;
 		static wxColour blueish;

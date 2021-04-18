@@ -22,6 +22,8 @@ namespace Sharpheus {
 		wxLongLong lastTick;
 		std::unordered_set<int> pressedKeys;
 
+		static wxPoint shift;
+
 		void OnResize(wxSizeEvent& e);
 		void OnClose(wxCloseEvent& e);
 		void OnKeyDown(wxKeyEvent& e);
@@ -38,6 +40,9 @@ namespace Sharpheus {
 		void On5Up(wxMouseEvent& e);
 		void OnMove(wxMouseEvent& e);
 		void OnScroll(wxMouseEvent& e);
+
+		void OnMousePressed(MouseButton button);
+		void OnMouseReleased(MouseButton button);
 	};
 
 }

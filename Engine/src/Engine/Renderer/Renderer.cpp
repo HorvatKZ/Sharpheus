@@ -20,9 +20,9 @@ namespace Sharpheus {
 	}
 
 
-	void Renderer::StartFrame()
+	void Renderer::StartFrame(const Point& shift)
 	{
-		renderer->StartFrame();
+		renderer->StartFrame(shift);
 	}
 
 
@@ -41,6 +41,12 @@ namespace Sharpheus {
 	void Renderer::DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color)
 	{
 		renderer->DrawVerticalLine(begin, end, place, thickness, color);
+	}
+
+
+	void Renderer::DrawLine(const Point& begin, const Point& end, float thickness, const Color& color)
+	{
+		renderer->DrawLine(begin, end, thickness, color);
 	}
 
 

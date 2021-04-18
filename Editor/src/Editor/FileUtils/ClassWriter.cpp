@@ -47,6 +47,8 @@ namespace Sharpheus {
 		cw.WriteDestructorDecl();
 		cw.WriteFunctionDecl("void", "CopyFrom", "Sharpheus::GameObject* other", "virtual", true);
 		cw.WriteEmptyLine();
+		cw.WriteFunctionDecl("void", "Init", "", "virtual", true);
+		cw.WriteEmptyLine();
 		cw.WriteFunctionDecl("bool", "Load", "Sharpheus::FileLoader& fl", "virtual", true);
 		cw.WriteEmptyLine();
 		cw.WriteLine(1, "SPH_DECL_BEHAVIOR(" + className + ", " + wxString::Format("%d", subType) + ");");
@@ -56,7 +58,6 @@ namespace Sharpheus {
 		cw.WriteFunctionDecl("bool", "Save", "Sharpheus::FileSaver& fs", "virtual", true);
 		cw.WriteEmptyLine();
 		cw.WriteFunctionDecl("void", "Tick", "float deltaTime", "virtual", true);
-		cw.WriteFunctionDecl("void", "Init", "", "virtual");
 		cw.EndClass();
 		cw.WriteEmptyLine();
 	}
@@ -78,12 +79,10 @@ namespace Sharpheus {
 		cw.WriteEmptyLines(2);
 
 		cw.StartConstructorDefWithParent("Sharpheus::Behavior* other", "other");
-		cw.WriteLine(1, "Init();");
 		cw.EndFunctionDef();
 		cw.WriteEmptyLines(2);
 
 		cw.StartConstructorDefWithParent("Sharpheus::GameObject* parent, const std::string& name", "parent, name");
-		cw.WriteLine(1, "Init();");
 		cw.EndFunctionDef();
 		cw.WriteEmptyLines(2);
 

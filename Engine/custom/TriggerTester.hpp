@@ -15,7 +15,6 @@ public:
 
 protected:
 	void Tick(float deltaTime) override;
-	void DoSubscriptions();
 
 	void OnTriggerEnter(const Sharpheus::OnEnterEvent& e);
 	void OnTriggerExit(const Sharpheus::OnExitEvent& e);

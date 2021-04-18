@@ -28,6 +28,14 @@ namespace Sharpheus {
 		gridProps.color.g = config.Read8();
 		gridProps.color.b = config.Read8();
 		gridProps.color.a = config.Read8();
+		c = config.GetChar();
+		gridProps.isCamOutlineVisible = (c == 't');
+		config.GetChar();
+		gridProps.camOutlineThickness = config.ReadDouble();
+		gridProps.camOutlineColor.r = config.Read8();
+		gridProps.camOutlineColor.g = config.Read8();
+		gridProps.camOutlineColor.b = config.Read8();
+		gridProps.camOutlineColor.a = config.Read8();
 	}
 
 
@@ -38,6 +46,8 @@ namespace Sharpheus {
 		config << path << "\n";
 		config << gridProps.size << " " << gridProps.thickness << (gridProps.isInForeground ? " t " : " f ") <<
 			gridProps.color.r << " " << gridProps.color.g << " " << gridProps.color.b << " " << gridProps.color.a << "\n";
+		config << (gridProps.isCamOutlineVisible ? "t " : "f ") << gridProps.camOutlineThickness << " " <<
+			gridProps.camOutlineColor.r << " " << gridProps.camOutlineColor.g << " " << gridProps.camOutlineColor.b << " " << gridProps.camOutlineColor.a << "\n";
 	}
 
 

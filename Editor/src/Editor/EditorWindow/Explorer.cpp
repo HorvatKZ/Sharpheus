@@ -1,6 +1,7 @@
 #include "editor_pch.h"
 #include "Explorer.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
+#include "Editor/EditorCommands.hpp"
 #include <wx/dir.h>
 
 
@@ -13,19 +14,21 @@ namespace Sharpheus {
 		: wxScrolledWindow(parent, wxID_ANY, pos, size),
 		backFolderImg	(ImageManager::GetImage("backfolder.png", ImageManager::PathType::EXPLORER)),
 		folderImg		(ImageManager::GetImage("folder.png", ImageManager::PathType::EXPLORER)),
-		cImg			(ImageManager::GetImage("c.png", ImageManager::PathType::EXPLORER)),
-		hImg			(ImageManager::GetImage("h.png", ImageManager::PathType::EXPLORER)),
-		cppImg			(ImageManager::GetImage("cpp.png", ImageManager::PathType::EXPLORER)),
-		hppImg			(ImageManager::GetImage("hpp.png", ImageManager::PathType::EXPLORER)),
-		txtImg			(ImageManager::GetImage("txt.png", ImageManager::PathType::EXPLORER)),
-		logImg			(ImageManager::GetImage("log.png", ImageManager::PathType::EXPLORER)),
-		imgImg			(ImageManager::GetImage("img.png", ImageManager::PathType::EXPLORER)),
-		animImg			(ImageManager::GetImage("anim.png", ImageManager::PathType::EXPLORER)),
-		lvlImg			(ImageManager::GetImage("lvl.png", ImageManager::PathType::EXPLORER)),
-		projImg			(ImageManager::GetImage("proj.png", ImageManager::PathType::EXPLORER)),
 		unknownImg		(ImageManager::GetImage("unknown.png", ImageManager::PathType::EXPLORER))
 	{
 		scrollHeight = GetClientSize().y;
+
+		imgs["c"] = ImageManager::GetImage("c.png", ImageManager::PathType::EXPLORER);
+		imgs["h"] = ImageManager::GetImage("h.png", ImageManager::PathType::EXPLORER);
+		imgs["cpp"] = ImageManager::GetImage("cpp.png", ImageManager::PathType::EXPLORER);
+		imgs["hpp"] = ImageManager::GetImage("hpp.png", ImageManager::PathType::EXPLORER);
+		imgs["txt"] = ImageManager::GetImage("txt.png", ImageManager::PathType::EXPLORER);
+		imgs["log"] = ImageManager::GetImage("log.png", ImageManager::PathType::EXPLORER);
+		imgs["img"] = ImageManager::GetImage("img.png", ImageManager::PathType::EXPLORER);
+		imgs["anim"] = ImageManager::GetImage("anim.png", ImageManager::PathType::EXPLORER);
+		imgs["scene"] = ImageManager::GetImage("scene.png", ImageManager::PathType::EXPLORER);
+		imgs["lvl"] = ImageManager::GetImage("lvl.png", ImageManager::PathType::EXPLORER);
+		imgs["proj"] = ImageManager::GetImage("proj.png", ImageManager::PathType::EXPLORER);
 
 		Bind(wxEVT_PAINT, &Explorer::OnPaintEvent, this);
 		Bind(wxEVT_LEFT_DCLICK, &Explorer::OnDoubleClick, this);
@@ -94,10 +97,57 @@ namespace Sharpheus {
 		if (wxFileName::DirExists(folderPath + name)) {
 			folder.AppendDir(name);
 			Refresh();
+			return;
 		}
-		else {
-			wxMessageBox("Cannot open " + name, "Error", wxICON_ERROR | wxOK | wxCENTRE);
+
+		wxString ext = name.Mid(name.find_last_of('.') + 1);
+		if (ext == "sharpheus") {
+			wxString withoutExt = name.Left(name.Length() - ext.Length() - 1);
+			wxString subExt = withoutExt.Mid(withoutExt.find_last_of('.') + 1);
+			if (subExt == "proj") {
+				wxMessageBox(name + " is the currently open project file", "Info");
+				return;
+			}
+			else if (subExt == "lvl") {
+				int response = wxMessageBox("Are you sure you want to open level: " + name, "Info", wxICON_INFORMATION | wxYES | wxNO | wxCENTRE);
+				if (response == wxNO) {
+					return;
+				}
+
+				wxString relativePath = folderPath.Mid(basePath.Length()) + name;
+				if (relativePath.Length() < 7 || relativePath.Left(7) != "Levels\\") {
+					wxMessageBox("Level: " + name + " is not under the Levels folder", "Error", wxICON_ERROR | wxOK | wxCENTRE);
+					return;
+				}
+
+				wxString levelPath = relativePath.Mid(7);
+				EditorCommands::LoadLevel(levelPath);
+				return;
+			}
+			else if (subExt == "scene") {
+				wxString relativePath = folderPath.Mid(basePath.Length()) + name;
+				if (relativePath.Length() < 7 || relativePath.Left(7) != "Scenes\\") {
+					wxMessageBox("Scene: " + name + " is not under the Scenes folder", "Error", wxICON_ERROR | wxOK | wxCENTRE);
+					return;
+				}
+
+				wxString scenePath = relativePath.Mid(7);
+				EditorCommands::AttachSceneToCurrent(scenePath);
+				return;
+			}
+			else if (subExt == "anim") {
+				wxString relativePath = folderPath.Mid(basePath.Length()) + name;
+				if (relativePath.Length() < 7 || relativePath.Left(7) != "Assets\\") {
+					wxMessageBox("Animation: " + name + " is not under the Assets folder", "Error", wxICON_ERROR | wxOK | wxCENTRE);
+					return;
+				}
+
+				wxString animPath = relativePath.Mid(7);
+				EditorCommands::EditAnimation(animPath);
+				return;
+			}
 		}
+		wxMessageBox("Cannot open " + name + " from the Explorer", "Error", wxICON_ERROR | wxOK | wxCENTRE);
 	}
 
 
@@ -136,47 +186,22 @@ namespace Sharpheus {
 			}
 			else {
 				wxString ext = name.Mid(name.find_last_of('.') + 1);
-				if (ext == "sharpheus") {
-					wxString withoutExt = name.Left(name.Length() - ext.Length() - 1);
-					wxString subExt = withoutExt.Mid(withoutExt.find_last_of('.') + 1);
-					displayName = withoutExt.Left(withoutExt.Length() - subExt.Length() - 1);
-					
-					if (subExt == "lvl") {
-						DrawIcon(dc, lvlImg, col, row);
-					}
-					else if (subExt == "anim") {
-						DrawIcon(dc, animImg, col, row);
-					}
-					else if (subExt == "proj") {
-						DrawIcon(dc, projImg, col, row);
-					}
-					else {
-						DrawIcon(dc, unknownImg, col, row);
-					}
-				}
-				else if (ext == "png" || ext == "jpg" || ext == "jpeg" || ext == "bmp" || ext == "gif") {
-					DrawIcon(dc, imgImg, col, row);
-				}
-				else if (ext == "cpp") {
-					DrawIcon(dc, cppImg, col, row);
-				}
-				else if (ext == "hpp") {
-					DrawIcon(dc, hppImg, col, row);
-				}
-				else if (ext == "h") {
-					DrawIcon(dc, hImg, col, row);
-				}
-				else if (ext == "c") {
-					DrawIcon(dc, cImg, col, row);
-				}
-				else if (ext == "txt") {
-					DrawIcon(dc, txtImg, col, row);
-				}
-				else if (ext == "log") {
-					DrawIcon(dc, logImg, col, row);
+				if (ImageManager::IsSupportedImgFormat(ext)) {
+					DrawIcon(dc, imgs["img"], col, row);
 				}
 				else {
-					DrawIcon(dc, unknownImg, col, row);
+					if (ext == "sharpheus") {
+						wxString withoutExt = name.Left(name.Length() - ext.Length() - 1);
+						ext = withoutExt.Mid(withoutExt.find_last_of('.') + 1);
+						displayName = withoutExt.Left(withoutExt.Length() - ext.Length() - 1);
+					}
+
+					auto it = imgs.find(ext);
+					if (it != imgs.end()) {
+						DrawIcon(dc, (*it).second, col, row);
+					} else {
+						DrawIcon(dc, unknownImg, col, row);
+					}
 				}
 			}
 
@@ -185,15 +210,15 @@ namespace Sharpheus {
 			++i;
 		}
 
-		uint32_t heightNeeded = i / perRow * (120 + UI::border);
+		uint32_t heightNeeded = ((i - 1) / perRow + 1) * (120 + UI::border);
 		uint32_t realHeight = GetClientSize().y;
 		if (heightNeeded < realHeight && scrollHeight != realHeight) {
 			scrollHeight = realHeight;
-			SetScrollbars(1, 1, GetClientSize().x, scrollHeight);
+			SetScrollbars(0, UI::scrollSpeed, GetClientSize().x, scrollHeight / UI::scrollSpeed);
 		}
 		else if (heightNeeded > realHeight && heightNeeded != scrollHeight) {
 			scrollHeight = heightNeeded;
-			SetScrollbars(1, 1, GetClientSize().x, scrollHeight);
+			SetScrollbars(0, UI::scrollSpeed, GetClientSize().x, scrollHeight / UI::scrollSpeed);
 		}
 	}
 
@@ -207,7 +232,7 @@ namespace Sharpheus {
 	void Explorer::DrawText(wxClientDC& dc, const wxString& text, uint32_t i, uint32_t j)
 	{
 		uint32_t extent = GetTextExtent(text).x;
-		dc.DrawLabel(text, wxRect(i * (oneWidth + UI::border) + UI::border + (oneWidth - extent) / 2, j * (120 + UI::border) + UI::border + 80, extent, 22));
+		dc.DrawLabel(text, wxRect(i * (oneWidth + UI::border) + UI::border + (oneWidth - extent) / 2, j * (120 + UI::border) + UI::border + 80, extent, UI::unitHeight));
 	}
 
 }

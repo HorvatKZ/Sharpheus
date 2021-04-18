@@ -16,6 +16,8 @@ namespace Sharpheus {
 
 	private:
 		StarterWindow* win = nullptr;
+
+		bool CheckCommonFiles();
 	};
 
 }

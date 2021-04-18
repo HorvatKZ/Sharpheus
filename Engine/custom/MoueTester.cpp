@@ -13,14 +13,12 @@ ClassInfo MoueTester::classInfo("MoueTester", "behavior.png", {
 MoueTester::MoueTester(Sharpheus::Behavior* other)
 	: Sharpheus::Behavior(other)
 {
-	Init();
 }
 
 
 MoueTester::MoueTester(Sharpheus::GameObject* parent, const std::string& name)
 	: Sharpheus::Behavior(parent, name)
 {
-	Init();
 }
 
 

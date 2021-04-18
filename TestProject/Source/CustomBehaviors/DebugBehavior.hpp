@@ -14,6 +14,5 @@ public:
 
 protected:
 	void Tick(float deltaTime) override;
-	void DoSubscriptions();
 };
 

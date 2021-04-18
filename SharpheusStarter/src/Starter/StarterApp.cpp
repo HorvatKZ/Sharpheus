@@ -23,6 +23,11 @@ namespace Sharpheus {
 	{
 		wxInitAllImageHandlers();
 
+		if (!ProcessControl::CheckCommonFiles()) {
+			wxMessageBox("Could not locate and/or create the necessary common files", "Error", wxICON_ERROR | wxOK | wxCENTRE);
+			return false;
+		}
+
 		if (argc == 2) {
 			ProcessControl::OpenFile(argv[1]);
 		}
@@ -32,4 +37,5 @@ namespace Sharpheus {
 
 		return true;
 	}
+
 }

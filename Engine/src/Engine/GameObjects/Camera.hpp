@@ -12,7 +12,6 @@ namespace Sharpheus {
 		virtual ~Camera() = default;
 		virtual void CopyFrom(GameObject* other) override;
 
-		virtual Point Project(const Point& pos);
 		virtual Point ScreenPosToGamePos(const Point& pos);
 		virtual Point GamePosToScreenPos(const Point& pos);
 
@@ -26,13 +25,15 @@ namespace Sharpheus {
 		void SetCurrent(bool set = true);
 		inline bool IsCurrent();
 
-		inline float GetWidth() { return customWidth == 0.f ? width : customWidth; }
-		inline float GetHeight() { return customHeight == 0.f ? height : customHeight; }
-		inline void SetCustomRect(float width, float height) { customWidth = width; customHeight = height; SetSizer(width, height); }
+		virtual inline float GetWidth() { return width; }
+		virtual inline float GetHeight() { return height; }
+		virtual inline float GetOGHeight() { return ogHeight; }
+		virtual inline float GetOGWidth() { return ogHeight * width / height; }
 
 		static inline float GetStaticWidth() { return width; }
 		static inline float GetStaticHeight() { return height; }
 		static inline void SetStaticRect(float _width, float _height) { width = _width; height = _height; }
+		static inline void SetOGHeight(float _height) { ogHeight = _height; }
 
 		virtual float GetXMin();
 		virtual float GetXMax();
@@ -46,10 +47,9 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(Camera)
 
 	protected:
-		float customWidth = 0.f;
-		float customHeight = 0.f;
 		static float width;
 		static float height;
+		static float ogHeight;
 		bool isCurrent = false;
 
 		virtual bool Save(FileSaver& fs) override;

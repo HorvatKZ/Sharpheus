@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "OpenGL_Window.hpp"
+#include "Engine/FileUtils/OSPaths.hpp"
 #include "stb_image.h"
 
 #define SPH_PROPAGATE(e) \
@@ -35,10 +36,11 @@ namespace Sharpheus {
 		Renderer::Init();
 		Renderer::SetBackgroundColor(props.background);
 		Camera::SetStaticRect(props.width, props.height);
+		Camera::SetOGHeight(props.height);
 
 		GLFWimage icons[1];
 		int channels;
-		icons[0].pixels = stbi_load("Assets/Icons/pngicon.png", &icons[0].width, &icons[0].height, &channels, 0);
+		icons[0].pixels = stbi_load((OSPaths::Get(OSPaths::Folder::EXEC_FOLDER) + "\\Assets\\Icon\\pngicon.png").c_str(), &icons[0].width, &icons[0].height, &channels, 0);
 		glfwSetWindowIcon(win, 1, icons);
 		stbi_image_free(icons[0].pixels);
 	}
@@ -210,8 +212,7 @@ namespace Sharpheus {
 			Camera* camera = Renderer::GetCamera();
 			Point screenPos(x, y);
 			Point gamePos = (camera != nullptr) ? camera->ScreenPosToGamePos(screenPos) : Point();
-			Point offset(xoffset, yoffset);
-			MouseScrolledEvent e(screenPos, gamePos, offset);
+			MouseScrolledEvent e(screenPos, gamePos, yoffset > 0.f);
 			SPH_PROPAGATE(e);
 		});
 	}

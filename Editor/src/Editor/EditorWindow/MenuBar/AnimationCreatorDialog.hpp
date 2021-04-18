@@ -7,7 +7,7 @@ namespace Sharpheus {
 	class AnimationCreatorDialog : public wxDialog
 	{
 	public:
-		AnimationCreatorDialog(wxWindow* parent);
+		AnimationCreatorDialog(wxWindow* parent, const wxString& defaultAnimPath = "");
 		virtual ~AnimationCreatorDialog();
 
 		inline const wxString& GetName() { return name; }
@@ -54,6 +54,13 @@ namespace Sharpheus {
 		wxTimer timer;
 		uint32_t currFrameInd = 0;
 
+		static uint32_t labelWidth;
+		static uint32_t inputWidth;
+		static uint32_t nameLabelWidth;
+		static uint32_t nameInputWidth;
+
+		void BuildDialog();
+
 		void OnBrowse(wxCommandEvent& e);
 		void OnBrowseImg(wxCommandEvent& e);
 		void OnSlicingWHChanged(wxCommandEvent& e);
@@ -62,6 +69,7 @@ namespace Sharpheus {
 		void OnTimingChanged(wxCommandEvent& e);
 		void OnTimerTick(wxTimerEvent& e);
 
+		void FillWithAnim(const wxString& animPath);
 		void StartAnimPreview();
 		void RefreshAnimPreview();
 		void SetAtlas(const wxString& path);

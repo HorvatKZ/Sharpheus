@@ -1,9 +1,10 @@
 #pragma once
 
-#include "LocalListenerBehavior.hpp"
+#include "Behavior.hpp"
+#include "LocalListeners/ColliderListener.hpp"
 
 
-class SPH_EXPORT TriggerTester : public Sharpheus::LocalListenerBehavior
+class SPH_EXPORT TriggerTester : public Sharpheus::Behavior, public Sharpheus::ColliderListener
 {
 public:
 	TriggerTester(Sharpheus::Behavior* other);
@@ -14,7 +15,6 @@ public:
 
 protected:
 	void Tick(float deltaTime) override;
-	void DoSubscriptions();
 
 	void OnTriggerEnter(const Sharpheus::OnEnterEvent& e);
 	void OnTriggerExit(const Sharpheus::OnExitEvent& e);

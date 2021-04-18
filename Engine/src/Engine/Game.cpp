@@ -10,7 +10,7 @@
 
 #ifdef SPH_EXPORTED
 	#include "ExportedProjectData.hpp"
-	#include "FileUnits/OSPaths.hpp"
+	#include "FileUtils/OSPaths.hpp"
 #endif
 
 

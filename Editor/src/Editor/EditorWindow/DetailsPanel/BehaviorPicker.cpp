@@ -13,11 +13,11 @@ namespace Sharpheus {
 	BehaviorPicker::BehaviorPicker(wxWindow* parent, const std::string& title, std::function<void(uint32_t)>& mainSignal, Signal signal, uint32_t& y)
 		: Presenter(parent, title, signal, y), mainSignal(mainSignal), y(y)
 	{
-		y += 22;
+		y += UI::unitHeight;
 		wxSize extent = this->title->GetTextExtent(title);
 		uint32_t parentWidth = parent->GetSize().x;
-		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(parentWidth - 3 * UI::border - 22, 22));
-		createNewTypeButton = new wxButton(parent, wxID_ANY, "+", wxPoint(parentWidth - 22 - UI::border, y), wxSize(22, 22));
+		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(parentWidth - 3 * UI::border - UI::unitHeight, UI::unitHeight));
+		createNewTypeButton = new wxButton(parent, wxID_ANY, "+", wxPoint(parentWidth - UI::unitHeight - UI::border, y), wxSize(UI::unitHeight, UI::unitHeight));
 		createNewTypeButton->Bind(wxEVT_BUTTON, &BehaviorPicker::CreateBehavior, this);
 		y += 30;
 	}
@@ -41,7 +41,7 @@ namespace Sharpheus {
 				arr.Add(wxString::Format("%d - %s", (*it).first, (*it).second));
 			}
 		}
-		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y + 22), wxSize(parentWidth - 3 * UI::border - 22, 22), arr);
+		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y + UI::unitHeight), wxSize(parentWidth - 3 * UI::border - UI::unitHeight, UI::unitHeight), arr);
 		typeSelector->SetEditable(false);
 		typeSelector->Bind(wxEVT_COMBOBOX, &BehaviorPicker::HandleChange, this);
 	}

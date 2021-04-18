@@ -1,9 +1,11 @@
 #include "editor_pch.h"
 #include "MenuBar.hpp"
+#include "Editor/EditorCommands.hpp"
 #include "ProjectSettingsDialog.hpp"
 #include "WindowSettingsDialog.hpp"
 #include "GridSettingsDialog.hpp"
 #include "AnimationCreatorDialog.hpp"
+#include "AboutDialog.hpp"
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
@@ -25,6 +27,9 @@ namespace Sharpheus {
 		level->Append(10102, wxT("Open level\tCtrl+O"));
 		level->Append(10103, wxT("Save level\tCtrl+S"));
 		level->Append(10104, wxT("Save as..\tCtrl+Shift+S"));
+		level->AppendSeparator();
+		level->Append(10105, wxT("Attach Scene"));
+		level->Append(10106, wxT("Save as Scene"));
 		Append(level, "Level");
 
 		wxMenu* editor = new wxMenu;
@@ -34,7 +39,8 @@ namespace Sharpheus {
 		Append(editor, "Editor");
 
 		wxMenu* exporting = new wxMenu;
-		exporting->Append(10301, wxT("Export the Game"));
+		exporting->Append(10301, wxT("Export with logging"));
+		exporting->Append(10302, wxT("Export final verison"));
 		Append(exporting, "Export");
 
 		wxMenu* about = new wxMenu;
@@ -47,21 +53,18 @@ namespace Sharpheus {
 		Connect(10102, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::LoadLevel));
 		Connect(10103, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveLevel));
 		Connect(10104, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveLevelAs));
+		Connect(10105, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AttachScene));
+		Connect(10106, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveAsScene));
 		Connect(10201, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::GridSettings));
 		Connect(10202, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AnimatorCreator));
-		Connect(10301, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportGame));
+		Connect(10301, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportWithLogs));
+		Connect(10302, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportFinal));
 		Connect(10401, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::About));
 	}
 
 
 	MenuBar::~MenuBar()
 	{
-	}
-
-
-	void MenuBar::BindCallbacks(std::function<void()>&& levelChangedCallback)
-	{
-		this->levelChangedCallback = std::move(levelChangedCallback);
 	}
 
 
@@ -104,63 +107,37 @@ namespace Sharpheus {
 
 	void MenuBar::NewLevel(wxCommandEvent& e)
 	{
-		int response = wxMessageBox("Do you want to save the current level?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
-
-		if (response == wxYES) {
-			SaveLevel(e);
-		}
-
-		wxTextEntryDialog levelNameDialog(this, "Level name:", "New Level");
-		levelNameDialog.SetTextValidator(wxFILTER_EMPTY);
-
-		if (levelNameDialog.ShowModal() == wxID_CANCEL)
-			return;
-		
-		ProjectData::CreateNewLevel(wxStr2StdStr(levelNameDialog.GetValue()));
-		levelChangedCallback();
+		EditorCommands::NewLevel();
 	}
 
 
 	void MenuBar::LoadLevel(wxCommandEvent& e)
 	{
-		int response = wxMessageBox("Do you want to save the current level?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
-
-		if (response == wxYES) {
-			SaveLevel(e);
-		}
-
-		RelativeOpenDialog openDialog(this, "Open Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
-
-		if (!openDialog.Show())
-			return;
-
-		bool success = ProjectData::GetProj()->LoadLevel(wxStr2StdStr(openDialog.GetPath()));
-		SPHE_ASSERT(success, "Cannot load level. Check the log files for more information");
-		levelChangedCallback();
+		EditorCommands::LoadLevel();
 	}
 
 
 	void MenuBar::SaveLevel(wxCommandEvent& e)
 	{
-		if (ProjectData::GetLevel()->HasPath()) {
-			bool success = ProjectData::GetLevel()->Save();
-			SPHE_ASSERT(success, "Cannot save level. Check the log files for more information");
-		}
-		else {
-			SaveLevelAs(e);
-		}
+		EditorCommands::SaveLevel();
 	}
 
 
-	void MenuBar::SaveLevelAs(wxCommandEvent& /*e*/)
+	void MenuBar::SaveLevelAs(wxCommandEvent& e)
 	{
-		RelativeSaveDialog saveDialog(this, "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
+		EditorCommands::SaveLevelAs();
+	}
 
-		if (!saveDialog.Show())
-			return;
 
-		bool success = ProjectData::GetProj()->SaveLevel(wxStr2StdStr(saveDialog.GetPath()));
-		SPHE_ASSERT(success, "Cannot save level. Check the log files for more information");
+	void MenuBar::AttachScene(wxCommandEvent& e)
+	{
+		EditorCommands::AttachSceneToCurrent();
+	}
+
+
+	void MenuBar::SaveAsScene(wxCommandEvent& e)
+	{
+		EditorCommands::SaveCurrentAsScene();
 	}
 
 
@@ -180,37 +157,27 @@ namespace Sharpheus {
 
 	void MenuBar::AnimatorCreator(wxCommandEvent& e)
 	{
-		AnimationCreatorDialog creator(parent);
-
-		if (creator.ShowModal() == wxID_CANCEL)
-			return;
-
-		Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), false);
-		Animation* anim = new Animation(atlas, creator.GetFrameWidth(), creator.GetFrameHeight(), creator.GetStartFrame(), creator.GetEndFrame());
-		anim->SetName(wxStr2StdStr(creator.GetName()));
-		anim->SetFrameTime(creator.GetFrameTime());
-		bool success = anim->Save(wxStr2StdStr(creator.GetPath()));
-		delete anim;
-
-		SPHE_ASSERT(success, "Cannot save animation. Check the log files for more information");
+		EditorCommands::CreateAnimation();
 	}
 
 
-	void MenuBar::ExportGame(wxCommandEvent& e)
+	void MenuBar::ExportWithLogs(wxCommandEvent& e)
 	{
-		int response = wxMessageBox("Do you want to save the current level before exporting?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
+		EditorCommands::ExportTheGame(true);
+	}
 
-		if (response == wxYES) {
-			SaveLevel(e);
-		}
 
-		Exporter exp;
+	void MenuBar::ExportFinal(wxCommandEvent& e)
+	{
+		EditorCommands::ExportTheGame(false);
 	}
 
 
 	void MenuBar::About(wxCommandEvent& e)
 	{
-		wxMessageBox("SHARPHEUS ENGINE & EDITOR\nCreator: HorvatKZ\nVersion: beta 1.0\nThe website will be available soon", "Sharpheus Info", wxICON_NONE | wxOK | wxCENTRE);
+		AboutDialog about(parent);
+
+		about.ShowModal();
 	}
 
 }

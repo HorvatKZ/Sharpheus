@@ -198,9 +198,9 @@ namespace Sharpheus {
 	inline BoolPresenter<Class>::BoolPresenter(wxWindow* parent, BoolProvider<Class>* provider, Signal signal, uint32_t& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		checkBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		checkBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(UI::unitHeight, UI::unitHeight));
 		checkBox->Bind(wxEVT_CHECKBOX, &BoolPresenter<Class>::HandleChange, this);
-		y += 30;
+		y += UI::heightPadding;
 	}
 
 	template<class Class>
@@ -245,9 +245,9 @@ namespace Sharpheus {
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		wxSize extent = title->GetTextExtent(provider->GetName());
-		checkBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		checkBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(UI::unitHeight, UI::unitHeight));
 		checkBox->Bind(wxEVT_CHECKBOX, &OneWayBoolPresenter<Class>::HandleChange, this);
-		y += 30;
+		y += UI::heightPadding;
 	}
 
 	template<class Class>
@@ -294,12 +294,12 @@ namespace Sharpheus {
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		uint32_t width = (parent->GetSize().x - 3 * UI::border) / 2;
-		y += 22;
+		y += UI::unitHeight;
 		xField = new FloatComponentCtrl(parent, "X", wxPoint(UI::border, y), width, redish);
 		yField = new FloatComponentCtrl(parent, "Y", wxPoint(2 * UI::border + width, y), width, blueish);
 		xField->Bind(wxEVT_TEXT_ENTER, &PointPresenter<Class>::HandleChange, this);
 		yField->Bind(wxEVT_TEXT_ENTER, &PointPresenter<Class>::HandleChange, this);
-		y += 35;
+		y += UI::heightPadding + UI::border;
 	}
 
 	template<class Class>
@@ -352,19 +352,19 @@ namespace Sharpheus {
 		lastColor = *wxBLACK;
 
 		uint32_t width = (parent->GetSize().x - 4 * UI::border) / 3;
-		y += 22;
+		y += UI::unitHeight;
 		rField = new ByteComponentCtrl(parent, "R", wxPoint(UI::border, y), width, redish);
 		gField = new ByteComponentCtrl(parent, "G", wxPoint(2 * UI::border + width, y), width, greenish);
 		bField = new ByteComponentCtrl(parent, "B", wxPoint(3 * UI::border + 2 * width, y), width, blueish);
 		rField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
 		gField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
 		bField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
-		y += 30;
+		y += UI::heightPadding;
 		aField = new ByteComponentCtrl(parent, "A", wxPoint(UI::border, y), width, greyish);
 		aField->Bind(wxEVT_TEXT_ENTER, &ColorPresenter<Class>::HandleInputChange, this);
-		color = new wxColourPickerCtrl(parent, wxID_ANY, *wxBLACK, wxPoint(2 * UI::border + width, y), wxSize(2 * width + UI::border, 24));
+		color = new wxColourPickerCtrl(parent, wxID_ANY, *wxBLACK, wxPoint(2 * UI::border + width, y), wxSize(2 * width + UI::border, UI::extUnitHeight));
 		color->Bind(wxEVT_COLOURPICKER_CHANGED, &ColorPresenter<Class>::HandlePickerChange, this);
-		y += 35;
+		y += UI::heightPadding + UI::border;
 	}
 
 	template<class Class>
@@ -450,15 +450,15 @@ namespace Sharpheus {
 	{
 		lastPath = "";
 
-		uint32_t width = parent->GetSize().x - 3 * UI::border - 50;
-		y += 22;
-		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22), wxST_ELLIPSIZE_START);
-		path->SetMaxSize(wxSize(width, 22));
-		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * UI::border + width, y), wxSize(50, 50));
-		y += 22;
-		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(UI::border, y), wxSize(75, 25));
+		uint32_t width = parent->GetSize().x - 3 * UI::border - previewHeight;
+		y += UI::unitHeight;
+		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
+		path->SetMaxSize(wxSize(width, UI::unitHeight));
+		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * UI::border + width, y), wxSize(previewHeight, previewHeight));
+		y += UI::unitHeight;
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(UI::border, y), UI::smallButtonSize);
 		browse->Bind(wxEVT_BUTTON, &ImagePresenter<Class>::HandleChange, this);
-		y += 33;
+		y += UI::heightPadding;
 	}
 
 	template<class Class>
@@ -479,7 +479,7 @@ namespace Sharpheus {
 			if (path != lastPath) {
 				this->path->SetLabel(path);
 				wxImage bitmap = ImageManager::GetImage(image->GetFullPath());
-				bitmap.Rescale(50, 50);
+				bitmap.Rescale(previewHeight, previewHeight);
 				preview->SetBitmap(bitmap);
 				lastPath = path;
 			}
@@ -527,14 +527,14 @@ namespace Sharpheus {
 	inline FontPresenter<Class>::FontPresenter(wxWindow* parent, FontProvider<Class>* provider, Signal signal, uint32_t& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = parent->GetSize().x - 3 * UI::border - 22;
-		y += 22;
-		fontPicker = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22));
+		uint32_t width = parent->GetSize().x - 3 * UI::border - UI::unitHeight;
+		y += UI::unitHeight;
+		fontPicker = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight));
 		fontPicker->Bind(wxEVT_COMBOBOX, &FontPresenter<Class>::HandleChange, this);
 		fontPicker->SetEditable(false);
-		addButton = new wxButton(parent, wxID_ANY, "+", wxPoint(2 * UI::border + width, y), wxSize(22, 22));
+		addButton = new wxButton(parent, wxID_ANY, "+", wxPoint(2 * UI::border + width, y), wxSize(UI::unitHeight, UI::unitHeight));
 		addButton->Bind(wxEVT_BUTTON, &FontPresenter<Class>::OnAdd, this);
-		y += 33;
+		y += UI::heightPadding;
 	}
 
 	template<class Class>
@@ -610,20 +610,20 @@ namespace Sharpheus {
 	inline FontStylePresenter<Class>::FontStylePresenter(wxWindow* parent, FontStyleProvider<Class>* provider, Signal signal, uint32_t& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = parent->GetSize().x - 3 * UI::border - 22;
-		y += 22;
+		uint32_t width = parent->GetSize().x - 3 * UI::border - UI::unitHeight;
+		y += UI::unitHeight;
 		boldLabel = new wxStaticText(parent, wxID_ANY, "Bold", wxPoint(UI::border, y));
-		boldCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		boldCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y - UI::shift), wxSize(UI::unitHeight, UI::unitHeight));
 		boldCheckBox->Bind(wxEVT_CHECKBOX, &FontStylePresenter<Class>::HandleChange, this);
-		y += 25;
+		y += UI::unitHeight + UI::shift;
 		italicLabel = new wxStaticText(parent, wxID_ANY, "Italic", wxPoint(UI::border, y));
-		italicCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		italicCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y - UI::shift), wxSize(UI::unitHeight, UI::unitHeight));
 		italicCheckBox->Bind(wxEVT_CHECKBOX, &FontStylePresenter<Class>::HandleChange, this);
-		y += 25;
+		y += UI::unitHeight + UI::shift;
 		underlinedLabel = new wxStaticText(parent, wxID_ANY, "Underlined", wxPoint(UI::border, y));
-		underlinedCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(22, 22));
+		underlinedCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y - UI::shift), wxSize(UI::unitHeight, UI::unitHeight));
 		underlinedCheckBox->Bind(wxEVT_CHECKBOX, &FontStylePresenter<Class>::HandleChange, this);
-		y += 30;
+		y += UI::heightPadding;
 	}
 
 	template<class Class>
@@ -691,13 +691,13 @@ namespace Sharpheus {
 	{
 		lastPath = "";
 
-		uint32_t width = parent->GetSize().x - 3 * UI::border - 50;
-		y += 22;
-		name = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22), wxST_ELLIPSIZE_START);
-		name->SetMaxSize(wxSize(width, 22));
-		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * UI::border + width, y), wxSize(50, 50));
-		y += 22;
-		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(UI::border, y), wxSize(75, 25));
+		uint32_t width = parent->GetSize().x - 3 * UI::border - previewHeight;
+		y += UI::unitHeight;
+		name = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
+		name->SetMaxSize(wxSize(width, UI::unitHeight));
+		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * UI::border + width, y), wxSize(previewHeight, previewHeight));
+		y += UI::unitHeight;
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(UI::border, y), UI::smallButtonSize);
 		browse->Bind(wxEVT_BUTTON, &AnimationPresenter<Class>::HandleChange, this);
 		y += 33;
 	}
@@ -774,13 +774,13 @@ namespace Sharpheus {
 	inline SoundPresenter<Class>::SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32_t& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = parent->GetSize().x - 3 * UI::border - 75;
-		y += 22;
-		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, 22), wxST_ELLIPSIZE_START);
-		path->SetMaxSize(wxSize(width, 22));
-		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(2 * UI::border + width, y - 3), wxSize(75, 25));
+		uint32_t width = parent->GetSize().x - 3 * UI::border - UI::smallButtonSize.x;
+		y += UI::unitHeight;
+		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
+		path->SetMaxSize(wxSize(width, UI::unitHeight));
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(2 * UI::border + width, y - 3), UI::smallButtonSize);
 		browse->Bind(wxEVT_BUTTON, &SoundPresenter<Class>::HandleChange, this);
-		y += 30;
+		y += UI::heightPadding;
 	}
 
 	template<class Class>
@@ -833,7 +833,7 @@ namespace Sharpheus {
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		uint32_t width = parent->GetSize().x - 2 * UI::border;
-		y += 22;
+		y += UI::unitHeight;
 
 		list = new wxListView(parent, wxID_ANY, wxPoint(UI::border, y), wxSize(width, 100), wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL);
 		list->Bind(wxEVT_LEFT_DOWN, &StringListPresenter<Class>::OnListClicked, this);
@@ -846,9 +846,9 @@ namespace Sharpheus {
 		list->AssignImageList(imgs, wxIMAGE_LIST_SMALL);
 		y += 100 + UI::border;
 
-		addButton = new wxButton(parent, wxID_ANY, "+ Add new", wxPoint(UI::border, y), wxSize(75, 25));
+		addButton = new wxButton(parent, wxID_ANY, "+ Add new", wxPoint(UI::border, y), UI::smallButtonSize);
 		addButton->Bind(wxEVT_BUTTON, &StringListPresenter<Class>::OnAdd, this);
-		y += 33;
+		y += UI::heightPadding;
 	}
 
 	template<class Class>

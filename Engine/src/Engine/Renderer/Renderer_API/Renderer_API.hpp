@@ -10,7 +10,7 @@ namespace Sharpheus {
 	public:
 		virtual ~Renderer_API() = default;
 
-		virtual void StartFrame() = 0;
+		virtual void StartFrame(const Point& shift) = 0;
 		virtual void EndFrame() = 0;
 
 		inline Camera* GetCamera() { return camera; }
@@ -26,6 +26,8 @@ namespace Sharpheus {
 
 		virtual void DrawHorizontalLine(float begin, float end, float place, float thickness, const Color& color) = 0;
 		virtual void DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color) = 0;
+		virtual void DrawLine(const Point& begin, const Point& end, float thickness, const Color& color) = 0;
+
 		virtual void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint) = 0;
 		virtual void DrawMonocromeQuad(Point coords[4], const Color& color) = 0;
 

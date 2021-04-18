@@ -34,6 +34,7 @@ namespace Sharpheus {
 
 		static wxColour inativeColour;
 		static wxFont inactiveFont;
+		static std::vector<Info> infos;
 
 		void OnSelect(wxTreeEvent& e);
 

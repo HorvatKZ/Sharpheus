@@ -7,6 +7,7 @@
 #include "ResourceManagement/ImageManager.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
 #include "Engine/ResourceManager/SoundPlayer.hpp"
+#include "EditorCommands.hpp"
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
 
@@ -67,6 +68,7 @@ namespace Sharpheus {
 #endif
 		}
 		win->SetTitle("Sharpheus Editor - " + ProjectData::GetProj()->GetName());
+		EditorCommands::Init(win, SPH_BIND_WITH_0(EditorWindow::LevelChanged, win), SPH_BIND_WITH_0(EditorWindow::CurrentChanged, win));
 
 		win->InitContent();
 		win->Show();

@@ -5,6 +5,7 @@
 
 namespace Sharpheus {
 
+	uint32_t WindowSettingsDialog::labelWidth = 40;
 	std::vector<wxString> WindowSettingsDialog::resolutionOptions = {
 		"3840x2160",
 		"2560x1440",
@@ -22,38 +23,42 @@ namespace Sharpheus {
 		: SettingsDialog(parent, "Window Settings", wxSize(400, 220))
 	{
 		uint32_t realWidth = GetClientSize().x;
-		resolutionLabel = new wxStaticText(this, wxID_ANY, "Resolution:", wxPoint(UI::UI::border, UI::UI::border), wxSize(120, 22));
+		uint32_t y = UI::border;
+		resolutionLabel = new wxStaticText(this, wxID_ANY, "Resolution:", wxPoint(UI::border, y), wxSize(120, UI::unitHeight));
 		resolutionLabel->SetFont(UI::titleFont);
 
+		y += UI::unitHeight;
 		wxArrayString resOptions;
 		for (const wxString& option : resolutionOptions) {
 			resOptions.Add(option);
 		}
-		resolutionPicker = new wxComboBox(this, wxID_ANY, "", wxPoint(UI::UI::border, UI::UI::border + 22), wxSize(200, 22), resOptions);
+		resolutionPicker = new wxComboBox(this, wxID_ANY, "", wxPoint(UI::border, y), wxSize(200, UI::unitHeight), resOptions);
 		resolutionPicker->SetEditable(false);
 		resolutionPicker->Bind(wxEVT_COMBOBOX, &WindowSettingsDialog::ResolutionChanged, this);
 		
-		uint32_t labelWidth = 40;
-		widthLabel = new wxStaticText(this, wxID_ANY, "Width:", wxPoint(UI::UI::border, 2 * UI::UI::border + 50), wxSize(labelWidth, 22));
-		widthInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(2 * UI::UI::border + labelWidth, 2 * UI::UI::border + 48), wxSize(realWidth / 2 - 3 * UI::border - labelWidth - 10, 22));
+		y += UI::border + UI::unitHeight + UI::shift;
+		widthLabel = new wxStaticText(this, wxID_ANY, "Width:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
+		widthInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(2 * UI::border + labelWidth, y), wxSize(realWidth / 2 - 3 * UI::border - labelWidth - 10, UI::unitHeight));
 		widthInput->SetValidator(wxIntegerValidator<uint32_t>());
-		heightLabel = new wxStaticText(this, wxID_ANY, "Height:", wxPoint(realWidth / 2 + UI::border, 2 * UI::border + 50), wxSize(labelWidth, 22));
-		heightInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(realWidth / 2 + 2 * UI::border + labelWidth, 2 * UI::border + 48), wxSize(realWidth / 2 - 3 * UI::border - labelWidth - 10, 22));
+		heightLabel = new wxStaticText(this, wxID_ANY, "Height:", wxPoint(realWidth / 2 + UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
+		heightInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(realWidth / 2 + 2 * UI::border + labelWidth, y), wxSize(realWidth / 2 - 3 * UI::border - labelWidth - 10, UI::unitHeight));
 		heightInput->SetValidator(wxIntegerValidator<uint32_t>());
 
-		fullscreenLabel = new wxStaticText(this, wxID_ANY, "Fullscreen:", wxPoint(UI::border, 3 * UI::border + 75), wxSize(80, 22));
+		y += UI::border + UI::unitHeight + UI::shift;
+		fullscreenLabel = new wxStaticText(this, wxID_ANY, "Fullscreen:", wxPoint(UI::border, y + UI::shift), wxSize(2 * labelWidth, UI::unitHeight));
 		fullscreenLabel->SetFont(UI::titleFont);
 		wxSize textExtent = fullscreenLabel->GetTextExtent("Fullscreen:");
-		fullscreenCheckBox = new wxCheckBox(this, wxID_ANY, "", wxPoint(2 * UI::border + textExtent.x, 3 * UI::border + 73), wxSize(22, 22));
+		fullscreenCheckBox = new wxCheckBox(this, wxID_ANY, "", wxPoint(2 * UI::border + textExtent.x, y), wxSize(UI::unitHeight, UI::unitHeight));
 
-		vsyncLabel = new wxStaticText(this, wxID_ANY, "V-sync:", wxPoint(realWidth / 2 + UI::border, 3 * UI::border + 75), wxSize(60, 22));
+		vsyncLabel = new wxStaticText(this, wxID_ANY, "V-sync:", wxPoint(realWidth / 2 + UI::border, y + UI::shift), wxSize(60, UI::unitHeight));
 		vsyncLabel->SetFont(UI::titleFont);
 		textExtent = vsyncLabel->GetTextExtent("V-sync:");
-		vsyncCheckBox = new wxCheckBox(this, wxID_ANY, "", wxPoint(realWidth / 2 + 2 * UI::border + textExtent.x, 3 * UI::border + 73), wxSize(22, 22));
+		vsyncCheckBox = new wxCheckBox(this, wxID_ANY, "", wxPoint(realWidth / 2 + 2 * UI::border + textExtent.x, y), wxSize(UI::unitHeight, UI::unitHeight));
 		
-		backgroundLabel = new wxStaticText(this, wxID_ANY, "Background color:", wxPoint(UI::border, 4 * UI::border + 98), wxSize(150, 22));
+		y += UI::border + UI::unitHeight + UI::shift;
+		backgroundLabel = new wxStaticText(this, wxID_ANY, "Background color:", wxPoint(UI::border, y + UI::shift), wxSize(150, UI::unitHeight));
 		backgroundLabel->SetFont(UI::titleFont);
-		backgroundPicker = new wxColourPickerCtrl(this, wxID_ANY, *wxBLACK, wxPoint(2 * UI::border + 150, 4 * UI::border + 96), wxSize(70, 22));
+		backgroundPicker = new wxColourPickerCtrl(this, wxID_ANY, *wxBLACK, wxPoint(2 * UI::border + 150, y), wxSize(70, UI::unitHeight));
 	}
 
 

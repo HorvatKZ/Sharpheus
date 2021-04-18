@@ -11,16 +11,13 @@ ClassInfo PlayerController::classInfo("PlayerController", "behavior.png", {
 });
 
 
-PlayerController::PlayerController(Sharpheus::Behavior* other) : LocalListenerBehavior(other)
+PlayerController::PlayerController(Sharpheus::Behavior* other) : Behavior(other), ColliderListener(GetID())
 {
-	DoSubscriptions();
 }
 
 
-PlayerController::PlayerController(GameObject* parent, const std::string& name) : LocalListenerBehavior(parent, name)
+PlayerController::PlayerController(GameObject* parent, const std::string& name) : Behavior(parent, name), ColliderListener(GetID())
 {
-	SPH_ASSERT(parent->Is(Type::PhysicsObject), "Parent \"{0}\" is not a PhysicsObject", parent->GetName());
-	DoSubscriptions();
 }
 
 
@@ -59,6 +56,7 @@ bool PlayerController::Load(FileLoader& fl)
 
 void PlayerController::OnKeyPressed(const Sharpheus::KeyPressedEvent& e)
 {
+	Transform trafo = anim->GetTrafo();
 	switch (e.code) {
 		case KeyCode::W:
 			if (canJump) {
@@ -68,9 +66,15 @@ void PlayerController::OnKeyPressed(const Sharpheus::KeyPressedEvent& e)
 			break;
 		case KeyCode::A:
 			((PhysicsObject*)parent)->SetVelocityX(-speed);
+			anim->SetCurrentByName("Walk");
+			trafo.scale.x = -1;
+			anim->SetTrafo(trafo);
 			break;
 		case KeyCode::D:
 			((PhysicsObject*)parent)->SetVelocityX(speed);
+			anim->SetCurrentByName("Walk");
+			trafo.scale.x = 1;
+			anim->SetTrafo(trafo);
 			break;
 	}
 }
@@ -95,6 +99,7 @@ void PlayerController::OnKeyReleased(const Sharpheus::KeyReleasedEvent& e)
 		case KeyCode::A:
 		case KeyCode::D:
 			((PhysicsObject*)parent)->SetVelocityX(0);
+			anim->SetCurrentByName("Idle");
 			break;
 	}
 }
@@ -113,12 +118,13 @@ void PlayerController::Tick(float deltaTime)
 }
 
 
-void PlayerController::DoSubscriptions()
+void PlayerController::Init()
 {
 	Subscribe<KeyPressedEvent>(SPH_BIND(PlayerController::OnKeyPressed));
 	Subscribe<KeyRepeatEvent>(SPH_BIND(PlayerController::OnKeyRepeat));
 	Subscribe<KeyReleasedEvent>(SPH_BIND(PlayerController::OnKeyReleased));
 	SubscribeCollision((Collider*)parent->GetFirstChildOfType(Type::CapsuleCollider), SPH_BIND(PlayerController::OnCollision));
+	anim = (AnimationPlayer*)parent->GetFirstChildOfType(Type::AnimationPlayer);
 }
 
 
@@ -133,6 +139,10 @@ bool PlayerController::IsCompatibleWithParent(GameObject* parent)
 	}
 
 	if (parent->GetFirstChildOfType(Type::CapsuleCollider) == nullptr) {
+		return false;
+	}
+
+	if (parent->GetFirstChildOfType(Type::AnimationPlayer) == nullptr) {
 		return false;
 	}
 	

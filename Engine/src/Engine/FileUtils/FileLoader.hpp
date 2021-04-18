@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include <cstdio>
 
 
 namespace Sharpheus {
@@ -11,7 +12,7 @@ namespace Sharpheus {
 		FileLoader(const std::string& path);
 		virtual ~FileLoader();
 
-		bool GetStatus();
+		inline bool GetStatus() { return status; }
 
 		bool Read(uint8_t& data);
 		bool Read(uint32_t& data);
@@ -30,7 +31,8 @@ namespace Sharpheus {
 		bool TryReadingEnd();
 
 	private:
-		std::ifstream file;
+		FILE* file;
+		bool status = true;
 	};
 
 }

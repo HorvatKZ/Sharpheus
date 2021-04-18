@@ -18,6 +18,8 @@ namespace Sharpheus {
 	private:
 		wxGLContext* glContext = nullptr;
 		Project* proj;
+		
+		static Point renderShift;
 
 		void Render(wxDC& dc);
 	};

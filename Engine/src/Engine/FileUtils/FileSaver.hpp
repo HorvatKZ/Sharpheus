@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include <cstdio>
 
 
 namespace Sharpheus {
@@ -11,7 +12,7 @@ namespace Sharpheus {
 		FileSaver(const std::string& path);
 		virtual ~FileSaver();
 
-		bool GetStatus();
+		inline bool GetStatus() { return status; }
 
 		bool Write(uint8_t data);
 		bool Write(uint32_t data);
@@ -30,7 +31,8 @@ namespace Sharpheus {
 		bool WriteEnd();
 
 	private:
-		std::ofstream file;
+		FILE* file;
+		bool status = true;
 	};
 
 }

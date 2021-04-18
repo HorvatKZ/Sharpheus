@@ -159,6 +159,27 @@ namespace Sharpheus {
 	}
 
 
+	bool ProcessControl::CheckCommonFiles()
+	{
+		wxString configPath = wxStandardPaths::Get().GetUserConfigDir() + "\\Sharpheus\\editorConfig.txt";
+		if (!wxFileExists(configPath)) {
+			wxTextFile file;
+			bool success = file.Create(configPath);
+			if (success) {
+				wxFileName binFolder(wxStandardPaths::Get().GetDataDir());
+				binFolder.SetName("");
+				file.AddLine(binFolder.GetFullPath());
+				file.AddLine("64.000000 2.000000 t 240 240 240 200");
+				file.AddLine("t 4.000000 255 32 64 200");
+				success &= file.Write();
+			}
+			return success;
+		}
+
+		return true;
+	}
+
+
 	bool ProcessControl::CopyFolderContent(const wxString& from, const wxString& to)
 	{
 		if (wxFileName::DirExists(to)) {

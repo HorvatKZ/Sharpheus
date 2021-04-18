@@ -34,6 +34,7 @@ namespace Sharpheus {
 
 		WinProps winProps;
 
+		static uint32_t labelWidth;
 		static std::vector<wxString> resolutionOptions;
 
 		void ResolutionChanged(wxCommandEvent& e);

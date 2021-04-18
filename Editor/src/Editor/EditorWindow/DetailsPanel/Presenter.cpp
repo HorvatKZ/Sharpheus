@@ -10,13 +10,14 @@ namespace Sharpheus {
 	wxColour Presenter::blueish(55, 0, 179);
 	wxColour Presenter::greyish(70, 70, 80);
 
+	uint32_t Presenter::previewHeight = 50;
 
 	// Presenter
 
 	Presenter::Presenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y) : parent(parent), signal(signal)
 	{
 		wxSize limit(parent->GetSize().x / 2 - 2 * UI::border, 16);
-		this->title = new wxStaticText(parent, wxID_ANY, title, wxPoint(UI::border, y + 5), limit, wxST_ELLIPSIZE_END);
+		this->title = new wxStaticText(parent, wxID_ANY, title, wxPoint(UI::border, y + UI::border), limit, wxST_ELLIPSIZE_END);
 		this->title->SetFont(UI::titleFont);
 		this->title->SetMaxSize(limit);
 	}
@@ -35,8 +36,8 @@ namespace Sharpheus {
 		wxSize extent = this->title->GetTextExtent(title);
 		uint32_t start = parent->GetSize().x / 2;
 		uint32_t width = parent->GetSize().x - start - UI::border;
-		input = new wxTextCtrl(parent, wxID_ANY, "", wxPoint(start, y), wxSize(width, 22), wxTE_PROCESS_ENTER);
-		y += 30;
+		input = new wxTextCtrl(parent, wxID_ANY, "", wxPoint(start, y), wxSize(width, UI::unitHeight), wxTE_PROCESS_ENTER);
+		y += UI::heightPadding;
 	}
 
 	FieldPresenter::~FieldPresenter()
@@ -55,11 +56,11 @@ namespace Sharpheus {
 		uint32_t realWidth = parent->GetVirtualSize().x;
 
 		this->title->SetSize(titleExtent);
-		input->SetPosition(wxPoint(2 * UI::border + titleExtent.x, y - 30));
-		input->SetSize(wxSize(realWidth - 4 * UI::border - titleExtent.x - 24, 22));
+		input->SetPosition(wxPoint(2 * UI::border + titleExtent.x, y - UI::heightPadding));
+		input->SetSize(wxSize(realWidth - 4 * UI::border - titleExtent.x - UI::extUnitHeight, UI::unitHeight));
 		input->Bind(wxEVT_TEXT_ENTER, &HeaderPresenter::OnNameChanged, this);
 
-		visibilityButton = new wxBitmapButton(parent, wxID_ANY, wxNullBitmap, wxPoint(realWidth - UI::border - 24, y - 31), wxSize(24, 24));
+		visibilityButton = new wxBitmapButton(parent, wxID_ANY, wxNullBitmap, wxPoint(realWidth - UI::border - UI::extUnitHeight, y - UI::heightPadding - 1), wxSize(UI::extUnitHeight, UI::extUnitHeight));
 		visibilityButton->Bind(wxEVT_BUTTON, &HeaderPresenter::OnVisibilityChanged, this);
 	}
 
@@ -115,19 +116,19 @@ namespace Sharpheus {
 		InitBitmaps();
 
 		uint32_t width = parent->GetSize().x;
-		uint32_t floatCompWidth = (width - 4 * UI::border - 24) / 2;
-		y += 22;
-		posImg = new wxStaticBitmap(parent, wxID_ANY, posBitmap, wxPoint(UI::border, y), wxSize(24, 24));
-		posX = new FloatComponentCtrl(parent, "X", wxPoint(2 * UI::border + 24, y), floatCompWidth, redish);
+		uint32_t floatCompWidth = (width - 4 * UI::border - UI::extUnitHeight) / 2;
+		y += UI::unitHeight;
+		posImg = new wxStaticBitmap(parent, wxID_ANY, posBitmap, wxPoint(UI::border, y), wxSize(UI::extUnitHeight, UI::extUnitHeight));
+		posX = new FloatComponentCtrl(parent, "X", wxPoint(2 * UI::border + UI::extUnitHeight, y), floatCompWidth, redish);
 		posY = new FloatComponentCtrl(parent, "Y", wxPoint(width - UI::border - floatCompWidth, y), floatCompWidth, blueish);
-		y += 30;
-		scaleImg = new wxStaticBitmap(parent, wxID_ANY, scaleBitmap, wxPoint(UI::border, y), wxSize(24, 24));
-		scaleX = new FloatComponentCtrl(parent, "X", wxPoint(2 * UI::border + 24, y), floatCompWidth, redish);
+		y += UI::heightPadding;
+		scaleImg = new wxStaticBitmap(parent, wxID_ANY, scaleBitmap, wxPoint(UI::border, y), wxSize(UI::extUnitHeight, UI::extUnitHeight));
+		scaleX = new FloatComponentCtrl(parent, "X", wxPoint(2 * UI::border + UI::extUnitHeight, y), floatCompWidth, redish);
 		scaleY = new FloatComponentCtrl(parent, "Y", wxPoint(width - UI::border - floatCompWidth, y), floatCompWidth, blueish);
-		y += 30;
-		rotImg = new wxStaticBitmap(parent, wxID_ANY, rotBitmap, wxPoint(UI::border, y), wxSize(24, 24));
-		rot = new AngleComponentCtrl(parent, "Angle", wxPoint(2 * UI::border + 24, y), width - 24 - 3 * UI::border, greenish);
-		y += 35;
+		y += UI::heightPadding;
+		rotImg = new wxStaticBitmap(parent, wxID_ANY, rotBitmap, wxPoint(UI::border, y), wxSize(UI::extUnitHeight, UI::extUnitHeight));
+		rot = new AngleComponentCtrl(parent, "Angle", wxPoint(2 * UI::border + UI::extUnitHeight, y), width - UI::extUnitHeight - 3 * UI::border, greenish);
+		y += UI::heightPadding + UI::border;
 	}
 
 	TrafoPresenterBase::~TrafoPresenterBase()
@@ -159,7 +160,7 @@ namespace Sharpheus {
 
 		uint32_t width = parent->GetSize().x;
 		rot->SetWidth(rot->GetWidth() - 24 - UI::border);
-		trafoTypeSwitch = new wxBitmapButton(parent, wxID_ANY, localBitmap, wxPoint(width - UI::border - 24, y - 35), wxSize(24, 24));
+		trafoTypeSwitch = new wxBitmapButton(parent, wxID_ANY, localBitmap, wxPoint(width - UI::border - UI::extUnitHeight, y - UI::heightPadding - UI::border), wxSize(UI::extUnitHeight, UI::extUnitHeight));
 		trafoTypeSwitch->Bind(wxEVT_BUTTON, &MainTrafoPresenter::TypeSwitchPressed, this);
 
 		posX->Bind(wxEVT_TEXT_ENTER, &MainTrafoPresenter::HandleChange, this);

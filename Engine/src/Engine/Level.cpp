@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Level.hpp"
 #include "GameObjects/GameObjects.h"
-#include "FileUnits/FileLoader.hpp"
-#include "FileUnits/FileSaver.hpp"
+#include "FileUtils/FileLoader.hpp"
+#include "FileUtils/FileSaver.hpp"
 #include "BehaviorCreator.hpp"
 
 
@@ -37,6 +37,8 @@ namespace Sharpheus {
 
 	void Level::Tick(float deltaTime)
 	{
+		InitBehaviors();
+
 		root->TickAll(deltaTime);
 		collSys.Tick();
 		root->UpdateLastPosAll();
@@ -217,6 +219,34 @@ namespace Sharpheus {
 	}
 
 
+	bool Level::SaveAsScene(GameObject* obj, const std::string& path)
+	{
+		SPH_ASSERT(obj != nullptr, "Cannot save null GameObject as scene");
+
+		std::string projPath = base.substr(0, base.length() - 7);
+		FileSaver fs((projPath + "Scenes\\" + path).c_str());
+
+		bool success = obj->SaveAll(fs);
+
+		SPH_ASSERT(success, "An error occured during saving GameObject \"{0}\" as scene \"{1}\"", obj->GetName(), path);
+		return success;
+	}
+
+
+	bool Level::AttachSceneTo(GameObject* obj, const std::string& path)
+	{
+		SPH_ASSERT(obj != nullptr, "Cannot load scene to  null GameObject");
+
+		std::string projPath = base.substr(0, base.length() - 7);
+		FileLoader fl((projPath + "Scenes\\" + path).c_str());
+
+		bool success = LoadGameObject(fl, obj);
+
+		SPH_ASSERT(success, "An error occured during loading scene \"{0}\" to GameObject \"{1}\"", path, obj->GetName());
+		return success;
+	}
+
+
 	bool Level::SaveLevelData(FileSaver& fs)
 	{
 		fs.Write(name);
@@ -309,6 +339,16 @@ namespace Sharpheus {
 
 		SPH_ASSERT(success, "Error during loading GameObject \"{0}\"", objName);
 		return success;
+	}
+
+
+	void Level::InitBehaviors()
+	{
+		while (!behaviorsToInit.empty()) {
+			Behavior* behavior = behaviorsToInit.front();
+			behaviorsToInit.pop();
+			behavior->Init();
+		}
 	}
 
 

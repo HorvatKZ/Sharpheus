@@ -17,6 +17,8 @@ namespace Sharpheus {
 
 		static void CreateNewProject(const wxString& name, const wxString& level, const wxString& folder, const wxString& ide, bool build);
 
+		static bool CheckCommonFiles();
+
 		static inline void SetProjectCreated(std::function<void(const wxString&)>&& _projectCreated) {
 			projectCreated = std::move(_projectCreated);
 		}

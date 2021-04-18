@@ -5,24 +5,30 @@
 
 namespace Sharpheus {
 
+	uint32_t ProjectSettingsDialog::labelWidth = 120;
+
+
 	ProjectSettingsDialog::ProjectSettingsDialog(wxWindow* parent, const wxString& projectFolder)
 		: SettingsDialog(parent, "Project Setting", wxSize(400, 180)), projectFolder(projectFolder)
 	{
 		uint32_t realWidth = GetClientSize().x;
-		nameLabel = new wxStaticText(this, wxID_ANY, "Project name:", wxPoint(UI::border, UI::border + 3), wxSize(120, 22));
+		uint32_t y = UI::border;
+		nameLabel = new wxStaticText(this, wxID_ANY, "Project name:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		nameLabel->SetFont(UI::titleFont);
 
-		nameInput = new wxTextCtrl(this, wxID_ANY, "", wxPoint(2 * UI::border + 120, UI::border), wxSize(realWidth - 120 - 3 * UI::border, 22), wxTE_PROCESS_ENTER);
+		nameInput = new wxTextCtrl(this, wxID_ANY, "", wxPoint(2 * UI::border + labelWidth, y), wxSize(realWidth - labelWidth - 3 * UI::border, UI::unitHeight), wxTE_PROCESS_ENTER);
 		nameInput->SetValidator(wxTextValidator(wxFILTER_EMPTY));
 
-		defaultLevelPathLabel = new wxStaticText(this, wxID_ANY, "Default level:", wxPoint(UI::border, 2 * UI::border + 30), wxSize(100, 22));
+		y += UI::border + UI::heightPadding;
+		defaultLevelPathLabel = new wxStaticText(this, wxID_ANY, "Default level:", wxPoint(UI::border, y), wxSize(labelWidth, UI::unitHeight));
 		defaultLevelPathLabel->SetFont(UI::titleFont);
 
+		y += UI::unitHeight;
 		wxSize pathTextSize(realWidth - 3 * UI::border - UI::buttonSize.x, UI::buttonSize.y);
-		pathText = new wxStaticText(this, wxID_ANY, "", wxPoint(UI::border, 2 * UI::border + 52), pathTextSize, wxST_ELLIPSIZE_START);
+		pathText = new wxStaticText(this, wxID_ANY, "", wxPoint(UI::border, y), pathTextSize, wxST_ELLIPSIZE_START);
 		pathText->SetMaxSize(pathTextSize);
 
-		browseButton = new wxButton(this, wxID_ANY, "Browse...", wxPoint(realWidth - UI::border - UI::buttonSize.x , 2 * UI::border + 52), UI::buttonSize);
+		browseButton = new wxButton(this, wxID_ANY, "Browse...", wxPoint(realWidth - UI::border - UI::buttonSize.x , y), UI::buttonSize);
 		browseButton->Bind(wxEVT_BUTTON, &ProjectSettingsDialog::BrowseClicked, this);
 	}
 

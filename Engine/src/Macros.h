@@ -10,18 +10,27 @@
 	#define SPH_EXPORT
 #endif
 
-
-#define SPH_BREAK __debugbreak
+#ifdef SPH_DEBUG
+	#define SPH_BREAK() __debugbreak()
+#else
+	#define SPH_BREAK() 
+#endif
 
 // Binds
 #define SPH_BIND_0(x) std::bind(&x)
 #define SPH_BIND_1(x) std::bind(&x, std::placeholders::_1)
 #define SPH_BIND_2(x) std::bind(&x, std::placeholders::_1, std::placeholders::_2)
 #define SPH_BIND_3(x) std::bind(&x, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
+
 #define SPH_BIND_THIS_0(x) std::bind(&x, this)
 #define SPH_BIND_THIS_1(x) std::bind(&x, this, std::placeholders::_1)
 #define SPH_BIND_THIS_2(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2)
 #define SPH_BIND_THIS_3(x) std::bind(&x, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
+
+#define SPH_BIND_WITH_0(x, a) std::bind(&x, a)
+#define SPH_BIND_WITH_1(x, a) std::bind(&x, a, std::placeholders::_1)
+#define SPH_BIND_WITH_2(x, a) std::bind(&x, a, std::placeholders::_1, std::placeholders::_2)
+#define SPH_BIND_WITH_3(x, a) std::bind(&x, a, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
 
 #define SPH_BIND(x) SPH_BIND_THIS_1(x)
 #define SPH_BIND_GETTER(x) SPH_BIND_1(x)
@@ -30,18 +39,18 @@
 
 
 // Logs
-#ifdef SPH_EXPORTED
+#ifdef SPH_FINAL
 	#define SPH_LOG(...)
 	#define SPH_INFO(...)
 	#define SPH_WARN(...)
 	#define SPH_ERROR(...)
 	#define SPH_FATAL(...)
-	#define SPH_ASSERT(cond, ...) cond;
+	#define SPH_ASSERT(cond, ...)
 #else
 	#define SPH_LOG(...) ::Sharpheus::Logger::GetEngineLogger()->trace(__VA_ARGS__)
 	#define SPH_INFO(...) ::Sharpheus::Logger::GetEngineLogger()->info( __VA_ARGS__)
 	#define SPH_WARN(...) ::Sharpheus::Logger::GetEngineLogger()->warn(__VA_ARGS__)
 	#define SPH_ERROR(...) ::Sharpheus::Logger::GetEngineLogger()->error(__VA_ARGS__)
 	#define SPH_FATAL(...) ::Sharpheus::Logger::GetEngineLogger()->critical(__VA_ARGS__)
-	#define SPH_ASSERT(cond, ...) { if (!(cond)) { SPH_ERROR(__VA_ARGS__); SPH_BREAK(); } }
+	#define SPH_ASSERT(cond, ...) { if (!(cond)) { SPH_BREAK(); SPH_ERROR(__VA_ARGS__); } }
 #endif

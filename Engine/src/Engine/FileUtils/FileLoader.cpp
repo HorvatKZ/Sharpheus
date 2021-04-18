@@ -5,28 +5,24 @@
 
 namespace Sharpheus {
 
-	FileLoader::FileLoader(const std::string& path) : file(path.c_str(), std::ios::in | std::ios::binary)
+	FileLoader::FileLoader(const std::string& path)
 	{
-		SPH_ASSERT(file, "Cannot create/open file \"{0}\" to load", path);
+		file = fopen(path.c_str(), "rb");
+		SPH_ASSERT(file != NULL, "Cannot create/open file \"{0}\" to load", path);
 	}
 
 
 	FileLoader::~FileLoader()
 	{
-		file.close();
-	}
-
-
-	bool FileLoader::GetStatus()
-	{
-		return !file.fail();
+		fclose(file);
 	}
 
 
 	bool FileLoader::Read(uint8_t& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -34,8 +30,9 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(uint32_t& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -43,8 +40,9 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(int32_t& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -52,8 +50,9 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(size_t& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -61,9 +60,10 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(bool& data)
 	{
-		if (file) {
+		if (file != NULL) {
 			char _data;
-			file.read((char*)&_data, sizeof(_data));
+			size_t result = fread(&_data, sizeof(_data), 1, file);
+			status &= result == 1;
 			data = _data != 0;
 		}
 		return GetStatus();
@@ -72,8 +72,9 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(float& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -83,11 +84,15 @@ namespace Sharpheus {
 	{
 		if (file) {
 			uint32_t len = 0;
-			file.read((char*)&len, sizeof(len));
-			char* str = new char[len + 1];
-			file.read(str, sizeof(char) * (len + 1));
-			data = str;
-			delete str;
+			size_t result = fread(&len, sizeof(len), 1, file);
+			status &= result == 1;
+			if (status) {
+				char* str = new char[len + 1];
+				result = fread(str, sizeof(char) * (len + 1), 1, file);
+				status &= result == 1;
+				data = str;
+				delete str;
+			}
 		}
 		return GetStatus();
 	}
@@ -95,8 +100,9 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(Point& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -104,8 +110,9 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(Color& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -113,8 +120,9 @@ namespace Sharpheus {
 
 	bool FileLoader::Read(Transform& data)
 	{
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus();
 	}
@@ -167,8 +175,9 @@ namespace Sharpheus {
 	bool FileLoader::TryReadingEnd()
 	{
 		char data;
-		if (file) {
-			file.read((char*)&data, sizeof(data));
+		if (file != NULL) {
+			size_t result = fread(&data, sizeof(data), 1, file);
+			status &= result == 1;
 		}
 		return GetStatus() && data == '\n';
 	}

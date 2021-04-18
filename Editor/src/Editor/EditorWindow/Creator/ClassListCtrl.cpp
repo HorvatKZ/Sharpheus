@@ -8,6 +8,31 @@ namespace Sharpheus {
 
     wxColour ClassListCtrl::inativeColour(128, 128, 128);
     wxFont ClassListCtrl::inactiveFont(9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL);
+    std::vector<ClassListCtrl::Info> ClassListCtrl::infos = {
+            Info("GameObject", "gameobj.png", GameObject::Type::None, 0),
+            Info("Collection", "collection.png", GameObject::Type::Collection, 1),
+            Info("Rendering", "rendering.png", GameObject::Type::None, 1),
+            Info("Camera", "camera.png", GameObject::Type::Camera, 2),
+            Info("Sprite", "sprite.png", GameObject::Type::Sprite, 2),
+            Info("Quad", "quad.png", GameObject::Type::Quad, 2),
+            Info("Text", "text.png", GameObject::Type::Text, 2),
+            Info("AnimatedSprite", "animsprite.png", GameObject::Type::AnimatedSprite, 2),
+            Info("AnimationPlayer", "animplayer.png", GameObject::Type::AnimationPlayer, 2),
+            Info("Physics", "physics.png", GameObject::Type::None, 1),
+            Info("PhysicsObject", "physicsobj.png", GameObject::Type::PhysicsObject, 2),
+            Info("Colliders", "colliders.png", GameObject::Type::None, 2),
+            Info("BoxCollider", "boxcollider.png", GameObject::Type::BoxCollider, 3),
+            Info("CircleCollider", "circlecollider.png", GameObject::Type::CircleCollider, 3),
+            Info("CapsuleCollider", "capsulecollider.png", GameObject::Type::CapsuleCollider, 3),
+            Info("Sounds", "sounds.png", GameObject::Type::None, 1),
+            Info("MusicPlayer", "musicplayer.png", GameObject::Type::MusicPlayer, 2),
+            Info("Controls", "controls.png", GameObject::Type::None, 1),
+            Info("Button", "button.png", GameObject::Type::Button, 2),
+            Info("ImageButton", "imagebutton.png", GameObject::Type::ImageButton, 2),
+            Info("CheckBox", "checkbox.png", GameObject::Type::CheckBox, 2),
+            Info("RadioButton", "radio.png", GameObject::Type::RadioButton, 2),
+            Info("Behavior", "behavior.png", GameObject::Type::Behavior, 1)
+    };
 
 
     ClassListCtrl::ClassListCtrl()
@@ -62,32 +87,6 @@ namespace Sharpheus {
 
     void ClassListCtrl::Fill()
     {
-        std::vector<Info> infos = {
-            Info("GameObject", "gameobj.png", GameObject::Type::None, 0),
-            Info("Collection", "collection.png", GameObject::Type::Collection, 1),
-            Info("Rendering", "rendering.png", GameObject::Type::None, 1),
-            Info("Camera", "camera.png", GameObject::Type::Camera, 2),
-            Info("Sprite", "sprite.png", GameObject::Type::Sprite, 2),
-            Info("Quad", "quad.png", GameObject::Type::Quad, 2),
-            Info("Text", "text.png", GameObject::Type::Text, 2),
-            Info("AnimatedSprite", "animsprite.png", GameObject::Type::AnimatedSprite, 2),
-            Info("AnimationPlayer", "animplayer.png", GameObject::Type::AnimationPlayer, 2),
-            Info("Physics", "physics.png", GameObject::Type::None, 1),
-            Info("PhysicsObject", "physicsobj.png", GameObject::Type::PhysicsObject, 2),
-            Info("Colliders", "colliders.png", GameObject::Type::None, 2),
-            Info("BoxCollider", "boxcollider.png", GameObject::Type::BoxCollider, 3),
-            Info("CircleCollider", "circlecollider.png", GameObject::Type::CircleCollider, 3),
-            Info("CapsuleCollider", "capsulecollider.png", GameObject::Type::CapsuleCollider, 3),
-            Info("Sounds", "sounds.png", GameObject::Type::None, 1),
-            Info("MusicPlayer", "musicplayer.png", GameObject::Type::MusicPlayer, 2),
-            Info("Controls", "controls.png", GameObject::Type::None, 1),
-            Info("Button", "button.png", GameObject::Type::Button, 2),
-            Info("ImageButton", "imagebutton.png", GameObject::Type::ImageButton, 2),
-            Info("CheckBox", "checkbox.png", GameObject::Type::CheckBox, 2),
-            Info("RadioButton", "radio.png", GameObject::Type::RadioButton, 2),
-            Info("Behavior", "behavior.png", GameObject::Type::Behavior, 1)
-        };
-
         wxImageList* images = new wxImageList(16, 16);
         for (Info& info : infos) {
             images->Add(ImageManager::GetImage(info.path, ImageManager::PathType::GAMEOBJECTS));
