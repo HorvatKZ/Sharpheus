@@ -23,7 +23,7 @@ namespace Sharpheus {
 		} else if (formatString == "jpg" || formatString == "jpeg") {
 			format = wxBITMAP_TYPE_JPEG;
 		} else if (formatString == "bmp") {
-			format = wxBITMAP_TYPE_JPEG;
+			format = wxBITMAP_TYPE_BMP;
 		} else if (formatString == "gif") {
 			format = wxBITMAP_TYPE_GIF;
 		}

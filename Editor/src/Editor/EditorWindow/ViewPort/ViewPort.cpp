@@ -16,6 +16,7 @@ namespace Sharpheus {
 		GLenum err = glewInit();
 		SPHE_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
 		Renderer::Init();
+		EditorData::SetOGLVersion(Renderer::GetAPIVersion());
 
 		camera = new ViewPortCamera();
 		camera->SetCustomRect(size.x, size.y);

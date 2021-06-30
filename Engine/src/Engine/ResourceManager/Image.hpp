@@ -4,6 +4,7 @@
 #include "Engine/Renderer/Renderer.hpp"
 #include <GL/glew.h>
 #include <GL/wglew.h>
+#include <GL/GLU.h>
 
 #define TEXTURE_ID_NONE 0
 
@@ -16,6 +17,8 @@ namespace Sharpheus {
 		Image(const std::string& path, bool filtered = false);
 		~Image();
 
+		inline bool IsValid() { return ID != TEXTURE_ID_NONE && valid; }
+
 		inline uint32_t GetWidth() { return width; }
 		inline uint32_t GetHeight() { return height; }
 		inline bool IsFiltered() { return filtered; }
@@ -26,7 +29,7 @@ namespace Sharpheus {
 	private:
 		GLuint ID = TEXTURE_ID_NONE;
 		uint32_t width, height;
-		bool filtered;
+		bool filtered, valid = false;
 
 		static Point fullTexCoords[4];
 

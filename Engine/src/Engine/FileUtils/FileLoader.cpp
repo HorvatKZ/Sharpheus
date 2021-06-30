@@ -8,13 +8,18 @@ namespace Sharpheus {
 	FileLoader::FileLoader(const std::string& path)
 	{
 		file = fopen(path.c_str(), "rb");
-		SPH_ASSERT(file != NULL, "Cannot create/open file \"{0}\" to load", path);
+		if (file == NULL) {
+			status = false;
+			SPH_ERROR("Cannot open file \"{0}\" to load", path);
+		}
 	}
 
 
 	FileLoader::~FileLoader()
 	{
-		fclose(file);
+		if (file != NULL) {
+			fclose(file);
+		}
 	}
 
 
@@ -172,8 +177,28 @@ namespace Sharpheus {
 	}
 
 
+	bool FileLoader::ReadLine()
+	{
+		char c;
+		size_t result = fread(&c, sizeof(c), 1, file);
+		status &= result == 1;
+		while (status && c != '\n') {
+			size_t result = fread(&c, sizeof(c), 1, file);
+			status &= result == 1;
+		}
+
+		newLineRead = (c == '\n');
+		return GetStatus();
+	}
+
+
 	bool FileLoader::TryReadingEnd()
 	{
+		if (newLineRead) {
+			newLineRead = false;
+			return GetStatus();
+		}
+
 		char data;
 		if (file != NULL) {
 			size_t result = fread(&data, sizeof(data), 1, file);

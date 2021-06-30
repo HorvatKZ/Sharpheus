@@ -28,11 +28,14 @@ namespace Sharpheus {
 		bool Read(class Font** data);
 		bool Read(class Animation** data);
 
+		bool ReadLine();
+
 		bool TryReadingEnd();
 
 	private:
 		FILE* file;
 		bool status = true;
+		bool newLineRead = false;
 	};
 
 }

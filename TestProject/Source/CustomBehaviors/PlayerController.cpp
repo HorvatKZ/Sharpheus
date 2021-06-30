@@ -26,9 +26,9 @@ PlayerController::~PlayerController()
 }
 
 
-void PlayerController::CopyFrom(GameObject* other)
+void PlayerController::CopyContent(GameObject* other)
 {
-	SPH_COPY_HEADER(2);
+	Behavior::CopyContent(other);
 
 	PlayerController* trueOther = (PlayerController*)other;
 	jumpForce = trueOther->jumpForce;
@@ -80,7 +80,7 @@ void PlayerController::OnKeyPressed(const Sharpheus::KeyPressedEvent& e)
 }
 
 
-void PlayerController::OnKeyRepeat(const Sharpheus::KeyRepeatEvent& e)
+void PlayerController::OnKeyHold(const Sharpheus::KeyHoldEvent& e)
 {
 	switch (e.code) {
 		case KeyCode::A:
@@ -121,7 +121,7 @@ void PlayerController::Tick(float deltaTime)
 void PlayerController::Init()
 {
 	Subscribe<KeyPressedEvent>(SPH_BIND(PlayerController::OnKeyPressed));
-	Subscribe<KeyRepeatEvent>(SPH_BIND(PlayerController::OnKeyRepeat));
+	Subscribe<KeyHoldEvent>(SPH_BIND(PlayerController::OnKeyHold));
 	Subscribe<KeyReleasedEvent>(SPH_BIND(PlayerController::OnKeyReleased));
 	SubscribeCollision((Collider*)parent->GetFirstChildOfType(Type::CapsuleCollider), SPH_BIND(PlayerController::OnCollision));
 	anim = (AnimationPlayer*)parent->GetFirstChildOfType(Type::AnimationPlayer);

@@ -40,7 +40,10 @@ namespace Sharpheus {
 	{
 		SPH_LOG("Importing image: \"{0}\"", fullPath);
 		glGenTextures(1, &ID);
-		SPH_ASSERT(ID != TEXTURE_ID_NONE, "Error: {0}. Could not create texture", glGetError());
+		if (ID == TEXTURE_ID_NONE) {
+			GLenum err = glGetError();
+			SPH_ERROR("Error: {0} - {1}. Could not create texture", err, gluErrorString(err));
+		}
 		glBindTexture(GL_TEXTURE_2D, ID);
 		glActiveTexture(ID);
 
@@ -55,6 +58,8 @@ namespace Sharpheus {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, sampling);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+			valid = true;
 			SPH_LOG("Import successful({0}x{1} {2})", width, height, channels == 4 ? "RGBA" : "RGB");
 		} else {
 			SPH_ERROR("Unable to import image: \"{0}\"", fullPath);

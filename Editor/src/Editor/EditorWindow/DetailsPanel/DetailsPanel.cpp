@@ -142,7 +142,7 @@ namespace Sharpheus {
 					SPH_PRESENT_BEHAVIOR(obj);
 					break;
 				default:
-					SPHE_WARN("Details Panel: Unexpected GameObject type {0}", type);
+					SPHE_WARN("Details Panel: Unexpected GameObject type");
 			}
 		}
 

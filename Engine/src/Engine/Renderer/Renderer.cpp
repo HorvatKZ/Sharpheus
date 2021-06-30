@@ -75,4 +75,9 @@ namespace Sharpheus {
 		renderer->SetBackgroundColor(color);
 	}
 
+	const std::string& Renderer::GetAPIVersion()
+	{
+		return renderer->GetVersion();
+	}
+
 }

@@ -3,7 +3,7 @@
 #include "ProcessControl.hpp"
 #include "NewProjectDialog.hpp"
 #include <wx/stdpaths.h>
-
+#include <wx/display.h>
 
 
 namespace Sharpheus {
@@ -15,8 +15,11 @@ namespace Sharpheus {
 	StarterWindow::StarterWindow(const std::string& title, uint32_t width, uint32_t height)
 		: wxFrame(nullptr, wxID_ANY, title, wxPoint(100, 100), wxSize(width, height))
 	{
-		SetMinSize(GetSize());
-		SetMaxSize(GetSize());
+		wxSize size = GetSize();
+		wxRect displaySize = wxDisplay(wxDisplay::GetFromWindow(this)).GetClientArea();
+		SetMinSize(size);
+		SetMaxSize(size);
+		SetPosition(wxPoint((displaySize.width - size.x) / 2, (displaySize.height - size.y) / 2));
 
 		wxIcon icon;
 		icon.CopyFromBitmap(wxBitmap(ProcessControl::GetRoot() + "Assets\\Editor\\Icons\\sharpheus_icon.png", wxBITMAP_TYPE_PNG));

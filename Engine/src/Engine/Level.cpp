@@ -152,10 +152,14 @@ namespace Sharpheus {
 	}
 
 
-	void Level::Move(GameObject* obj, GameObject* newParent)
+	bool Level::Move(GameObject* obj, GameObject* newParent)
 	{
-		SPH_ASSERT(obj != nullptr, "Tried to move null GameObject");
-		obj->Move(newParent);
+		if (obj == nullptr) {
+			SPH_ERROR("Tried to move null GameObject");
+			return false;
+		}
+
+		return obj->Move(newParent);
 	}
 
 
@@ -190,6 +194,7 @@ namespace Sharpheus {
 		Renderer::SetCamera(nullptr);
 		delete root;
 		collSys.Clear();
+		RadioButton::Clear();
 
 		FileLoader fl((base + path).c_str());
 
@@ -357,7 +362,9 @@ namespace Sharpheus {
 		while (!objsToDelete.empty()) {
 			GameObject* obj = objsToDelete.front();
 			objsToDelete.pop();
-			delete obj;
+			if (!obj->IsParentOfCurrentCamera()) {
+				delete obj;
+			}
 		}
 	}
 

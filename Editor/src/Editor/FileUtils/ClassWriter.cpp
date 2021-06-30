@@ -45,9 +45,6 @@ namespace Sharpheus {
 		cw.WriteConstructorDecl("Sharpheus::Behavior* other");
 		cw.WriteConstructorDecl("Sharpheus::GameObject* parent, const std::string& name");
 		cw.WriteDestructorDecl();
-		cw.WriteFunctionDecl("void", "CopyFrom", "Sharpheus::GameObject* other", "virtual", true);
-		cw.WriteEmptyLine();
-		cw.WriteFunctionDecl("void", "Init", "", "virtual", true);
 		cw.WriteEmptyLine();
 		cw.WriteFunctionDecl("bool", "Load", "Sharpheus::FileLoader& fl", "virtual", true);
 		cw.WriteEmptyLine();
@@ -58,6 +55,8 @@ namespace Sharpheus {
 		cw.WriteFunctionDecl("bool", "Save", "Sharpheus::FileSaver& fs", "virtual", true);
 		cw.WriteEmptyLine();
 		cw.WriteFunctionDecl("void", "Tick", "float deltaTime", "virtual", true);
+		cw.WriteEmptyLine();
+		cw.WriteFunctionDecl("void", "CopyContent", "GameObject* other", "virtual", true);
 		cw.EndClass();
 		cw.WriteEmptyLine();
 	}
@@ -72,6 +71,9 @@ namespace Sharpheus {
 
 		cw.UsingNamespace("Sharpheus");
 		cw.WriteEmptyLines(2);
+
+		cw.WriteLine("uint32_t " + className + "::classVersion = 1;");
+		cw.WriteEmptyLine();
 
 		cw.WriteLine("ClassInfo " + className + "::classInfo(\"" + className + "\", \"behavior.png\", {");
 		cw.WriteLine(1, "// Provide necessary data members here for the Editor to present them");
@@ -90,16 +92,9 @@ namespace Sharpheus {
 		cw.EndFunctionDef();
 		cw.WriteEmptyLines(2);
 
-		cw.StartFunctionDef("void", "CopyFrom", "GameObject* other");
-		cw.WriteLine(1, "SPH_COPY_HEADER(" + wxString::Format("%d", subType) + ");");
-		cw.WriteEmptyLine();
-		cw.WriteLine(1, className + "* trueOther = (" + className + "*)other;");
-		cw.WriteLine(1, "// Copy data members here");
-		cw.EndFunctionDef();
-		cw.WriteEmptyLines(2);
-
 		cw.StartFunctionDef("bool", "Load", "FileLoader& fl");
 		cw.WriteLine(1, parent + "::Load(fl);");
+		cw.WriteLine(1, "SPH_CHECK_CLASSVERSION(fl, classVersion);");
 		cw.WriteLine(1, "// Read data members here");
 		cw.WriteLine(1, "return fl.GetStatus();");
 		cw.EndFunctionDef();
@@ -107,6 +102,7 @@ namespace Sharpheus {
 
 		cw.StartFunctionDef("bool", "Save", "FileSaver& fs");
 		cw.WriteLine(1, parent + "::Save(fs);");
+		cw.WriteLine(1, "fs.Write(classVersion);");
 		cw.WriteLine(1, "// Write data members here");
 		cw.WriteLine(1, "return fs.GetStatus();");
 		cw.EndFunctionDef();
@@ -114,6 +110,14 @@ namespace Sharpheus {
 
 		cw.StartFunctionDef("void", "Tick", "float deltaTime");
 		cw.WriteLine(1, "// Called once per tick");
+		cw.EndFunctionDef();
+		cw.WriteEmptyLines(2);
+
+		cw.StartFunctionDef("void", "CopyContent", "GameObject* other");
+		cw.WriteLine(1, parent + "::CopyContent(other);");
+		cw.WriteEmptyLine();
+		cw.WriteLine(1, className + "* trueOther = (" + className + "*)other;");
+		cw.WriteLine(1, "// Copy data members here");
 		cw.EndFunctionDef();
 		cw.WriteEmptyLines(2);
 
@@ -131,7 +135,7 @@ namespace Sharpheus {
 
 	void ClassWriter::UpdateCreateBehaviorHeader(const wxString& filePath, const wxString& newClassPath, const wxString& newClassName, uint32_t newSubType, std::unordered_map<uint32_t, std::string>& oldClasses)
 	{
-		uint32_t ind = 10;
+		uint32_t ind = 9;
 		wxTextFile file;
 		file.Open(filePath);
 		wxArrayString behaviorIncludes;

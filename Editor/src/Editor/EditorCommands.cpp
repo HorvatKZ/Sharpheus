@@ -135,7 +135,7 @@ namespace Sharpheus {
 		SPHE_ASSERT(success, "Cannot save level. Check the log files for more information");
 		
 		levelChangedCallback();
-		EditorData::SetCurrent(curr);
+		EditorData::SetCurrent(curr->GetLastChild());
 		currChangedCallback();
 		return success;
 	}

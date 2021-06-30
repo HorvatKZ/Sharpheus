@@ -81,7 +81,7 @@ namespace Sharpheus {
 		y = UI::border;
 		slicingLabel = new wxStaticText(this, wxID_ANY, "Slicing", wxPoint(secondColStartX, y + UI::shift));
 		slicingLabel->SetFont(UI::titleFont);
-
+		                              
 		y += UI::border + UI::unitHeight;
 		widthLabel = new wxStaticText(this, wxID_ANY, "Frame width", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		widthInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
@@ -354,6 +354,7 @@ namespace Sharpheus {
 			newBitmapSize = wxSize(bitmapSize.x * imgPrevSize.x / bitmapSize.y, imgPrevSize.y);
 		}
 		bitmap.Rescale(newBitmapSize.x, newBitmapSize.y);
+		imgPathText->SetLabel(imgPath);
 		imgPreview->SetBitmap(bitmap);
 		info->SetLabel(wxString::Format("Width: %d px, Height: %d px", bitmapSize.x, bitmapSize.y));
 	}

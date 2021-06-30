@@ -57,8 +57,9 @@ namespace Sharpheus {
 		}
 
 		virtual inline void SetDim(const Point& dim) {
-			if (dim != this->dim) {
-				this->dim = dim;
+			if (dim != realDim) {
+				realDim = dim;
+				this->dim = Point(abs(dim.x), abs(dim.y));
 				UpdateFurthest();
 				needsToRecalc = true;
 			}
@@ -82,7 +83,7 @@ namespace Sharpheus {
 		};
 
 		Point xAxis, yAxis;
-		Point pos, dim;
+		Point pos, dim, realDim;
 		Point corners[4];
 		float rot, furthest;
 		bool needsToRecalc = true;

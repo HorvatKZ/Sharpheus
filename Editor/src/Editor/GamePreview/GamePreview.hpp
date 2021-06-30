@@ -19,7 +19,7 @@ namespace Sharpheus {
 
 	private:
 		PreviewCanvas* canvas;
-		wxLongLong lastTick;
+		wxLongLong firstTick;
 		std::unordered_set<int> pressedKeys;
 
 		static wxPoint shift;

@@ -86,9 +86,12 @@ namespace Sharpheus {
 	{
 		if (needsToRecalc) {
 			Point smallHeight = yAxis * (dim.y - domeHeight * 0.66f);
-			Point smallWidth = xAxis * dim.x * 0.33f;
-			Point height = yAxis * dim.y;
-			Point width = xAxis * dim.x;
+			if (realDim.y < 0) {
+				smallHeight *= -1;
+			}
+			Point smallWidth = xAxis * realDim.x * 0.33f;
+			Point height = yAxis * realDim.y;
+			Point width = xAxis * realDim.x;
 			satCorners[0] = pos - height - smallWidth;
 			satCorners[1] = pos - height + smallWidth;
 			satCorners[2] = pos - smallHeight + width;

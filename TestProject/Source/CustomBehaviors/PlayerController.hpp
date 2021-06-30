@@ -12,7 +12,6 @@ public:
 	PlayerController(Sharpheus::Behavior* other);
 	PlayerController(Sharpheus::GameObject* parent, const std::string& name);
 	virtual ~PlayerController();
-	virtual void CopyFrom(Sharpheus::GameObject* other) override;
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
@@ -31,8 +30,10 @@ protected:
 	void Tick(float deltaTime) override;
 	virtual bool Save(Sharpheus::FileSaver& fs) override;
 
+	virtual void CopyContent(Sharpheus::GameObject* other) override;
+
 	void OnKeyPressed(const Sharpheus::KeyPressedEvent& e);
-	void OnKeyRepeat(const Sharpheus::KeyRepeatEvent& e);
+	void OnKeyHold(const Sharpheus::KeyHoldEvent& e);
 	void OnKeyReleased(const Sharpheus::KeyReleasedEvent& e);
 	void OnCollision(const Sharpheus::CollisionEvent& e);
 };

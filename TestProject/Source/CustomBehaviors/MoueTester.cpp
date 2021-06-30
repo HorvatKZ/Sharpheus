@@ -27,15 +27,6 @@ MoueTester::~MoueTester()
 }
 
 
-void MoueTester::CopyFrom(GameObject* other)
-{
-	SPH_COPY_HEADER(4);
-
-	MoueTester* trueOther = (MoueTester*)other;
-	// Copy data members here
-}
-
-
 bool MoueTester::Load(FileLoader& fl)
 {
 	Sharpheus::Behavior::Load(fl);

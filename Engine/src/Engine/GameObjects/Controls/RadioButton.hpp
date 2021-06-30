@@ -16,7 +16,9 @@ namespace Sharpheus {
 		void SetGroupId(ID groupId);
 
 		const std::string& GetValue();
+		bool SetValue(const std::string& value);
 
+		static void Clear();
 		static const std::string& GetValueOf(ID id);
 
 		SPH_DECL_GAMEOBJECT(RadioButton)

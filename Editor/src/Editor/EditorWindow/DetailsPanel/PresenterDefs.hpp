@@ -477,8 +477,14 @@ namespace Sharpheus {
 		if (image != nullptr) {
 			std::string path = image->GetPath();
 			if (path != lastPath) {
-				this->path->SetLabel(path);
 				wxImage bitmap = ImageManager::GetImage(image->GetFullPath());
+				if (!bitmap.IsOk()) {
+					SPHE_ERROR("The image is not found or corrupted");
+					provider->Set((Class*)curr, nullptr);
+					signal();
+					return;
+				}
+				this->path->SetLabel(path);
 				bitmap.Rescale(previewHeight, previewHeight);
 				preview->SetBitmap(bitmap);
 				lastPath = path;
@@ -718,8 +724,14 @@ namespace Sharpheus {
 		if (anim != nullptr) {
 			std::string path = anim->GetPath();
 			if (path != lastPath) {
-				name->SetLabel(anim->GetName());
 				wxImage bitmap = ImageManager::GetImage(anim->GetAtlas()->GetFullPath());
+				if (!bitmap.IsOk()) {
+					SPHE_ERROR("The image is not found or corrupted");
+					provider->Set((Class*)curr, nullptr);
+					signal();
+					return;
+				}
+				name->SetLabel(anim->GetName());
 				uint32_t startFrame = anim->GetStartFrame(), frameCols = anim->GetFrameCols();
 				uint32_t frameWidth = anim->GetFrameWidth(), frameHeight = anim->GetFrameHeight();
 				uint32_t currCol = startFrame % frameCols, currRow = startFrame / frameCols;
@@ -908,7 +920,7 @@ namespace Sharpheus {
 	{
 		if (curr != nullptr) {
 			long selected = list->GetFirstSelected();
-			if (selected >= 0 && selected < provider->GetCount((Class*)curr)) {
+			if (selected >= 0 && (uint32_t)selected < provider->GetCount((Class*)curr)) {
 				if (deleteSelected) {
 					provider->RemoveString((Class*)curr, selected);
 					deleteSelected = false;
@@ -924,7 +936,7 @@ namespace Sharpheus {
 	template<class Class>
 	inline void StringListPresenter<Class>::OnListClicked(wxMouseEvent& e)
 	{
-		if (wxGetMousePosition().x - list->GetScreenPosition().x > secondColStart) {
+		if (wxGetMousePosition().x - list->GetScreenPosition().x > (int)secondColStart) {
 			deleteSelected = true;
 		}
 		e.Skip();

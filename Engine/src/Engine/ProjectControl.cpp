@@ -6,10 +6,13 @@ namespace Sharpheus {
 
 	std::string ProjectControl::loadLevelPath;
 	bool ProjectControl::needToExit = false;
+	bool ProjectControl::isPaused = false;
 
 
 	void ProjectControl::Init()
 	{
+		isPaused = false;
+		needToExit = false;
 	}
 
 
@@ -30,6 +33,18 @@ namespace Sharpheus {
 	}
 
 
+	void ProjectControl::Pause()
+	{
+		isPaused = true;
+	}
+
+
+	void ProjectControl::Resume()
+	{
+		isPaused = false;
+	}
+
+
 	std::string ProjectControl::GetLoadLevelPath()
 	{
 		std::string result = loadLevelPath;
@@ -37,14 +52,4 @@ namespace Sharpheus {
 		return result;
 	}
 
-
-	bool ProjectControl::NeedToExit()
-	{
-		return needToExit;
-	}
-
-	void ProjectControl::ResetExit()
-	{
-		needToExit = false;
-	}
 }

@@ -85,7 +85,9 @@ namespace Sharpheus {
 		}
 
 		Image* newImage = new Image(path, filtered);
-		images[path] = newImage;
+		if (newImage->IsValid()) {
+			images[path] = newImage;
+		}
 		return newImage;
 	}
 

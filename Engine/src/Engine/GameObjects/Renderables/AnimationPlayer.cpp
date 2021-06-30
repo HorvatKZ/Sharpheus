@@ -51,11 +51,21 @@ namespace Sharpheus {
 		if (anim != nullptr) {
 			currTime += deltaTime * speed;
 			float animFullTime = anim->GetFullTime();
-			if (currTime > animFullTime) {
-				currTime -= animFullTime;
+			while (currTime > animFullTime) {
+				if (playOnceActive) {
+					FallBack();
+				}
+				else {
+					currTime -= animFullTime;
+				}
 			}
-			else if (currTime < 0.f) {
-				currTime += animFullTime;
+			while (currTime < 0.f) {
+				if (playOnceActive) {
+					FallBack();
+				}
+				else {
+					currTime += animFullTime;
+				}
 			}
 		}
 	}
@@ -66,6 +76,14 @@ namespace Sharpheus {
 		if (currAnimInd < anims.size()) {
 			GetAnimation(currAnimInd)->Render(shape->GetCorners(), currTime, tint);
 		}
+	}
+
+
+	void AnimationPlayer::FallBack()
+	{
+		playOnceActive = false;
+		SetCurrent(fallBackInd);
+		fallBackInd = 0;
 	}
 
 

@@ -57,14 +57,14 @@ namespace Sharpheus {
 
 
 	template <class Class, class T, CommonProvider::Type type>
-	class RangableProvider : public Provider<Class, T, type>
+	class RangeableProvider : public Provider<Class, T, type>
 	{
 	public:
-		RangableProvider(const std::string& name, Getter<Class, T>&& getter, Setter<Class, T>&& setter)
+		RangeableProvider(const std::string& name, Getter<Class, T>&& getter, Setter<Class, T>&& setter)
 			: Provider<Class, T, type>(name, std::move(getter), std::move(setter)), hasRange(false) {}
-		RangableProvider(const std::string& name, Getter<Class, T>&& getter, Setter<Class, T>&& setter, T min, T max)
+		RangeableProvider(const std::string& name, Getter<Class, T>&& getter, Setter<Class, T>&& setter, T min, T max)
 			: Provider<Class, T, type>(name, std::move(getter), std::move(setter)), hasRange(true), min(min), max(max) {}
-		virtual ~RangableProvider() = default;
+		virtual ~RangeableProvider() = default;
 
 		virtual inline void Set(Class * obj, T value) override { if (!hasRange || min <= value && value <= max) setter(obj, value); }
 
@@ -78,9 +78,9 @@ namespace Sharpheus {
 	};
 
 
-	template <class Class> using IntProvider	= RangableProvider<Class, int32_t,		CommonProvider::Type::INT>;
-	template <class Class> using UIntProvider	= RangableProvider<Class, uint32_t,		CommonProvider::Type::UINT>;
-	template <class Class> using FloatProvider	= RangableProvider<Class, float,		CommonProvider::Type::FLOAT>;
+	template <class Class> using IntProvider	= RangeableProvider<Class, int32_t,		CommonProvider::Type::INT>;
+	template <class Class> using UIntProvider	= RangeableProvider<Class, uint32_t,		CommonProvider::Type::UINT>;
+	template <class Class> using FloatProvider	= RangeableProvider<Class, float,		CommonProvider::Type::FLOAT>;
 
 	template <class Class> using BoolProvider		= Provider<Class, bool,					CommonProvider::Type::BOOL>;
 	template <class Class> using FontStyleProvider	= Provider<Class, uint8_t,				CommonProvider::Type::FONTSTYLE>;
@@ -92,13 +92,13 @@ namespace Sharpheus {
 
 
 	template <class Class>
-	class UFloatProvider : public RangableProvider<Class, float, CommonProvider::Type::UFLOAT>
+	class UFloatProvider : public RangeableProvider<Class, float, CommonProvider::Type::UFLOAT>
 	{
 	public:
 		UFloatProvider(const std::string& name, Getter<Class, float>&& getter, Setter<Class, float>&& setter)
-			: RangableProvider<Class, float, Type::UFLOAT>(name, std::move(getter), std::move(setter)) {}
+			: RangeableProvider<Class, float, Type::UFLOAT>(name, std::move(getter), std::move(setter)) {}
 		UFloatProvider(const std::string& name, Getter<Class, float>&& getter, Setter<Class, float>&& setter, float min, float max)
-			: RangableProvider<Class, float, Type::UFLOAT>(name, std::move(getter), std::move(setter), min, max){}
+			: RangeableProvider<Class, float, Type::UFLOAT>(name, std::move(getter), std::move(setter), min, max){}
 		virtual ~UFloatProvider() = default;
 
 		virtual inline void Set(Class * obj, float value) override {

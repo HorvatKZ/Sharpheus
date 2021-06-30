@@ -15,6 +15,18 @@ namespace Sharpheus {
 		level->RequestInit(this);
 	}
 
+
+	void Behavior::CopyFrom(GameObject* other)
+	{
+		SPH_CHECKTYPE(other, Behavior);
+		if (((Behavior*)other)->GetSubType() != GetSubType()) {
+			SPH_ERROR("\"{0}\" tries to copy from different type \"{1}\"", name, other->GetName());
+			return;
+		}
+		CopyContent(other);
+	}
+
+
 	void Behavior::SetLevel(Level* level)
 	{
 		GameObject::SetLevel(level);
@@ -31,6 +43,11 @@ namespace Sharpheus {
 		fs.Write(trafo);
 		fs.Write(isVisible);
 		return fs.GetStatus();
+	}
+
+
+	void Behavior::CopyContent(GameObject* other)
+	{
 	}
 
 }

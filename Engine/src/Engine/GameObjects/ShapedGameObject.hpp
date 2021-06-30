@@ -13,7 +13,7 @@ namespace Sharpheus {
 
 		virtual inline Shape* GetShape() { return shape; }
 
-		virtual void SetWorldTrafo(const Transform & trafo) override;
+		virtual void SetWorldTrafo(const Transform& trafo) override;
 
 	protected:
 		Shape* shape = nullptr;

@@ -43,51 +43,56 @@ namespace Sharpheus {
 
 	SPH_DEF_EVENT_FUNC(KeyPressedEvent)
 	SPH_DEF_EVENT_FUNC(KeyReleasedEvent)
-	SPH_DEF_EVENT_FUNC(KeyRepeatEvent)
+	SPH_DEF_EVENT_FUNC(KeyHoldEvent)
 
-
-	class SPH_EXPORT KeyPressedEvent : public Event
+	
+	class SPH_EXPORT KeyEvent : public Event
 	{
 	public:
-		KeyPressedEvent(KeyCode code) : code(code) {}
-		KeyPressedEvent(int code) : code((KeyCode)code) {}
+		KeyEvent(KeyCode code) : code(code) {}
+		KeyEvent(int code) : code((KeyCode)code) {}
+		virtual ~KeyEvent() = default;
+
+		KeyCode code;
+	};
+
+
+	class SPH_EXPORT KeyPressedEvent : public KeyEvent
+	{
+	public:
+		KeyPressedEvent(KeyCode code) : KeyEvent(code) {}
+		KeyPressedEvent(int code) : KeyEvent(code) {}
 		virtual ~KeyPressedEvent() = default;
 
 		inline std::string ToStr() const override { return "KeyPressedEvent " + std::to_string((int)code); }
 
 		SPH_DECL_EVENT(KeyPressed)
-
-		KeyCode code;
 	};
 
 
-	class SPH_EXPORT KeyRepeatEvent : public Event
+	class SPH_EXPORT KeyHoldEvent : public KeyEvent
 	{
 	public:
-		KeyRepeatEvent(KeyCode code) : code(code) {}
-		KeyRepeatEvent(int code) : code((KeyCode)code) {}
-		virtual ~KeyRepeatEvent() = default;
+		KeyHoldEvent(KeyCode code) : KeyEvent(code) {}
+		KeyHoldEvent(int code) : KeyEvent(code) {}
+		virtual ~KeyHoldEvent() = default;
 
-		inline std::string ToStr() const override { return "KeyRepeatEvent " + std::to_string((int)code); }
+		inline std::string ToStr() const override { return "KeyHoldEvent " + std::to_string((int)code); }
 
-		SPH_DECL_EVENT(KeyRepeat)
-
-		KeyCode code;
+		SPH_DECL_EVENT(KeyHold)
 	};
 
 
-	class SPH_EXPORT KeyReleasedEvent : public Event
+	class SPH_EXPORT KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(KeyCode code) : code(code) {}
-		KeyReleasedEvent(int code) : code((KeyCode)code) {}
+		KeyReleasedEvent(KeyCode code) : KeyEvent(code) {}
+		KeyReleasedEvent(int code) : KeyEvent(code) {}
 		virtual ~KeyReleasedEvent() = default;
 
 		inline std::string ToStr() const override { return "KeyReleasedEvent " + std::to_string((int)code); }
 
 		SPH_DECL_EVENT(KeyReleased)
-
-		KeyCode code;
 	};
 
 }

@@ -17,7 +17,7 @@ namespace Sharpheus {
 		: wxDialog(parent, wxID_ANY, "Create new project", wxPoint(0, 0), wxSize(400, 250))
 	{
 		wxSize parentSize = parent->GetSize();
-		SetPosition(wxPoint((parentSize.x - 400) / 2, (parentSize.y - 300) / 2));
+		SetPosition(parent->GetPosition() + wxPoint((parentSize.x - 400) / 2, (parentSize.y - 300) / 2));
 
 		uint32_t realWidth = GetClientSize().x;
 		projectNameLabel = new wxStaticText(this, wxID_ANY, "Name:", wxPoint(border, border + 3), wxSize(120, 22));

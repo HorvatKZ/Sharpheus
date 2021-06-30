@@ -34,11 +34,14 @@ namespace Sharpheus {
 
 	void Creator::OnAdd(wxCommandEvent& e)
 	{
-		if (type == GameObject::Type::None) {
+		wxString name = newName->GetValue();
+		if (name.empty()) {
+			SPHE_WARN("The name of the GameObject cannot be empty!");
+		} else if (type == GameObject::Type::None) {
 			typeSelector->SetValue("");
 			SPHE_WARN("Choose a valid type before adding a GameObject!");
 		} else {
-			levelHierarchy->CreateNewGameObject(wxStr2StdStr(newName->GetValue()), type);
+			levelHierarchy->CreateNewGameObject(wxStr2StdStr(name), type);
 			typeSelector->Dismiss();
 		}
 	}

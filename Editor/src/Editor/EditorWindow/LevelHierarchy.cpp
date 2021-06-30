@@ -214,11 +214,11 @@ namespace Sharpheus {
 		if (dragTarget != nullptr) {
 			wxTreeItemId newParentID = e.GetItem();
 			GameObject* newParent = ProjectData::GetLevel()->GetGameObject(wxStr2StdStr(GetItemText(newParentID)));
-			if (newParent == nullptr || newParent == dragTarget) {
+
+			if (!ProjectData::GetLevel()->Move(dragTarget, newParent)) {
+				SPHE_ERROR("Unable to move selected GameObject under the desired target");
 				return;
 			}
-
-			ProjectData::GetLevel()->Move(dragTarget, newParent);
 
 			Delete(nameToId[dragTarget->GetName()]);
 			

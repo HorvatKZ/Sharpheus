@@ -17,6 +17,8 @@ namespace Sharpheus {
 	Project::Project(const Data& data, const std::string& basePath)
 		: data(data), basePath(basePath)
 	{
+		ProjectControl::Init();
+
 		if (basePath[basePath.size() - 1] != '\\') {
 			this->basePath += '\\';
 		}
@@ -31,6 +33,8 @@ namespace Sharpheus {
 	Project::Project(const std::string& name, const std::string& path, const std::string& defaultLevelName, const std::string& defaultLevelPath)
 		: path(path)
 	{
+		ProjectControl::Init();
+
 		data.name = name;
 		data.defaultLevelPath = defaultLevelPath;
 		SetWinProps(data.winProps);
@@ -79,13 +83,18 @@ namespace Sharpheus {
 	}
 
 
-	void Project::Tick(float deltaTime)
+	void Project::Tick(float allTime)
 	{
 		std::string loadLevel = ProjectControl::GetLoadLevelPath();
 		if (!loadLevel.empty()) {
 			level->Load(basePath + "Levels\\", loadLevel);
+			ProjectControl::Resume();
 		}
-		level->Tick(deltaTime);
+
+		if (!ProjectControl::IsPaused()) {
+			level->Tick(allTime - lastTime);
+		}
+		lastTime = allTime;
 	}
 
 

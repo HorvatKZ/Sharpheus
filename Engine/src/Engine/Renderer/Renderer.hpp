@@ -27,6 +27,8 @@ namespace Sharpheus {
 		static const Color& GetBackgroundColor();
 		static void SetBackgroundColor(const Color& color);
 
+		static const std::string& GetAPIVersion();
+
 	private:
 		static Renderer_API* renderer;
 	};

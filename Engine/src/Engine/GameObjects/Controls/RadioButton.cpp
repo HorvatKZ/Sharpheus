@@ -11,6 +11,7 @@ namespace Sharpheus {
 		new UIntProvider<RadioButton>("Group ID", SPH_BIND_GETTER(RadioButton::GetGroupId), SPH_BIND_SETTER(RadioButton::SetGroupId)),
 		new ImageProvider<RadioButton>("Checked image", SPH_BIND_GETTER(RadioButton::GetCheckedImg), SPH_BIND_SETTER(RadioButton::SetCheckedImg), SPH_BIND_3(RadioButton::SetCheckedImgFromPath)),
 		new ImageProvider<RadioButton>("Unchecked image", SPH_BIND_GETTER(RadioButton::GetUncheckedImg), SPH_BIND_SETTER(RadioButton::SetUncheckedImg), SPH_BIND_3(RadioButton::SetUncheckedImgFromPath)),
+		new ColorProvider<RadioButton>("Tint", SPH_BIND_GETTER(RadioButton::GetTint), SPH_BIND_SETTER(RadioButton::SetTint)),
 		new StringProvider<RadioButton>("Value", SPH_BIND_GETTER(RadioButton::GetText), SPH_BIND_SETTER(RadioButton::SetText)),
 		new BoolProvider<RadioButton>("On right", SPH_BIND_GETTER(RadioButton::IsTextOnRight), SPH_BIND_SETTER(RadioButton::SetTextOnRight)),
 		new FontProvider<RadioButton>("Font", SPH_BIND_GETTER(RadioButton::GetFont), SPH_BIND_SETTER(RadioButton::SetFont),
@@ -62,6 +63,26 @@ namespace Sharpheus {
 	}
 
 
+	bool RadioButton::SetValue(const std::string& value)
+	{
+		std::vector<RadioButton*>& group = groups[groupId];
+		for (RadioButton* radio : group) {
+			if (radio->GetText() == value) {
+				radio->ChangeOnClick();
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	void RadioButton::Clear()
+	{
+		groups.clear();
+		selecteds.clear();
+	}
+
+
 	const std::string& RadioButton::GetValueOf(ID id)
 	{
 		auto it = selecteds.find(id);
@@ -102,6 +123,7 @@ namespace Sharpheus {
 		}
 		
 		if (selecteds[radio->groupId] == radio) {
+			radio->isChecked = false;
 			if (group.empty()) {
 				auto it2 = selecteds.find(radio->groupId);
 				if (it2 != selecteds.end()) {
@@ -111,6 +133,7 @@ namespace Sharpheus {
 				}
 			} else {
 				selecteds[radio->groupId] = group[0];
+				group[0]->isChecked = true;
 			}
 		}
 	}

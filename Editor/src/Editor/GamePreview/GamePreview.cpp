@@ -6,13 +6,12 @@
 
 namespace Sharpheus {
 
-	wxPoint GamePreview::shift(8, 8 + wxSystemSettings::GetMetric(wxSYS_CAPTION_Y));
+	wxPoint GamePreview::shift;
 
 
 	GamePreview::GamePreview(wxWindow* parent, const std::string& projectPath, wxGLContext* glContext, const Window::Props& winProps)
 		: wxFrame(parent, wxID_ANY, winProps.title, wxPoint(0, 0), wxSize(winProps.width, winProps.height))
 	{
-		ProjectControl::ResetExit();
 		EventHandler::Init(SPH_BIND(GamePreview::WindowClosed));
 
 		proj = new Project();
@@ -20,7 +19,7 @@ namespace Sharpheus {
 		SPHE_ASSERT(success, "Cannot start GamePreview, because the .lvl file is damaged");
 
 		canvas = new PreviewCanvas(this, glContext, proj);
-		lastTick = wxGetLocalTimeMillis();
+		firstTick = wxGetLocalTimeMillis();
 
 		if (winProps.fullscreen) {
 			ShowFullScreen(true);
@@ -32,7 +31,6 @@ namespace Sharpheus {
 
 		Bind(wxEVT_IDLE, &GamePreview::OnIdle, this);
 		Bind(wxEVT_SIZE, &GamePreview::OnResize, this);
-		Bind(wxEVT_CLOSE_WINDOW, &GamePreview::OnClose, this);
 		canvas->Bind(wxEVT_KEY_DOWN, &GamePreview::OnKeyDown, this);
 		canvas->Bind(wxEVT_KEY_UP, &GamePreview::OnKeyUp, this);
 		canvas->Bind(wxEVT_LEFT_DOWN, &GamePreview::OnLeftDown, this);
@@ -60,13 +58,12 @@ namespace Sharpheus {
 	void GamePreview::OnIdle(wxIdleEvent& e)
 	{
 		for (auto it = pressedKeys.begin(); it != pressedKeys.end(); ++it) {
-			EventHandler::Handle(KeyRepeatEvent(*it));
+			EventHandler::Handle(KeyHoldEvent(*it));
 		}
 
 		wxLongLong currTick = wxGetLocalTimeMillis();
-		proj->Tick((currTick - lastTick).ToDouble() / 1000);
+		proj->Tick((currTick - firstTick).ToDouble() / 1000);
 		canvas->Refresh();
-		lastTick = currTick;
 
 		if (ProjectControl::NeedToExit()) {
 			EventHandler::Handle(WindowClosedEvent());
@@ -74,10 +71,8 @@ namespace Sharpheus {
 		}
 	}
 
-
 	void GamePreview::WindowClosed(const WindowClosedEvent& e)
 	{
-		//Destroy();
 	}
 	
 	

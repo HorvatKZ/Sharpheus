@@ -14,6 +14,7 @@ namespace Sharpheus {
 	private:
 		wxStaticText* nameLabel;
 		wxStaticText* authorLabel;
+		wxStaticText* oglLabel;
 		wxStaticBitmap* logo;
 		wxButton* okButton;
 

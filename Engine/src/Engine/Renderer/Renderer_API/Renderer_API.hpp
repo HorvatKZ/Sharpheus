@@ -8,6 +8,7 @@ namespace Sharpheus {
 	class Renderer_API
 	{
 	public:
+		Renderer_API() = default;
 		virtual ~Renderer_API() = default;
 
 		virtual void StartFrame(const Point& shift) = 0;
@@ -30,6 +31,8 @@ namespace Sharpheus {
 
 		virtual void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint) = 0;
 		virtual void DrawMonocromeQuad(Point coords[4], const Color& color) = 0;
+
+		virtual inline const std::string& GetVersion() = 0;
 
 	protected:
 		Camera* camera = nullptr;

@@ -26,7 +26,7 @@ namespace Sharpheus {
 	private:
 		std::vector<class Collider*> colliders;
 		bool areCollidersVisible = false;
-		GameObject* root;
+		GameObject* root = nullptr;
 	};
 
 }

@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	class OpenGL_Renderer : public Renderer_API, public EventListener
+	class OpenGL_Renderer : public Renderer_API
 	{
 	public:
 		OpenGL_Renderer();
@@ -22,6 +22,10 @@ namespace Sharpheus {
 		void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint) override;
 		void DrawMonocromeQuad(Point coords[4], const Color& color) override;
 
+		inline const std::string& GetVersion() override { return version; }
+
+	private:
+		static std::string version;
 	};
 
 }

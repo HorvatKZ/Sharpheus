@@ -30,13 +30,16 @@ namespace Sharpheus {
 		SetCallbacks();
 		SetVsync(props.vsync);
 
-		lastTime = glfwGetTime();
-		lastSecond = lastTime;
+		startTime = glfwGetTime();
+		lastSecond = startTime;
 
 		Renderer::Init();
 		Renderer::SetBackgroundColor(props.background);
 		Camera::SetStaticRect(props.width, props.height);
 		Camera::SetOGHeight(props.height);
+
+		EventHandler::Subscribe<KeyPressedEvent>(0, SPH_BIND(OpenGL_Window::HandleInnerKeyPress));
+		EventHandler::Subscribe<KeyReleasedEvent>(0, SPH_BIND(OpenGL_Window::HandleInnerKeyRelease));
 
 		GLFWimage icons[1];
 		int channels;
@@ -48,18 +51,21 @@ namespace Sharpheus {
 
 	OpenGL_Window::~OpenGL_Window()
 	{
+		EventHandler::UnSubscribeAll(0);
 		glfwDestroyWindow(win);
 	}
 
 
 	void OpenGL_Window::PollEvents()
 	{
+		NotifyKeyHold();
 		glfwPollEvents();
 	}
 
 
 	void OpenGL_Window::StartRender()
 	{
+		HandleFPS();
 		Renderer::StartFrame();
 	}
 
@@ -71,19 +77,15 @@ namespace Sharpheus {
 	}
 
 
-	float OpenGL_Window::GetDeltaTime()
+	float OpenGL_Window::GetTime()
 	{
-		float currentTime = glfwGetTime();
-		float deltaTime = currentTime - lastTime;
-		lastTime = currentTime;
-		if (lastSecond + 1 < currentTime) {
-			glfwSetWindowTitle(win, (props.title + " [" + std::to_string(fps) + " FPS]").c_str());
-			lastSecond = currentTime;
-			fps = 0;
-		} else {
-			++fps;
-		}
-		return deltaTime;
+		return glfwGetTime() - startTime;
+	}
+
+
+	uint32_t OpenGL_Window::GetFPS()
+	{
+		return lastFps;
 	}
 
 
@@ -141,6 +143,43 @@ namespace Sharpheus {
 	}
 
 
+	void OpenGL_Window::HandleInnerKeyPress(const KeyPressedEvent& e)
+	{
+		pressedKeys.insert(e.code);
+	}
+
+
+	void OpenGL_Window::HandleInnerKeyRelease(const KeyReleasedEvent& e)
+	{
+		pressedKeys.erase(e.code);
+	}
+
+
+	void OpenGL_Window::HandleFPS()
+	{
+		float currentTime = glfwGetTime();
+		if (lastSecond + 1 < currentTime) {
+#ifndef SPH_FINAL
+			glfwSetWindowTitle(win, (props.title + " [" + std::to_string(fps) + " FPS]").c_str());
+#endif
+			lastSecond = currentTime;
+			lastFps = fps;
+			fps = 0;
+		}
+		else {
+			++fps;
+		}
+	}
+
+
+	void OpenGL_Window::NotifyKeyHold()
+	{
+		for (auto it = pressedKeys.begin(); it != pressedKeys.end(); ++it) {
+			EventHandler::Handle(KeyHoldEvent(*it));
+		}
+	}
+
+
 	void OpenGL_Window::SetCallbacks()
 	{
 		glfwSetWindowCloseCallback(win, [](GLFWwindow* win) {
@@ -158,12 +197,6 @@ namespace Sharpheus {
 				case GLFW_PRESS:
 					{
 						KeyPressedEvent e((KeyCode)keyCode);
-						SPH_PROPAGATE(e);
-					}
-					break;
-				case GLFW_REPEAT:
-					{
-						KeyRepeatEvent e((KeyCode)keyCode);
 						SPH_PROPAGATE(e);
 					}
 					break;
@@ -216,4 +249,5 @@ namespace Sharpheus {
 			SPH_PROPAGATE(e);
 		});
 	}
+
 }

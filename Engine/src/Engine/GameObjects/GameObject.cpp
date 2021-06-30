@@ -80,8 +80,8 @@ namespace Sharpheus {
 	{
 		Tick(deltaTime);
 
-		for (GameObject* child : children) {
-			child->TickAll(deltaTime);
+		for (uint32_t i = 0; i < children.size(); ++i) {
+			children[i]->TickAll(deltaTime);
 		}
 	}
 
@@ -146,21 +146,43 @@ namespace Sharpheus {
 		return root;
 	}
 
-	void GameObject::Move(GameObject* newParent)
+
+	bool GameObject::IsDescendantOf(GameObject* other)
+	{
+		if (other == this) {
+			return true;
+		}
+
+		if (parent == nullptr) {
+			return false;
+		}
+
+		return parent->IsDescendantOf(other);
+	}
+
+
+	bool GameObject::Move(GameObject* newParent)
 	{
 		if (parent == nullptr) {
 			SPH_ERROR("Cannot move root GameObject");
-			return;
+			return false;
 		}
 
 		if (newParent == nullptr) {
 			SPH_ERROR("Cannot move GameObject to null parent");
-			return;
+			return false;
+		}
+
+		if (newParent->IsDescendantOf(this)) {
+			SPH_ERROR("Cannot move GameObject under its descandant");
+			return false;
 		}
 
 		parent->RemoveChild(this);
 		newParent->AddChild(this);
+		return true;
 	}
+
 
 	void GameObject::SetTrafo(const Transform& trafo)
 	{
@@ -189,6 +211,26 @@ namespace Sharpheus {
 		}
 
 		return nullptr;
+	}
+
+
+	GameObject* GameObject::GetChild(uint32_t ind)
+	{
+		if (ind < children.size()) {
+			return children[ind];
+		}
+
+		return nullptr;
+	}
+
+
+	GameObject* GameObject::GetLastChild()
+	{
+		if (children.empty()) {
+			return nullptr;
+		}
+
+		return children[children.size() - 1];
 	}
 
 

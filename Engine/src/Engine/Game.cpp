@@ -31,9 +31,9 @@ namespace Sharpheus {
 		Logger::Init();
 		SPH_INFO("Welcome to Sharpheus!");
 
-		win = new OpenGL_Window();
-		ResourceManager::Init("D:\\Programming\\Sharpheus\\TestProject\\");
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
+
+		win = new OpenGL_Window();
 		SoundPlayer::Init();
 
 #ifdef SPH_EXPORTED
@@ -61,7 +61,7 @@ namespace Sharpheus {
 	{
 		while (isRunning) {
 			win->PollEvents();
-			proj->Tick(win->GetDeltaTime());
+			proj->Tick(win->GetTime());
 			win->StartRender();
 			proj->Render();
 			win->EndRender();

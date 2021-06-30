@@ -42,7 +42,8 @@ project "Engine"
 		"GLEW",
 		"spdlog",
 		"opengl32.lib",
-		"Winmm.lib"
+		"Winmm.lib",
+		"Glu32.lib"
 	}
 	
 	defines

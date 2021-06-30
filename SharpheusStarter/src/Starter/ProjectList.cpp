@@ -18,8 +18,10 @@ namespace Sharpheus {
 		Bind(wxEVT_MOTION, &ProjectList::OnMouseMove, this);
 
 		wxTextFile file;
-		if (!file.Open(projectsFile)) {
+		if (!wxFileExists(projectsFile)) {
 			file.Create(projectsFile);
+		} else {
+			file.Open(projectsFile);
 		}
 		wxString line = file.GetFirstLine();
 		AddProject(line);
@@ -104,7 +106,7 @@ namespace Sharpheus {
 		dc.Clear();
 		
 		if (projects.empty()) {
-			wxString notFoundStr = "No previously opened project found...";
+			wxString notFoundStr = "No previously opened project is found...";
 			wxSize extent = GetTextExtent(notFoundStr);
 			wxSize realSize = GetClientSize();
 			dc.DrawLabel(notFoundStr, wxRect((realSize.x - extent.x) / 2, (realSize.y - extent.y) / 2, extent.x, extent.y));

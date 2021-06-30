@@ -7,11 +7,14 @@
 
 namespace Sharpheus {
 
+	std::string OpenGL_Renderer::version;
+
 	OpenGL_Renderer::OpenGL_Renderer()
 	{
 		GLenum err = glewInit();
 		SPH_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
-		SPH_INFO("OpenGL renderer created");
+		version = (char*)glGetString(GL_VERSION);
+		SPH_INFO("OpenGL renderer created. Running OpenGL v{0}", version);
 	}
 
 

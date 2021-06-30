@@ -39,7 +39,7 @@ namespace Sharpheus {
 	protected:
 		static ID nextFreeID;
 
-		ID subscribedNum;
+		uint32_t subscribedNum;
 		ID listenerID;
 	};
 }

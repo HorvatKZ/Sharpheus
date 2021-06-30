@@ -15,6 +15,9 @@ workspace "%{ProjectName}"
 		"MultiProcessorCompile"
 	}
 
+configuration "vs*"
+	buildoptions { "/bigobj" } 
+
 outputdir = "%{cfg.buildcfg}"
 bindir = "%{wks.location}/../bin/" .. outputdir
 bintempdir = "%{wks.location}/../bin-temp/" .. outputdir .. "/%{prj.name}"

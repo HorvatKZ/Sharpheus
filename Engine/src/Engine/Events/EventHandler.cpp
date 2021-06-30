@@ -6,7 +6,7 @@ namespace Sharpheus {
 	std::unordered_map<ID, WindowClosedEventFunc> EventHandler::windowClosedListeners;
 	std::unordered_map<ID, WindowResizedEventFunc> EventHandler::windowResizedListeners;
 	std::unordered_map<ID, KeyPressedEventFunc> EventHandler::keyPressedListeners;
-	std::unordered_map<ID, KeyRepeatEventFunc> EventHandler::keyRepeatListeners;
+	std::unordered_map<ID, KeyHoldEventFunc> EventHandler::keyHoldListeners;
 	std::unordered_map<ID, KeyReleasedEventFunc> EventHandler::keyReleasedListeners;
 	std::unordered_map<ID, MousePressedEventFunc> EventHandler::mousePressedListeners;
 	std::unordered_map<ID, MouseReleasedEventFunc> EventHandler::mouseReleasedListeners;
@@ -28,7 +28,7 @@ namespace Sharpheus {
 		windowClosedListeners.clear();
 		windowResizedListeners.clear();
 		keyPressedListeners.clear();
-		keyRepeatListeners.clear();
+		keyHoldListeners.clear();
 		keyReleasedListeners.clear();
 		mousePressedListeners.clear();
 		mouseReleasedListeners.clear();
@@ -52,8 +52,8 @@ namespace Sharpheus {
 			case Event::Type::KeyPressed:
 				HandleKeyPressed(static_cast<const KeyPressedEvent&>(e));
 				break;
-			case Event::Type::KeyRepeat:
-				HandleKeyRepeat(static_cast<const KeyRepeatEvent&>(e));
+			case Event::Type::KeyHold:
+				HandleKeyHold(static_cast<const KeyHoldEvent&>(e));
 				break;
 			case Event::Type::KeyReleased:
 				HandleKeyReleased(static_cast<const KeyReleasedEvent&>(e));
@@ -81,7 +81,7 @@ namespace Sharpheus {
 		SPH_UNSUBSCRIBE_EVENTS_IN(windowClosedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(windowResizedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(keyPressedListeners);
-		SPH_UNSUBSCRIBE_EVENTS_IN(keyRepeatListeners);
+		SPH_UNSUBSCRIBE_EVENTS_IN(keyHoldListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(keyReleasedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(mousePressedListeners);
 		SPH_UNSUBSCRIBE_EVENTS_IN(mouseReleasedListeners);
@@ -106,9 +106,9 @@ namespace Sharpheus {
 		SPH_NOTIFY_LISTENERS(keyPressedListeners);
 	}
 
-	void EventHandler::HandleKeyRepeat(const KeyRepeatEvent& e)
+	void EventHandler::HandleKeyHold(const KeyHoldEvent& e)
 	{
-		SPH_NOTIFY_LISTENERS(keyRepeatListeners);
+		SPH_NOTIFY_LISTENERS(keyHoldListeners);
 	}
 
 	void EventHandler::HandleKeyReleased(const KeyReleasedEvent& e)

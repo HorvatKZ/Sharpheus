@@ -23,12 +23,18 @@ namespace Sharpheus {
 
 		static inline const GridProps& GetGridProps() { return gridProps; }
 		static inline void SetGridProps(const GridProps& grid) { gridProps = grid; }
+
+		static inline const wxString& GetVersion() { return version; }
+		static inline const wxString& GetOGLVersion() { return oglVersion; }
+		static inline void SetOGLVersion(const wxString& newOglVersion) { oglVersion = newOglVersion; }
 	
 	private:
 		static class GameObject* curr;
 		static wxString path;
 		static wxString configFile;
 		static GridProps gridProps;
+		static wxString version;
+		static wxString oglVersion;
 	};
 
 	typedef EditorData::GridProps ViewPortGridProps;

@@ -66,8 +66,8 @@ namespace Sharpheus {
 	void Shape::CheckCorners()
 	{
 		if (needsToRecalc) {
-			Point height = yAxis * dim.y;
-			Point width = xAxis * dim.x;
+			Point height = yAxis * realDim.y;
+			Point width = xAxis * realDim.x;
 			corners[0] = pos - height - width;
 			corners[1] = pos - height + width;
 			corners[2] = pos + height + width;

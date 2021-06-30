@@ -13,8 +13,6 @@ namespace Sharpheus {
 
 	Point::Point(float x, float y) : x(x), y(y) {}
 
-	Point::Point(const glm::vec2& vec) : x(vec.x), y(vec.y) {}
-
 
 	Point Point::operator+(const Point& other) const
 	{
@@ -120,12 +118,6 @@ namespace Sharpheus {
 	}
 
 
-	glm::vec2 Point::ToVec2() const
-	{
-		return glm::vec2(x, y);
-	}
-
-
 	Point Point::Rotate(float angle) const
 	{
 		float angleInRad = glm::radians(-angle); // Because y axis is inverted
@@ -145,7 +137,7 @@ namespace Sharpheus {
 			return (x >= 0) ? 0 : 180;
 		}
 
-		int angle = glm::degrees(glm::atan(-y / x));
+		float angle = glm::degrees(glm::atan(-y / x));
 		if (x < 0 && y < 0) {
 			return angle - 180;
 		}
@@ -168,85 +160,6 @@ namespace Sharpheus {
 	{
 		float angleInRad = glm::radians(-angle); // Because y axis is inverted
 		return Point(glm::cos(angleInRad), glm::sin(angleInRad));
-	}
-
-
-	bool Point::DoSectionsIntersect(const Point& sec1begin, const Point& sec1end, const Point& sec2begin, const Point& sec2end)
-	{
-		if (sec1end.x == sec1begin.x && sec2end.x == sec2begin.x) { // if both are vertical
-			return false;
-		}
-		else if (sec1end.x != sec1begin.x && sec2end.x == sec2begin.x) { // if sec1 is non-vertical, and sec2 is vertical
-			float sec1slope = (sec1end.y - sec1begin.y) / (sec1end.x - sec1begin.x);
-			float sec1offset = sec1begin.y - sec1begin.x * sec1slope;
-
-			float x = sec2begin.x;
-			float y = sec2begin.x * sec1slope + sec1offset;
-
-			return (y < sec2begin.y && y > sec2end.y || y > sec2begin.y && y < sec2end.y) &&
-				(x < sec1begin.x && x > sec1end.x || x > sec1begin.x && x < sec1end.x);
-		}
-		else if (sec2end.x != sec2begin.x && sec1end.x == sec1begin.x) { // if sec2 is non-vertical, and sec1 is vertical
-			float sec2slope = (sec2end.y - sec2begin.y) / (sec2end.x - sec2begin.x);
-			float sec2offset = sec2begin.y - sec2begin.x * sec2slope;
-
-			float x = sec1begin.x;
-			float y = sec1begin.x * sec2slope + sec2offset;
-
-			return (y < sec1begin.y&& y > sec1end.y || y > sec1begin.y && y < sec1end.y) &&
-				(x < sec2begin.x&& x > sec2end.x || x > sec2begin.x && x < sec2end.x);
-		}
-		else { // if both are non-vertical
-			float sec1slope = (sec1end.y - sec1begin.y) / (sec1end.x - sec1begin.x);
-			float sec1offset = sec1begin.y - sec1begin.x * sec1slope;
-			float sec2slope = (sec2end.y - sec2begin.y) / (sec2end.x - sec2begin.x);
-			float sec2offset = sec2begin.y - sec2begin.x * sec2slope;
-
-			if (sec1slope == sec2slope) { // if they are paralell
-				return false;
-			}
-
-			float x = (sec2offset - sec1offset) / (sec1slope - sec2slope);
-
-			return (x < sec1begin.x&& x > sec1end.x || x > sec1begin.x && x < sec1end.x) &&
-				(x < sec2begin.x&& x > sec2end.x || x > sec2begin.x && x < sec2end.x);
-		}
-	}
-
-	Point Point::GetNormalVectorToward(const Point& secBegin, const Point& secEnd, const Point& toward)
-	{
-		if (secBegin.x == secEnd.x) { // vertical
-			return (toward.x > secBegin.x) ? Right : Left;
-		}
-		if (secBegin.y == secEnd.y) { // horizontal
-			return (toward.y > secBegin.y) ? Down : Up;
-		}
-
-		float secSlope = (secEnd.y - secBegin.y) / (secEnd.x - secBegin.x);
-		float secOffset = secBegin.y - secBegin.x * secSlope;
-		Point normal = Point(1 / (secBegin.x - secEnd.x), -1 / (secBegin.y - secEnd.y)).Normalize();
-
-		if (toward.x * secSlope + secOffset > toward.y && normal.x * secSlope + secOffset > normal.y ||
-			toward.x * secSlope + secOffset < toward.y && normal.x * secSlope + secOffset < normal.y) {
-			return normal;
-		} else {
-			return normal * -1;
-		}
-	}
-
-
-	bool Point::IsBelow(const Point& secBegin, const Point& secEnd, const Point& point)
-	{
-		if (secBegin.x == secEnd.x) { // vertical
-			return point.x > secBegin.x;
-		}
-		if (secBegin.y == secEnd.y) { // horizontal
-			return point.y > secBegin.y;
-		}
-
-		float secSlope = (secEnd.y - secBegin.y) / (secEnd.x - secBegin.x);
-		float secOffset = secBegin.y - secBegin.x * secSlope;
-		return secSlope * point.x + secOffset > point.y;
 	}
 
 

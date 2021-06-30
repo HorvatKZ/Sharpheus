@@ -39,7 +39,7 @@ namespace Sharpheus {
 		void Attach(GameObject* obj);
 
 		void Delete(GameObject* obj, bool forceNow = false);
-		void Move(GameObject* obj, GameObject* newParent);
+		bool Move(GameObject* obj, GameObject* newParent);
 		std::string RenameGameObject(GameObject* obj, const std::string& newName, bool deregisterOld = true);
 		void Deregister(class GameObject* obj);
 		void SetRegistry(class GameObject* obj);

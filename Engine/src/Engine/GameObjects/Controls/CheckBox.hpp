@@ -12,6 +12,8 @@ namespace Sharpheus {
 		virtual ~CheckBox();
 		virtual void CopyFrom(GameObject* other) override;
 
+		virtual inline void SetState(bool state) { isChecked = state; };
+
 		SPH_DECL_GAMEOBJECT(CheckBox)
 
 	protected:

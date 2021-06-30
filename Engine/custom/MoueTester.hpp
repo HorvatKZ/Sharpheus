@@ -11,7 +11,6 @@ public:
 	MoueTester(Sharpheus::Behavior* other);
 	MoueTester(Sharpheus::GameObject* parent, const std::string& name);
 	virtual ~MoueTester();
-	virtual void CopyFrom(Sharpheus::GameObject* other) override;
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 

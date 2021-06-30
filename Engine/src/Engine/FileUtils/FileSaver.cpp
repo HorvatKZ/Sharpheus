@@ -9,13 +9,18 @@ namespace Sharpheus {
 	FileSaver::FileSaver(const std::string& path)
 	{
 		file = fopen(path.c_str(), "wb");
-		SPH_ASSERT(file != NULL, "Cannot create/open file \"{0}\" to save", path);
+		if (file == NULL) {
+			status = false;
+			SPH_ERROR("Cannot create/open file \"{0}\" to load", path);
+		}
 	}
 
 
 	FileSaver::~FileSaver()
 	{
-		fclose(file);
+		if (file != NULL) {
+			fclose(file);
+		}
 	}
 
 

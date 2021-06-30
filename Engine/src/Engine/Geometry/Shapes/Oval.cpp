@@ -59,10 +59,10 @@ namespace Sharpheus {
 	void Oval::CheckCorners()
 	{
 		if (needsToRecalc) {
-			Point smallHeight = yAxis * dim.y * 0.33f;
-			Point smallWidth = xAxis * dim.x * 0.33f;
-			Point height = yAxis * dim.y;
-			Point width = xAxis * dim.x;
+			Point smallHeight = yAxis * realDim.y * 0.33f;
+			Point smallWidth = xAxis * realDim.x * 0.33f;
+			Point height = yAxis * realDim.y;
+			Point width = xAxis * realDim.x;
 			satCorners[0] = pos - height - smallWidth;
 			satCorners[1] = pos - height + smallWidth;
 			satCorners[2] = pos - smallHeight + width;
@@ -120,11 +120,11 @@ namespace Sharpheus {
 			return Intersection();
 		}
 
-		Point localNormal = -1 * other->GetLocalPerpendicularAt(closest);
+		Point localNormal = closest - center;
 		Intersection inter;
 		inter.normal = (localNormal).Rotate(other->GetRot()).Normalize();
-		inter.depth = (dim.x - closest.Distance(center)) / glm::cos(glm::radians((closest - center).GetAngleWith(localNormal))) / 2;
-		inter.contact = (closest + localNormal * inter.depth).Rotate(other->GetRot()) + other->GetPos();
+		inter.depth = (dim.x - closest.Distance(center)) / 2;
+		inter.contact = pos + inter.normal * (dim.x - inter.depth);
 		return inter;
 	}
 

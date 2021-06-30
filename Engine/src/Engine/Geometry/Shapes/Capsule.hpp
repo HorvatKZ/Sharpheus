@@ -35,8 +35,9 @@ namespace Sharpheus {
 		}
 
 		inline void SetDim(const Point& dim) override {
-			if (dim != this->dim) {
-				this->dim = dim;
+			if (dim != realDim) {
+				realDim = dim;
+				this->dim = Point(abs(dim.x), abs(dim.y));
 				furthest = dim.x > dim.y ? dim.x : dim.y;
 				if (domeHeight > dim.y) {
 					domeHeight = dim.y;

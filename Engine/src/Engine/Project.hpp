@@ -31,7 +31,7 @@ namespace Sharpheus {
 		bool SaveLevel(const std::string& path);
 		void CreateNewLevel(const std::string& name);
 
-		void Tick(float deltaTime);
+		void Tick(float allTime);
 		inline void Render() { level->Render(); }
 
 		inline const std::string& GetName() const { return data.name; }
@@ -51,6 +51,7 @@ namespace Sharpheus {
 		Data data;
 		Level* level = nullptr;
 		std::string path, basePath;
+		float lastTime = 0.f;
 
 		bool LoadProjectData(const std::string& path);
 	};

@@ -30,7 +30,8 @@ namespace Sharpheus {
 		virtual void StartRender() = 0;
 		virtual void EndRender() = 0;
 
-		virtual float GetDeltaTime() = 0;
+		virtual float GetTime() = 0;
+		virtual uint32_t GetFPS() = 0;
 
 		inline const Props&			GetProps() { return props; }
 		inline uint32_t				GetWidth() { return props.width; }

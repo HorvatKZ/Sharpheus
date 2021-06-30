@@ -41,7 +41,7 @@ namespace Sharpheus {
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(WindowClosedEvent, windowClosedListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(WindowResizedEvent, windowResizedListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(KeyPressedEvent, keyPressedListeners)
-		SPH_DECL_EVENTTYPE_SUBSCRIPTION(KeyRepeatEvent, keyRepeatListeners)
+		SPH_DECL_EVENTTYPE_SUBSCRIPTION(KeyHoldEvent, keyHoldListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(KeyReleasedEvent, keyReleasedListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(MousePressedEvent, mousePressedListeners)
 		SPH_DECL_EVENTTYPE_SUBSCRIPTION(MouseReleasedEvent, mouseReleasedListeners)
@@ -61,8 +61,8 @@ namespace Sharpheus {
 			case Event::Type::KeyPressed:
 				SPH_UNSUBSCRIBE_EVENTS_IN(keyPressedListeners);
 				break;
-			case Event::Type::KeyRepeat:
-				SPH_UNSUBSCRIBE_EVENTS_IN(keyRepeatListeners);
+			case Event::Type::KeyHold:
+				SPH_UNSUBSCRIBE_EVENTS_IN(keyHoldListeners);
 				break;
 			case Event::Type::KeyReleased:
 				SPH_UNSUBSCRIBE_EVENTS_IN(keyReleasedListeners);
@@ -90,7 +90,7 @@ namespace Sharpheus {
 		static std::unordered_map<ID, WindowClosedEventFunc> windowClosedListeners;
 		static std::unordered_map<ID, WindowResizedEventFunc> windowResizedListeners;
 		static std::unordered_map<ID, KeyPressedEventFunc> keyPressedListeners;
-		static std::unordered_map<ID, KeyRepeatEventFunc> keyRepeatListeners;
+		static std::unordered_map<ID, KeyHoldEventFunc> keyHoldListeners;
 		static std::unordered_map<ID, KeyReleasedEventFunc> keyReleasedListeners;
 		static std::unordered_map<ID, MousePressedEventFunc> mousePressedListeners;
 		static std::unordered_map<ID, MouseReleasedEventFunc> mouseReleasedListeners;
@@ -101,7 +101,7 @@ namespace Sharpheus {
 		static void HandleWindowsClosed(const WindowClosedEvent& e);
 		static void HandleWindowsResized(const WindowResizedEvent& e);
 		static void HandleKeyPressed(const KeyPressedEvent& e);
-		static void HandleKeyRepeat(const KeyRepeatEvent& e);
+		static void HandleKeyHold(const KeyHoldEvent& e);
 		static void HandleKeyReleased(const KeyReleasedEvent& e);
 		static void HandleMousePressed(const MousePressedEvent& e);
 		static void HandleMouseReleased(const MouseReleasedEvent& e);

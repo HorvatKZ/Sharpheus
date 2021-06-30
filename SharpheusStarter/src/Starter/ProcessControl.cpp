@@ -142,11 +142,7 @@ namespace Sharpheus {
 	void ProcessControl::OpenWithEditor(wxFileName& root, const wxString& path)
 	{
 		root.AppendDir("bin");
-#ifdef SPH_DEBUG
 		root.AppendDir("Debug");
-#else
-		root.AppendDir("Release");
-#endif
 		root.SetName("Editor");
 		root.SetExt("exe");
 		if (!root.Exists()) {
@@ -161,7 +157,14 @@ namespace Sharpheus {
 
 	bool ProcessControl::CheckCommonFiles()
 	{
-		wxString configPath = wxStandardPaths::Get().GetUserConfigDir() + "\\Sharpheus\\editorConfig.txt";
+		wxString configPath = wxStandardPaths::Get().GetUserConfigDir() + "\\Sharpheus";
+		if (!wxDirExists(configPath)) {
+			if (!wxMkdir(configPath)) {
+				return false;
+			}
+		}
+
+		configPath += "\\editorConfig.txt";
 		if (!wxFileExists(configPath)) {
 			wxTextFile file;
 			bool success = file.Create(configPath);

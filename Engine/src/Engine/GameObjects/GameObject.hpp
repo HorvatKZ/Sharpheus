@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Events/EventListener.hpp"
+#include "Engine/Events/LocalEvent.hpp"
 #include "Engine/EditorInterface/ClassInfo.hpp"
 #include "Engine/FileUtils/FileLoader.hpp"
 #include "Engine/FileUtils/FileSaver.hpp"
@@ -94,13 +95,14 @@ namespace Sharpheus {
 		virtual inline void		SetLevel(class Level* level) { this->level = level; }
 		inline GameObject*		GetParent() { return parent; }
 		GameObject*				GetRoot();
-		void					Move(GameObject* newParent);
+		bool					IsDescendantOf(GameObject* other);
+		bool					Move(GameObject* newParent);
 
 		inline bool				Is(Type type)		{ return GetType() == type; }
 		inline bool				Is(TypeMasks mask)	{ return ((uint8_t)GetType() & (uint8_t)TypeMasks::MASK) == (uint8_t)mask; }
 
-		inline Transform&		GetTrafo() { return trafo; }
-		inline Transform&		GetWorldTrafo() { return worldTrafo; }
+		inline const Transform& GetTrafo() { return trafo; }
+		inline const Transform&	GetWorldTrafo() { return worldTrafo; }
 		virtual void			SetTrafo(const Transform& trafo);
 		virtual void			SetWorldTrafo(const Transform& trafo);
 
@@ -110,6 +112,8 @@ namespace Sharpheus {
 
 		void									AddChild(GameObject* child);
 		GameObject*								GetChild(const std::string& name);
+		GameObject*								GetChild(uint32_t ind);
+		GameObject*								GetLastChild();
 		GameObject*								GetFirstChildOfType(Type type);
 		GameObject*								GetLastChildOfType(Type type);
 		GameObject*								GetFirstChildOfMask(TypeMasks mask);
@@ -121,8 +125,7 @@ namespace Sharpheus {
 		void									SetUpName(const std::string& name);
 		void									SetChildByName(GameObject* newChild);
 
-		virtual inline Type		GetType() { return Type::None; }
-		static inline Type		GetStaticType() { return Type::None; }
+		virtual inline Type		GetType() = 0;
 
 		bool		IsParentOfCurrentCamera();
 		GameObject* GetUpperMostSelected(const Point& pos);
@@ -274,17 +277,13 @@ namespace Sharpheus {
 	typedef SafeObject<GameObject> SafeGameObject;
 
 
-	class SPH_EXPORT GameObjectDestroyedEvent : public Event
+	class SPH_EXPORT GameObjectDestroyedEvent : public LocalEvent<GameObject>
 	{
 	public:
-		GameObjectDestroyedEvent(GameObject* source) : source(source) {}
+		GameObjectDestroyedEvent(GameObject* source) : LocalEvent<GameObject>(source) {}
 		virtual ~GameObjectDestroyedEvent() = default;
 
 		inline std::string ToStr() const override { return "GameObjectDestroyedEvent " + source->GetName(); }
-
-		SPH_DECL_EVENT(Local)
-
-		GameObject* source;
 	};
 
 }

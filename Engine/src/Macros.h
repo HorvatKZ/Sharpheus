@@ -32,6 +32,11 @@
 #define SPH_BIND_WITH_2(x, a) std::bind(&x, a, std::placeholders::_1, std::placeholders::_2)
 #define SPH_BIND_WITH_3(x, a) std::bind(&x, a, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
 
+#define SPH_BIND_THIS_WITH_0(x, a) std::bind(&x, this, a)
+#define SPH_BIND_THIS_WITH_1(x, a) std::bind(&x, this, a, std::placeholders::_1)
+#define SPH_BIND_THIS_WITH_2(x, a) std::bind(&x, this, a, std::placeholders::_1, std::placeholders::_2)
+#define SPH_BIND_THIS_WITH_3(x, a) std::bind(&x, this, a, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
+
 #define SPH_BIND(x) SPH_BIND_THIS_1(x)
 #define SPH_BIND_GETTER(x) SPH_BIND_1(x)
 #define SPH_BIND_SETTER(x) SPH_BIND_2(x)

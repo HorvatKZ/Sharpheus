@@ -27,6 +27,7 @@ namespace Sharpheus {
 		CheckBase* trueOther = (CheckBase*)other;
 		SetCheckedImg(trueOther->checkedImg);
 		SetUncheckedImg(trueOther->uncheckedImg);
+		tint = trueOther->tint;
 		textOnRight = trueOther->textOnRight;
 	}
 
@@ -51,6 +52,7 @@ namespace Sharpheus {
 		SetCheckedImg(tempImg);
 		fl.Read(&tempImg);
 		SetUncheckedImg(tempImg);
+		fl.Read(tint);
 		fl.Read(textOnRight);
 		return fl.GetStatus();
 	}
@@ -61,6 +63,7 @@ namespace Sharpheus {
 		Control::Save(fs);
 		fs.Write(checkedImg);
 		fs.Write(uncheckedImg);
+		fs.Write(tint);
 		fs.Write(textOnRight);
 		return fs.GetStatus();
 	}
@@ -70,7 +73,7 @@ namespace Sharpheus {
 	{
 		Image* toDraw = isChecked ? checkedImg : uncheckedImg;
 		if (toDraw != nullptr) {
-			toDraw->Render(shape->GetCorners());
+			toDraw->Render(shape->GetCorners(), tint);
 
 			if (font != nullptr) {
 				Point extent = font->GetExtent(text, fontSize, fontStyle);

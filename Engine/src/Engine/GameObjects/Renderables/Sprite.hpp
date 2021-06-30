@@ -20,6 +20,8 @@ namespace Sharpheus {
 			this->image = image;
 			if (image != nullptr) {
 				SetSizer(image->GetWidth(), image->GetHeight());
+			} else {
+				SetSizer(0, 0);
 			}
 		}
 

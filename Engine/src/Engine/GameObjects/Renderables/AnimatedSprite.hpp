@@ -23,6 +23,8 @@ namespace Sharpheus {
 			currTime = 0.f;
 			if (anim != nullptr) {
 				SetSizer(anim->GetFrameWidth(), anim->GetFrameHeight());
+			} else {
+				SetSizer(0, 0);
 			}
 		}
 

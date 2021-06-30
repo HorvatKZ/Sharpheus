@@ -4,10 +4,17 @@
 
 #define SPH_DECL_BEHAVIOR(Class, subType) \
 	static ::Sharpheus::ClassInfo classInfo; \
+	static uint32_t classVersion; \
 	virtual inline uint32_t GetSubType() override { return subType; } \
 	virtual inline ::Sharpheus::ClassInfo* GetBehaviorClassInfo() override { return &Class::classInfo; } \
 	virtual void Init() override; \
 	static bool IsCompatibleWithParent(::Sharpheus::GameObject* parent);
+
+#define SPH_CHECK_CLASSVERSION(fl, version) \
+	uint32_t oldVersion; \
+	fl.Read(oldVersion); \
+	if (oldVersion != version) \
+		return fl.ReadLine();
 
 #define SPH_SUBCHECKTYPE(variable, subType) \
 	if (((Behavior*)variable)->GetSubType() != subType) { \
@@ -15,10 +22,10 @@
 		return; \
 	}
 
-#define SPH_COPY_HEADER(subType) \
+#define SPH_COPY_HEADER(subType, parent) \
 	SPH_CHECKTYPE(other, Behavior); \
 	SPH_SUBCHECKTYPE(other, subType); \
-	Behavior::CopyFrom(other);
+	parent::CopyContent(other);
 
 
 namespace Sharpheus {
@@ -29,6 +36,7 @@ namespace Sharpheus {
 		Behavior(Behavior* other);
 		Behavior(GameObject* parent, const std::string& name) : GameObject(parent, name) {}
 		virtual ~Behavior() = default;
+		void CopyFrom(GameObject* other) override;
 
 		void SetLevel(class Level* level) override;
 
@@ -42,5 +50,7 @@ namespace Sharpheus {
 
 	protected:
 		virtual bool Save(FileSaver& file);
+
+		virtual void CopyContent(GameObject* other);
 	};
 }

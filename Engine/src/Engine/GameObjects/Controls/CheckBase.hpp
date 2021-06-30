@@ -14,10 +14,12 @@ namespace Sharpheus {
 
 		inline Image* GetCheckedImg() { return checkedImg; }
 		inline Image* GetUncheckedImg() { return uncheckedImg; }
+		inline const Color& GetTint() { return tint; }
 		inline bool IsTextOnRight() { return textOnRight; }
 
 		inline void SetCheckedImg(Image* checkedImg) { this->checkedImg = checkedImg; UpdateSizer(); }
 		inline void SetUncheckedImg(Image* uncheckedImg) { this->uncheckedImg = uncheckedImg; }
+		inline void SetTint(const Color& tint) { this->tint = tint; }
 		inline void SetTextOnRight(bool textOnRight) { this->textOnRight = textOnRight; }
 
 		void SetCheckedImgFromPath(const std::string& path, bool filtered);
@@ -31,6 +33,7 @@ namespace Sharpheus {
 	protected:
 		Image* checkedImg = nullptr;
 		Image* uncheckedImg = nullptr;
+		Color tint = Color::White;
 		bool isChecked = false;
 		bool textOnRight = true;
 

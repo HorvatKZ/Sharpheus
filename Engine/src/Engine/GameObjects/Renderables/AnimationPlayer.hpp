@@ -58,16 +58,24 @@ namespace Sharpheus {
 			RemoveAnimationByIndex(i);
 		}
 
+		inline Animation* GetCurrentAnimation() { return GetAnimation(GetCurrent()); }
+		inline const std::string& GetCurrentAnimationName() { return GetAnimationName(GetCurrent()); }
+
 		void SetAnimationFromPath(uint32_t ind, const std::string& path);
 		void AddAnimationFromPath(const std::string& path);
 
 		inline uint32_t GetCurrent() { return currAnimInd; }
 		inline void SetCurrent(uint32_t ind) {
 			if (ind < anims.size() && currAnimInd != ind) {
-				currAnimInd = ind;
-				currTime = 0.f;
-				Animation* anim = anims[ind];
-				SetSizer(anim->GetFrameWidth(), anim->GetFrameHeight());
+				if (playOnceActive) {
+					fallBackInd = ind;
+				}
+				else {
+					currAnimInd = ind;
+					currTime = 0.f;
+					Animation* anim = anims[ind];
+					SetSizer(anim->GetFrameWidth(), anim->GetFrameHeight());
+				}
 			}
 		}
 		inline void SetCurrentByName(const std::string& name) {
@@ -75,6 +83,21 @@ namespace Sharpheus {
 				if (anims[i]->GetName() == name) {
 					return SetCurrent(i);
 				}
+			}
+		}
+
+		inline void PlayOnce(uint32_t ind) {
+			if (!playOnceActive) {
+				fallBackInd = currAnimInd;
+				SetCurrent(ind);
+				playOnceActive = true;
+			}
+		}
+		inline void PlayOnce(const std::string& name) {
+			if (!playOnceActive) {
+				fallBackInd = currAnimInd;
+				SetCurrentByName(name);
+				playOnceActive = true;
 			}
 		}
 
@@ -87,12 +110,15 @@ namespace Sharpheus {
 		Color tint = Color::White;
 		float speed = 1.f;
 		float currTime = 0.f;
-		uint32_t currAnimInd = 0;
+		uint32_t currAnimInd = 0, fallBackInd = 0;
+		bool playOnceActive = false;
 
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
 		virtual void Render() override;
+
+		void FallBack();
 	};
 
 }
