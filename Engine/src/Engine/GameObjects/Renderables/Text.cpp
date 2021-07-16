@@ -17,7 +17,7 @@ namespace Sharpheus {
 
 
 	Text::Text(GameObject* parent, const std::string& name) :
-		ShapedGameObject(parent, name, new Rect())
+		AxisShapedGameObject(parent, name, new Rect())
 	{
 		ForceUpdateAxes();
 	}
@@ -27,7 +27,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKTYPE(other, Text);
 
-		ShapedGameObject::CopyFrom(other);
+		AxisShapedGameObject::CopyFrom(other);
 		Text* trueOther = (Text*)other;
 		content = trueOther->content;
 		font = trueOther->font;
@@ -35,14 +35,6 @@ namespace Sharpheus {
 		size = trueOther->size;
 		style = trueOther->style;
 		UpdateSizer();
-	}
-
-
-	void Text::SetWorldTrafo(const Transform& trafo)
-	{
-		Transform oldTrafo = worldTrafo;
-		ShapedGameObject::SetWorldTrafo(trafo);
-		UpdateAxes(oldTrafo);
 	}
 
 
@@ -54,14 +46,6 @@ namespace Sharpheus {
 	}
 
 
-	void Text::UpdateWorldTrafo(const Transform& parentWorldTrafo)
-	{
-		Transform oldTrafo = worldTrafo;
-		ShapedGameObject::UpdateWorldTrafo(parentWorldTrafo);
-		UpdateAxes(oldTrafo);
-	}
-
-
 	void Text::UpdateSizer()
 	{
 		if (font != nullptr) {
@@ -70,24 +54,9 @@ namespace Sharpheus {
 	}
 
 
-	void Text::UpdateAxes(const Transform& oldTrafo)
-	{
-		if (oldTrafo.rot != worldTrafo.rot || oldTrafo.scale != worldTrafo.scale) {
-			ForceUpdateAxes();
-		}
-	}
-
-
-	void Text::ForceUpdateAxes()
-	{
-		xAxis = Point::GetUnit(worldTrafo.rot) * worldTrafo.scale.x;
-		yAxis = Point::GetUnit(worldTrafo.rot - 90) * worldTrafo.scale.y;
-	}
-
-
 	bool Text::Save(FileSaver& fs)
 	{
-		ShapedGameObject::Save(fs);
+		AxisShapedGameObject::Save(fs);
 		fs.Write(content);
 		fs.Write(font);
 		fs.Write(color);
@@ -111,7 +80,7 @@ namespace Sharpheus {
 
 	bool Text::Load(FileLoader& fl)
 	{
-		ShapedGameObject::Load(fl);
+		AxisShapedGameObject::Load(fl);
 		fl.Read(content);
 		fl.Read(&font);
 		fl.Read(color);

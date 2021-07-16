@@ -94,7 +94,10 @@ namespace Sharpheus {
 		SPH_LOG("Importing font: \"{0}\"", fullPath);
 		FILE* fin;
 		fin = fopen(fullPath.c_str(), "r");
-		SPH_ASSERT(fin != NULL, "Unable to open font file: \"{0}\"", fullPath);
+		if (fin == NULL) {
+			SPH_ERROR("Unable to open font file: \"{0}\"", fullPath);
+			return;
+		}
 
 		std::string key, value;
 		uint32_t basicSize;
@@ -113,6 +116,7 @@ namespace Sharpheus {
 		}
 		lineHeight /= basicSize;
 
+		valid = img->IsValid();
 		uint8_t n = std::stoi(value);
 		for (uint8_t i = 0; i < n; ++i) {
 			ReadCharData(fin, basicSize);
@@ -163,36 +167,60 @@ namespace Sharpheus {
 	{
 		std::string key, value;
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "id", "Not appropriate format");
+		if (key == "id") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		uint8_t id = std::stoi(value);
 		CharData& data = chars[id];
 
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "x", "Not appropriate format");
+		if (key == "x") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		uint32_t x = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "y", "Not appropriate format");
+		if (key == "y") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		uint32_t y = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "width", "Not appropriate format");
+		if (key == "width") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		uint32_t width = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "height", "Not appropriate format");
+		if (key == "height") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		uint32_t height = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "xoffset", "Not appropriate format");
+		if (key == "xoffset") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		data.xoffset = std::stoi(value) / originalSize;
 
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "yoffset", "Not appropriate format");
+		if (key == "yoffset") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		data.yoffset = std::stoi(value) / originalSize;
 
 		GetNextKeyValue(fin, key, value);
-		SPH_ASSERT(key == "xadvance", "Not appropriate format");
+		if (key == "xadvance") {
+			SPH_ERROR("Not appropriate format");
+			valid = false;
+		}
 		data.xadvance = std::stoi(value) / originalSize;
 
 		data.width = width / originalSize;

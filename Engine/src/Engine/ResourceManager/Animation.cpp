@@ -10,18 +10,21 @@ namespace Sharpheus {
 	Animation::Animation(const std::string& animFile)
 		: Resource(animFile)
 	{
-		Load();
+		valid = Load();
 	}
 
 
 	Animation::Animation(Image* atlas, uint32_t frameWidth, uint32_t frameHeight, uint32_t startFrame, uint32_t endFrame)
 		: Resource(), atlas(atlas), frameWidth(frameWidth), frameHeight(frameHeight), startFrame(startFrame), endFrame(endFrame)
 	{
-		SPH_ASSERT(atlas != nullptr, "The texture atlas must be set");
-		
-		frameCols = atlas->GetWidth() / frameWidth;
-		frameRows = atlas->GetHeight() / frameHeight;
-		CalcTexCoords();
+		if (atlas != nullptr) {
+			frameCols = atlas->GetWidth() / frameWidth;
+			frameRows = atlas->GetHeight() / frameHeight;
+			CalcTexCoords();
+			valid = atlas->IsValid();
+		} else {
+			SPH_ERROR("The texture atlas must be set");
+		}
 	}
 
 
@@ -79,10 +82,15 @@ namespace Sharpheus {
 		fl.Read(endFrame);
 		fl.Read(frameTime);
 
+		if (atlas == nullptr) {
+			SPH_ERROR("The animation atlas from {0} is not valid!", fullPath);
+			return false;
+		}
+
 		frameCols = atlas->GetWidth() / frameWidth;
 		frameRows = atlas->GetHeight() / frameHeight;
 		CalcTexCoords();
-		return fl.GetStatus();
+		return fl.GetStatus() && atlas->IsValid();
 	}
 
 

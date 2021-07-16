@@ -1,6 +1,7 @@
 #include "editor_pch.h"
 #include "Presenter.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
+#include "Editor/EditorCommands.hpp"
 
 
 namespace Sharpheus {
@@ -75,11 +76,6 @@ namespace Sharpheus {
 
 		input->SetLabel(curr->GetName());
 		visibilityButton->SetBitmap(curr->IsVisible() ? visibleBitmap : invisibleBitmap);
-	}
-
-	void HeaderPresenter::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	void HeaderPresenter::InitBitmaps()
@@ -187,11 +183,6 @@ namespace Sharpheus {
 		rot->SetValue(trafo.rot);
 	}
 
-	void MainTrafoPresenter::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
 	void MainTrafoPresenter::InitBitmaps()
 	{
 		TrafoPresenterBase::InitBitmaps();
@@ -223,4 +214,32 @@ namespace Sharpheus {
 		}
 	}
 
+
+	// TileMapPresenter
+
+	TileMapPresenter::TileMapPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y)
+		: Presenter(parent, title, signal, y)
+	{
+		y += UI::unitHeight;
+		uint32_t x = (parent->GetClientSize().x - UI::smallButtonSize.x) / 2;
+		openButton = new wxButton(parent, wxID_ANY, "Open", wxPoint(x, y), UI::smallButtonSize);
+		openButton->Bind(wxEVT_BUTTON, &TileMapPresenter::HandleChange, this);
+		y += UI::heightPadding;
+	}
+
+	TileMapPresenter::~TileMapPresenter()
+	{
+		wxREMOVE(openButton);
+	}
+
+	void TileMapPresenter::SetCurrent(GameObject* curr)
+	{
+		SPHE_ASSERT(curr->Is(GameObject::Type::TileMap), "Non-tilemap type is passed to TileMapPresenter");
+		Presenter::SetCurrent(curr);
+	}
+
+	void TileMapPresenter::HandleChange(wxCommandEvent& e)
+	{
+		EditorCommands::OpenTileMapEditor((TileMap*)curr);
+	}
 }

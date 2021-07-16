@@ -22,7 +22,7 @@ namespace Sharpheus {
 		typeSelector->SetEditable(false);
 		popup = new ClassListCtrl();
 		typeSelector->SetPopupControl(popup);
-		popup->InitContent(SPH_BIND_THIS_2(Creator::TypeSelectorChanged));
+		popup->InitContent(SPH_BIND_THIS_2(Creator::TypeSelectorChanged), SPH_BIND_THIS_0(Creator::SelectorDoubleClicked));
 
 		addButton->Bind(wxEVT_BUTTON, &Creator::OnAdd, this);
 		newName->Bind(wxEVT_TEXT_ENTER, &Creator::OnAdd, this);
@@ -50,6 +50,13 @@ namespace Sharpheus {
 	{
 		this->type = type;
 		typeSelector->SetValue(name);
+	}
+
+	void Creator::SelectorDoubleClicked()
+	{
+		if (type != GameObject::Type::None) {
+			typeSelector->Dismiss();
+		}
 	}
 
 	void Creator::InitBitmaps()

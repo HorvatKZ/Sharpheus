@@ -21,7 +21,7 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) { this->curr = curr; }
 		virtual void SetDefault() { curr = nullptr; }
-		virtual void Refresh() = 0;
+		void Refresh() { SetCurrent(curr); }
 
 	protected:
 		wxWindow* parent;
@@ -58,7 +58,6 @@ namespace Sharpheus {
 		virtual ~HeaderPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
 
 		virtual inline void SetDefault() override { FieldPresenter::SetDefault(); visibilityButton->SetBitmap(wxNullBitmap); }
 
@@ -83,7 +82,6 @@ namespace Sharpheus {
 		virtual ~StringPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
 
 	protected:
 		StringProvider<Class>* provider;
@@ -100,7 +98,6 @@ namespace Sharpheus {
 		virtual ~IntPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
 
 	protected:
 		IntProvider<Class>* provider;
@@ -118,7 +115,6 @@ namespace Sharpheus {
 		virtual ~UIntPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
 
 	protected:
 		UIntProvider<Class>* provider;
@@ -136,7 +132,6 @@ namespace Sharpheus {
 		virtual ~FloatPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
 
 	protected:
 		FloatProvider<Class>* provider;
@@ -155,7 +150,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		BoolProvider<Class>* provider;
@@ -174,7 +168,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		OneWayBoolProvider<Class>* provider;
@@ -193,7 +186,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		PointProvider<Class>* provider;
@@ -213,7 +205,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		ColorProvider<Class>* provider;
@@ -238,7 +229,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		ImageProvider<Class>* provider;
@@ -259,7 +249,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		FontProvider<Class>* provider;
@@ -280,7 +269,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		FontStyleProvider<Class>* provider;
@@ -300,10 +288,30 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		AnimationProvider<Class>* provider;
+		wxStaticText* name;
+		wxStaticBitmap* preview;
+		wxButton* browse;
+		wxString lastPath;
+
+		virtual void HandleChange(wxCommandEvent& e);
+	};
+
+
+	template <class Class>
+	class TileSetPresenter : public Presenter
+	{
+	public:
+		TileSetPresenter(wxWindow* parent, TileSetProvider<Class>* provider, Signal signal, uint32_t& y);
+		virtual ~TileSetPresenter();
+
+		virtual void SetCurrent(GameObject* curr) override;
+		virtual inline void SetDefault() override;
+
+	protected:
+		TileSetProvider<Class>* provider;
 		wxStaticText* name;
 		wxStaticBitmap* preview;
 		wxButton* browse;
@@ -322,7 +330,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		SoundProvider<Class>* provider;
@@ -342,7 +349,6 @@ namespace Sharpheus {
 
 		virtual void SetCurrent(GameObject* curr) override;
 		virtual inline void SetDefault() override;
-		virtual void Refresh() override;
 
 	protected:
 		StringListProvider<Class>* provider;
@@ -400,7 +406,6 @@ namespace Sharpheus {
 			trafoTypeSwitch->SetBitmap(localBitmap);
 			isWorldTrafo = false;
 		}
-		virtual void Refresh() override;
 
 	private:
 		wxBitmapButton* trafoTypeSwitch;
@@ -422,10 +427,24 @@ namespace Sharpheus {
 		virtual ~TrafoPresenter();
 
 		void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
 
 	private:
 		TrafoProvider<Class>* provider;
+
+		virtual void HandleChange(wxCommandEvent& e);
+	};
+
+
+	class TileMapPresenter : public Presenter
+	{
+	public:
+		TileMapPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y);
+		virtual ~TileMapPresenter();
+
+		void SetCurrent(GameObject* curr) override;
+
+	private:
+		wxButton* openButton;
 
 		virtual void HandleChange(wxCommandEvent& e);
 	};

@@ -28,6 +28,7 @@ namespace Sharpheus {
 		void OnAdd(wxCommandEvent& e);
 
 		void TypeSelectorChanged(const wxString& name, GameObject::Type type);
+		void SelectorDoubleClicked();
 		void InitBitmaps();
 	};
 

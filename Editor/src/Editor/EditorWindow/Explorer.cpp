@@ -26,6 +26,7 @@ namespace Sharpheus {
 		imgs["log"] = ImageManager::GetImage("log.png", ImageManager::PathType::EXPLORER);
 		imgs["img"] = ImageManager::GetImage("img.png", ImageManager::PathType::EXPLORER);
 		imgs["anim"] = ImageManager::GetImage("anim.png", ImageManager::PathType::EXPLORER);
+		imgs["tile"] = ImageManager::GetImage("tile.png", ImageManager::PathType::EXPLORER);
 		imgs["scene"] = ImageManager::GetImage("scene.png", ImageManager::PathType::EXPLORER);
 		imgs["lvl"] = ImageManager::GetImage("lvl.png", ImageManager::PathType::EXPLORER);
 		imgs["proj"] = ImageManager::GetImage("proj.png", ImageManager::PathType::EXPLORER);
@@ -65,7 +66,7 @@ namespace Sharpheus {
 
 	void Explorer::OnDoubleClick(wxMouseEvent& e)
 	{
-		wxPoint pos = e.GetPosition() + GetViewStart();
+		wxPoint pos = e.GetPosition() + GetViewStart() * UI::scrollSpeed;
 		uint32_t col = pos.x / (UI::border + oneWidth);
 		uint32_t row = pos.y / (UI::border + 120);
 		uint32_t perRow = (GetClientSize().x - UI::border) / (UI::border + oneWidth);
@@ -146,8 +147,19 @@ namespace Sharpheus {
 				EditorCommands::EditAnimation(animPath);
 				return;
 			}
+			else if (subExt == "tile") {
+				wxString relativePath = folderPath.Mid(basePath.Length()) + name;
+				if (relativePath.Length() < 7 || relativePath.Left(7) != "Assets\\") {
+					wxMessageBox("TileSet: " + name + " is not under the Assets folder", "Error", wxICON_ERROR | wxOK | wxCENTRE);
+					return;
+				}
+
+				wxString tileSetPath = relativePath.Mid(7);
+				EditorCommands::EditTileSet(tileSetPath);
+				return;
+			}
 		}
-		wxMessageBox("Cannot open " + name + " from the Explorer", "Error", wxICON_ERROR | wxOK | wxCENTRE);
+		wxMessageBox(name + " is not a *.sharpheus file", "Error", wxICON_ERROR | wxOK | wxCENTRE);
 	}
 
 

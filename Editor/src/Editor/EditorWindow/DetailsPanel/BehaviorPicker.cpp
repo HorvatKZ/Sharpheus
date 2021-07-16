@@ -30,8 +30,9 @@ namespace Sharpheus {
 
 	void BehaviorPicker::SetCurrent(GameObject* curr)
 	{
-		Presenter::SetCurrent(curr);
+		SPHE_ASSERT(curr->Is(GameObject::Type::Behavior), "Non-behavior type is passed to BehaviorPicker");
 
+		Presenter::SetCurrent(curr);
 		wxREMOVE(typeSelector);
 
 		uint32_t parentWidth = parent->GetSize().x;
@@ -44,11 +45,6 @@ namespace Sharpheus {
 		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y + UI::unitHeight), wxSize(parentWidth - 3 * UI::border - UI::unitHeight, UI::unitHeight), arr);
 		typeSelector->SetEditable(false);
 		typeSelector->Bind(wxEVT_COMBOBOX, &BehaviorPicker::HandleChange, this);
-	}
-
-	void BehaviorPicker::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	void BehaviorPicker::HandleChange(wxCommandEvent& e)

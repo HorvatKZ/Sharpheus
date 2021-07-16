@@ -18,6 +18,7 @@ namespace Sharpheus {
             Info("Text", "text.png", GameObject::Type::Text, 2),
             Info("AnimatedSprite", "animsprite.png", GameObject::Type::AnimatedSprite, 2),
             Info("AnimationPlayer", "animplayer.png", GameObject::Type::AnimationPlayer, 2),
+            Info("TileMap", "tilemap.png", GameObject::Type::TileMap, 2),
             Info("Physics", "physics.png", GameObject::Type::None, 1),
             Info("PhysicsObject", "physicsobj.png", GameObject::Type::PhysicsObject, 2),
             Info("Colliders", "colliders.png", GameObject::Type::None, 2),
@@ -47,11 +48,13 @@ namespace Sharpheus {
     {
     }
 
-    void ClassListCtrl::InitContent(std::function<void(const wxString&, GameObject::Type)>&& selectCallback)
+    void ClassListCtrl::InitContent(std::function<void(const wxString&, GameObject::Type)>&& selectCallback, std::function<void()>&& dclickCallback)
     {
         this->selectCallback = std::move(selectCallback);
+        this->dclickCallback = std::move(dclickCallback);
         Fill();
         Bind(wxEVT_TREE_SEL_CHANGED, &ClassListCtrl::OnSelect, this);
+        Bind(wxEVT_LEFT_DCLICK, &ClassListCtrl::OnDoubleClick, this);
     }
 
     bool ClassListCtrl::Create(wxWindow* parent)
@@ -83,6 +86,11 @@ namespace Sharpheus {
             selectCallback(selectedName, nameToType[selectedName]);
         }
        
+    }
+
+    void ClassListCtrl::OnDoubleClick(wxMouseEvent& e)
+    {
+        dclickCallback();
     }
 
     void ClassListCtrl::Fill()

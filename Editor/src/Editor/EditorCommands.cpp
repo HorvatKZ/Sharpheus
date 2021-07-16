@@ -4,7 +4,9 @@
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/EditorWindow/MenuBar/AnimationCreatorDialog.hpp"
+#include "Editor/EditorWindow/MenuBar/TileSetCreatorDialog.hpp"
 #include "Editor/Exporting/Exporter.hpp"
+#include "Editor/TileMapEditor/TileMapEditor.hpp"
 
 
 namespace Sharpheus {
@@ -12,6 +14,10 @@ namespace Sharpheus {
 	wxWindow* EditorCommands::editorWindow = nullptr;
 	std::function<void()> EditorCommands::levelChangedCallback;
 	std::function<void()> EditorCommands::currChangedCallback;
+	
+	static TileMapEditor::Editor* tme = nullptr;
+
+	static inline void OnTMEClosed(wxCloseEvent& e) { tme = nullptr; e.Skip(); }
 
 
 	void EditorCommands::Init(wxWindow* _editorWindow, std::function<void()>&& _levelChangedCallback, std::function<void()>&& _currChangedCallback)
@@ -174,6 +180,20 @@ namespace Sharpheus {
 	}
 
 
+	void EditorCommands::CreateTileSet()
+	{
+		TileSetCreatorDialog creator(editorWindow);
+		HandleTileSetCreator(creator);
+	}
+
+
+	void EditorCommands::EditTileSet(const wxString& tileSetPath)
+	{
+		TileSetCreatorDialog creator(editorWindow, tileSetPath);
+		HandleTileSetCreator(creator);
+	}
+
+
 	void EditorCommands::ExportTheGame(bool includeLogging)
 	{
 		int response = wxMessageBox("Do you want to save the current level before exporting?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
@@ -187,17 +207,68 @@ namespace Sharpheus {
 	}
 
 
+	void EditorCommands::OpenTileMapEditor(TileMap* tileMap)
+	{
+		if (tme != nullptr) {
+			SPHE_WARN("TileMap Editor is already open");
+			return;
+		}
+
+		if (tileMap == nullptr) {
+			SPHE_ERROR("Cannot open TileMap Editor: The given TileMap is nullptr");
+			return;
+		}
+
+		if (tileMap->GetTileSet() == nullptr) {
+			SPHE_WARN("Please browse a TileSet before opening the TileMap Editor");
+			return;
+		}
+
+		if (!tileMap->GetTileSet()->IsValid()) {
+			SPHE_ERROR("Cannot open TileMap Editor: The given TileMap has an invalid TileSet");
+			return;
+		}
+
+		tme = new TileMapEditor::Editor(EditorData::GetMainWindow(), EditorData::GetMainContext(), tileMap);
+		tme->Bind(wxEVT_CLOSE_WINDOW, OnTMEClosed);
+		tme->Show();
+	}
+
+
+	void EditorCommands::ChangeTileSet(GameObject* obj)
+	{
+		if (tme != nullptr) {
+			tme->ChangeTileSet(obj);
+		}
+	}
+
+
 	void EditorCommands::HandleAnimationCreator(AnimationCreatorDialog& creator)
 	{
 		if (creator.ShowModal() == wxID_CANCEL)
 			return;
 
-		Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), false);
+		Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), creator.UseFilter());
 		Animation* anim = new Animation(atlas, creator.GetFrameWidth(), creator.GetFrameHeight(), creator.GetStartFrame(), creator.GetEndFrame());
 		anim->SetName(wxStr2StdStr(creator.GetName()));
 		anim->SetFrameTime(creator.GetFrameTime());
 		bool success = anim->Save(wxStr2StdStr(creator.GetPath()));
 		delete anim;
+
+		SPHE_ASSERT(success, "Cannot save animation. Check the log files for more information");
+	}
+
+
+	void EditorCommands::HandleTileSetCreator(TileSetCreatorDialog& creator)
+	{
+		if (creator.ShowModal() == wxID_CANCEL)
+			return;
+
+		Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), creator.UseFilter());
+		TileSet* tileSet = new TileSet(atlas, creator.GetFrameWidth(), creator.GetFrameHeight());
+		tileSet->SetName(wxStr2StdStr(creator.GetName()));
+		bool success = tileSet->Save(wxStr2StdStr(creator.GetPath()));
+		delete tileSet;
 
 		SPHE_ASSERT(success, "Cannot save animation. Check the log files for more information");
 	}

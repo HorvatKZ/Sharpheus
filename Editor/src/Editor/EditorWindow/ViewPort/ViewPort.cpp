@@ -7,7 +7,7 @@
 namespace Sharpheus {
 
 	ViewPort::ViewPort(wxFrame* parent, const wxPoint& pos, const wxSize& size)
-		: wxGLCanvas(parent, wxID_ANY, NULL, pos, size)
+		: ViewPortBase(parent, pos, size)
 	{
 		glContext = new wxGLContext(this);
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -18,12 +18,6 @@ namespace Sharpheus {
 		Renderer::Init();
 		EditorData::SetOGLVersion(Renderer::GetAPIVersion());
 
-		camera = new ViewPortCamera();
-		camera->SetCustomRect(size.x, size.y);
-
-		prevMousePos = wxGetMousePosition() - this->GetScreenPosition();
-
-		Bind(wxEVT_PAINT, &ViewPort::OnPaintEvent, this);
 		Bind(wxEVT_SIZE, &ViewPort::OnResize, this);
 		Bind(wxEVT_MOUSEWHEEL, &ViewPort::OnScroll, this);
 		Bind(wxEVT_MOTION, &ViewPort::OnMouseMove, this);
@@ -34,16 +28,14 @@ namespace Sharpheus {
 
 	ViewPort::~ViewPort()
 	{
-		delete glContext;
-		delete camera;
 		delete editArrow;
 	}
 
 
 	void ViewPort::BindCallbacks(std::function<void()>&& currChangedCallback, std::function<void()>&& currDataChangedCallback)
 	{
+		ViewPortBase::BindCallbacks(std::move(currDataChangedCallback));
 		this->currChangedCallback = std::move(currChangedCallback);
-		this->currDataChangedCallback = std::move(currDataChangedCallback);
 	}
 
 
@@ -53,47 +45,13 @@ namespace Sharpheus {
 	}
 
 
-	void ViewPort::OnPaintEvent(wxPaintEvent& evt)
-	{
-		if (!isPlaying) {
-			wxPaintDC dc(this);
-			Render(dc);
-		}
-	}
-
-
-	void ViewPort::PaintNow()
-	{
-		if (!isPlaying) {
-			wxClientDC dc(this);
-			Render(dc);
-		}
-	}
-
-
-	void ViewPort::OnResize(wxSizeEvent& e)
-	{
-		wxSize size = GetSize();
-		camera->SetCustomRect(size.x, size.y);
-	}
-
-
-	void ViewPort::OnScroll(wxMouseEvent& e)
-	{
-		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		camera->ZoomToScreen(e.GetWheelRotation() > 0.f ? 0.9f : 1.1f, Point(mousePos.x, mousePos.y));
-		Refresh();
-	}
-
-
 	void ViewPort::OnMouseMove(wxMouseEvent& e)
 	{
+		ViewPortBase::OnMouseMove(e);
+
 		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
 		wxPoint diff = mousePos - prevMousePos;
-		if (e.MiddleIsDown()) {
-			camera->MoveByScreen(Point(-diff.x, -diff.y));
-			Refresh();
-		} else if (e.LeftIsDown() && EditorData::GetCurrent() != nullptr) {
+		if (e.LeftIsDown() && EditorData::GetCurrent() != nullptr) {
 			GameObject* curr = EditorData::GetCurrent();
 			Transform currTrafo = curr->GetWorldTrafo();
 			Point camScale = camera->GetWorldTrafo().scale;

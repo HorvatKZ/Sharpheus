@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ShapedGameObject.hpp"
+#include "../AxisShapedGameObject.hpp"
 #include "Engine/Events/LocalEvent.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
 
@@ -11,14 +11,12 @@ namespace Sharpheus {
 	SPH_DEF_EVENT_FUNC(ControlChangedEvent);
 
 
-	class SPH_EXPORT Control : public ShapedGameObject
+	class SPH_EXPORT Control : public AxisShapedGameObject
 	{
 	public:
 		Control(GameObject* parent, const std::string& name, Shape* shape);
 		virtual ~Control();
 		virtual void CopyFrom(GameObject* other) override;
-
-		virtual void SetWorldTrafo(const Transform& trafo) override;
 
 		inline void SubscribeForChange(ID subscriberID, ControlChangedEventFunc&& func) {
 			subscribers[subscriberID] = std::move(func);
@@ -57,15 +55,10 @@ namespace Sharpheus {
 		uint8_t fontStyle = 0;
 		Color fontColor = Color::White;
 
-		Point xAxis = Point(1, 0), yAxis = Point(0, 1);
 		bool isCurrentlyClicked = false;
 		std::unordered_map<ID, ControlChangedEventFunc> subscribers;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void UpdateWorldTrafo(const Transform& parentWorldTrafo) override;
-		void UpdateAxes(const Transform& oldTrafo);
-		void ForceUpdateAxes();
 
 		virtual void OnClick(const MousePressedEvent& e);
 		virtual void OnRelease(const MouseReleasedEvent& e);
@@ -73,7 +66,6 @@ namespace Sharpheus {
 		virtual inline bool DoesChangeOnRelease() = 0;
 		virtual void ChangeOnClick() = 0;
 		virtual void ChangeOnRelease() {};
-		virtual void UpdateSizer() = 0;
 	};
 
 

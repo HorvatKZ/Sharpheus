@@ -25,6 +25,7 @@ namespace Sharpheus {
 		void WindowSettings(wxCommandEvent& e);
 		void GridSettings(wxCommandEvent& e);
 		void AnimatorCreator(wxCommandEvent& e);
+		void TileSetCreator(wxCommandEvent& e);
 		void ExportWithLogs(wxCommandEvent& e);
 		void ExportFinal(wxCommandEvent& e);
 		void About(wxCommandEvent& e);

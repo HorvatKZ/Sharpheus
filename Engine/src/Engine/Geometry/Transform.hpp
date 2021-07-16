@@ -5,18 +5,18 @@
 
 namespace Sharpheus {
 
-	struct Transform {
+	struct SPH_EXPORT Transform {
 		Point pos;
 		Point scale;
 		float rot;
 
 		Transform(const Point& pos = Point(), const Point& scale = Point(1.f, 1.f), float rot = 0) : pos(pos), scale(scale), rot(rot) {}
 
-		bool operator==(const Transform& other) {
+		bool operator==(const Transform& other) const {
 			return pos == other.pos && scale == other.scale && rot == other.rot;
 		}
 
-		bool operator!=(const Transform& other) {
+		bool operator!=(const Transform& other) const {
 			return pos != other.pos || scale != other.scale || rot != other.rot;
 		}
 

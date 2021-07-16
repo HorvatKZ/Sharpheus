@@ -3,6 +3,7 @@
 #include "Image.hpp"
 #include "Font.hpp"
 #include "Animation.hpp"
+#include "TileSet.hpp"
 
 
 namespace Sharpheus {
@@ -28,12 +29,15 @@ namespace Sharpheus {
 
 		static Animation* GetAnimation(const std::string& path);
 
+		static TileSet* GetTileSet(const std::string& path);
+
 	private:
 		static std::string assetsRoot;
 		static std::unordered_map<std::string, Image*> images;
 		static std::unordered_map<std::string, Font*> fontsByPaths;
 		static std::unordered_map<std::string, Font*> fontsByNames;
 		static std::unordered_map<std::string, Animation*> animations;
+		static std::unordered_map<std::string, TileSet*> tileSets;
 		static Image* circle;
 
 		static std::string Concat(const std::string& first, const std::string& second);

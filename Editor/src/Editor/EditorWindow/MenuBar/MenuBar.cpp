@@ -4,7 +4,6 @@
 #include "ProjectSettingsDialog.hpp"
 #include "WindowSettingsDialog.hpp"
 #include "GridSettingsDialog.hpp"
-#include "AnimationCreatorDialog.hpp"
 #include "AboutDialog.hpp"
 #include "Editor/Registry/EditorData.hpp"
 #include "Editor/Registry/ProjectData.hpp"
@@ -36,6 +35,7 @@ namespace Sharpheus {
 		editor->Append(10201, wxT("Grid Settings\tCtrl+Alt+G"));
 		editor->AppendSeparator();
 		editor->Append(10202, wxT("Animation Creator"));
+		editor->Append(10203, wxT("TileSet Creator"));
 		Append(editor, "Editor");
 
 		wxMenu* exporting = new wxMenu;
@@ -57,6 +57,7 @@ namespace Sharpheus {
 		Connect(10106, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveAsScene));
 		Connect(10201, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::GridSettings));
 		Connect(10202, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AnimatorCreator));
+		Connect(10203, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::TileSetCreator));
 		Connect(10301, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportWithLogs));
 		Connect(10302, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportFinal));
 		Connect(10401, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::About));
@@ -158,6 +159,12 @@ namespace Sharpheus {
 	void MenuBar::AnimatorCreator(wxCommandEvent& e)
 	{
 		EditorCommands::CreateAnimation();
+	}
+
+
+	void MenuBar::TileSetCreator(wxCommandEvent& e)
+	{
+		EditorCommands::CreateTileSet();
 	}
 
 

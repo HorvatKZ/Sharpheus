@@ -177,6 +177,20 @@ namespace Sharpheus {
 	}
 
 
+	bool FileLoader::Read(TileSet** data)
+	{
+		std::string path;
+		Read(path);
+		if (path == "nullptr") {
+			*data = nullptr;
+			return GetStatus();
+		}
+
+		*data = ResourceManager::GetTileSet(path);
+		return GetStatus();
+	}
+
+
 	bool FileLoader::ReadLine()
 	{
 		char c;

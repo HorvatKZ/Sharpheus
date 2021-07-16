@@ -5,6 +5,7 @@
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
 #include "Editor/ResourceManagement/ImageManager.hpp"
 #include "Engine/ResourceManager/Font.hpp"
+#include "Editor/EditorCommands.hpp"
 #include <wx/valnum.h>
 
 
@@ -30,12 +31,6 @@ namespace Sharpheus {
 		Presenter::SetCurrent(curr);
 
 		input->SetLabel(provider->Get((Class*)curr));
-	}
-
-	template<class Class>
-	inline void StringPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>
@@ -76,12 +71,6 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void IntPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
-	template<class Class>
 	inline void IntPresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
@@ -118,12 +107,6 @@ namespace Sharpheus {
 		Presenter::SetCurrent(curr);
 
 		input->SetLabel(wxString::Format(wxT("%d"), provider->Get((Class*)curr)));
-	}
-
-	template<class Class>
-	inline void UIntPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>
@@ -175,12 +158,6 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void FloatPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
-	template<class Class>
 	inline void FloatPresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
@@ -224,12 +201,6 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void BoolPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
-	template<class Class>
 	inline void BoolPresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
@@ -268,12 +239,6 @@ namespace Sharpheus {
 	{
 		Presenter::SetDefault();
 		checkBox->SetValue(false);
-	}
-
-	template<class Class>
-	inline void OneWayBoolPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>
@@ -325,12 +290,6 @@ namespace Sharpheus {
 		Presenter::SetDefault();
 		xField->SetValue(0.f);
 		yField->SetValue(0.f);
-	}
-
-	template<class Class>
-	inline void PointPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>
@@ -405,12 +364,6 @@ namespace Sharpheus {
 		aField->SetValue(0);
 		color->SetColour(*wxBLACK);
 		lastColor = *wxBLACK;
-	}
-
-	template<class Class>
-	inline void ColorPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>
@@ -506,12 +459,6 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void ImagePresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
-	template<class Class>
 	inline void ImagePresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
@@ -521,7 +468,10 @@ namespace Sharpheus {
 			if (!browseDialog.Show())
 				return;
 
-			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()), false);
+			int response = wxMessageBox("Do you want to import the image with filtering?", "Importing", wxYES | wxNO | wxICON_QUESTION | wxCENTRE);
+
+			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()), response == wxYES);
+			SPHE_ASSERT(provider->Get((Class*)curr)->IsValid(), "Importing the image failed. Check the logs, or try to restart the editor.");
 			signal();
 		}
 	}
@@ -578,12 +528,6 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void FontPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
-	template<class Class>
 	inline void FontPresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
@@ -605,6 +549,7 @@ namespace Sharpheus {
 			wxString fontFile = "Fonts\\" + browseDialog.GetPath();
 			wxString imgFile = fontFile.Left(fontFile.find_last_of('.')) + ".png";
 			provider->SetByPath((Class*)curr, wxStr2StdStr(fontFile), wxStr2StdStr(imgFile));
+			SPHE_ASSERT(provider->Get((Class*)curr)->IsValid(), "Importing the font failed. Check the logs, or try to restart the editor.");
 			signal();
 		}
 	}
@@ -660,12 +605,6 @@ namespace Sharpheus {
 		boldCheckBox->SetValue(false);
 		italicCheckBox->SetValue(false);
 		underlinedCheckBox->SetValue(false);
-	}
-
-	template<class Class>
-	inline void FontStylePresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>
@@ -759,22 +698,106 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void AnimationPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
-	template<class Class>
 	inline void AnimationPresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
-			RelativeOpenDialog browseDialog(parent, "Browse for animation", ProjectData::GetPath() + "Assets\\",
+			RelativeOpenDialog browseDialog(parent, "Browse for Animation", ProjectData::GetPath() + "Assets\\",
 				"Sharpheus animation files(*.anim.sharpheus) | *.anim.sharpheus");
 
 			if (!browseDialog.Show())
 				return;
 
 			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+			SPHE_ASSERT(provider->Get((Class*)curr)->IsValid(), "Importing the animation failed. Check the logs, or try to restart the editor.");
+			signal();
+		}
+	}
+
+
+	// TileSetPresenter
+
+	template<class Class>
+	inline TileSetPresenter<Class>::TileSetPresenter(wxWindow* parent, TileSetProvider<Class>* provider, Signal signal, uint32_t& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		lastPath = "";
+
+		uint32_t width = parent->GetSize().x - 3 * UI::border - previewHeight;
+		y += UI::unitHeight;
+		name = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
+		name->SetMaxSize(wxSize(width, UI::unitHeight));
+		preview = new wxStaticBitmap(parent, wxID_ANY, wxNullBitmap, wxPoint(2 * UI::border + width, y), wxSize(previewHeight, previewHeight));
+		y += UI::unitHeight;
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(UI::border, y), UI::smallButtonSize);
+		browse->Bind(wxEVT_BUTTON, &TileSetPresenter<Class>::HandleChange, this);
+		y += 33;
+	}
+
+	template<class Class>
+	inline TileSetPresenter<Class>::~TileSetPresenter()
+	{
+		wxREMOVE(name);
+		wxREMOVE(browse);
+		wxREMOVE(preview);
+	}
+
+	template<class Class>
+	inline void TileSetPresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+		TileSet* tileSet = provider->Get((Class*)curr);
+		if (tileSet != nullptr) {
+			std::string path = tileSet->GetPath();
+			if (path != lastPath) {
+				wxImage bitmap = ImageManager::GetImage(tileSet->GetAtlas()->GetFullPath());
+				if (!bitmap.IsOk()) {
+					SPHE_ERROR("The image is not found or corrupted");
+					provider->Set((Class*)curr, nullptr);
+					signal();
+					return;
+				}
+				name->SetLabel(tileSet->GetName());
+				bitmap.Rescale(50, 50);
+				preview->SetBitmap(bitmap);
+				lastPath = path;
+			}
+		} else {
+			name->SetLabel("");
+			preview->SetBitmap(wxNullBitmap);
+			lastPath = "";
+		}
+	}
+
+	template<class Class>
+	inline void TileSetPresenter<Class>::SetDefault()
+	{
+		Presenter::SetDefault();
+		name->SetLabel("");
+		preview->SetBitmap(wxNullBitmap);
+		lastPath = "";
+	}
+
+	template<class Class>
+	inline void TileSetPresenter<Class>::HandleChange(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			RelativeOpenDialog browseDialog(parent, "Browse for TileSet", ProjectData::GetPath() + "Assets\\",
+				"Sharpheus TileSet files(*.tile.sharpheus) | *.tile.sharpheus");
+
+			if (!browseDialog.Show())
+				return;
+
+			std::string pathInStr = wxStr2StdStr(browseDialog.GetPath());
+			TileSet* old = provider->Get((Class*)curr);
+			if (old != nullptr && pathInStr != old->GetPath()) {
+				int response = wxMessageBox("Changing the TileSet could alter the TileMap's state. Are you sure you want to change it?", "Changing TileSet", wxYES | wxNO | wxICON_WARNING | wxCENTRE);;
+				if (response == wxNO) {
+					return;
+				}
+			}
+			provider->SetByPath((Class*)curr, pathInStr);
+			SPHE_ASSERT(provider->Get((Class*)curr)->IsValid(), "Importing the image failed. Check the logs, or try to restart the editor.");
+			EditorCommands::ChangeTileSet(curr);
 			signal();
 		}
 	}
@@ -814,12 +837,6 @@ namespace Sharpheus {
 	{
 		Presenter::SetDefault();
 		this->path->SetLabel("");
-	}
-
-	template<class Class>
-	inline void SoundPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>
@@ -895,12 +912,6 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void StringListPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
-	}
-
-	template<class Class>
 	inline void StringListPresenter<Class>::OnAdd(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
@@ -972,12 +983,6 @@ namespace Sharpheus {
 		scaleX->SetValue(trafo.scale.x);
 		scaleY->SetValue(trafo.scale.y);
 		rot->SetValue(trafo.rot);
-	}
-
-	template<class Class>
-	inline void TrafoPresenter<Class>::Refresh()
-	{
-		SetCurrent(curr);
 	}
 
 	template<class Class>

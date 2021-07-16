@@ -111,6 +111,9 @@ namespace Sharpheus {
 				case GameObject::Type::AnimationPlayer:
 					CreatePresenterFrom<AnimationPlayer>(provider, y);
 					break;
+				case GameObject::Type::TileMap:
+					CreatePresenterFrom<TileMap>(provider, y);
+					break;
 				case GameObject::Type::PhysicsObject:
 					CreatePresenterFrom<PhysicsObject>(provider, y);
 					break;
@@ -189,9 +192,9 @@ namespace Sharpheus {
 		typeIcon->SetBitmap(wxNullBitmap);
 		mainTrafo->SetDefault();
 		headerPresenter->SetDefault();
-		for (Presenter* presenter : presenters) {
-			presenter->SetDefault();
-		}
+		
+		lastType = GameObject::Type::None;
+		ClearPresenters();
 	}
 
 
@@ -246,6 +249,9 @@ namespace Sharpheus {
 			case CommonProvider::Type::ANIM:
 				presenters.push_back(new AnimationPresenter<Class>(this, (AnimationProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
+			case CommonProvider::Type::TILESET:
+				presenters.push_back(new TileSetPresenter<Class>(this, (TileSetProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
 			case CommonProvider::Type::SOUND:
 				presenters.push_back(new SoundPresenter<Class>(this, (SoundProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
@@ -257,6 +263,9 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::BEHAVIOR:
 				presenters.push_back(new BehaviorPicker(this, provider->GetName(), behaviorChangedCallback, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::TILEMAP:
+				presenters.push_back(new TileMapPresenter(this, provider->GetName(), currDataChangedCallback, y));
 				break;
 			default:
 				SPHE_WARN("Details Panel: Unexpected provider type {0}", provider->GetType());

@@ -13,7 +13,7 @@ namespace Sharpheus {
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, SOUND, STRING, STRINGLIST, BEHAVIOR
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, TILESET, SOUND, STRING, STRINGLIST, BEHAVIOR, TILEMAP
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -27,14 +27,18 @@ namespace Sharpheus {
 	};
 
 
-	class BehaviorProvider : public CommonProvider
+	template <CommonProvider::Type type>
+	class SignalOnlyProvider : public CommonProvider
 	{
 	public:
-		BehaviorProvider(const std::string& name) : CommonProvider(name) {}
-		virtual ~BehaviorProvider() = default;
+		SignalOnlyProvider(const std::string& name) : CommonProvider(name) {}
+		virtual ~SignalOnlyProvider() = default;
 
-		virtual inline Type GetType() override { return Type::BEHAVIOR; }
+		virtual inline Type GetType() override { return type; }
 	};
+
+	using BehaviorProvider = SignalOnlyProvider<CommonProvider::Type::BEHAVIOR>;
+	using TileMapProvider = SignalOnlyProvider<CommonProvider::Type::TILEMAP>;
 
 
 	template <class Class, class T, CommonProvider::Type type>
@@ -115,7 +119,7 @@ namespace Sharpheus {
 	public:
 		ImageProvider(const std::string& name, Getter<Class, class Image*>&& getter, Setter<Class, class Image*>&& setter,
 			std::function<void(Class*, const std::string&, bool)>&& pathSetter)
-			: Provider<Class, class Image*, Type::IMAGE>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
+			: Provider<Class, class Image*, CommonProvider::Type::IMAGE>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
 		virtual ~ImageProvider() = default;
 
 		virtual inline void SetByPath(Class* obj, const std::string& path, bool filtered) { pathSetter(obj, path, filtered); }
@@ -123,6 +127,25 @@ namespace Sharpheus {
 	protected:
 		std::function<void(Class*, const std::string&, bool)> pathSetter;
 	};
+
+
+	template <class Class, class T, CommonProvider::Type type>
+	class ResourceProvider : public Provider<Class, T, type>
+	{
+	public:
+		ResourceProvider(const std::string& name, Getter<Class, T>&& getter, Setter<Class, T>&& setter,
+			std::function<void(Class*, const std::string&)>&& pathSetter)
+			: Provider<Class, T, type>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
+		virtual ~ResourceProvider() = default;
+
+		virtual inline void SetByPath(Class* obj, const std::string& path) { pathSetter(obj, path); }
+
+	protected:
+		std::function<void(Class*, const std::string&)> pathSetter;
+	};
+
+	template <class Class> using AnimationProvider	= ResourceProvider<Class, class Animation*, CommonProvider::Type::ANIM>;
+	template <class Class> using TileSetProvider	= ResourceProvider<Class, class TileSet*, CommonProvider::Type::TILESET>;
 
 
 	template <class Class>
@@ -144,22 +167,6 @@ namespace Sharpheus {
 		std::function<void(Class*, const std::string&)> setByName;
 		std::function<void(Class*, const std::string&, const std::string&)> setByPath;
 		const std::unordered_map<std::string, Font*>* fontTable;
-	};
-
-
-	template <class Class>
-	class AnimationProvider : public Provider<Class, class Animation*, CommonProvider::Type::ANIM>
-	{
-	public:
-		AnimationProvider(const std::string& name, Getter<Class, class Animation*>&& getter, Setter<Class, class Animation*>&& setter,
-			std::function<void(Class*, const std::string&)>&& pathSetter)
-			: Provider<Class, class Animation*, Type::ANIM>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
-		virtual ~AnimationProvider() = default;
-
-		virtual inline void SetByPath(Class* obj, const std::string& path) { pathSetter(obj, path); }
-
-	protected:
-		std::function<void(Class*, const std::string&)> pathSetter;
 	};
 
 

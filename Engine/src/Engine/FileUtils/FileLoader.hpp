@@ -27,6 +27,7 @@ namespace Sharpheus {
 		bool Read(class Image** data);
 		bool Read(class Font** data);
 		bool Read(class Animation** data);
+		bool Read(class TileSet** data);
 
 		bool ReadLine();
 

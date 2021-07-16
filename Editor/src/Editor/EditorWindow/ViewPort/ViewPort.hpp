@@ -4,13 +4,13 @@
 #include <GL/glew.h>
 #include <GL/wglew.h>
 #include <wx/glcanvas.h>
+#include "ViewPortBase.hpp"
 #include "EditingArrow.hpp"
-#include "ViewPortCamera.hpp"
 
 
 namespace Sharpheus {
 
-	class ViewPort : public wxGLCanvas
+	class ViewPort : public ViewPortBase
 	{
 	public:
 		ViewPort(wxFrame* parent, const wxPoint& pos, const wxSize& size);
@@ -19,36 +19,27 @@ namespace Sharpheus {
 		void BindCallbacks(std::function<void()>&& currChangedCallback, std::function<void()>&& currDataChangedCallback);
 		void InitEditingArrow();
 
-		void OnPaintEvent(wxPaintEvent& evt);
-		void PaintNow();
-
 		inline void SetPlaying(bool value) { isPlaying = value; }
 		inline void SetGrid(bool value) { isGridOn = value; }
 		inline bool IsGridOn() { return isGridOn; }
 		inline void SetSnapToGrid(bool value) { isSnapToGrid = value; }
 		inline bool IsSnapToGrid() { return isSnapToGrid; }
 
-		inline wxGLContext* GetContext() { return glContext; }
-
 	private:
-		ViewPortCamera* camera;
 		EditingArrow* editArrow;
-		wxGLContext* glContext = nullptr;
 
-		wxPoint prevMousePos;
 		EditingArrow::EditType editType = EditingArrow::EditType::NONE;
 		std::function<void()> currChangedCallback;
-		std::function<void()> currDataChangedCallback;
 		bool isGridOn = true;
 		bool isSnapToGrid = false;
 		bool isPlaying = false;
 
-		void OnResize(wxSizeEvent& e);
-		void OnScroll(wxMouseEvent& e);
-		void OnMouseMove(wxMouseEvent& e);
+		void OnMouseMove(wxMouseEvent& e) override;
+		void Render(wxDC& dc) override;
+
 		void OnMouseDown(wxMouseEvent& e);
 		void OnMouseUp(wxMouseEvent& e);
-		void Render(wxDC& dc);
+
 		void RenderGrid();
 		void RenderCameraOutline(Camera* cam);
 	};

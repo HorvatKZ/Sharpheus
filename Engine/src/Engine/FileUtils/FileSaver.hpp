@@ -27,6 +27,7 @@ namespace Sharpheus {
 		bool Write(class Image* data);
 		bool Write(class Font* data);
 		bool Write(class Animation* data);
+		bool Write(class TileSet* data);
 
 		bool WriteEnd();
 

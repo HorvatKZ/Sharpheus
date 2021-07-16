@@ -12,7 +12,6 @@ namespace Sharpheus {
 		virtual ~BehaviorPicker();
 
 		void SetCurrent(GameObject* curr) override;
-		virtual void Refresh() override;
 		virtual inline void SetDefault() override {
 			Presenter::SetDefault();
 			typeSelector->SelectNone();

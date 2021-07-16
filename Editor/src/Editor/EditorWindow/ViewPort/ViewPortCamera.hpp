@@ -8,7 +8,7 @@ namespace Sharpheus {
     class ViewPortCamera : public Camera
     {
     public:
-        ViewPortCamera() : Camera(nullptr, "VP_Camera") {}
+        ViewPortCamera(GameObject* parent = nullptr) : Camera(parent, "VP_Camera") {}
         virtual ~ViewPortCamera() = default;
 
         inline float GetWidth() override { return customWidth; }

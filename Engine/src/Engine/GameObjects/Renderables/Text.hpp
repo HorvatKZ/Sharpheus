@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ShapedGameObject.hpp"
+#include "../AxisShapedGameObject.hpp"
 #include "Engine/ResourceManager/Font.hpp"
 
 #define SPH_TEXT_SETSTYLE(Property, flag) \
@@ -16,14 +16,12 @@
 
 namespace Sharpheus {
 
-	class SPH_EXPORT Text : public ShapedGameObject
+	class SPH_EXPORT Text : public AxisShapedGameObject
 	{
 	public:
 		Text(GameObject* parent, const std::string& name);
 		virtual ~Text() = default;
 		virtual void CopyFrom(GameObject* other) override;
-
-		virtual void SetWorldTrafo(const Transform& trafo) override;
 
 		inline const std::string& GetContent() { return content; }
 		inline Font* GetFont() { return font; }
@@ -56,16 +54,12 @@ namespace Sharpheus {
 		Color color = Color::White;
 		float size = 20.f;
 		uint8_t style = 0;
-		Point xAxis = Point(1, 0), yAxis = Point(0, 1);
 
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Render() override;
 
-		virtual void UpdateWorldTrafo(const Transform& parentWorldTrafo) override;
-		void UpdateSizer();
-		void UpdateAxes(const Transform& oldTrafo);
-		void ForceUpdateAxes();
+		void UpdateSizer() override;
 	};
 
 }

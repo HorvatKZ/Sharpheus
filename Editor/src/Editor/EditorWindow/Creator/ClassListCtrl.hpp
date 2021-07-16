@@ -23,7 +23,7 @@ namespace Sharpheus {
 		virtual ~ClassListCtrl();
 
 		virtual void Init() override;
-		virtual void InitContent(std::function<void(const wxString&, GameObject::Type)>&& selectCallback);
+		virtual void InitContent(std::function<void(const wxString&, GameObject::Type)>&& selectCallback, std::function<void()>&& dclickCallback);
 		virtual bool Create(wxWindow* parent) override;
 		virtual wxWindow* GetControl() override;
 		virtual wxString GetStringValue() const override;
@@ -31,12 +31,14 @@ namespace Sharpheus {
 	private:
 		std::unordered_map<wxString, GameObject::Type> nameToType;
 		std::function<void(const wxString&, GameObject::Type)> selectCallback;
+		std::function<void()> dclickCallback;
 
 		static wxColour inativeColour;
 		static wxFont inactiveFont;
 		static std::vector<Info> infos;
 
 		void OnSelect(wxTreeEvent& e);
+		void OnDoubleClick(wxMouseEvent& e);
 
 		void Fill();
 	};

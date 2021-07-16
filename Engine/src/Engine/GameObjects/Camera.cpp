@@ -87,7 +87,7 @@ namespace Sharpheus {
 	void Camera::MoveByScreen(const Point& delta)
 	{
 		Transform newTrafo = trafo;
-		newTrafo.pos += Point(delta.x * trafo.scale.x, delta.y * trafo.scale.y);
+		newTrafo.pos += Point(delta.x * trafo.scale.x, delta.y * trafo.scale.y).Rotate(trafo.rot);
 		SetTrafo(newTrafo);
 	}
 

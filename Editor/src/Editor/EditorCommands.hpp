@@ -24,7 +24,13 @@ namespace Sharpheus {
 		static void CreateAnimation();
 		static void EditAnimation(const wxString& animPath);
 
+		static void CreateTileSet();
+		static void EditTileSet(const wxString& tileSetPath);
+
 		static void ExportTheGame(bool includeLogging);
+
+		static void OpenTileMapEditor(TileMap* tileMap);
+		static void ChangeTileSet(GameObject* obj);
 
 	private:
 		static wxWindow* editorWindow;
@@ -32,6 +38,7 @@ namespace Sharpheus {
 		static std::function<void()> currChangedCallback;
 
 		static void HandleAnimationCreator(class AnimationCreatorDialog& creator);
+		static void HandleTileSetCreator(class TileSetCreatorDialog& creator);
 	};
 
 }

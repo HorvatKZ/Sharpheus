@@ -120,6 +120,10 @@ namespace Sharpheus {
 
 	Point Point::Rotate(float angle) const
 	{
+		if (angle == 0.f) {
+			return *this;
+		}
+
 		float angleInRad = glm::radians(-angle); // Because y axis is inverted
 		float sinus = glm::sin(angleInRad);
 		float cosinus = glm::cos(angleInRad);

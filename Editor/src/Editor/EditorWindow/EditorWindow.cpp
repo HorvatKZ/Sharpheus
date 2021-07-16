@@ -49,6 +49,9 @@ namespace Sharpheus {
 
 		Bind(wxEVT_CLOSE_WINDOW, &EditorWindow::OnClose, this);
 		Bind(wxEVT_IDLE, &EditorWindow::OnIdle, this);
+
+		EditorData::SetMainWindow(this);
+		EditorData::SetMainContext(viewPort->GetContext());
 	}
 
 
@@ -145,7 +148,10 @@ namespace Sharpheus {
 
 	void EditorWindow::OnClose(wxCloseEvent& e)
 	{
-		EditorCommands::SaveLevel();
+		int response = wxMessageBox("Do you want to save the current level before exiting?", "Exiting", wxYES | wxNO | wxICON_INFORMATION | wxCENTRE);
+		if (response == wxYES) {
+			EditorCommands::SaveLevel();
+		}
 		e.Skip();
 	}
 

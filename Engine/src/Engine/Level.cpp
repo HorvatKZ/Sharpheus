@@ -70,6 +70,8 @@ namespace Sharpheus {
 				return Create<AnimatedSprite>(parent, newName);
 			case GameObject::Type::AnimationPlayer:
 				return Create<AnimationPlayer>(parent, newName);
+			case GameObject::Type::TileMap:
+				return Create<TileMap>(parent, newName);
 			case GameObject::Type::PhysicsObject:
 				return Create<PhysicsObject>(parent, newName);
 			case GameObject::Type::BoxCollider:

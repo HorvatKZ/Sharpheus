@@ -1,5 +1,7 @@
 #pragma once
 
+#include "editor_pch.h"
+#include <wx/glcanvas.h>
 
 namespace Sharpheus {
 
@@ -27,6 +29,12 @@ namespace Sharpheus {
 		static inline const wxString& GetVersion() { return version; }
 		static inline const wxString& GetOGLVersion() { return oglVersion; }
 		static inline void SetOGLVersion(const wxString& newOglVersion) { oglVersion = newOglVersion; }
+
+		static inline wxFrame* GetMainWindow() { return editorWindow; }
+		static inline void SetMainWindow(wxFrame* window) { editorWindow = window; }
+
+		static inline wxGLContext* GetMainContext() { return mainContext; }
+		static inline void SetMainContext(wxGLContext* context) { mainContext = context; }
 	
 	private:
 		static class GameObject* curr;
@@ -35,6 +43,8 @@ namespace Sharpheus {
 		static GridProps gridProps;
 		static wxString version;
 		static wxString oglVersion;
+		static wxFrame* editorWindow;
+		static wxGLContext* mainContext;
 	};
 
 	typedef EditorData::GridProps ViewPortGridProps;

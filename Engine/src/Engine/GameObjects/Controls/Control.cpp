@@ -5,7 +5,7 @@
 namespace Sharpheus {
 
 	Control::Control(GameObject* parent, const std::string& name, Shape* shape)
-		: ShapedGameObject(parent, name, shape)
+		: AxisShapedGameObject(parent, name, shape)
 	{
 		Subscribe<MousePressedEvent>(SPH_BIND(Control::OnClick));
 		Subscribe<MouseReleasedEvent>(SPH_BIND(Control::OnRelease));
@@ -22,7 +22,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKMASK(other, Control);
 
-		ShapedGameObject::CopyFrom(other);
+		AxisShapedGameObject::CopyFrom(other);
 		Control* trueOther = (Control*)other;
 		text = trueOther->text;
 		font = trueOther->font;
@@ -30,14 +30,6 @@ namespace Sharpheus {
 		fontSize = trueOther->fontSize;
 		fontStyle = trueOther->fontStyle;
 		UpdateSizer();
-	}
-
-
-	void Control::SetWorldTrafo(const Transform& trafo)
-	{
-		Transform oldTrafo = worldTrafo;
-		ShapedGameObject::SetWorldTrafo(trafo);
-		UpdateAxes(oldTrafo);
 	}
 
 
@@ -66,7 +58,7 @@ namespace Sharpheus {
 
 	bool Control::Load(FileLoader& fl)
 	{
-		ShapedGameObject::Load(fl);
+		AxisShapedGameObject::Load(fl);
 		fl.Read(text);
 		fl.Read(&font);
 		fl.Read(fontColor);
@@ -79,36 +71,13 @@ namespace Sharpheus {
 
 	bool Control::Save(FileSaver& fs)
 	{
-		ShapedGameObject::Save(fs);
+		AxisShapedGameObject::Save(fs);
 		fs.Write(text);
 		fs.Write(font);
 		fs.Write(fontColor);
 		fs.Write(fontSize);
 		fs.Write(fontStyle);
 		return fs.GetStatus();
-	}
-
-
-	void Control::UpdateWorldTrafo(const Transform& parentWorldTrafo)
-	{
-		Transform oldTrafo = worldTrafo;
-		ShapedGameObject::UpdateWorldTrafo(parentWorldTrafo);
-		UpdateAxes(oldTrafo);
-	}
-
-
-	void Control::UpdateAxes(const Transform& oldTrafo)
-	{
-		if (oldTrafo.rot != worldTrafo.rot || oldTrafo.scale != worldTrafo.scale) {
-			ForceUpdateAxes();
-		}
-	}
-
-
-	void Control::ForceUpdateAxes()
-	{
-		xAxis = Point::GetUnit(worldTrafo.rot) * worldTrafo.scale.x;
-		yAxis = Point::GetUnit(worldTrafo.rot - 90) * worldTrafo.scale.y;
 	}
 
 
