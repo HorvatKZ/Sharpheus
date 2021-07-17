@@ -72,6 +72,8 @@ namespace Sharpheus {
 				return Create<AnimationPlayer>(parent, newName);
 			case GameObject::Type::TileMap:
 				return Create<TileMap>(parent, newName);
+			case GameObject::Type::ParticleEmitter:
+				return Create<ParticleEmitter>(parent, newName);
 			case GameObject::Type::PhysicsObject:
 				return Create<PhysicsObject>(parent, newName);
 			case GameObject::Type::BoxCollider:

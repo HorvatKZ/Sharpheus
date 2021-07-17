@@ -32,7 +32,4 @@ namespace Sharpheus {
 		Transform SubstractSecond(const Transform& other) const;
 	};
 
-
-	
-
 }

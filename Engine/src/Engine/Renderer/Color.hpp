@@ -14,6 +14,8 @@ namespace Sharpheus {
 		inline float GetBlue() const { return b / 255.f; }
 		inline float GetAlpha() const { return a / 255.f; }
 
+		inline void MakeOpaque(float percent) { a *= percent; }
+
 		static Color Black;
 		static Color Red;
 		static Color Green;

@@ -28,7 +28,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKTYPE(other, TileMap);
 
-		ShapedGameObject::CopyFrom(other);
+		AxisShapedGameObject::CopyFrom(other);
 		TileMap* trueOther = (TileMap*)other;
 		SetTileSet(trueOther->tiles);
 		tint = trueOther->tint;

@@ -49,6 +49,7 @@ namespace Sharpheus {
 			AnimatedSprite = 0x23,
 			AnimationPlayer = 0x24,
 			TileMap = 0x25,
+			ParticleEmitter = 0x26,
 
 			// Basic physics
 			PhysicsObject = 0x30,

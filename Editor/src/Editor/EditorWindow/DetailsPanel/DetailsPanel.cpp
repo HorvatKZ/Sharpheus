@@ -114,6 +114,9 @@ namespace Sharpheus {
 				case GameObject::Type::TileMap:
 					CreatePresenterFrom<TileMap>(provider, y);
 					break;
+				case GameObject::Type::ParticleEmitter:
+					CreatePresenterFrom<ParticleEmitter>(provider, y);
+					break;
 				case GameObject::Type::PhysicsObject:
 					CreatePresenterFrom<PhysicsObject>(provider, y);
 					break;

@@ -8,6 +8,7 @@
 #include "Renderables/AnimatedSprite.hpp"
 #include "Renderables/AnimationPlayer.hpp"
 #include "Renderables/TileMap.hpp"
+#include "Renderables/ParticleEmitter.hpp"
 #include "Colliders/BoxCollider.hpp"
 #include "Colliders/CircleCollider.hpp"
 #include "Colliders/CapsuleCollider.hpp"

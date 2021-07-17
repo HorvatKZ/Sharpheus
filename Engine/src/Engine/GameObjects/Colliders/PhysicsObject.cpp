@@ -8,8 +8,8 @@ namespace Sharpheus {
 		new PointProvider<PhysicsObject>("Velocity", SPH_BIND_GETTER(PhysicsObject::GetVelocity), SPH_BIND_SETTER(PhysicsObject::SetVelocity)),
 		new UFloatProvider<PhysicsObject>("Mass", SPH_BIND_GETTER(PhysicsObject::GetMass), SPH_BIND_SETTER(PhysicsObject::SetMass)),
 		new FloatProvider<PhysicsObject>("Gravity", SPH_BIND_GETTER(PhysicsObject::GetGravity), SPH_BIND_SETTER(PhysicsObject::SetGravity)),
-		new UFloatProvider<PhysicsObject>("Bounce", SPH_BIND_GETTER(PhysicsObject::GetBounce), SPH_BIND_SETTER(PhysicsObject::SetBounce)),
-		new UFloatProvider<PhysicsObject>("Friction", SPH_BIND_GETTER(PhysicsObject::GetFriction), SPH_BIND_SETTER(PhysicsObject::SetFriction))
+		new UFloatProvider<PhysicsObject>("Bounce", SPH_BIND_GETTER(PhysicsObject::GetBounce), SPH_BIND_SETTER(PhysicsObject::SetBounce), 0.f, 1.f),
+		new UFloatProvider<PhysicsObject>("Friction", SPH_BIND_GETTER(PhysicsObject::GetFriction), SPH_BIND_SETTER(PhysicsObject::SetFriction), 0.f, 1.f)
 	});
 
 

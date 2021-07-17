@@ -17,6 +17,7 @@ namespace Sharpheus {
 		classInfos[GameObject::Type::AnimatedSprite]			= &AnimatedSprite::classInfo;
 		classInfos[GameObject::Type::AnimationPlayer]			= &AnimationPlayer::classInfo;
 		classInfos[GameObject::Type::TileMap]					= &TileMap::classInfo;
+		classInfos[GameObject::Type::ParticleEmitter]			= &ParticleEmitter::classInfo;
 		classInfos[GameObject::Type::PhysicsObject]				= &PhysicsObject::classInfo;
 		classInfos[GameObject::Type::BoxCollider]				= &BoxCollider::classInfo;
 		classInfos[GameObject::Type::CircleCollider]			= &CircleCollider::classInfo;
