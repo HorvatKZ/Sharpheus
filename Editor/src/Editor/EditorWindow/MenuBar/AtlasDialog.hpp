@@ -13,8 +13,8 @@ namespace Sharpheus {
 		inline const wxString& GetName() { return name; }
 		inline const wxString& GetPath() { return path; }
 		inline const wxString& GetAtlas() { return imgPath; }
-		inline uint32_t GetFrameWidth() { return frameWidth; }
-		inline uint32_t GetFrameHeight() { return frameHeight; }
+		inline uint32 GetFrameWidth() { return frameWidth; }
+		inline uint32 GetFrameHeight() { return frameHeight; }
 		inline bool UseFilter() { return useFilter; }
 
 		virtual void EndModal(int retCode) override;
@@ -44,13 +44,13 @@ namespace Sharpheus {
 
 		wxImage img;
 		wxString name, path, imgPath;
-		uint32_t frameWidth = 0, frameHeight = 0, frameCols = 0, frameRows = 0, numOfFrames = 0;
+		uint32 frameWidth = 0, frameHeight = 0, frameCols = 0, frameRows = 0, numOfFrames = 0;
 		bool useFilter;
 
-		static uint32_t labelWidth;
-		static uint32_t inputWidth;
-		static uint32_t nameLabelWidth;
-		static uint32_t nameInputWidth;
+		static const uint32 labelWidth;
+		static const uint32 inputWidth;
+		static const uint32 nameLabelWidth;
+		static const uint32 nameInputWidth;
 
 		void BuildDialog();
 		void FillSlicing();

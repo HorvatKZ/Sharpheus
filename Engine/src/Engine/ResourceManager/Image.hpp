@@ -17,8 +17,8 @@ namespace Sharpheus {
 		Image(const std::string& path, bool filtered = false);
 		~Image();
 
-		inline uint32_t GetWidth() { return width; }
-		inline uint32_t GetHeight() { return height; }
+		inline uint32 GetWidth() { return width; }
+		inline uint32 GetHeight() { return height; }
 		inline bool IsFiltered() { return filtered; }
 
 		void Render(Point coords[4], const Color& tint = Color::White);
@@ -26,7 +26,7 @@ namespace Sharpheus {
 
 	private:
 		GLuint ID = TEXTURE_ID_NONE;
-		uint32_t width, height;
+		uint32 width, height;
 		bool filtered;
 
 		static Point fullTexCoords[4];

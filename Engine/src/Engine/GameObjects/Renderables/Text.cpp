@@ -6,14 +6,13 @@
 
 namespace Sharpheus {
 
-	ClassInfo Text::classInfo("Text", "text.png", {
-		new StringProvider<Text>("Content", SPH_BIND_GETTER(Text::GetContent), SPH_BIND_SETTER(Text::SetContent)),
-		new FontProvider<Text>("Font", SPH_BIND_GETTER(Text::GetFont), SPH_BIND_SETTER(Text::SetFont),
-			SPH_BIND_SETTER(Text::SetFontByName), SPH_BIND_3(Text::SetFontByPath), ResourceManager::GetFontTable()),
-		new ColorProvider<Text>("Color", SPH_BIND_GETTER(Text::GetColor), SPH_BIND_SETTER(Text::SetColor)),
-		new UFloatProvider<Text>("Size", SPH_BIND_GETTER(Text::GetSize), SPH_BIND_SETTER(Text::SetSize)),
-		new FontStyleProvider<Text>("Style", SPH_BIND_GETTER(Text::GetStyle), SPH_BIND_SETTER(Text::SetStyle))
-	});
+	SPH_START_CLASSINFO(Text, "text.png")
+		SPH_PROVIDE_STRING(Text, "Content", GetContent, SetContent)
+		SPH_PROVIDE_FONT(Text, "Font", GetFont, SetFont, SetFontByName, SetFontByPath)
+		SPH_PROVIDE_COLOR(Text, "Color", GetColor, SetColor)
+		SPH_PROVIDE_UFLOAT(Text, "Size", GetSize, SetSize)
+		SPH_PROVIDE_FONTSTYLE(Text, "Style", GetStyle, SetStyle)
+	SPH_END_CLASSINFO
 
 
 	Text::Text(GameObject* parent, const std::string& name) :

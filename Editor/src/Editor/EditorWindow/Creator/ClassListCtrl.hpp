@@ -10,12 +10,12 @@ namespace Sharpheus {
 	class ClassListCtrl : public wxTreeCtrl, public wxComboPopup
 	{
 		struct Info {
-			Info (const std::string& name, const std::string& path, GameObject::Type type, uint32_t level)
+			Info (const std::string& name, const std::string& path, GameObject::Type type, uint32 level)
 				: name(name), path(path), type(type), level(level) {}
 
 			std::string name, path;
 			GameObject::Type type;
-			uint32_t level;
+			uint32 level;
 		};
 
 	public:
@@ -33,9 +33,9 @@ namespace Sharpheus {
 		std::function<void(const wxString&, GameObject::Type)> selectCallback;
 		std::function<void()> dclickCallback;
 
-		static wxColour inativeColour;
-		static wxFont inactiveFont;
-		static std::vector<Info> infos;
+		static const wxColour inativeColour;
+		static const wxFont inactiveFont;
+		static const std::vector<Info> infos;
 
 		void OnSelect(wxTreeEvent& e);
 		void OnDoubleClick(wxMouseEvent& e);

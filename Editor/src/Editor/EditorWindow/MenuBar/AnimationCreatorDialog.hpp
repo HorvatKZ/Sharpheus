@@ -10,8 +10,8 @@ namespace Sharpheus {
 		AnimationCreatorDialog(wxWindow* parent, const wxString& defaultAnimPath = "");
 		virtual ~AnimationCreatorDialog();
 
-		inline uint32_t GetStartFrame() { return startFrame; }
-		inline uint32_t GetEndFrame() { return endFrame; }
+		inline uint32 GetStartFrame() { return startFrame; }
+		inline uint32 GetEndFrame() { return endFrame; }
 		inline float GetFrameTime() { return frameTime; }
 
 	private:
@@ -20,10 +20,10 @@ namespace Sharpheus {
 		wxTextCtrl* firstFrameInput, * lastFrameInput, * frameTimeInput;
 		wxStaticBitmap* animPreview;
 
-		uint32_t startFrame = 0, endFrame = 0;
+		uint32 startFrame = 0, endFrame = 0;
 		float frameTime = 1.f;
 		wxTimer timer;
-		uint32_t currFrameInd = 0;
+		uint32 currFrameInd = 0;
 
 		void BuildAnimDialog();
 

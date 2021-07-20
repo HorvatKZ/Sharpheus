@@ -22,9 +22,6 @@
 
 namespace Sharpheus {
 
-	typedef uint32_t ID;
-
-
 	class SPH_EXPORT EventHandler
 	{
 	public:

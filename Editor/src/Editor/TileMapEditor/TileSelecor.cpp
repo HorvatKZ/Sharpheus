@@ -5,8 +5,8 @@
 
 namespace Sharpheus::TileMapEditor {
 
-	const uint32_t TileSelector::tileSize = 100;
-	const uint32_t TileSelector::border = 10;
+	const uint32 TileSelector::tileSize = 100;
+	const uint32 TileSelector::border = 10;
 	const wxColour TileSelector::selectColor(240, 180, 20);
 
 
@@ -35,7 +35,7 @@ namespace Sharpheus::TileMapEditor {
 		this->tileSet = tileSet;
 		atlas = ImageManager::GetImage(tileSet->GetAtlas()->GetFullPath());
 		tileImgs.clear();
-		for (uint32_t i = 0; i < tileSet->GetNumOfTiles(); ++i) {
+		for (uint32 i = 0; i < tileSet->GetNumOfTiles(); ++i) {
 			tileImgs.push_back(GetTile(i));
 		}
 		Refresh();
@@ -59,15 +59,15 @@ namespace Sharpheus::TileMapEditor {
 	void TileSelector::OnClick(wxMouseEvent& e)
 	{
 		wxPoint pos = e.GetPosition() + GetViewStart() * UI::scrollSpeed;
-		uint32_t col = pos.x / (border + tileSize);
-		uint32_t row = pos.y / (border + tileSize + 20);
-		uint32_t perRow = (GetClientSize().x - border) / (border + tileSize);
+		uint32 col = pos.x / (border + tileSize);
+		uint32 row = pos.y / (border + tileSize + 20);
+		uint32 perRow = (GetClientSize().x - border) / (border + tileSize);
 
 		if (col >= perRow) {
 			return;
 		}
 
-		uint32_t ind = row * perRow + col;
+		uint32 ind = row * perRow + col;
 		if (ind < tileSet->GetNumOfTiles()) {
 			selected = ind;
 			Refresh();
@@ -86,13 +86,13 @@ namespace Sharpheus::TileMapEditor {
 		PrepareDC(dc);
 		dc.Clear();
 
-		uint32_t perRow = (GetClientSize().x - border) / (border + tileSize);
-		for (uint32_t i = 0; i < tileSet->GetNumOfTiles(); ++i) {
+		uint32 perRow = (GetClientSize().x - border) / (border + tileSize);
+		for (uint32 i = 0; i < tileSet->GetNumOfTiles(); ++i) {
 			DrawTile(dc, i, i % perRow, i / perRow);
 		}
 
-		uint32_t heightNeeded = ((tileSet->GetNumOfTiles() - 1) / perRow + 1) * (tileSize + 20 + border);
-		uint32_t realHeight = GetClientSize().y;
+		uint32 heightNeeded = ((tileSet->GetNumOfTiles() - 1) / perRow + 1) * (tileSize + 20 + border);
+		uint32 realHeight = GetClientSize().y;
 		if (heightNeeded < realHeight && scrollHeight != realHeight) {
 			scrollHeight = realHeight;
 			SetScrollbars(0, UI::scrollSpeed, GetClientSize().x, scrollHeight / UI::scrollSpeed);
@@ -104,7 +104,7 @@ namespace Sharpheus::TileMapEditor {
 	}
 
 
-	void TileSelector::DrawTile(wxClientDC& dc, uint32_t ind, uint32_t i, uint32_t j)
+	void TileSelector::DrawTile(wxClientDC& dc, uint32 ind, uint32 i, uint32 j)
 	{
 		if (ind == selected) {
 			dc.SetBrush(selectColor);
@@ -114,15 +114,15 @@ namespace Sharpheus::TileMapEditor {
 		dc.DrawBitmap(tileImgs[ind], wxPoint(i * (tileSize + border) + border, j * (tileSize + 20 + border) + border));
 
 		wxString indStr = wxString::Format("%d", ind);
-		uint32_t extent = GetTextExtent(indStr).x;
+		uint32 extent = GetTextExtent(indStr).x;
 		dc.DrawLabel(indStr, wxRect(i * (tileSize + border) + border + (tileSize - extent) / 2, j * (tileSize + 20 + border) + border + tileSize, extent, UI::unitHeight));
 	}
 
 
-	wxBitmap TileSelector::GetTile(uint32_t ind)
+	wxBitmap TileSelector::GetTile(uint32 ind)
 	{
-		uint32_t currCol = ind % tileSet->GetFrameCols(), currRow = ind / tileSet->GetFrameCols();
-		uint32_t frameWidth = tileSet->GetFrameWidth(), frameHeight = tileSet->GetFrameHeight();
+		uint32 currCol = ind % tileSet->GetFrameCols(), currRow = ind / tileSet->GetFrameCols();
+		uint32 frameWidth = tileSet->GetFrameWidth(), frameHeight = tileSet->GetFrameHeight();
 		wxImage bitmap = atlas.GetSubImage(wxRect(wxPoint(frameWidth * currCol, frameHeight * currRow), wxSize(frameWidth, frameHeight)));
 		wxSize newBitmapSize;
 		if (frameWidth > frameHeight) {

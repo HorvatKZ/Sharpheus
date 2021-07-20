@@ -6,9 +6,9 @@
 
 namespace Sharpheus {
 
-    wxColour ClassListCtrl::inativeColour(128, 128, 128);
-    wxFont ClassListCtrl::inactiveFont(9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL);
-    std::vector<ClassListCtrl::Info> ClassListCtrl::infos = {
+    const wxColour ClassListCtrl::inativeColour(128, 128, 128);
+    const wxFont ClassListCtrl::inactiveFont(9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL);
+    const std::vector<ClassListCtrl::Info> ClassListCtrl::infos = {
             Info("GameObject", "gameobj.png", GameObject::Type::None, 0),
             Info("Collection", "collection.png", GameObject::Type::Collection, 1),
             Info("Rendering", "rendering.png", GameObject::Type::None, 1),
@@ -97,7 +97,7 @@ namespace Sharpheus {
     void ClassListCtrl::Fill()
     {
         wxImageList* images = new wxImageList(16, 16);
-        for (Info& info : infos) {
+        for (const Info& info : infos) {
             images->Add(ImageManager::GetImage(info.path, ImageManager::PathType::GAMEOBJECTS));
         }
         AssignImageList(images);
@@ -107,9 +107,9 @@ namespace Sharpheus {
         SetItemFont(prev, inactiveFont);
         nameToType[infos[0].name] = infos[0].type;
 
-        for (uint32_t i = 1; i < infos.size(); ++i) {
-            uint32_t prevLevel = infos[i - 1].level;
-            for (uint32_t j = prevLevel; j >= infos[i].level; --j) {
+        for (uint32 i = 1; i < infos.size(); ++i) {
+            uint32 prevLevel = infos[i - 1].level;
+            for (uint32 j = prevLevel; j >= infos[i].level; --j) {
                 GetItemText(prev);
                 prev = GetItemParent(prev);
             }

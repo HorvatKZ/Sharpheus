@@ -9,10 +9,10 @@
 
 namespace Sharpheus {
 
-	uint32_t AtlasDialog::labelWidth = 90;
-	uint32_t AtlasDialog::inputWidth = 60;
-	uint32_t AtlasDialog::nameLabelWidth = 60;
-	uint32_t AtlasDialog::nameInputWidth = 200;
+	const uint32 AtlasDialog::labelWidth = 90;
+	const uint32 AtlasDialog::inputWidth = 60;
+	const uint32 AtlasDialog::nameLabelWidth = 60;
+	const uint32 AtlasDialog::nameInputWidth = 200;
 
 	AtlasDialog::AtlasDialog(wxWindow* parent, const wxString& title)
 		: wxDialog(parent, wxID_ANY, title, wxPoint(0, 0), wxSize(560, 550))
@@ -41,7 +41,7 @@ namespace Sharpheus {
 
 	void AtlasDialog::BuildDialog()
 	{
-		uint32_t y = UI::border;
+		uint32 y = UI::border;
 		nameLabel = new wxStaticText(this, wxID_ANY, "Name", wxPoint(UI::border, y + UI::shift), wxSize(nameLabelWidth, UI::unitHeight));
 		nameLabel->SetFont(UI::titleFont);
 		nameInput = new wxTextCtrl(this, wxID_ANY, "Unnamed", wxPoint(2 * UI::border + 60, y), wxSize(nameInputWidth, UI::unitHeight));
@@ -61,15 +61,15 @@ namespace Sharpheus {
 		browseImg = new wxButton(this, wxID_ANY, "Browse...", wxPoint(3 * UI::border + nameLabelWidth + nameInputWidth, y), UI::buttonSize);
 
 		y += UI::unitHeight + UI::shift;
-		uint32_t firstColWidth = 2 * UI::border + nameLabelWidth + nameInputWidth + UI::buttonSize.x;
+		uint32 firstColWidth = 2 * UI::border + nameLabelWidth + nameInputWidth + UI::buttonSize.x;
 		imgPreview = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap, wxPoint(UI::border, 2 * UI::border + y), wxSize(firstColWidth, firstColWidth));
 
 		y += 3 * UI::border + firstColWidth;
 		filterLabel = new wxStaticText(this, wxID_ANY, "Use filtering", wxPoint(UI::border, y + UI::shift));
-		uint32_t filterLabelWidth = filterLabel->GetTextExtent("Use filtering").x;
+		uint32 filterLabelWidth = filterLabel->GetTextExtent("Use filtering").x;
 		filterCheckBox = new wxCheckBox(this, wxID_ANY, "", wxPoint(2 * UI::border + filterLabelWidth, y), wxSize(UI::unitHeight, UI::unitHeight));
 
-		uint32_t secondColStartX = 4 * UI::border + firstColWidth;
+		uint32 secondColStartX = 4 * UI::border + firstColWidth;
 		y = UI::border;
 		slicingLabel = new wxStaticText(this, wxID_ANY, "Slicing", wxPoint(secondColStartX, y + UI::shift));
 		slicingLabel->SetFont(UI::titleFont);
@@ -77,22 +77,22 @@ namespace Sharpheus {
 		y += UI::border + UI::unitHeight;
 		widthLabel = new wxStaticText(this, wxID_ANY, "Frame width", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		widthInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
-		widthInput->SetValidator(wxIntegerValidator<uint32_t>());
+		widthInput->SetValidator(wxIntegerValidator<uint32>());
 
 		y += UI::border + UI::unitHeight;
 		heightLabel = new wxStaticText(this, wxID_ANY, "Frame height", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		heightInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
-		heightInput->SetValidator(wxIntegerValidator<uint32_t>());
+		heightInput->SetValidator(wxIntegerValidator<uint32>());
 
 		y += UI::border + UI::unitHeight;
 		colLabel = new wxStaticText(this, wxID_ANY, "Columns", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		colInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
-		colInput->SetValidator(wxIntegerValidator<uint32_t>());
+		colInput->SetValidator(wxIntegerValidator<uint32>());
 
 		y += UI::border + UI::unitHeight;
 		rowLabel = new wxStaticText(this, wxID_ANY, "Rows", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		rowInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
-		rowInput->SetValidator(wxIntegerValidator<uint32_t>());
+		rowInput->SetValidator(wxIntegerValidator<uint32>());
 
 		y += UI::border + UI::unitHeight;
 		numOfFramesLabel = new wxStaticText(this, wxID_ANY, "Frames:", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
@@ -223,10 +223,10 @@ namespace Sharpheus {
 
 		if (img.IsOk()) {
 			wxSize imgSize = img.GetSize();
-			((wxIntegerValidator<uint32_t>*)widthInput->GetValidator())->SetRange(1, imgSize.x);
-			((wxIntegerValidator<uint32_t>*)heightInput->GetValidator())->SetRange(1, imgSize.y);
-			((wxIntegerValidator<uint32_t>*)colInput->GetValidator())->SetRange(1, imgSize.x);
-			((wxIntegerValidator<uint32_t>*)rowInput->GetValidator())->SetRange(1, imgSize.y);
+			((wxIntegerValidator<uint32>*)widthInput->GetValidator())->SetRange(1, imgSize.x);
+			((wxIntegerValidator<uint32>*)heightInput->GetValidator())->SetRange(1, imgSize.y);
+			((wxIntegerValidator<uint32>*)colInput->GetValidator())->SetRange(1, imgSize.x);
+			((wxIntegerValidator<uint32>*)rowInput->GetValidator())->SetRange(1, imgSize.y);
 		}
 	}
 

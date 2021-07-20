@@ -33,7 +33,7 @@ namespace Sharpheus {
 		GameObject* dragTarget = nullptr;
 
 		std::unordered_map<wxString, wxTreeItemId> nameToId;
-		std::unordered_map<GameObject::Type, uint32_t> typeToIcon;
+		std::unordered_map<GameObject::Type, uint32> typeToIcon;
 		std::function<void()> currChangedCallback = nullptr;
 	};
 

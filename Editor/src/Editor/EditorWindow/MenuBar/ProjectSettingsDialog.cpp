@@ -5,14 +5,14 @@
 
 namespace Sharpheus {
 
-	uint32_t ProjectSettingsDialog::labelWidth = 120;
+	uint32 ProjectSettingsDialog::labelWidth = 120;
 
 
 	ProjectSettingsDialog::ProjectSettingsDialog(wxWindow* parent, const wxString& projectFolder)
 		: SettingsDialog(parent, "Project Setting", wxSize(400, 180)), projectFolder(projectFolder)
 	{
-		uint32_t realWidth = GetClientSize().x;
-		uint32_t y = UI::border;
+		uint32 realWidth = GetClientSize().x;
+		uint32 y = UI::border;
 		nameLabel = new wxStaticText(this, wxID_ANY, "Project name:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		nameLabel->SetFont(UI::titleFont);
 

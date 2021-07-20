@@ -18,7 +18,7 @@ namespace Sharpheus {
 	class EditorWindow : public wxFrame
 	{
 	public:
-		EditorWindow(const std::string& title, uint32_t width, uint32_t height);
+		EditorWindow(const std::string& title, uint32 width, uint32 height);
 		virtual ~EditorWindow();
 
 		void InitContent();
@@ -26,7 +26,7 @@ namespace Sharpheus {
 		void CurrentChanged();
 		void CurrentNameChanged(const std::string& oldName, const std::string& newName);
 		void CurrentDataChanged();
-		void BehaviorChanged(uint32_t subType);
+		void BehaviorChanged(uint32 subType);
 		void StartGame(bool withCurrent);
 		void StopGame();
 
@@ -42,13 +42,13 @@ namespace Sharpheus {
 
 		GamePreview* game = nullptr;
 		Camera* originalCamera = nullptr;
-		std::queue<uint32_t> behviorChangeRequests;
+		std::queue<uint32> behviorChangeRequests;
 
 		void OnGamePreviewExit(wxCloseEvent& e);
 		void OnClose(wxCloseEvent& e);
 		void OnIdle(wxIdleEvent& e);
 
-		void ChangeBehavior(uint32_t subType);
+		void ChangeBehavior(uint32 subType);
 	};
 
 }

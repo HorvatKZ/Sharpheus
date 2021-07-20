@@ -27,9 +27,9 @@ namespace Sharpheus {
 			return;
 		}
 
-		for (uint32_t i = 0; i < colliders.size() - 1; ++i) {
+		for (uint32 i = 0; i < colliders.size() - 1; ++i) {
 			if (!colliders[i]->IsTrigger()) {
-				for (uint32_t j = i + 1; j < colliders.size(); ++j) {
+				for (uint32 j = i + 1; j < colliders.size(); ++j) {
 					if (!colliders[j]->IsTrigger() && (!colliders[i]->WasStill() || !colliders[j]->WasStill())) {
 						CollDataPair cds = colliders[i]->CalcCollision(colliders[j]);
 						if (cds.first.Is()) {
@@ -64,7 +64,7 @@ namespace Sharpheus {
 
 	void CollisionSystem::RemoveCollider(Collider* collider)
 	{
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < colliders.size() && (*collider) != (*colliders[i])) {
 			++i;
 		}

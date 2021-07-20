@@ -4,7 +4,7 @@
 
 namespace Sharpheus {
 
-	Point PreviewCanvas::renderShift(-8, 8);
+	const Point PreviewCanvas::renderShift(-8, 8);
 
 
 	PreviewCanvas::PreviewCanvas(wxWindow* parent, wxGLContext* other, Project* proj)

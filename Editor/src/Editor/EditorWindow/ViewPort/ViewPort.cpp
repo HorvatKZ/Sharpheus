@@ -225,7 +225,7 @@ namespace Sharpheus {
 			ViewPortGridProps grid = EditorData::GetGridProps();
 			Point* corners = cam->GetShape()->GetCorners();
 
-			for (uint8_t i = 0; i < 4; ++i) {
+			for (uint8 i = 0; i < 4; ++i) {
 				Renderer::DrawLine(corners[i], corners[(i + 1) % 4], grid.camOutlineThickness * camera->GetWorldTrafo().scale.x,
 					grid.camOutlineColor);
 			}

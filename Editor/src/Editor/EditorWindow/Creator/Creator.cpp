@@ -7,8 +7,8 @@
 
 namespace Sharpheus {
 
-	uint32_t Creator::border = 2;
-	uint32_t Creator::textCtrlWidth = 172;
+	const uint32 Creator::border = 2;
+	const uint32 Creator::textCtrlWidth = 172;
 
 
 	Creator::Creator(wxFrame* parent, const wxPoint& pos, const wxSize& size, LevelHierarchy* levelHierarchy)

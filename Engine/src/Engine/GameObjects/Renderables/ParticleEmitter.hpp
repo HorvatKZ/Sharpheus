@@ -28,7 +28,7 @@ namespace Sharpheus {
 		inline bool IsShrink() { return shrink; }
 		inline bool IsFade() { return fade; }
 		inline bool IsBurst() { return burst; }
-		inline uint32_t GetBurstN() { return burstN; }
+		inline uint32 GetBurstN() { return burstN; }
 		inline float GetLifeTime() { return lifeTime; }
 		inline float GetSpeed() { return speed; }
 		inline float GetEmitionTime() { return emitionTime; }
@@ -41,7 +41,7 @@ namespace Sharpheus {
 		inline void SetShrink(bool shrink) { this->shrink = shrink; }
 		inline void SetFade(bool fade) { this->fade = fade; }
 		inline void SetBurst(bool burst) { this->burst = burst; }
-		inline void SetBurstN(uint32_t burstN) { this->burstN = burstN; }
+		inline void SetBurstN(uint32 burstN) { this->burstN = burstN; }
 		inline void SetLifeTime(float lifeTime) { this->lifeTime = lifeTime; }
 		inline void SetSpeed(float speed) { this->speed = speed; }
 		inline void SetEmitionTime(float emitionTime) { this->emitionTime = emitionTime; }
@@ -75,7 +75,7 @@ namespace Sharpheus {
 		float emitionTime = 1.f;
 		float gravity = 0.f;
 		float friction = 0.f;
-		uint32_t burstN = 1;
+		uint32 burstN = 1;
 
 		std::list<ParticleState> particles;
 		std::function<void(ParticleEmitter*, ParticleState&, float, float)> customFunc = nullptr;
@@ -92,7 +92,7 @@ namespace Sharpheus {
 		virtual bool IsSelected(const Point& pos) override;
 		void UpdateSizer() override {}
 
-		void Emit(uint32_t n);
+		void Emit(uint32 n);
 		inline Point GetRandDir() {
 			float x = ((float)rand() / RAND_MAX) * 2.f - 1.f;
 			float y = ((float)rand() / RAND_MAX) * 2.f - 1.f;

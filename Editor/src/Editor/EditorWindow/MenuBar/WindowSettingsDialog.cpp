@@ -5,8 +5,8 @@
 
 namespace Sharpheus {
 
-	uint32_t WindowSettingsDialog::labelWidth = 40;
-	std::vector<wxString> WindowSettingsDialog::resolutionOptions = {
+	const uint32 WindowSettingsDialog::labelWidth = 40;
+	const std::vector<wxString> WindowSettingsDialog::resolutionOptions = {
 		"3840x2160",
 		"2560x1440",
 		"3360x1440",
@@ -22,8 +22,8 @@ namespace Sharpheus {
 	WindowSettingsDialog::WindowSettingsDialog(wxWindow* parent)
 		: SettingsDialog(parent, "Window Settings", wxSize(400, 220))
 	{
-		uint32_t realWidth = GetClientSize().x;
-		uint32_t y = UI::border;
+		uint32 realWidth = GetClientSize().x;
+		uint32 y = UI::border;
 		resolutionLabel = new wxStaticText(this, wxID_ANY, "Resolution:", wxPoint(UI::border, y), wxSize(120, UI::unitHeight));
 		resolutionLabel->SetFont(UI::titleFont);
 
@@ -39,10 +39,10 @@ namespace Sharpheus {
 		y += UI::border + UI::unitHeight + UI::shift;
 		widthLabel = new wxStaticText(this, wxID_ANY, "Width:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		widthInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(2 * UI::border + labelWidth, y), wxSize(realWidth / 2 - 3 * UI::border - labelWidth - 10, UI::unitHeight));
-		widthInput->SetValidator(wxIntegerValidator<uint32_t>());
+		widthInput->SetValidator(wxIntegerValidator<uint32>());
 		heightLabel = new wxStaticText(this, wxID_ANY, "Height:", wxPoint(realWidth / 2 + UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		heightInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(realWidth / 2 + 2 * UI::border + labelWidth, y), wxSize(realWidth / 2 - 3 * UI::border - labelWidth - 10, UI::unitHeight));
-		heightInput->SetValidator(wxIntegerValidator<uint32_t>());
+		heightInput->SetValidator(wxIntegerValidator<uint32>());
 
 		y += UI::border + UI::unitHeight + UI::shift;
 		fullscreenLabel = new wxStaticText(this, wxID_ANY, "Fullscreen:", wxPoint(UI::border, y + UI::shift), wxSize(2 * labelWidth, UI::unitHeight));
@@ -70,7 +70,7 @@ namespace Sharpheus {
 	void WindowSettingsDialog::FillWithData(const WinProps& winProps)
 	{
 		wxString resolutionText = wxString::Format(wxT("%ux%u"), winProps.width, winProps.height);
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < resolutionOptions.size() && resolutionOptions[i] != resolutionText) {
 			++i;
 		}
@@ -118,7 +118,7 @@ namespace Sharpheus {
 		} else {
 			widthInput->Enable(false);
 			heightInput->Enable(false);
-			uint32_t pos = newResolution.find('x');
+			uint32 pos = newResolution.find('x');
 			widthInput->SetValue(newResolution.Mid(0, pos));
 			heightInput->SetValue(newResolution.Mid(pos + 1));
 		}

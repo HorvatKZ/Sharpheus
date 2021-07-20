@@ -8,10 +8,10 @@
 
 namespace Sharpheus {
 
-	ClassInfo CircleCollider::classInfo("CircleCollider", "circlecollider.png", {
-		new BoolProvider<CircleCollider>("Only Trigger", SPH_BIND_GETTER(CircleCollider::IsTrigger), SPH_BIND_SETTER(CircleCollider::SetTrigger)),
-		new UFloatProvider<CircleCollider>("Radius", SPH_BIND_GETTER(CircleCollider::GetRadius), SPH_BIND_SETTER(CircleCollider::SetRadius))
-	});
+	SPH_START_CLASSINFO(CircleCollider, "circlecollider.png")
+		SPH_PROVIDE_BOOL(CircleCollider, "Only Trigger", IsTrigger, SetTrigger)
+		SPH_PROVIDE_UFLOAT(CircleCollider, "Radius", GetRadius, SetRadius)
+	SPH_END_CLASSINFO
 
 
 	CircleCollider::CircleCollider(GameObject* parent, const std::string& name)

@@ -5,9 +5,8 @@
 using namespace Sharpheus;
 
 
-ClassInfo MoueTester::classInfo("MoueTester", "behavior.png", {
-	// Provide necessary data members here for the Editor to present them
-});
+SPH_START_CLASSINFO(MoueTester, "behavior.png")
+SPH_END_CLASSINFO
 
 
 MoueTester::MoueTester(Sharpheus::Behavior* other)

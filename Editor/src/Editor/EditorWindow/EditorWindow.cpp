@@ -10,7 +10,7 @@
 
 namespace Sharpheus {
 
-	EditorWindow::EditorWindow(const std::string& title, uint32_t width, uint32_t height)
+	EditorWindow::EditorWindow(const std::string& title, uint32 width, uint32 height)
 		: wxFrame(nullptr, wxID_ANY, title, wxPoint(30, 30), wxSize(width, height))
 	{
 		details = new DetailsPanel(this, wxPoint(0, 0), wxSize(240, 500));
@@ -102,7 +102,7 @@ namespace Sharpheus {
 	}
 
 
-	void EditorWindow::BehaviorChanged(uint32_t subType)
+	void EditorWindow::BehaviorChanged(uint32 subType)
 	{
 		behviorChangeRequests.push(subType);
 	}
@@ -166,7 +166,7 @@ namespace Sharpheus {
 	}
 
 
-	void EditorWindow::ChangeBehavior(uint32_t subType)
+	void EditorWindow::ChangeBehavior(uint32 subType)
 	{
 		GameObject* curr = EditorData::GetCurrent();
 		if (!BehaviorCreator::IsCompatibleWithParent(subType, curr->GetParent())) {

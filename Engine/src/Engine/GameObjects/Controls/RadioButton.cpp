@@ -4,22 +4,21 @@
 
 namespace Sharpheus {
 
+	SPH_START_CLASSINFO(RadioButton, "radio.png")
+		SPH_PROVIDE_UINT(RadioButton, "Group ID", GetGroupId, SetGroupId)
+		SPH_PROVIDE_IMAGE(RadioButton, "Checked image", GetCheckedImg, SetCheckedImg, SetCheckedImgFromPath)
+		SPH_PROVIDE_IMAGE(RadioButton, "Unchecked image", GetUncheckedImg, SetUncheckedImg, SetUncheckedImgFromPath)
+		SPH_PROVIDE_COLOR(RadioButton, "Tint", GetTint, SetTint)
+		SPH_PROVIDE_STRING(RadioButton, "Value", GetText, SetText)
+		SPH_PROVIDE_BOOL(RadioButton, "On right", IsTextOnRight, SetTextOnRight)
+		SPH_PROVIDE_FONT(RadioButton, "Font", GetFont, SetFont, SetFontByName, SetFontByPath)
+		SPH_PROVIDE_COLOR(RadioButton, "Font color", GetFontColor, SetFontColor)
+		SPH_PROVIDE_UFLOAT(RadioButton, "Font size", GetFontSize, SetFontSize)
+		SPH_PROVIDE_FONTSTYLE(RadioButton, "Font style", GetFontStyle, SetFontStyle)
+	SPH_END_CLASSINFO
+
 	std::unordered_map<ID, std::vector<RadioButton*>> RadioButton::groups;
 	std::unordered_map<ID, RadioButton*> RadioButton::selecteds;
-
-	ClassInfo RadioButton::classInfo("RadioButton", "radio.png", {
-		new UIntProvider<RadioButton>("Group ID", SPH_BIND_GETTER(RadioButton::GetGroupId), SPH_BIND_SETTER(RadioButton::SetGroupId)),
-		new ImageProvider<RadioButton>("Checked image", SPH_BIND_GETTER(RadioButton::GetCheckedImg), SPH_BIND_SETTER(RadioButton::SetCheckedImg), SPH_BIND_3(RadioButton::SetCheckedImgFromPath)),
-		new ImageProvider<RadioButton>("Unchecked image", SPH_BIND_GETTER(RadioButton::GetUncheckedImg), SPH_BIND_SETTER(RadioButton::SetUncheckedImg), SPH_BIND_3(RadioButton::SetUncheckedImgFromPath)),
-		new ColorProvider<RadioButton>("Tint", SPH_BIND_GETTER(RadioButton::GetTint), SPH_BIND_SETTER(RadioButton::SetTint)),
-		new StringProvider<RadioButton>("Value", SPH_BIND_GETTER(RadioButton::GetText), SPH_BIND_SETTER(RadioButton::SetText)),
-		new BoolProvider<RadioButton>("On right", SPH_BIND_GETTER(RadioButton::IsTextOnRight), SPH_BIND_SETTER(RadioButton::SetTextOnRight)),
-		new FontProvider<RadioButton>("Font", SPH_BIND_GETTER(RadioButton::GetFont), SPH_BIND_SETTER(RadioButton::SetFont),
-			SPH_BIND_SETTER(RadioButton::SetFontByName), SPH_BIND_3(RadioButton::SetFontByPath), ResourceManager::GetFontTable()),
-		new ColorProvider<RadioButton>("Font color", SPH_BIND_GETTER(RadioButton::GetFontColor), SPH_BIND_SETTER(RadioButton::SetFontColor)),
-		new UFloatProvider<RadioButton>("Font size", SPH_BIND_GETTER(RadioButton::GetFontSize), SPH_BIND_SETTER(RadioButton::SetFontSize)),
-		new FontStyleProvider<RadioButton>("Font style", SPH_BIND_GETTER(RadioButton::GetFontStyle), SPH_BIND_SETTER(RadioButton::SetFontStyle))
-		});
 
 
 	RadioButton::RadioButton(GameObject* parent, const std::string& name)

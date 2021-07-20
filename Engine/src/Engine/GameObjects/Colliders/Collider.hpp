@@ -91,8 +91,8 @@ namespace Sharpheus {
 
 		std::unordered_map<ID, GameObject*> insideTriggerA, insideTriggerB, *currInside, *lastInside;
 
-		static Color colliderColor;
-		static Color triggerColor;
+		static const Color colliderColor;
+		static const Color triggerColor;
 
 		virtual bool Save(FileSaver& fs) override;
 

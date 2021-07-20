@@ -1,13 +1,16 @@
 #pragma once
 
+#include "typedefs.h"
+
+
 namespace Sharpheus {
 
 	struct SPH_EXPORT Color
 	{
-		uint8_t r, g, b, a;
+		byte r, g, b, a;
 
 		Color() : r(0), g(0), b(0), a(255) {}
-		Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) : r(r), g(g), b(b), a(a) {}
+		Color(byte r, byte g, byte b, byte a = 255) : r(r), g(g), b(b), a(a) {}
 
 		inline float GetRed() const { return r / 255.f; }
 		inline float GetGreen() const { return g / 255.f; }
@@ -16,14 +19,14 @@ namespace Sharpheus {
 
 		inline void MakeOpaque(float percent) { a *= percent; }
 
-		static Color Black;
-		static Color Red;
-		static Color Green;
-		static Color Blue;
-		static Color Yellow;
-		static Color Cyan;
-		static Color Magenta;
-		static Color White;
-		static Color Transparent;
+		static const Color Black;
+		static const Color Red;
+		static const Color Green;
+		static const Color Blue;
+		static const Color Yellow;
+		static const Color Cyan;
+		static const Color Magenta;
+		static const Color White;
+		static const Color Transparent;
 	};
 }

@@ -22,7 +22,7 @@ namespace Sharpheus {
 		wxLongLong firstTick;
 		std::unordered_set<int> pressedKeys;
 
-		static wxPoint shift;
+		static const wxPoint shift;
 
 		void OnResize(wxSizeEvent& e);
 		void OnClose(wxCloseEvent& e);

@@ -89,13 +89,13 @@ namespace Sharpheus {
 
 		Point* otherCorners = other->GetCorners();
 		Point relCorners[4];
-		for (uint8_t i = 0; i < 4; ++i) {
+		for (uint8 i = 0; i < 4; ++i) {
 			relCorners[i] = GetRelativePos(otherCorners[i]);
 		}
 
 		float minX = relCorners[0].x, minY = relCorners[0].y;
 		float maxX = minX, maxY = minY;
-		for (uint8_t i = 1; i < 4; ++i) {
+		for (uint8 i = 1; i < 4; ++i) {
 			if (relCorners[i].x < minX) {
 				minX = relCorners[i].x;
 			}
@@ -140,8 +140,8 @@ namespace Sharpheus {
 		}
 
 		float tolerance = 0.01f;
-		uint8_t found = 0;
-		for (uint8_t i = 0; i < 4; ++i) {
+		uint8 found = 0;
+		for (uint8 i = 0; i < 4; ++i) {
 			if (isXCoord && abs(relCorners[i].x - relevantCoord) < tolerance ||
 				!isXCoord && abs(relCorners[i].y - relevantCoord) < tolerance) {
 				data.contactPoints[found++] = otherCorners[i];

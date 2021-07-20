@@ -5,11 +5,11 @@
 
 namespace Sharpheus {
 
-	ClassInfo AnimatedSprite::classInfo("AnimatedSprite", "animsprite.png", {
-		new AnimationProvider<AnimatedSprite>("Animation", SPH_BIND_GETTER(AnimatedSprite::GetAnimation), SPH_BIND_SETTER(AnimatedSprite::SetAnimation), SPH_BIND_2(AnimatedSprite::SetAnimationFromPath)),
-		new ColorProvider<AnimatedSprite>("Tint", SPH_BIND_GETTER(AnimatedSprite::GetTint), SPH_BIND_SETTER(AnimatedSprite::SetTint)),
-		new FloatProvider<AnimatedSprite>("Speed", SPH_BIND_GETTER(AnimatedSprite::GetSpeed), SPH_BIND_SETTER(AnimatedSprite::SetSpeed))
-	});
+	SPH_START_CLASSINFO(AnimatedSprite, "animsprite.png")
+		SPH_PROVIDE_ANIM(AnimatedSprite, "Animation", GetAnimation, SetAnimation, SetAnimationFromPath)
+		SPH_PROVIDE_COLOR(AnimatedSprite, "Tint", GetTint, SetTint)
+		SPH_PROVIDE_FLOAT(AnimatedSprite, "Speed", GetSpeed, SetSpeed)
+	SPH_END_CLASSINFO
 
 
 	AnimatedSprite::AnimatedSprite(GameObject* parent, const std::string& name) :

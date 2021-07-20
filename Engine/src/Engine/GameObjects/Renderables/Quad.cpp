@@ -5,11 +5,11 @@
 
 namespace Sharpheus {
 
-	ClassInfo Quad::classInfo("Quad", "quad.png", {
-		new UFloatProvider<Quad>("Width", SPH_BIND_GETTER(Quad::GetWidth), SPH_BIND_SETTER(Quad::SetWidth)),
-		new UFloatProvider<Quad>("Height", SPH_BIND_GETTER(Quad::GetHeight), SPH_BIND_SETTER(Quad::SetHeight)),
-		new ColorProvider<Quad>("Color", SPH_BIND_GETTER(Quad::GetColor), SPH_BIND_SETTER(Quad::SetColor))
-		});
+	SPH_START_CLASSINFO(Quad, "quad.png")
+		SPH_PROVIDE_UFLOAT(Quad, "Width", GetWidth, SetWidth)
+		SPH_PROVIDE_UFLOAT(Quad, "Height", GetHeight, SetHeight)
+		SPH_PROVIDE_COLOR(Quad, "Color", GetColor, SetColor)
+	SPH_END_CLASSINFO
 
 
 	Quad::Quad(GameObject* parent, const std::string& name) :

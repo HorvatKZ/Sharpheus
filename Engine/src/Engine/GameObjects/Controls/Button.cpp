@@ -5,20 +5,19 @@
 
 namespace Sharpheus {
 
-	ClassInfo Button::classInfo("Button", "button.png", {
-		new UFloatProvider<Button>("Width", SPH_BIND_GETTER(Button::GetWidth), SPH_BIND_SETTER(Button::SetWidth)),
-		new UFloatProvider<Button>("Height", SPH_BIND_GETTER(Button::GetHeight), SPH_BIND_SETTER(Button::SetHeight)),
-		new ColorProvider<Button>("Color", SPH_BIND_GETTER(Button::GetColor), SPH_BIND_SETTER(Button::SetColor)),
-		new StringProvider<Button>("Text", SPH_BIND_GETTER(Button::GetText), SPH_BIND_SETTER(Button::SetText)),
-		new FontProvider<Button>("Font", SPH_BIND_GETTER(Button::GetFont), SPH_BIND_SETTER(Button::SetFont),
-			SPH_BIND_SETTER(Button::SetFontByName), SPH_BIND_3(Button::SetFontByPath), ResourceManager::GetFontTable()),
-		new ColorProvider<Button>("Font color", SPH_BIND_GETTER(Button::GetFontColor), SPH_BIND_SETTER(Button::SetFontColor)),
-		new UFloatProvider<Button>("Font size", SPH_BIND_GETTER(Button::GetFontSize), SPH_BIND_SETTER(Button::SetFontSize)),
-		new FontStyleProvider<Button>("Font style", SPH_BIND_GETTER(Button::GetFontStyle), SPH_BIND_SETTER(Button::SetFontStyle)),
-		new BoolProvider<Button>("Use clicked", SPH_BIND_GETTER(Button::DoesUseClickedColors), SPH_BIND_SETTER(Button::SetUseClickedColors)),
-		new ColorProvider<Button>("Clicked color", SPH_BIND_GETTER(Button::GetClickedColor), SPH_BIND_SETTER(Button::SetClickedColor)),
-		new ColorProvider<Button>("Clicked font color", SPH_BIND_GETTER(Button::GetClickedFontColor), SPH_BIND_SETTER(Button::SetClickedFontColor))
-	});
+	SPH_START_CLASSINFO(Button, "button.png")
+		SPH_PROVIDE_UFLOAT(Button, "Width", GetWidth, SetWidth)
+		SPH_PROVIDE_UFLOAT(Button, "Height", GetHeight, SetHeight)
+		SPH_PROVIDE_COLOR(Button, "Color", GetColor, SetColor)
+		SPH_PROVIDE_STRING(Button, "Text", GetText, SetText)
+		SPH_PROVIDE_FONT(Button, "Font", GetFont, SetFont, SetFontByName, SetFontByPath)
+		SPH_PROVIDE_COLOR(Button, "Font color", GetFontColor, SetFontColor)
+		SPH_PROVIDE_UFLOAT(Button, "Font size", GetFontSize, SetFontSize)
+		SPH_PROVIDE_FONTSTYLE(Button, "Font style", GetFontStyle, SetFontStyle)
+		SPH_PROVIDE_BOOL(Button, "Use clicked", DoesUseClickedColors, SetUseClickedColors)
+		SPH_PROVIDE_COLOR(Button, "Clicked color", GetClickedColor, SetClickedColor)
+		SPH_PROVIDE_COLOR(Button, "Clicked font color", GetClickedFontColor, SetClickedFontColor)
+	SPH_END_CLASSINFO
 
 
 	Button::Button(GameObject* parent, const std::string& name)

@@ -14,9 +14,9 @@ namespace Sharpheus {
 
 		inline bool GetStatus() { return status; }
 
-		bool Read(uint8_t& data);
-		bool Read(uint32_t& data);
-		bool Read(int32_t& data);
+		bool Read(uint8& data);
+		bool Read(uint32& data);
+		bool Read(int32& data);
 		bool Read(size_t& data);
 		bool Read(bool& data);
 		bool Read(float& data);

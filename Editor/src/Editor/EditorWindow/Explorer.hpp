@@ -23,15 +23,15 @@ namespace Sharpheus {
 		wxFileName folder;
 		wxBitmap backFolderImg, folderImg, unknownImg;
 		std::unordered_map<wxString, wxBitmap> imgs;
-		uint32_t scrollHeight;
-		static uint32_t oneWidth;
+		uint32 scrollHeight;
+		static const uint32 oneWidth;
 
 		void OnDoubleClick(wxMouseEvent& e);
 		void OnResize(wxSizeEvent& e);
 
 		void Draw(wxClientDC& dc);
-		void DrawIcon(wxClientDC& dc, const wxBitmap& img, uint32_t i, uint32_t j);
-		void DrawText(wxClientDC& dc, const wxString& text, uint32_t i, uint32_t j);
+		void DrawIcon(wxClientDC& dc, const wxBitmap& img, uint32 i, uint32 j);
+		void DrawText(wxClientDC& dc, const wxString& text, uint32 i, uint32 j);
 	};
 
 }

@@ -35,9 +35,9 @@ namespace Sharpheus {
 		colInput->Bind(wxEVT_TEXT_ENTER, &TileSetCreatorDialog::OnSlicingCRChanged, this);
 		rowInput->Bind(wxEVT_TEXT_ENTER, &TileSetCreatorDialog::OnSlicingCRChanged, this);
 
-		uint32_t firstColWidth = 2 * UI::border + nameLabelWidth + nameInputWidth + UI::buttonSize.x;
-		uint32_t secondColStartX = 4 * UI::border + firstColWidth;
-		uint32_t y = 7 * UI::border + 5 * UI::unitHeight + UI::heightPadding;
+		uint32 firstColWidth = 2 * UI::border + nameLabelWidth + nameInputWidth + UI::buttonSize.x;
+		uint32 secondColStartX = 4 * UI::border + firstColWidth;
+		uint32 y = 7 * UI::border + 5 * UI::unitHeight + UI::heightPadding;
 
 		previewLabel = new wxStaticText(this, wxID_ANY, "Preview", wxPoint(secondColStartX, y));
 		previewLabel->SetFont(UI::titleFont);
@@ -45,11 +45,11 @@ namespace Sharpheus {
 		y += UI::border + UI::unitHeight - UI::shift;
 		currTileLabel = new wxStaticText(this, wxID_ANY, "Current tile", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		currTileInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
-		currTileInput->SetValidator(wxIntegerValidator<uint32_t>());
+		currTileInput->SetValidator(wxIntegerValidator<uint32>());
 		currTileInput->Bind(wxEVT_TEXT_ENTER, &TileSetCreatorDialog::OnCurrTileChanged, this);
 
 		y += UI::border + UI::unitHeight;
-		uint32_t incDecWidth = (labelWidth + inputWidth) / 2;
+		uint32 incDecWidth = (labelWidth + inputWidth) / 2;
 		decButton = new wxButton(this, wxID_ANY, "-", wxPoint(secondColStartX, y), wxSize(incDecWidth, UI::unitHeight));
 		decButton->Bind(wxEVT_BUTTON, &TileSetCreatorDialog::OnCurrTileDec, this);
 		incButton = new wxButton(this, wxID_ANY, "+", wxPoint(incDecWidth + UI::border + secondColStartX, y), wxSize(incDecWidth, UI::unitHeight));
@@ -137,7 +137,7 @@ namespace Sharpheus {
 
 	void TileSetCreatorDialog::OnCurrTileDec(wxCommandEvent& e)
 	{
-		uint32_t limit = (numOfFrames > 255) ? 255 : numOfFrames;
+		uint32 limit = (numOfFrames > 255) ? 255 : numOfFrames;
 		if (currTileInd > 0) {
 			--currTileInd;
 		} else {
@@ -150,7 +150,7 @@ namespace Sharpheus {
 
 	void TileSetCreatorDialog::OnCurrTileInc(wxCommandEvent& e)
 	{
-		uint32_t limit = (numOfFrames > 255) ? 255 : numOfFrames;
+		uint32 limit = (numOfFrames > 255) ? 255 : numOfFrames;
 		currTileInd = (currTileInd + 1) % limit;
 		FillPreview();
 	}
@@ -187,8 +187,8 @@ namespace Sharpheus {
 	void TileSetCreatorDialog::FillPreview()
 	{
 		currTileInput->SetValue(wxString::Format("%d", currTileInd));
-		uint32_t limit = (numOfFrames > 255) ? 255 : numOfFrames;
-		((wxIntegerValidator<uint32_t>*)currTileInput->GetValidator())->SetRange(0, limit - 1);
+		uint32 limit = (numOfFrames > 255) ? 255 : numOfFrames;
+		((wxIntegerValidator<uint32>*)currTileInput->GetValidator())->SetRange(0, limit - 1);
 
 		if (numOfFrames > 255) {
 			manyTileWarning->Show();
@@ -197,7 +197,7 @@ namespace Sharpheus {
 		}
 
 		wxImage bitmap = img;
-		uint32_t currCol = currTileInd % frameCols, currRow = currTileInd / frameCols;
+		uint32 currCol = currTileInd % frameCols, currRow = currTileInd / frameCols;
 		bitmap.Resize(bitmap.GetSize(), wxPoint(-1 * frameWidth * currCol, -1 * frameHeight * currRow));
 		bitmap.Resize(wxSize(frameWidth, frameHeight), wxPoint());
 		wxSize tilePrevSize = tilePreview->GetSize();

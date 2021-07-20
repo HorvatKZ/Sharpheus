@@ -10,9 +10,9 @@ namespace Sharpheus {
 	{
 	public:
 		struct IntPoint {
-			int32_t x, y;
+			int32 x, y;
 
-			IntPoint(int32_t x, int32_t y) : x(x), y(y) {}
+			IntPoint(int32 x, int32 y) : x(x), y(y) {}
 			IntPoint(float x, float y) : x(glm::floor(x)), y(glm::floor(y)) {}
 
 			bool operator==(const IntPoint& other) const {
@@ -21,18 +21,18 @@ namespace Sharpheus {
 
 			inline IntPoint ToChunk() const { return IntPoint(DivByChunkSize(x), DivByChunkSize(y)); }
 			inline IntPoint ToRelPos() const { return IntPoint(ModByChunkSize(x), ModByChunkSize(y)); }
-			inline uint8_t ToRelInd() const { return ModByChunkSize(y) * chunkSize + ModByChunkSize(x); }
+			inline uint8 ToRelInd() const { return ModByChunkSize(y) * chunkSize + ModByChunkSize(x); }
 
-			inline int32_t DivByChunkSize(int32_t a) const { return (a >= 0) ? (a / chunkSize) : (a / chunkSize - 1); }
-			inline int32_t ModByChunkSize(int32_t a) const { return (a >= 0) ? (a % chunkSize) : (a % chunkSize + chunkSize); }
+			inline int32 DivByChunkSize(int32 a) const { return (a >= 0) ? (a / chunkSize) : (a / chunkSize - 1); }
+			inline int32 ModByChunkSize(int32 a) const { return (a >= 0) ? (a % chunkSize) : (a % chunkSize + chunkSize); }
 		};
 
 		struct ChunkData {
-			uint8_t* arr;
-			uint8_t count = 0;
+			byte* arr;
+			uint8 count = 0;
 
-			ChunkData() : arr(new uint8_t[chunkSize * chunkSize]) {}
-			ChunkData(uint8_t* arr, uint8_t count) : arr(arr), count(count) {}
+			ChunkData() : arr(new byte[chunkSize * chunkSize]) {}
+			ChunkData(byte* arr, uint8 count) : arr(arr), count(count) {}
 			ChunkData(ChunkData&& other) : arr(other.arr), count(other.count) { other.arr = nullptr; }
 			ChunkData(const ChunkData& other) = default;
 			ChunkData& operator=(const ChunkData& other) = default;
@@ -73,8 +73,8 @@ namespace Sharpheus {
 			return IntPoint(localPos.x / tiles->GetFrameWidth(), localPos.y / tiles->GetFrameHeight());
 		}
 
-		uint8_t Get(const IntPoint& pos);
-		void Set(const IntPoint& pos, uint8_t value);
+		byte Get(const IntPoint& pos);
+		void Set(const IntPoint& pos, byte value);
 		void Clear(const IntPoint& pos);
 
 		virtual bool Load(FileLoader& fl) override;
@@ -86,7 +86,7 @@ namespace Sharpheus {
 		Color tint = Color::White;
 		std::unordered_map<IntPoint, ChunkData, IntPointHasher> chunks;
 		Point tileCorners[4], tempCorners[4], prevAxis[2], xShift, yShift;
-		static const int32_t chunkSize;
+		static const int32 chunkSize;
 
 		virtual bool Save(FileSaver& fs) override;
 
@@ -95,10 +95,10 @@ namespace Sharpheus {
 		virtual void RenderSelection() override;
 		virtual bool IsSelected(const Point& pos) override;
 
-		void SetBack(uint8_t max);
+		void SetBack(byte max);
 		void UpdateTileCorners();
 		void UpdateSizer() override {}
-		inline Point* GetCornersOf(const IntPoint& chunk, uint8_t ind) {
+		inline Point* GetCornersOf(const IntPoint& chunk, uint8 ind) {
 			Point shift = worldTrafo.pos + (chunk.x * chunkSize + ind % chunkSize) * xShift + (chunk.y * chunkSize + ind / chunkSize) * yShift;
 			tempCorners[0] = tileCorners[0] + shift;
 			tempCorners[1] = tileCorners[1] + shift;

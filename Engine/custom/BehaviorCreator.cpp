@@ -3,7 +3,7 @@
 #include "BehaviorCreator.hpp"
 
 
-std::unordered_map<uint32_t, std::string> BehaviorCreator::behaviorNames({
+std::unordered_map<uint32, std::string> BehaviorCreator::behaviorNames({
     {1, "DebugBehavior"},
     {2, "PlayerContoller"},
     {3, "TriggerTester"},
@@ -11,7 +11,7 @@ std::unordered_map<uint32_t, std::string> BehaviorCreator::behaviorNames({
 });
 
 
-Sharpheus::Behavior* BehaviorCreator::Create(uint32_t subType, Sharpheus::PlaceholderBehavior* other)
+Sharpheus::Behavior* BehaviorCreator::Create(uint32 subType, Sharpheus::PlaceholderBehavior* other)
 {
 	SPH_START_BEHAVIORS(subType)
 		SPH_CREATE_BEHAVIOR_1(DebugBehavior, 1, other)
@@ -22,7 +22,7 @@ Sharpheus::Behavior* BehaviorCreator::Create(uint32_t subType, Sharpheus::Placeh
 }
 
 
-Sharpheus::Behavior* BehaviorCreator::Create(uint32_t subType, Sharpheus::GameObject* parent, const std::string& name)
+Sharpheus::Behavior* BehaviorCreator::Create(uint32 subType, Sharpheus::GameObject* parent, const std::string& name)
 {
 	SPH_START_BEHAVIORS(subType)
 		SPH_CREATE_BEHAVIOR_2(Sharpheus::PlaceholderBehavior, 0, parent, name)
@@ -34,7 +34,7 @@ Sharpheus::Behavior* BehaviorCreator::Create(uint32_t subType, Sharpheus::GameOb
 }
 
 
-bool BehaviorCreator::IsCompatibleWithParent(uint32_t subType, Sharpheus::GameObject* parent)
+bool BehaviorCreator::IsCompatibleWithParent(uint32 subType, Sharpheus::GameObject* parent)
 {
 	SPH_START_BEHAVIORS(subType)
 		SPH_IS_BEHAVIOR_COMP(Sharpheus::PlaceholderBehavior, 0, parent)

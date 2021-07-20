@@ -26,11 +26,11 @@ namespace Sharpheus {
 		virtual Point GetLocalPerpendicularAt(const Point& surfaceP) = 0;
 		virtual Point GetLocalClosestTo(const Point& p) = 0;
 
-		virtual inline uint8_t GetPriority() { return 0; }
+		virtual inline uint8 GetPriority() { return 0; }
 
 		inline Point* GetCorners() { CheckCorners(); return corners; }
 		virtual inline Point* GetSATCorners() { return GetCorners(); }
-		virtual inline uint8_t GetSATCornerNum() { return 4; }
+		virtual inline uint8 GetSATCornerNum() { return 4; }
 		virtual inline bool IsSATSymmetrical() { return true; }
 
 		virtual void ForceRefresh();

@@ -5,11 +5,11 @@
 
 namespace Sharpheus {
 
-	ClassInfo MusicPlayer::classInfo("MusicPlayer", "musicplayer.png", {
-		new SoundProvider<MusicPlayer>("Music", SPH_BIND_GETTER(MusicPlayer::GetMusicPath), SPH_BIND_SETTER(MusicPlayer::SetMusicPath)),
-		new BoolProvider<MusicPlayer>("Default start", SPH_BIND_GETTER(MusicPlayer::DoesStartByDefault), SPH_BIND_SETTER(MusicPlayer::SetStartByDefault)),
-		new BoolProvider<MusicPlayer>("Looping", SPH_BIND_GETTER(MusicPlayer::IsLooping), SPH_BIND_SETTER(MusicPlayer::SetLooping))
-		});
+	SPH_START_CLASSINFO(MusicPlayer, "musicplayer.png")
+		SPH_PROVIDE_SOUND(MusicPlayer, "Music", GetMusicPath, SetMusicPath)
+		SPH_PROVIDE_BOOL(MusicPlayer, "Default start", DoesStartByDefault, SetStartByDefault)
+		SPH_PROVIDE_BOOL(MusicPlayer, "Looping", IsLooping, SetLooping)
+	SPH_END_CLASSINFO
 
 
 	MusicPlayer::MusicPlayer(GameObject* parent, const std::string& name)

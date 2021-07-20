@@ -18,7 +18,7 @@ namespace Sharpheus {
 		wxStaticBitmap* tilePreview;
 		wxStaticText* manyTileWarning;
 
-		uint32_t currTileInd = 0;
+		uint32 currTileInd = 0;
 
 		void BuildTileSetDialog();
 

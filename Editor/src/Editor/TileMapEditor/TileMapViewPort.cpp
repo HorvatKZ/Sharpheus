@@ -46,7 +46,7 @@ namespace Sharpheus::TileMapEditor {
 	{
 		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
 		TileMap::IntPoint tileCoords = tileMap->ToTile(camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y)));
-		uint8_t newTile = selector->GetSelectedTile() + 1;
+		byte newTile = selector->GetSelectedTile() + 1;
 		if (tileMap->Get(tileCoords) != newTile) {
 			tileMap->Set(tileCoords, newTile);
 			((EditorWindow*)EditorData::GetMainWindow())->CurrentDataChanged();
@@ -112,12 +112,12 @@ namespace Sharpheus::TileMapEditor {
 		float halfCamHeight = camera->GetHeight() * 0.5f * camera->GetTrafo().scale.y;
 		float relativeXGridThickness = grid.thickness * camera->GetWorldTrafo().scale.x;
 		float relativeYGridThickness = grid.thickness * camera->GetWorldTrafo().scale.y;
-		int32_t width = tileMap->GetTileSet()->GetFrameWidth(), height = tileMap->GetTileSet()->GetFrameHeight();
-		int32_t xShift = camera->GetTrafo().pos.x / width, yShift = camera->GetTrafo().pos.y / height;
+		int32 width = tileMap->GetTileSet()->GetFrameWidth(), height = tileMap->GetTileSet()->GetFrameHeight();
+		int32 xShift = camera->GetTrafo().pos.x / width, yShift = camera->GetTrafo().pos.y / height;
 		Point startPos = (tileMap->GetWorldTrafo() + Transform(Point(xShift * width, yShift * height), camera->GetTrafo().scale, camera->GetTrafo().rot)).pos;
 
-		int32_t firstX = -halfCamWidth / width - 1, lastX = -firstX;
-		int32_t firstY = -halfCamHeight / height - 1, lastY = -firstY;
+		int32 firstX = -halfCamWidth / width - 1, lastX = -firstX;
+		int32 firstY = -halfCamHeight / height - 1, lastY = -firstY;
 
 		while (firstX <= lastX) {
 			Point center = startPos + xAxis * firstX * width;

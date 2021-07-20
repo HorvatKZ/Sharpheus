@@ -10,12 +10,12 @@
 
 namespace Sharpheus {
 
-	BehaviorPicker::BehaviorPicker(wxWindow* parent, const std::string& title, std::function<void(uint32_t)>& mainSignal, Signal signal, uint32_t& y)
+	BehaviorPicker::BehaviorPicker(wxWindow* parent, const std::string& title, std::function<void(uint32)>& mainSignal, Signal signal, uint32& y)
 		: Presenter(parent, title, signal, y), mainSignal(mainSignal), y(y)
 	{
 		y += UI::unitHeight;
 		wxSize extent = this->title->GetTextExtent(title);
-		uint32_t parentWidth = parent->GetSize().x;
+		uint32 parentWidth = parent->GetSize().x;
 		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(parentWidth - 3 * UI::border - UI::unitHeight, UI::unitHeight));
 		createNewTypeButton = new wxButton(parent, wxID_ANY, "+", wxPoint(parentWidth - UI::unitHeight - UI::border, y), wxSize(UI::unitHeight, UI::unitHeight));
 		createNewTypeButton->Bind(wxEVT_BUTTON, &BehaviorPicker::CreateBehavior, this);
@@ -35,7 +35,7 @@ namespace Sharpheus {
 		Presenter::SetCurrent(curr);
 		wxREMOVE(typeSelector);
 
-		uint32_t parentWidth = parent->GetSize().x;
+		uint32 parentWidth = parent->GetSize().x;
 		wxArrayString arr;
 		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
 			if (BehaviorCreator::IsCompatibleWithParent((*it).first, curr->GetParent())) {
@@ -101,7 +101,7 @@ namespace Sharpheus {
 	}
 
 
-	void BehaviorPicker::CreateFiles(const wxString& className, const wxString& parentClassName, const wxString& folder, uint32_t ID)
+	void BehaviorPicker::CreateFiles(const wxString& className, const wxString& parentClassName, const wxString& folder, uint32 ID)
 	{
 		wxString hppPath = folder + className + ".hpp";
 		wxString cppPath = folder + className + ".cpp";

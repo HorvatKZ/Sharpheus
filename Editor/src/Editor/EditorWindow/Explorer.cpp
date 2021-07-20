@@ -7,7 +7,7 @@
 
 namespace Sharpheus {
 
-	uint32_t Explorer::oneWidth = 120;
+	const uint32 Explorer::oneWidth = 120;
 
 
 	Explorer::Explorer(wxFrame* parent, const wxPoint& pos, const wxSize& size)
@@ -67,15 +67,15 @@ namespace Sharpheus {
 	void Explorer::OnDoubleClick(wxMouseEvent& e)
 	{
 		wxPoint pos = e.GetPosition() + GetViewStart() * UI::scrollSpeed;
-		uint32_t col = pos.x / (UI::border + oneWidth);
-		uint32_t row = pos.y / (UI::border + 120);
-		uint32_t perRow = (GetClientSize().x - UI::border) / (UI::border + oneWidth);
+		uint32 col = pos.x / (UI::border + oneWidth);
+		uint32 row = pos.y / (UI::border + 120);
+		uint32 perRow = (GetClientSize().x - UI::border) / (UI::border + oneWidth);
 
 		if (col >= perRow) {
 			return;
 		}
 
-		uint32_t ind = row * perRow + col;
+		uint32 ind = row * perRow + col;
 		wxString name, folderPath = folder.GetPath();
 		if (folderPath.Last() != '\\') {
 			folderPath += '\\';
@@ -174,7 +174,7 @@ namespace Sharpheus {
 		PrepareDC(dc);
 		dc.Clear();
 
-		uint32_t i = 0;
+		uint32 i = 0;
 		wxString folderPath = folder.GetFullPath();
 		if (folderPath.Last() != '\\') {
 			folderPath += '\\';
@@ -189,10 +189,10 @@ namespace Sharpheus {
 		wxDir dir(folderPath);
 		bool found = dir.GetFirst(&name);
 
-		uint32_t perRow = (GetClientSize().x - UI::border) / (UI::border + oneWidth);
+		uint32 perRow = (GetClientSize().x - UI::border) / (UI::border + oneWidth);
 		while (found) {
 			wxString displayName = name;
-			uint32_t col = i % perRow, row = i / perRow;
+			uint32 col = i % perRow, row = i / perRow;
 			if (wxFileName::DirExists(folderPath + name)) {
 				DrawIcon(dc, folderImg, col, row);
 			}
@@ -222,8 +222,8 @@ namespace Sharpheus {
 			++i;
 		}
 
-		uint32_t heightNeeded = ((i - 1) / perRow + 1) * (120 + UI::border);
-		uint32_t realHeight = GetClientSize().y;
+		uint32 heightNeeded = ((i - 1) / perRow + 1) * (120 + UI::border);
+		uint32 realHeight = GetClientSize().y;
 		if (heightNeeded < realHeight && scrollHeight != realHeight) {
 			scrollHeight = realHeight;
 			SetScrollbars(0, UI::scrollSpeed, GetClientSize().x, scrollHeight / UI::scrollSpeed);
@@ -235,15 +235,15 @@ namespace Sharpheus {
 	}
 
 
-	void Explorer::DrawIcon(wxClientDC& dc, const wxBitmap& img, uint32_t i, uint32_t j)
+	void Explorer::DrawIcon(wxClientDC& dc, const wxBitmap& img, uint32 i, uint32 j)
 	{
 		dc.DrawBitmap(img, wxPoint(i * (oneWidth + UI::border) + UI::border + (oneWidth - 80) / 2, j * (120 + UI::border) + UI::border));
 	}
 
 
-	void Explorer::DrawText(wxClientDC& dc, const wxString& text, uint32_t i, uint32_t j)
+	void Explorer::DrawText(wxClientDC& dc, const wxString& text, uint32 i, uint32 j)
 	{
-		uint32_t extent = GetTextExtent(text).x;
+		uint32 extent = GetTextExtent(text).x;
 		dc.DrawLabel(text, wxRect(i * (oneWidth + UI::border) + UI::border + (oneWidth - extent) / 2, j * (120 + UI::border) + UI::border + 80, extent, UI::unitHeight));
 	}
 

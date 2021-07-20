@@ -5,14 +5,14 @@
 
 namespace Sharpheus {
 
-	uint32_t GridSettingsDialog::labelWidth = 80;
+	const uint32 GridSettingsDialog::labelWidth = 80;
 
 
 	GridSettingsDialog::GridSettingsDialog(wxWindow* parent)
 		: SettingsDialog(parent, "Grid Settings", wxSize(400, 250))
 	{
-		uint32_t realWidth = GetClientSize().x;
-		uint32_t y = UI::border;
+		uint32 realWidth = GetClientSize().x;
+		uint32 y = UI::border;
 		wxSize inputSize(realWidth / 2 - 3 * UI::border - labelWidth - 10, UI::unitHeight);
 		sizeLabel = new wxStaticText(this, wxID_ANY, "Size:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		sizeLabel->SetFont(UI::titleFont);
@@ -30,12 +30,12 @@ namespace Sharpheus {
 		opacityLabel = new wxStaticText(this, wxID_ANY, "Opacity:", wxPoint(realWidth / 2 + UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		opacityLabel->SetFont(UI::titleFont);
 		opacityInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(realWidth / 2 + 2 * UI::border + labelWidth, y), inputSize);
-		opacityInput->SetValidator(wxIntegerValidator<uint8_t>());
+		opacityInput->SetValidator(wxIntegerValidator<byte>());
 
 		y += UI::border + UI::unitHeight;
 		foregroundLabel = new wxStaticText(this, wxID_ANY, "In foreground", wxPoint(UI::border, y + UI::shift));
 		foregroundLabel->SetFont(UI::titleFont);
-		uint32_t textWidth = foregroundLabel->GetTextExtent("In foreground").x;
+		uint32 textWidth = foregroundLabel->GetTextExtent("In foreground").x;
 		foregroundCheckBox = new wxCheckBox(this, wxID_ANY, "", wxPoint(2 * UI::border + textWidth, y), wxSize(UI::unitHeight, UI::unitHeight));
 		
 		y += UI::border + UI::unitHeight;
@@ -58,7 +58,7 @@ namespace Sharpheus {
 		camOutlineOpacityLabel = new wxStaticText(this, wxID_ANY, "Opacity:", wxPoint(realWidth / 2 + UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		camOutlineOpacityLabel->SetFont(UI::titleFont);
 		camOutlineOpacityInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(realWidth / 2 + 2 * UI::border + labelWidth, y), inputSize);
-		camOutlineOpacityInput->SetValidator(wxIntegerValidator<uint8_t>());
+		camOutlineOpacityInput->SetValidator(wxIntegerValidator<byte>());
 	}
 
 

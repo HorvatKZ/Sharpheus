@@ -8,11 +8,11 @@
 
 namespace Sharpheus {
 
-	ClassInfo CapsuleCollider::classInfo("CapsuleCollider", "capsulecollider.png", {
-		new BoolProvider<CapsuleCollider>("Only Trigger", SPH_BIND_GETTER(CapsuleCollider::IsTrigger), SPH_BIND_SETTER(CapsuleCollider::SetTrigger)),
-		new UFloatProvider<CapsuleCollider>("Width", SPH_BIND_GETTER(CapsuleCollider::GetWidth), SPH_BIND_SETTER(CapsuleCollider::SetWidth)),
-		new UFloatProvider<CapsuleCollider>("Height", SPH_BIND_GETTER(CapsuleCollider::GetHeight), SPH_BIND_SETTER(CapsuleCollider::SetHeight))
-		});
+	SPH_START_CLASSINFO(CapsuleCollider, "capsulecollider.png")
+		SPH_PROVIDE_BOOL(CapsuleCollider, "Only Trigger", IsTrigger, SetTrigger)
+		SPH_PROVIDE_UFLOAT(CapsuleCollider, "Width", GetWidth, SetWidth)
+		SPH_PROVIDE_UFLOAT(CapsuleCollider, "Height", GetHeight, SetHeight)
+	SPH_END_CLASSINFO
 
 
 	Point CapsuleCollider::upperTexCoords[] = { Point(0, 0), Point(1, 0), Point(1, 0.5), Point(0, 0.5) };

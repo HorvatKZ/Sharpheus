@@ -6,8 +6,8 @@
 
 namespace Sharpheus {
 
-	Color Collider::colliderColor = Color(0, 255, 64, 127);
-	Color Collider::triggerColor = Color(167, 15, 255, 127);
+	const Color Collider::colliderColor = Color(0, 255, 64, 127);
+	const Color Collider::triggerColor = Color(167, 15, 255, 127);
 
 
 	Collider::Collider(GameObject* parent, const std::string& name, Shape* shape) : ShapedGameObject(parent, name, shape)

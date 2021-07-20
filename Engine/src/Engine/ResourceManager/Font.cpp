@@ -4,11 +4,11 @@
 
 namespace Sharpheus {
 
-	float Font::boldness = 0.02f;
-	uint8_t Font::boldIterations = 3;
-	float Font::italicness = 0.15f;
-	float Font::underlineHeight = -0.35f;
-	float Font::underlineThickness = 0.05f;
+	const float Font::boldness = 0.02f;
+	const uint8 Font::boldIterations = 3;
+	const float Font::italicness = 0.15f;
+	const float Font::underlineHeight = -0.35f;
+	const float Font::underlineThickness = 0.05f;
 
 	Font::Font(const std::string& fontFile, Image* img)
 		: Resource(fontFile), img(img)
@@ -23,11 +23,11 @@ namespace Sharpheus {
 
 
 	void Font::Render(const std::string& text, const Point& center, const Point& xAxis, const Point& yAxis,
-		float size, const Color& color, uint8_t style)
+		float size, const Color& color, byte style)
 	{
 		Point halfExtent = GetExtent(text, size, style) * 0.5f;
 		Point renderPos = center - xAxis * halfExtent.x - yAxis * halfExtent.y;
-		for (uint32_t i = 0; i < text.length(); ++i) {
+		for (uint32 i = 0; i < text.length(); ++i) {
 			RenderChar(text[i], renderPos, xAxis, yAxis, size, color, style);
 		}
 
@@ -43,10 +43,10 @@ namespace Sharpheus {
 	}
 
 
-	Point Font::GetExtent(const std::string& text, float size, uint8_t style)
+	Point Font::GetExtent(const std::string& text, float size, byte style)
 	{
 		float width = 0.f;
-		for (uint32_t i = 0; i < text.length(); ++i) {
+		for (uint32 i = 0; i < text.length(); ++i) {
 			width += size * chars[text[i]].xadvance;
 		}
 		if (style & SPH_FONT_BOLD) {
@@ -61,7 +61,7 @@ namespace Sharpheus {
 
 
 	void Font::RenderChar(char character, Point& pos, const Point& xAxis, const Point& yAxis,
-		float size, const Color& color, uint8_t style)
+		float size, const Color& color, byte style)
 	{
 		CharData data = chars[character];
 
@@ -77,8 +77,8 @@ namespace Sharpheus {
 
 		if (style & SPH_FONT_BOLD) {
 			float boldShift = lineHeight * boldness * size / boldIterations;
-			for (uint8_t i = 0; i < boldIterations; ++i) {
-				for (uint8_t j = 0; j < 4; ++j) {
+			for (uint8 i = 0; i < boldIterations; ++i) {
+				for (uint8 j = 0; j < 4; ++j) {
 					coords[j] += xAxis * boldShift;
 				}
 				img->RenderPart(coords, data.texCoords, color);
@@ -100,7 +100,7 @@ namespace Sharpheus {
 		}
 
 		std::string key, value;
-		uint32_t basicSize;
+		uint32 basicSize;
 		while (key != "count") {
 			GetNextKeyValue(fin, key, value);
 			
@@ -117,8 +117,8 @@ namespace Sharpheus {
 		lineHeight /= basicSize;
 
 		valid = img->IsValid();
-		uint8_t n = std::stoi(value);
-		for (uint8_t i = 0; i < n; ++i) {
+		uint8 n = std::stoi(value);
+		for (uint8 i = 0; i < n; ++i) {
 			ReadCharData(fin, basicSize);
 		}
 
@@ -171,7 +171,7 @@ namespace Sharpheus {
 			SPH_ERROR("Not appropriate format");
 			valid = false;
 		}
-		uint8_t id = std::stoi(value);
+		uint8 id = std::stoi(value);
 		CharData& data = chars[id];
 
 		GetNextKeyValue(fin, key, value);
@@ -179,28 +179,28 @@ namespace Sharpheus {
 			SPH_ERROR("Not appropriate format");
 			valid = false;
 		}
-		uint32_t x = std::stoi(value);
+		uint32 x = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
 		if (key == "y") {
 			SPH_ERROR("Not appropriate format");
 			valid = false;
 		}
-		uint32_t y = std::stoi(value);
+		uint32 y = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
 		if (key == "width") {
 			SPH_ERROR("Not appropriate format");
 			valid = false;
 		}
-		uint32_t width = std::stoi(value);
+		uint32 width = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
 		if (key == "height") {
 			SPH_ERROR("Not appropriate format");
 			valid = false;
 		}
-		uint32_t height = std::stoi(value);
+		uint32 height = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
 		if (key == "xoffset") {

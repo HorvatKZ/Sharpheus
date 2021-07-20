@@ -14,7 +14,7 @@ namespace Sharpheus {
 	}
 
 
-	TileSet::TileSet(Image* atlas, uint32_t frameWidth, uint32_t frameHeight)
+	TileSet::TileSet(Image* atlas, uint32 frameWidth, uint32 frameHeight)
 		: Resource(), atlas(atlas), frameWidth(frameWidth), frameHeight(frameHeight)
 	{
 		if (atlas != nullptr) {
@@ -35,7 +35,7 @@ namespace Sharpheus {
 	}
 
 
-	void TileSet::Render(Point coords[4], uint8_t ind, const Color& tint)
+	void TileSet::Render(Point coords[4], byte ind, const Color& tint)
 	{
 		atlas->RenderPart(coords, texCoords + 4 * ind, tint);
 	}
@@ -87,9 +87,9 @@ namespace Sharpheus {
 
 	void TileSet::CalcTexCoords()
 	{
-		uint32_t tiles = GetNumOfTiles();
+		uint32 tiles = GetNumOfTiles();
 		texCoords = new Point[tiles * 4];
-		for (uint32_t tile = 0; tile < tiles; ++tile) {
+		for (uint32 tile = 0; tile < tiles; ++tile) {
 			float xStart = ((tile % frameCols) * frameWidth) / (float)atlas->GetWidth();
 			float yStart = ((tile / frameCols) * frameHeight) / (float)atlas->GetHeight();
 			float xEnd = xStart + frameWidth / (float)atlas->GetWidth();

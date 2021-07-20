@@ -3,15 +3,15 @@
 #include "../GameObject.hpp"
 
 #define SPH_DECL_BEHAVIOR(Class, subType) \
-	static ::Sharpheus::ClassInfo classInfo; \
-	static uint32_t classVersion; \
-	virtual inline uint32_t GetSubType() override { return subType; } \
-	virtual inline ::Sharpheus::ClassInfo* GetBehaviorClassInfo() override { return &Class::classInfo; } \
+	static const ::Sharpheus::ClassInfo classInfo; \
+	static const uint32 classVersion; \
+	virtual inline uint32 GetSubType() override { return subType; } \
+	virtual inline ::Sharpheus::ClassInfoPtr GetBehaviorClassInfo() override { return &Class::classInfo; } \
 	virtual void Init() override; \
 	static bool IsCompatibleWithParent(::Sharpheus::GameObject* parent);
 
 #define SPH_CHECK_CLASSVERSION(fl, version) \
-	uint32_t oldVersion; \
+	uint32 oldVersion; \
 	fl.Read(oldVersion); \
 	if (oldVersion != version) \
 		return fl.ReadLine();
@@ -42,9 +42,9 @@ namespace Sharpheus {
 
 		virtual void Init() = 0;
 
-		virtual inline uint32_t GetSubType() = 0;
+		virtual inline uint32 GetSubType() = 0;
 
-		virtual inline ClassInfo* GetBehaviorClassInfo() = 0;
+		virtual inline ClassInfoPtr GetBehaviorClassInfo() = 0;
 
 		SPH_DECL_GAMEOBJECT(Behavior);
 

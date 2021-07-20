@@ -7,7 +7,7 @@
 
 namespace Sharpheus {
 
-	uint32_t CreateBehaviorDialog::labelWidth = 60;
+	const uint32 CreateBehaviorDialog::labelWidth = 60;
 
 
 	CreateBehaviorDialog::CreateBehaviorDialog(wxWindow* parent, const wxString& projectFolder)
@@ -17,8 +17,8 @@ namespace Sharpheus {
 		wxSize size = GetClientSize();
 		SetPosition(wxPoint((parentSize.x - size.x) / 2, (parentSize.y - size.y) / 2));
 
-		uint32_t realWidth = GetClientSize().x;
-		uint32_t y = UI::border;
+		uint32 realWidth = GetClientSize().x;
+		uint32 y = UI::border;
 		classNameLabel = new wxStaticText(this, wxID_ANY, "Name:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		classNameLabel->SetFont(UI::titleFont);
 
@@ -29,7 +29,7 @@ namespace Sharpheus {
 		parentClassLabel = new wxStaticText(this, wxID_ANY, "Parent class:", wxPoint(UI::border, y + UI::shift), wxSize(2 * labelWidth, UI::unitHeight));
 		parentClassLabel->SetFont(UI::titleFont);
 
-		uint32_t maxId = 0;
+		uint32 maxId = 0;
 		wxArrayString parentClasses;
 		parentClasses.Add("Sharpheus::Behavior");
 		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
@@ -47,7 +47,7 @@ namespace Sharpheus {
 		idLabel->SetFont(UI::titleFont);
 
 		idInput = new wxTextCtrl(this, wxID_ANY, wxString::Format("%d", maxId + 1), wxPoint(2 * UI::border + labelWidth, y), wxSize(labelWidth, UI::unitHeight));
-		idInput->SetValidator(wxIntegerValidator<uint32_t>());
+		idInput->SetValidator(wxIntegerValidator<uint32>());
 
 		y += UI::border + UI::unitHeight + UI::shift;
 		baseFolderLabel = new wxStaticText(this, wxID_ANY, "Folder:", wxPoint(UI::border, y + UI::shift), wxSize(labelWidth, UI::unitHeight));

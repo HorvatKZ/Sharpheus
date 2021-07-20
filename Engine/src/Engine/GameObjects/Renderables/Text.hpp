@@ -27,7 +27,7 @@ namespace Sharpheus {
 		inline Font* GetFont() { return font; }
 		inline const Color& GetColor() { return color; }
 		inline float GetSize() { return size; }
-		inline uint8_t GetStyle() { return style; }
+		inline byte GetStyle() { return style; }
 		inline bool IsBold() { return style & SPH_FONT_BOLD; }
 		inline bool IsItalic() { return style & SPH_FONT_ITALIC; }
 		inline bool IsUnderlined() { return style & SPH_FONT_UNDERLINED; }
@@ -39,7 +39,7 @@ namespace Sharpheus {
 		inline void SetFont(Font* font) { this->font = font; UpdateSizer(); }
 		inline void SetColor(const Color& color) { this->color = color; }
 		inline void SetSize(float size) { this->size = size; UpdateSizer(); }
-		inline void SetStyle(uint8_t style) { this->style = style; UpdateSizer(); }
+		inline void SetStyle(byte style) { this->style = style; UpdateSizer(); }
 		SPH_TEXT_SETSTYLE(Bold, SPH_FONT_BOLD);
 		SPH_TEXT_SETSTYLE(Italic, SPH_FONT_ITALIC);
 		SPH_TEXT_SETSTYLE(Underlined, SPH_FONT_UNDERLINED);
@@ -53,7 +53,7 @@ namespace Sharpheus {
 		Font* font = nullptr;
 		Color color = Color::White;
 		float size = 20.f;
-		uint8_t style = 0;
+		byte style = 0;
 
 		virtual bool Save(FileSaver& fs) override;
 

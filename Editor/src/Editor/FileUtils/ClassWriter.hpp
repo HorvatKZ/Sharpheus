@@ -11,17 +11,17 @@ namespace Sharpheus {
 		ClassWriter(const wxString& filePath, const wxString& className, const wxString& parent, bool header, const wxString& comment = "");
 		virtual ~ClassWriter();
 
-		static void CreateBehaviorHeader(const wxString& filePath, const wxString& className, const wxString& parent, uint32_t subType);
-		static void CreateBehaviorSource(const wxString& filePath, const wxString& headerInclude, const wxString& className, const wxString& parent, uint32_t subType);
-		static void UpdateCreateBehaviorHeader(const wxString& filePath, const wxString& newClassPath, const wxString& newClassName, uint32_t newSubType, std::unordered_map<uint32_t, std::string>& oldClasses);
-		static void UpdateCreateBehaviorSource(const wxString& filePath, const wxString& newClassName, uint32_t newSubType, std::unordered_map<uint32_t, std::string>& oldClasses);
+		static void CreateBehaviorHeader(const wxString& filePath, const wxString& className, const wxString& parent, uint32 subType);
+		static void CreateBehaviorSource(const wxString& filePath, const wxString& headerInclude, const wxString& className, const wxString& parent, uint32 subType);
+		static void UpdateCreateBehaviorHeader(const wxString& filePath, const wxString& newClassPath, const wxString& newClassName, uint32 newSubType, std::unordered_map<uint32, std::string>& oldClasses);
+		static void UpdateCreateBehaviorSource(const wxString& filePath, const wxString& newClassName, uint32 newSubType, std::unordered_map<uint32, std::string>& oldClasses);
 
 		void Include(const wxString& file);
 		void IncludeCompilerPath(const wxString& file);
 		void WriteLine(const wxString& line);
-		void WriteLine(uint32_t tabs, const wxString& line);
+		void WriteLine(uint32 tabs, const wxString& line);
 		void WriteEmptyLine();
-		void WriteEmptyLines(uint32_t number);
+		void WriteEmptyLines(uint32 number);
 
 		// Header
 		void StartClass(const wxString& inharitanceMode = "public");

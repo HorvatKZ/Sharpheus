@@ -5,13 +5,13 @@
 
 namespace Sharpheus {
 
-	ClassInfo TileMap::classInfo("TileMap", "tilemap.png", {
-		new TileSetProvider<TileMap>("TileSet", SPH_BIND_GETTER(TileMap::GetTileSet), SPH_BIND_SETTER(TileMap::SetTileSet), SPH_BIND_2(TileMap::SetTileSetFromPath)),
-		new ColorProvider<TileMap>("Tint", SPH_BIND_GETTER(TileMap::GetTint), SPH_BIND_SETTER(TileMap::SetTint)),
-		new TileMapProvider("TileMap Editor")
-	});
+	SPH_START_CLASSINFO(TileMap, "tilemap.png")
+		SPH_PROVIDE_TILESET(TileMap, "TileSet", GetTileSet, SetTileSet, SetTileSetFromPath)
+		SPH_PROVIDE_COLOR(TileMap, "Tint", GetTint, SetTint)
+		SPH_PROVIDE_TILEMAP("TileMap Editor")
+	SPH_END_CLASSINFO
 
-	const int32_t TileMap::chunkSize = 16;
+	const int32 TileMap::chunkSize = 16;
 
 
 	TileMap::TileMap(GameObject* parent, const std::string& name) :
@@ -41,7 +41,7 @@ namespace Sharpheus {
 	}
 
 
-	uint8_t TileMap::Get(const IntPoint& pos)
+	byte TileMap::Get(const IntPoint& pos)
 	{
 		IntPoint chunk = pos.ToChunk();
 		auto it = chunks.find(chunk);
@@ -52,7 +52,7 @@ namespace Sharpheus {
 		return it->second.arr[pos.ToRelInd()];
 	}
 
-	void TileMap::Set(const IntPoint& pos, uint8_t value)
+	void TileMap::Set(const IntPoint& pos, byte value)
 	{
 		if (value == 0) {
 			Clear(pos);
@@ -65,8 +65,8 @@ namespace Sharpheus {
 			it = chunks.insert({ chunk, ChunkData() }).first;
 			memset(it->second.arr, 0, chunkSize * chunkSize);
 		}
-		uint8_t relInd = pos.ToRelInd();
-		uint8_t oldValue = it->second.arr[relInd];
+		uint8 relInd = pos.ToRelInd();
+		byte oldValue = it->second.arr[relInd];
 		if (oldValue == 0) {
 			++(it->second.count);
 		}
@@ -82,8 +82,8 @@ namespace Sharpheus {
 			return;
 		}
 
-		uint8_t relInd = pos.ToRelInd();
-		uint8_t oldValue = it->second.arr[relInd];
+		uint8 relInd = pos.ToRelInd();
+		byte oldValue = it->second.arr[relInd];
 		if (oldValue == 0) {
 			return;
 		}
@@ -107,8 +107,8 @@ namespace Sharpheus {
 			}
 
 			for (auto it = chunks.begin(); it != chunks.end(); ++it) {
-				uint8_t* arr = it->second.arr;
-				for (uint32_t i = 0; i < chunkSize * chunkSize; ++i) {
+				byte* arr = it->second.arr;
+				for (uint32 i = 0; i < chunkSize * chunkSize; ++i) {
 					if (arr[i] != 0) {
 						tiles->Render(GetCornersOf(it->first, i), arr[i] - 1, tint);
 					}
@@ -122,8 +122,8 @@ namespace Sharpheus {
 	{
 		if (tiles != nullptr) {
 			for (auto it = chunks.begin(); it != chunks.end(); ++it) {
-				uint8_t* arr = it->second.arr;
-				for (uint32_t i = 0; i < chunkSize * chunkSize; ++i) {
+				byte* arr = it->second.arr;
+				for (uint32 i = 0; i < chunkSize * chunkSize; ++i) {
 					if (arr[i] != 0) {
 						Renderer::DrawMonocromeQuad(GetCornersOf(it->first, i), selectColor);
 					}
@@ -139,11 +139,11 @@ namespace Sharpheus {
 	}
 
 
-	void TileMap::SetBack(uint8_t max)
+	void TileMap::SetBack(byte max)
 	{
 		for (auto it = chunks.begin(); it != chunks.end(); ++it) {
-			uint8_t* arr = it->second.arr;
-			for (uint32_t i = 0; i < chunkSize * chunkSize; ++i) {
+			byte* arr = it->second.arr;
+			for (uint32 i = 0; i < chunkSize * chunkSize; ++i) {
 				if (arr[i] > max) {
 					arr[i] = 0;
 					--(it->second.count);
@@ -176,8 +176,8 @@ namespace Sharpheus {
 		for (auto it = chunks.begin(); it != chunks.end(); ++it) {
 			fs.Write(it->first.x);
 			fs.Write(it->first.y);
-			uint8_t* arr = it->second.arr;
-			for (uint32_t i = 0; i < chunkSize * chunkSize; ++i) {
+			byte* arr = it->second.arr;
+			for (uint32 i = 0; i < chunkSize * chunkSize; ++i) {
 				fs.Write(arr[i]);
 			}
 		}
@@ -198,12 +198,12 @@ namespace Sharpheus {
 		fl.Read(size);
 		chunks.clear();
 		for (size_t i = 0; i < size; ++i) {
-			int32_t x, y;
+			int32 x, y;
 			fl.Read(x);
 			fl.Read(y);
-			uint8_t count = 0;
-			uint8_t* arr = new uint8_t[chunkSize * chunkSize];
-			for (uint32_t j = 0; j < chunkSize * chunkSize; ++j) {
+			uint8 count = 0;
+			byte* arr = new byte[chunkSize * chunkSize];
+			for (uint32 j = 0; j < chunkSize * chunkSize; ++j) {
 				fl.Read(arr[j]);
 				if (arr[j] != 0) {
 					++count;

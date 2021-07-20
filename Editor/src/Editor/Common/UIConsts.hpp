@@ -8,15 +8,15 @@ namespace Sharpheus {
 	class UI
 	{
 	public:
-		static uint32_t border;
-		static uint32_t unitHeight;
-		static uint32_t extUnitHeight;
-		static uint32_t shift;
-		static uint32_t heightPadding;
-		static uint32_t scrollSpeed;
-		static wxSize buttonSize;
-		static wxSize smallButtonSize;
-		static wxFont titleFont;
+		static const uint32 border;
+		static const uint32 unitHeight;
+		static const uint32 extUnitHeight;
+		static const uint32 shift;
+		static const uint32 heightPadding;
+		static const uint32 scrollSpeed;
+		static const wxSize buttonSize;
+		static const wxSize smallButtonSize;
+		static const wxFont titleFont;
 	};
 
 }

@@ -5,20 +5,20 @@
 
 namespace Sharpheus {
 
-	ClassInfo ParticleEmitter::classInfo("ParticleEmitter", "particleemitter.png", {
-		new ImageProvider<ParticleEmitter>("Particle", SPH_BIND_GETTER(ParticleEmitter::GetParticle), SPH_BIND_SETTER(ParticleEmitter::SetParticle), SPH_BIND_3(ParticleEmitter::SetParticleByPath)),
-		new PointProvider<ParticleEmitter>("Particle scale", SPH_BIND_GETTER(ParticleEmitter::GetParticleScale), SPH_BIND_SETTER(ParticleEmitter::SetParticleScale)),
-		new ColorProvider<ParticleEmitter>("Particle tint", SPH_BIND_GETTER(ParticleEmitter::GetTint), SPH_BIND_SETTER(ParticleEmitter::SetTint)),
-		new UFloatProvider<ParticleEmitter>("Emition time", SPH_BIND_GETTER(ParticleEmitter::GetEmitionTime), SPH_BIND_SETTER(ParticleEmitter::SetEmitionTime)),
-		new UFloatProvider<ParticleEmitter>("Lifetime", SPH_BIND_GETTER(ParticleEmitter::GetLifeTime), SPH_BIND_SETTER(ParticleEmitter::SetLifeTime)),
-		new UFloatProvider<ParticleEmitter>("Speed", SPH_BIND_GETTER(ParticleEmitter::GetSpeed), SPH_BIND_SETTER(ParticleEmitter::SetSpeed)),
-		new UFloatProvider<ParticleEmitter>("Gravity", SPH_BIND_GETTER(ParticleEmitter::GetGravity), SPH_BIND_SETTER(ParticleEmitter::SetGravity)),
-		new UFloatProvider<ParticleEmitter>("Friction", SPH_BIND_GETTER(ParticleEmitter::GetFriction), SPH_BIND_SETTER(ParticleEmitter::SetFriction), 0.f, 1.f),
-		new BoolProvider<ParticleEmitter>("Shrink", SPH_BIND_GETTER(ParticleEmitter::IsShrink), SPH_BIND_SETTER(ParticleEmitter::SetShrink)),
-		new BoolProvider<ParticleEmitter>("Fade", SPH_BIND_GETTER(ParticleEmitter::IsFade), SPH_BIND_SETTER(ParticleEmitter::SetFade)),
-		new BoolProvider<ParticleEmitter>("Burst", SPH_BIND_GETTER(ParticleEmitter::IsBurst), SPH_BIND_SETTER(ParticleEmitter::SetBurst)),
-		new UIntProvider<ParticleEmitter>("Burst N", SPH_BIND_GETTER(ParticleEmitter::GetBurstN), SPH_BIND_SETTER(ParticleEmitter::SetBurstN)),
-	});
+	SPH_START_CLASSINFO(ParticleEmitter, "particleemitter.png")
+		SPH_PROVIDE_IMAGE(ParticleEmitter, "Particle", GetParticle, SetParticle, SetParticleByPath)
+		SPH_PROVIDE_POINT(ParticleEmitter, "Particle scale", GetParticleScale, SetParticleScale)
+		SPH_PROVIDE_COLOR(ParticleEmitter, "Particle tint", GetTint, SetTint)
+		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Emition time", GetEmitionTime, SetEmitionTime)
+		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Lifetime", GetLifeTime, SetLifeTime)
+		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Speed", GetSpeed, SetSpeed)
+		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Gravity", GetGravity, SetGravity)
+		SPH_PROVIDE_UFLOAT_RANGE(ParticleEmitter, "Friction", GetFriction, SetFriction, 0.f, 1.f)
+		SPH_PROVIDE_BOOL(ParticleEmitter, "Shrink", IsShrink, SetShrink)
+		SPH_PROVIDE_BOOL(ParticleEmitter, "Fade", IsFade, SetFade)
+		SPH_PROVIDE_BOOL(ParticleEmitter, "Burst", IsBurst, SetBurst)
+		SPH_PROVIDE_UINT(ParticleEmitter, "Burst N", GetBurstN, SetBurstN)
+	SPH_END_CLASSINFO
 
 
 	ParticleEmitter::ParticleEmitter(GameObject* parent, const std::string& name)
@@ -155,9 +155,9 @@ namespace Sharpheus {
 	}
 
 
-	void ParticleEmitter::Emit(uint32_t n)
+	void ParticleEmitter::Emit(uint32 n)
 	{
-		for (uint32_t i = 0; i < n; ++i) {
+		for (uint32 i = 0; i < n; ++i) {
 			particles.push_back(ParticleState(GetRandDir(), worldTrafo.pos, totalTime, speed));
 		}
 	}

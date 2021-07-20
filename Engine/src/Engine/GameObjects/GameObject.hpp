@@ -7,7 +7,7 @@
 #include "Engine/FileUtils/FileSaver.hpp"
 
 #define SPH_DECL_GAMEOBJECT(type) \
-	static ClassInfo classInfo; \
+	static const ClassInfo classInfo; \
 	virtual inline Type GetType() override { return Type::type; } \
 	static inline Type GetStaticType() { return Type::type; };
 
@@ -33,7 +33,7 @@ namespace Sharpheus {
 	class SPH_EXPORT GameObject : public EventListener
 	{
 	public:
-		enum class Type : uint8_t {
+		enum class Type : byte {
 			// Basic types
 			None = 0x00,
 			Collection = 0x01,
@@ -69,7 +69,7 @@ namespace Sharpheus {
 			RadioButton = 0x63
 		};
 
-		enum class TypeMasks : uint8_t {
+		enum class TypeMasks : byte {
 			Basic = 0x00,
 			Camera = 0x10,
 			Renderables = 0x20,
@@ -101,7 +101,7 @@ namespace Sharpheus {
 		bool					Move(GameObject* newParent);
 
 		inline bool				Is(Type type)		{ return GetType() == type; }
-		inline bool				Is(TypeMasks mask)	{ return ((uint8_t)GetType() & (uint8_t)TypeMasks::MASK) == (uint8_t)mask; }
+		inline bool				Is(TypeMasks mask)	{ return ((byte)GetType() & (byte)TypeMasks::MASK) == (byte)mask; }
 
 		inline const Transform& GetTrafo() { return trafo; }
 		inline const Transform&	GetWorldTrafo() { return worldTrafo; }
@@ -114,7 +114,7 @@ namespace Sharpheus {
 
 		void									AddChild(GameObject* child);
 		GameObject*								GetChild(const std::string& name);
-		GameObject*								GetChild(uint32_t ind);
+		GameObject*								GetChild(uint32 ind);
 		GameObject*								GetLastChild();
 		GameObject*								GetFirstChildOfType(Type type);
 		GameObject*								GetLastChildOfType(Type type);
@@ -170,8 +170,8 @@ namespace Sharpheus {
 		std::unordered_map<ID, GameObjectDestroyedEventFunc> safeObjects;
 		std::unordered_map<ID, GameObjectDestroyedEventFunc> onDestroySubscribers;
 
-		static float selectCircleRadius;
-		static Color selectColor;
+		static const float selectCircleRadius;
+		static const Color selectColor;
 		static ID nextFreeSafeObjectID;
 
 		void RemoveChild(GameObject* child);

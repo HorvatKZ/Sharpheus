@@ -7,7 +7,8 @@
 using namespace Sharpheus;
 
 
-ClassInfo TriggerTester::classInfo("TriggerTester", "behavior.png", {});
+SPH_START_CLASSINFO(TriggerTester, "behavior.png")
+SPH_END_CLASSINFO
 
 
 TriggerTester::TriggerTester(Behavior* other) : Behavior(other), ColliderListener(GetID())

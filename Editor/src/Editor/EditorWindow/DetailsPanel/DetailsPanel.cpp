@@ -33,7 +33,7 @@ namespace Sharpheus {
 
 
 	void DetailsPanel::BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback,
-		std::function<void()>&& currDataChangedCallback, std::function<void(uint32_t)>&& behaviorChangedCallback)
+		std::function<void()>&& currDataChangedCallback, std::function<void(uint32)>&& behaviorChangedCallback)
 	{
 		this->currNameChangedCallback = std::move(currNameChangedCallback);
 		this->currDataChangedCallback = std::move(currDataChangedCallback);
@@ -79,7 +79,7 @@ namespace Sharpheus {
 	{
 		ClearPresenters();
 
-		ClassInfo* classInfo = ClassRegistry::GetClassInfo(obj);
+		ClassInfoPtr classInfo = ClassRegistry::GetClassInfo(obj);
 		GameObject::Type type = obj->GetType();
 		if (classInfo == nullptr) {
 			SPHE_ERROR("Class Registry: Unexpected GameObject type {0}", type);
@@ -87,7 +87,7 @@ namespace Sharpheus {
 		}
 
 		Scroll(0, 0);
-		uint32_t y = freeY;
+		uint32 y = freeY;
 		for (CommonProvider* provider : classInfo->GetProviders()) {
 			switch (type) {
 				case GameObject::Type::Collection:
@@ -172,7 +172,7 @@ namespace Sharpheus {
 
 	void DetailsPanel::FillPresenters(GameObject* curr)
 	{
-		ClassInfo* classInfo = ClassRegistry::GetClassInfo(curr);
+		ClassInfoPtr classInfo = ClassRegistry::GetClassInfo(curr);
 		if (classInfo == nullptr) {
 			SPHE_ERROR("Class Registry: Unexpected GameObject type {0}", curr->GetType());
 			return;
@@ -212,7 +212,7 @@ namespace Sharpheus {
 
 
 	template<class Class>
-	inline void DetailsPanel::CreatePresenterFrom(CommonProvider* provider, uint32_t& y)
+	inline void DetailsPanel::CreatePresenterFrom(CommonProvider* provider, uint32& y)
 	{
 		switch (provider->GetType()) {
 			case CommonProvider::Type::BOOL:

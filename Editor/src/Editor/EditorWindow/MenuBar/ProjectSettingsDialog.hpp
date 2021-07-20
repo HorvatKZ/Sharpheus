@@ -27,7 +27,7 @@ namespace Sharpheus {
 
 		wxString projectName, defaultLevelPath, projectFolder;
 
-		static uint32_t labelWidth;
+		static uint32 labelWidth;
 
 		void BrowseClicked(wxCommandEvent& e);
 

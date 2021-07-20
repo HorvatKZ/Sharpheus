@@ -20,9 +20,9 @@ namespace Sharpheus {
 		inline const std::string& GetName() { return name; }
 
 		void Render(const std::string& text, const Point& center, const Point& xAxis, const Point& yAxis,
-			float size, const Color& color, uint8_t style = 0);
+			float size, const Color& color, byte style = 0);
 
-		Point GetExtent(const std::string& text, float size, uint8_t style = 0);
+		Point GetExtent(const std::string& text, float size, byte style = 0);
 
 	private:
 		struct CharData {
@@ -35,14 +35,14 @@ namespace Sharpheus {
 		float lineHeight;
 		CharData chars[128];
 
-		static float boldness;
-		static uint8_t boldIterations;
-		static float italicness;
-		static float underlineHeight;
-		static float underlineThickness;
+		static const float boldness;
+		static const uint8 boldIterations;
+		static const float italicness;
+		static const float underlineHeight;
+		static const float underlineThickness;
 
 		void RenderChar(char character, Point& pos, const Point& xAxis, const Point& yAxis,
-			float size, const Color& color, uint8_t style = 0);
+			float size, const Color& color, byte style = 0);
 
 		void ReadFontData();
 		void GetNextKeyValue(FILE* fin, std::string& key, std::string& value);

@@ -41,7 +41,7 @@ namespace Sharpheus {
 
 		ViewPortGridProps gridProps;
 
-		static uint32_t labelWidth;
+		static const uint32 labelWidth;
 	};
 
 }

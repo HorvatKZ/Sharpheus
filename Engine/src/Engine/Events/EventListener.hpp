@@ -5,9 +5,6 @@
 
 namespace Sharpheus {
 
-	typedef uint32_t ID;
-
-
 	class EventListener
 	{
 	public:
@@ -39,7 +36,7 @@ namespace Sharpheus {
 	protected:
 		static ID nextFreeID;
 
-		uint32_t subscribedNum;
+		uint32 subscribedNum;
 		ID listenerID;
 	};
 }

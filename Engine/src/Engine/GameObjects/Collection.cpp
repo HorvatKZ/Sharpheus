@@ -4,7 +4,8 @@
 
 namespace Sharpheus {
 
-	ClassInfo Collection::classInfo("Collection", "collection.png", {});
+	SPH_START_CLASSINFO(Collection, "collection.png")
+	SPH_END_CLASSINFO
 
 
 	Collection::Collection(GameObject* parent, const std::string& name)

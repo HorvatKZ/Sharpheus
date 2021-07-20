@@ -275,13 +275,13 @@ namespace Sharpheus {
 
 	bool Level::LoadRoot(FileLoader& fl)
 	{
-		uint8_t type;
+		byte type;
 		std::string rootName;
-		uint32_t childNum;
+		uint32 childNum;
 
 		bool success = true;
 		success &= fl.Read(type);
-		if (type != (uint8_t)GameObject::Type::Collection) {
+		if (type != (byte)GameObject::Type::Collection) {
 			SPH_ERROR("Wrong root object type");
 			return false;
 		}
@@ -295,7 +295,7 @@ namespace Sharpheus {
 		success &= root->Load(fl);
 		success &= fl.TryReadingEnd();
 
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < childNum && success) {
 			success &= LoadGameObject(fl, root);
 			++i;
@@ -310,10 +310,10 @@ namespace Sharpheus {
 
 	bool Level::LoadGameObject(FileLoader& fl, GameObject* parent)
 	{
-		uint8_t type;
+		byte type;
 		GameObject::Type realType;
 		std::string objName;
-		uint32_t childNum;
+		uint32 childNum;
 
 		bool success = true;
 		success &= fl.Read(type);
@@ -324,7 +324,7 @@ namespace Sharpheus {
 		if (realType != GameObject::Type::Behavior) {
 			obj = Create(realType, parent, objName);
 		} else {
-			uint32_t subType;
+			uint32 subType;
 			success &= fl.Read(subType);
 			obj = BehaviorCreator::Create(subType, parent, objName);
 			Attach(obj);
@@ -340,7 +340,7 @@ namespace Sharpheus {
 		success &= obj->Load(fl);
 		success &= fl.TryReadingEnd();
 
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < childNum && success) {
 			success &= LoadGameObject(fl, obj);
 			++i;

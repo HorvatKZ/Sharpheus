@@ -101,7 +101,7 @@ namespace Sharpheus {
 		glBegin(GL_QUADS);
 
 		glColor4f(tint.GetRed(), tint.GetGreen(), tint.GetBlue(), tint.GetAlpha());
-		for (uint8_t i = 0; i < 4; ++i) {
+		for (uint8 i = 0; i < 4; ++i) {
 			glTexCoord2f(texCoords[i].x, texCoords[i].y);
 			glVertex2f(coords[i].x, coords[i].y);
 		}
@@ -118,7 +118,7 @@ namespace Sharpheus {
 		glBegin(GL_QUADS);
 
 		glColor4f(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
-		for (uint8_t i = 0; i < 4; ++i) {
+		for (uint8 i = 0; i < 4; ++i) {
 			glVertex2f(coords[i].x, coords[i].y);
 		}
 

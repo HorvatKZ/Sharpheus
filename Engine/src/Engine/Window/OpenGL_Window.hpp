@@ -20,10 +20,10 @@ namespace Sharpheus {
 		void EndRender() override;
 
 		float GetTime() override;
-		uint32_t GetFPS() override;
+		uint32 GetFPS() override;
 
-		void SetWidth(uint32_t width) override;
-		void SetHeight(uint32_t height) override;
+		void SetWidth(uint32 width) override;
+		void SetHeight(uint32 height) override;
 		void SetTitle(const std::string& title) override;
 		void SetVsync(bool vsync) override;
 		void SetFullscreen(bool fullscreen) override;
@@ -32,7 +32,7 @@ namespace Sharpheus {
 	private:
 		GLFWwindow* win;
 		float startTime, lastSecond;
-		uint32_t fps = 0, lastFps = 0;
+		uint32 fps = 0, lastFps = 0;
 		int lastPos[2], lastSize[2];
 		std::unordered_set<KeyCode> pressedKeys;
 

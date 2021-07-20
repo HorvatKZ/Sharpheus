@@ -5,8 +5,8 @@
 
 namespace Sharpheus {
 
-	wxFont InputComponentCtrl::titleFont(15, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
-	uint32_t InputComponentCtrl::border = 3;
+	const wxFont InputComponentCtrl::titleFont(15, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+	const uint32 InputComponentCtrl::border = 3;
 
 
 	// InputComponentCtrl
@@ -18,7 +18,7 @@ namespace Sharpheus {
 	}
 
 
-	InputComponentCtrl::InputComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color)
+	InputComponentCtrl::InputComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color)
 		: wxPanel(parent, wxID_ANY, pos, wxSize(width, UI::extUnitHeight))
 	{
 		SetBackgroundColour(color);
@@ -37,9 +37,9 @@ namespace Sharpheus {
 	{
 	}
 
-	void InputComponentCtrl::SetWidth(uint32_t width)
+	void InputComponentCtrl::SetWidth(uint32 width)
 	{
-		uint32_t currWidth = GetSize().x;
+		uint32 currWidth = GetSize().x;
 		input->SetSize(input->GetSize() - wxSize(currWidth - width, 0));
 		SetSize(wxSize(width, UI::extUnitHeight));
 	}
@@ -52,10 +52,10 @@ namespace Sharpheus {
 	}
 
 
-	IntComponentCtrl::IntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, int32_t min, int32_t max)
+	IntComponentCtrl::IntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, int32 min, int32 max)
 		: InputComponentCtrl(parent, title, pos, width, color)
 	{
-		wxIntegerValidator validator = wxIntegerValidator<int32_t>(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
+		wxIntegerValidator validator = wxIntegerValidator<int32>(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
 		validator.SetRange(min, max);
 		input->SetValidator(validator);
 		formater = wxT("%d");
@@ -74,10 +74,10 @@ namespace Sharpheus {
 	}
 
 
-	UIntComponentCtrl::UIntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, uint32_t min, uint32_t max)
+	UIntComponentCtrl::UIntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, uint32 min, uint32 max)
 		: InputComponentCtrl(parent, title, pos, width, color)
 	{
-		wxIntegerValidator validator = wxIntegerValidator<uint32_t>(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
+		wxIntegerValidator validator = wxIntegerValidator<uint32>(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
 		validator.SetRange(min, max);
 		input->SetValidator(validator);
 		formater = wxT("%d");
@@ -96,10 +96,10 @@ namespace Sharpheus {
 	}
 
 
-	ByteComponentCtrl::ByteComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, bool hex)
+	ByteComponentCtrl::ByteComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, bool hex)
 		: InputComponentCtrl(parent, title, pos, width, color)
 	{
-		input->SetValidator(wxIntegerValidator<uint8_t>(&value));
+		input->SetValidator(wxIntegerValidator<byte>(&value));
 		
 		if (hex) {
 			formater = wxT("%x");
@@ -121,7 +121,7 @@ namespace Sharpheus {
 	}
 
 
-	FloatComponentCtrl::FloatComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, uint32_t precision)
+	FloatComponentCtrl::FloatComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, uint32 precision)
 		: InputComponentCtrl(parent, title, pos, width, color)
 	{
 		input->SetValidator(wxFloatingPointValidator<float>(precision, &value));
@@ -140,7 +140,7 @@ namespace Sharpheus {
 	{
 	}
 
-	AngleComponentCtrl::AngleComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, uint32_t precision)
+	AngleComponentCtrl::AngleComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, uint32 precision)
 		: InputComponentCtrl(parent, title, pos, width, color)
 	{
 		wxFloatingPointValidator validator = wxFloatingPointValidator<float>(precision, &value);

@@ -23,7 +23,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(uint8_t& data)
+	bool FileLoader::Read(uint8& data)
 	{
 		if (file != NULL) {
 			size_t result = fread(&data, sizeof(data), 1, file);
@@ -33,7 +33,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(uint32_t& data)
+	bool FileLoader::Read(uint32& data)
 	{
 		if (file != NULL) {
 			size_t result = fread(&data, sizeof(data), 1, file);
@@ -43,7 +43,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(int32_t& data)
+	bool FileLoader::Read(int32& data)
 	{
 		if (file != NULL) {
 			size_t result = fread(&data, sizeof(data), 1, file);
@@ -88,7 +88,7 @@ namespace Sharpheus {
 	bool FileLoader::Read(std::string& data)
 	{
 		if (file) {
-			uint32_t len = 0;
+			uint32 len = 0;
 			size_t result = fread(&len, sizeof(len), 1, file);
 			status &= result == 1;
 			if (status) {

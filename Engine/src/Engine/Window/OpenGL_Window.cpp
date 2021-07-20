@@ -83,20 +83,20 @@ namespace Sharpheus {
 	}
 
 
-	uint32_t OpenGL_Window::GetFPS()
+	uint32 OpenGL_Window::GetFPS()
 	{
 		return lastFps;
 	}
 
 
-	void OpenGL_Window::SetWidth(uint32_t width)
+	void OpenGL_Window::SetWidth(uint32 width)
 	{
 		props.width = width;
 		glfwSetWindowSize(win, props.width, props.height);
 	}
 
 
-	void OpenGL_Window::SetHeight(uint32_t height)
+	void OpenGL_Window::SetHeight(uint32 height)
 	{
 		props.height = height;
 		glfwSetWindowSize(win, props.width, props.height);

@@ -14,7 +14,7 @@ namespace Sharpheus {
 		inline const wxString& GetName() { return className; }
 		inline const wxString& GetParentName() { return parentClassName; }
 		inline const wxString& GetFolder() { return folder; }
-		inline uint32_t GetID() { return id; }
+		inline uint32 GetID() { return id; }
 
 		virtual void EndModal(int retCode) override;
 
@@ -32,9 +32,9 @@ namespace Sharpheus {
 		wxButton* cancelButton;
 
 		wxString className, parentClassName, folder, projectFolder;
-		uint32_t id;
+		uint32 id;
 
-		static uint32_t labelWidth;
+		static const uint32 labelWidth;
 
 		void OnBrowse(wxCommandEvent& e);
 	};

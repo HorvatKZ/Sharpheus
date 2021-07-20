@@ -18,7 +18,7 @@ namespace Sharpheus {
 		wxStaticBitmap* logo;
 		wxButton* okButton;
 
-		static uint32_t logoHeight;
+		static const uint32 logoHeight;
 	};
 
 }

@@ -23,14 +23,14 @@ namespace Sharpheus {
 		inline void SetUseClickedColors(bool useClickedColors) { this->useClickedColors = useClickedColors; }
 
 		virtual inline bool GetState() override { return isCurrentlyClicked; }
-		inline uint32_t GetClickNum() { return clickNum; }
+		inline uint32 GetClickNum() { return clickNum; }
 
 		virtual bool Load(FileLoader& fl) override;
 
 	protected:
 		Color color, clickedColor, clickedFontColor = Color::White;
 		bool useClickedColors = false;
-		uint32_t clickNum = 0;
+		uint32 clickNum = 0;
 
 		virtual bool Save(FileSaver& fs) override;
 

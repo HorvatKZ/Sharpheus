@@ -4,11 +4,11 @@
 
 namespace Sharpheus {
 
-	Point Point::Zero = Point(0, 0);
-	Point Point::Up = Point(0, -1);
-	Point Point::Down = Point(0, 1);
-	Point Point::Left = Point(-1, 0);
-	Point Point::Right = Point(1, 0);
+	const Point Point::Zero = Point(0, 0);
+	const Point Point::Up = Point(0, -1);
+	const Point Point::Down = Point(0, 1);
+	const Point Point::Left = Point(-1, 0);
+	const Point Point::Right = Point(1, 0);
 
 
 	Point::Point(float x, float y) : x(x), y(y) {}

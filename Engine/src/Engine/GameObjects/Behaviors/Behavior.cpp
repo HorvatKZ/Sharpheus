@@ -5,7 +5,8 @@
 
 namespace Sharpheus {
 
-	ClassInfo Behavior::classInfo("Behavior", "behavior.png", {});
+	SPH_START_CLASSINFO(Behavior, "behavior.png")
+	SPH_END_CLASSINFO
 
 
 	Behavior::Behavior(Behavior* other) : GameObject(std::move(*other))
@@ -36,10 +37,10 @@ namespace Sharpheus {
 
 	bool Behavior::Save(FileSaver& fs)
 	{
-		fs.Write((uint8_t)GetType());
+		fs.Write((uint8)GetType());
 		fs.Write(name);
 		fs.Write(GetSubType());
-		fs.Write((uint32_t)children.size());
+		fs.Write((uint32)children.size());
 		fs.Write(trafo);
 		fs.Write(isVisible);
 		return fs.GetStatus();

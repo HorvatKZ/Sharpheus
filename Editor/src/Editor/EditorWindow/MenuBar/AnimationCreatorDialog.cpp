@@ -42,9 +42,9 @@ namespace Sharpheus {
 		colInput->Bind(wxEVT_TEXT_ENTER, &AnimationCreatorDialog::OnSlicingCRChanged, this);
 		rowInput->Bind(wxEVT_TEXT_ENTER, &AnimationCreatorDialog::OnSlicingCRChanged, this);
 
-		uint32_t firstColWidth = 2 * UI::border + nameLabelWidth + nameInputWidth + UI::buttonSize.x;
-		uint32_t secondColStartX = 4 * UI::border + firstColWidth;
-		uint32_t y = 7 * UI::border + 5 * UI::unitHeight + UI::heightPadding;
+		uint32 firstColWidth = 2 * UI::border + nameLabelWidth + nameInputWidth + UI::buttonSize.x;
+		uint32 secondColStartX = 4 * UI::border + firstColWidth;
+		uint32 y = 7 * UI::border + 5 * UI::unitHeight + UI::heightPadding;
 
 		timingLabel = new wxStaticText(this, wxID_ANY, "Timing", wxPoint(secondColStartX, y));
 		timingLabel->SetFont(UI::titleFont);
@@ -52,13 +52,13 @@ namespace Sharpheus {
 		y += UI::border + UI::unitHeight - UI::shift;
 		firstFrameLabel = new wxStaticText(this, wxID_ANY, "First frame", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		firstFrameInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
-		firstFrameInput->SetValidator(wxIntegerValidator<uint32_t>());
+		firstFrameInput->SetValidator(wxIntegerValidator<uint32>());
 		firstFrameInput->Bind(wxEVT_TEXT_ENTER, &AnimationCreatorDialog::OnTimingFramesChanged, this);
 
 		y += UI::border + UI::unitHeight;
 		lastFrameLabel = new wxStaticText(this, wxID_ANY, "Last frame", wxPoint(secondColStartX, y + UI::shift), wxSize(labelWidth, UI::unitHeight));
 		lastFrameInput = new wxTextCtrl(this, wxID_ANY, "0", wxPoint(secondColStartX + UI::border + labelWidth, y), wxSize(inputWidth, UI::unitHeight), wxTE_PROCESS_ENTER);
-		lastFrameInput->SetValidator(wxIntegerValidator<uint32_t>());
+		lastFrameInput->SetValidator(wxIntegerValidator<uint32>());
 		lastFrameInput->Bind(wxEVT_TEXT_ENTER, &AnimationCreatorDialog::OnTimingFramesChanged, this);
 
 		y += UI::border + UI::unitHeight;
@@ -125,8 +125,8 @@ namespace Sharpheus {
 		endFrame = numOfFrames - 1;
 		firstFrameInput->SetValue("0");
 		lastFrameInput->SetValue(wxString::Format("%d", numOfFrames - 1));
-		((wxIntegerValidator<uint32_t>*)firstFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
-		((wxIntegerValidator<uint32_t>*)lastFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
+		((wxIntegerValidator<uint32>*)firstFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
+		((wxIntegerValidator<uint32>*)lastFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
 
 		StartAnimPreview();
 	}
@@ -140,8 +140,8 @@ namespace Sharpheus {
 		endFrame = numOfFrames - 1;
 		firstFrameInput->SetValue("0");
 		lastFrameInput->SetValue(wxString::Format("%d", numOfFrames - 1));
-		((wxIntegerValidator<uint32_t>*)firstFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
-		((wxIntegerValidator<uint32_t>*)lastFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
+		((wxIntegerValidator<uint32>*)firstFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
+		((wxIntegerValidator<uint32>*)lastFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
 
 		StartAnimPreview();
 	}
@@ -228,7 +228,7 @@ namespace Sharpheus {
 	void AnimationCreatorDialog::RefreshAnimPreview()
 	{
 		wxImage bitmap = img;
-		uint32_t currCol = currFrameInd % frameCols, currRow = currFrameInd / frameCols;
+		uint32 currCol = currFrameInd % frameCols, currRow = currFrameInd / frameCols;
 		bitmap.Resize(bitmap.GetSize(), wxPoint(-1 * frameWidth * currCol, -1 * frameHeight * currRow));
 		bitmap.Resize(wxSize(frameWidth, frameHeight), wxPoint());
 		wxSize animPrevSize = animPreview->GetSize();
@@ -251,8 +251,8 @@ namespace Sharpheus {
 		frameTimeInput->SetValue(wxString::Format("%.3f", frameTime));
 
 		if (img.IsOk()) {
-			((wxIntegerValidator<uint32_t>*)firstFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
-			((wxIntegerValidator<uint32_t>*)lastFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
+			((wxIntegerValidator<uint32>*)firstFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
+			((wxIntegerValidator<uint32>*)lastFrameInput->GetValidator())->SetRange(0, numOfFrames - 1);
 		}
 	}
 

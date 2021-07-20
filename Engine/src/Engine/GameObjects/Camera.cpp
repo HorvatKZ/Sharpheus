@@ -5,9 +5,9 @@
 
 namespace Sharpheus {
 
-	ClassInfo Camera::classInfo("Camera", "camera.png", {
-		new OneWayBoolProvider<Camera>("IsCurrent", SPH_BIND_GETTER(Camera::IsCurrent), SPH_BIND_SETTER(Camera::SetCurrent), true)
-	});
+	SPH_START_CLASSINFO(Camera, "camera.png")
+		SPH_PROVIDE_1WAYBOOL(Camera, "IsCurrent", IsCurrent, SetCurrent, true)
+	SPH_END_CLASSINFO
 
 	float Camera::width = 0.f;
 	float Camera::height = 0.f;
@@ -140,7 +140,7 @@ namespace Sharpheus {
 		Point* corners = shape->GetCorners();
 
 		float minX = corners[0].x;
-		for (uint32_t i = 1; i < 4; ++i) {
+		for (uint32 i = 1; i < 4; ++i) {
 			if (corners[i].x < minX) {
 				minX = corners[i].x;
 			}
@@ -155,7 +155,7 @@ namespace Sharpheus {
 		Point* corners = shape->GetCorners();
 
 		float maxX = corners[0].x;
-		for (uint32_t i = 1; i < 4; ++i) {
+		for (uint32 i = 1; i < 4; ++i) {
 			if (corners[i].x > maxX) {
 				maxX = corners[i].x;
 			}
@@ -170,7 +170,7 @@ namespace Sharpheus {
 		Point* corners = shape->GetCorners();
 
 		float minY = corners[0].y;
-		for (uint32_t i = 1; i < 4; ++i) {
+		for (uint32 i = 1; i < 4; ++i) {
 			if (corners[i].y < minY) {
 				minY = corners[i].y;
 			}
@@ -185,7 +185,7 @@ namespace Sharpheus {
 		Point* corners = shape->GetCorners();
 
 		float maxY = corners[0].y;
-		for (uint32_t i = 1; i < 4; ++i) {
+		for (uint32 i = 1; i < 4; ++i) {
 			if (corners[i].y > maxY) {
 				maxY = corners[i].y;
 			}

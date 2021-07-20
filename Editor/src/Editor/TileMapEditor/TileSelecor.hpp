@@ -17,26 +17,26 @@ namespace Sharpheus::TileMapEditor {
 		void OnPaintEvent(wxPaintEvent& evt);
 		void PaintNow();
 
-		inline uint8_t GetSelectedTile() { return selected; }
+		inline byte GetSelectedTile() { return selected; }
 
 	private:
 		TileSet* tileSet = nullptr;
 		wxImage atlas;
 		std::vector<wxBitmap> tileImgs;
-		uint32_t scrollHeight;
-		uint8_t selected = 0;
+		uint32 scrollHeight;
+		byte selected = 0;
 
-		static const uint32_t tileSize;
-		static const uint32_t border;
+		static const uint32 tileSize;
+		static const uint32 border;
 		static const wxColour selectColor;
 
 		void OnClick(wxMouseEvent& e);
 		void OnResize(wxSizeEvent& e);
 
 		void Draw(wxClientDC& dc);
-		void DrawTile(wxClientDC& dc, uint32_t ind, uint32_t i, uint32_t j);
+		void DrawTile(wxClientDC& dc, uint32 ind, uint32 i, uint32 j);
 
-		wxBitmap GetTile(uint32_t ind);
+		wxBitmap GetTile(uint32 ind);
 	};
 
 }

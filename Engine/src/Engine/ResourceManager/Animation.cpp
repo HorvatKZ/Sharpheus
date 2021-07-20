@@ -14,7 +14,7 @@ namespace Sharpheus {
 	}
 
 
-	Animation::Animation(Image* atlas, uint32_t frameWidth, uint32_t frameHeight, uint32_t startFrame, uint32_t endFrame)
+	Animation::Animation(Image* atlas, uint32 frameWidth, uint32 frameHeight, uint32 startFrame, uint32 endFrame)
 		: Resource(), atlas(atlas), frameWidth(frameWidth), frameHeight(frameHeight), startFrame(startFrame), endFrame(endFrame)
 	{
 		if (atlas != nullptr) {
@@ -38,7 +38,7 @@ namespace Sharpheus {
 	{
 		time = glm::clamp(time, 0.f, GetFullTime());
 
-		uint32_t ind = time / frameTime;
+		uint32 ind = time / frameTime;
 
 		atlas->RenderPart(coords, texCoords + 4 * ind, tint);
 	}
@@ -97,7 +97,7 @@ namespace Sharpheus {
 	void Animation::CalcTexCoords()
 	{
 		texCoords = new Point[(endFrame - startFrame + 1) * 4];
-		for (uint32_t frame = startFrame, ind = 0; frame <= endFrame; ++frame) {
+		for (uint32 frame = startFrame, ind = 0; frame <= endFrame; ++frame) {
 			float xStart = ((frame % frameCols) * frameWidth) / (float)atlas->GetWidth();
 			float yStart = ((frame / frameCols) * frameHeight) / (float)atlas->GetHeight();
 			float xEnd = xStart + frameWidth / (float)atlas->GetWidth();

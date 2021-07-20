@@ -5,10 +5,10 @@
 
 namespace Sharpheus {
 
-	ClassInfo Sprite::classInfo("Sprite", "sprite.png", {
-		new ImageProvider<Sprite>("Image", SPH_BIND_GETTER(Sprite::GetImage), SPH_BIND_SETTER(Sprite::SetImage), SPH_BIND_3(Sprite::SetImageFromPath)),
-		new ColorProvider<Sprite>("Tint", SPH_BIND_GETTER(Sprite::GetTint), SPH_BIND_SETTER(Sprite::SetTint))
-	});
+	SPH_START_CLASSINFO(Sprite, "sprite.png")
+		SPH_PROVIDE_IMAGE(Sprite, "Image", GetImage, SetImage, SetImageFromPath)
+		SPH_PROVIDE_COLOR(Sprite, "Tint", GetTint, SetTint)
+	SPH_END_CLASSINFO
 
 
 	Sprite::Sprite(GameObject* parent, const std::string& name) :

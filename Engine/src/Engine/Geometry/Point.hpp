@@ -37,11 +37,11 @@ namespace Sharpheus {
 		float			GetAngle() const;
 		float			GetAngleWith(const Point& other) const;
 
-		static Point Zero;
-		static Point Up;
-		static Point Down;
-		static Point Left;
-		static Point Right;
+		static const Point Zero;
+		static const Point Up;
+		static const Point Down;
+		static const Point Left;
+		static const Point Right;
 
 		static Point GetUnit(float angle);
 	};

@@ -14,7 +14,7 @@ namespace Sharpheus {
 	// StringPresenter
 
 	template<class Class>
-	inline StringPresenter<Class>::StringPresenter(wxWindow* parent, StringProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline StringPresenter<Class>::StringPresenter(wxWindow* parent, StringProvider<Class>* provider, Signal signal, uint32& y)
 		: FieldPresenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		input->Bind(wxEVT_TEXT_ENTER, &StringPresenter<Class>::HandleChange, this);
@@ -46,10 +46,10 @@ namespace Sharpheus {
 	// IntPresenter
 
 	template<class Class>
-	inline IntPresenter<Class>::IntPresenter(wxWindow* parent, IntProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline IntPresenter<Class>::IntPresenter(wxWindow* parent, IntProvider<Class>* provider, Signal signal, uint32& y)
 		: FieldPresenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		wxIntegerValidator<int32_t> validator(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
+		wxIntegerValidator<int32> validator(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
 		if (provider->HasRange()) {
 			validator.SetRange(provider->GetMin(), provider->GetMax());
 		}
@@ -76,7 +76,7 @@ namespace Sharpheus {
 		if (curr != nullptr) {
 			long realValue;
 			input->GetValue().ToLong(&realValue);
-			provider->Set((Class*)curr, (int32_t)realValue);
+			provider->Set((Class*)curr, (int32)realValue);
 			signal();
 		}
 	}
@@ -85,10 +85,10 @@ namespace Sharpheus {
 	// UIntPresenter
 
 	template<class Class>
-	inline UIntPresenter<Class>::UIntPresenter(wxWindow* parent, UIntProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline UIntPresenter<Class>::UIntPresenter(wxWindow* parent, UIntProvider<Class>* provider, Signal signal, uint32& y)
 		: FieldPresenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		wxIntegerValidator<uint32_t> validator(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
+		wxIntegerValidator<uint32> validator(&value, wxNUM_VAL_THOUSANDS_SEPARATOR);
 		if (provider->HasRange()) {
 			validator.SetRange(provider->GetMin(), provider->GetMax());
 		}
@@ -115,7 +115,7 @@ namespace Sharpheus {
 		if (curr != nullptr) {
 			unsigned long realValue;
 			input->GetValue().ToULong(&realValue);
-			provider->Set((Class*)curr, (uint32_t)realValue);
+			provider->Set((Class*)curr, (uint32)realValue);
 			signal();
 		}
 	}
@@ -124,7 +124,7 @@ namespace Sharpheus {
 	// FloatPresenter
 
 	template<class Class>
-	inline FloatPresenter<Class>::FloatPresenter(wxWindow* parent, FloatProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline FloatPresenter<Class>::FloatPresenter(wxWindow* parent, FloatProvider<Class>* provider, Signal signal, uint32& y)
 		: FieldPresenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		wxFloatingPointValidator<float> validator(3, &value, wxNUM_VAL_THOUSANDS_SEPARATOR);
@@ -172,7 +172,7 @@ namespace Sharpheus {
 	// BoolPresenter
 
 	template<class Class>
-	inline BoolPresenter<Class>::BoolPresenter(wxWindow* parent, BoolProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline BoolPresenter<Class>::BoolPresenter(wxWindow* parent, BoolProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		checkBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y), wxSize(UI::unitHeight, UI::unitHeight));
@@ -212,7 +212,7 @@ namespace Sharpheus {
 
 	// OneWayBoolPresenter
 	template<class Class>
-	inline OneWayBoolPresenter<Class>::OneWayBoolPresenter(wxWindow* parent, OneWayBoolProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline OneWayBoolPresenter<Class>::OneWayBoolPresenter(wxWindow* parent, OneWayBoolProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		wxSize extent = title->GetTextExtent(provider->GetName());
@@ -255,10 +255,10 @@ namespace Sharpheus {
 	// PointPresenter
 
 	template<class Class>
-	inline PointPresenter<Class>::PointPresenter(wxWindow* parent, PointProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline PointPresenter<Class>::PointPresenter(wxWindow* parent, PointProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = (parent->GetSize().x - 3 * UI::border) / 2;
+		uint32 width = (parent->GetSize().x - 3 * UI::border) / 2;
 		y += UI::unitHeight;
 		xField = new FloatComponentCtrl(parent, "X", wxPoint(UI::border, y), width, redish);
 		yField = new FloatComponentCtrl(parent, "Y", wxPoint(2 * UI::border + width, y), width, blueish);
@@ -305,12 +305,12 @@ namespace Sharpheus {
 	// ColorPresenter
 
 	template<class Class>
-	inline ColorPresenter<Class>::ColorPresenter(wxWindow* parent, ColorProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline ColorPresenter<Class>::ColorPresenter(wxWindow* parent, ColorProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		lastColor = *wxBLACK;
 
-		uint32_t width = (parent->GetSize().x - 4 * UI::border) / 3;
+		uint32 width = (parent->GetSize().x - 4 * UI::border) / 3;
 		y += UI::unitHeight;
 		rField = new ByteComponentCtrl(parent, "R", wxPoint(UI::border, y), width, redish);
 		gField = new ByteComponentCtrl(parent, "G", wxPoint(2 * UI::border + width, y), width, greenish);
@@ -398,12 +398,12 @@ namespace Sharpheus {
 	// ImagePresenter
 
 	template<class Class>
-	inline ImagePresenter<Class>::ImagePresenter(wxWindow* parent, ImageProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline ImagePresenter<Class>::ImagePresenter(wxWindow* parent, ImageProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		lastPath = "";
 
-		uint32_t width = parent->GetSize().x - 3 * UI::border - previewHeight;
+		uint32 width = parent->GetSize().x - 3 * UI::border - previewHeight;
 		y += UI::unitHeight;
 		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
 		path->SetMaxSize(wxSize(width, UI::unitHeight));
@@ -480,10 +480,10 @@ namespace Sharpheus {
 	// FontPresenter
 
 	template<class Class>
-	inline FontPresenter<Class>::FontPresenter(wxWindow* parent, FontProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline FontPresenter<Class>::FontPresenter(wxWindow* parent, FontProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = parent->GetSize().x - 3 * UI::border - UI::unitHeight;
+		uint32 width = parent->GetSize().x - 3 * UI::border - UI::unitHeight;
 		y += UI::unitHeight;
 		fontPicker = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight));
 		fontPicker->Bind(wxEVT_COMBOBOX, &FontPresenter<Class>::HandleChange, this);
@@ -506,7 +506,7 @@ namespace Sharpheus {
 		Presenter::SetCurrent(curr);
 
 		fontPicker->Clear();
-		auto fontTable = provider->GetAllFonts();
+		auto fontTable = ResourceManager::GetFontTable();
 		for (auto it = fontTable->begin(); it != fontTable->end(); ++it) {
 			fontPicker->Append((*it).first);
 		}
@@ -558,10 +558,10 @@ namespace Sharpheus {
 	// FontStylePresenter
 
 	template<class Class>
-	inline FontStylePresenter<Class>::FontStylePresenter(wxWindow* parent, FontStyleProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline FontStylePresenter<Class>::FontStylePresenter(wxWindow* parent, FontStyleProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = parent->GetSize().x - 3 * UI::border - UI::unitHeight;
+		uint32 width = parent->GetSize().x - 3 * UI::border - UI::unitHeight;
 		y += UI::unitHeight;
 		boldLabel = new wxStaticText(parent, wxID_ANY, "Bold", wxPoint(UI::border, y));
 		boldCheckBox = new wxCheckBox(parent, wxID_ANY, "", wxPoint(parent->GetSize().x / 2, y - UI::shift), wxSize(UI::unitHeight, UI::unitHeight));
@@ -593,7 +593,7 @@ namespace Sharpheus {
 	{
 		Presenter::SetCurrent(curr);
 
-		uint8_t style = provider->Get((Class*)curr);
+		byte style = provider->Get((Class*)curr);
 		boldCheckBox->SetValue(style & SPH_FONT_BOLD);
 		italicCheckBox->SetValue(style & SPH_FONT_ITALIC);
 		underlinedCheckBox->SetValue(style & SPH_FONT_UNDERLINED);
@@ -611,7 +611,7 @@ namespace Sharpheus {
 	inline void FontStylePresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
-			uint8_t style = 0;
+			byte style = 0;
 			if (boldCheckBox->GetValue()) {
 				style = style | SPH_FONT_BOLD;
 			}
@@ -631,12 +631,12 @@ namespace Sharpheus {
 	// AnimationPresenter
 
 	template<class Class>
-	inline AnimationPresenter<Class>::AnimationPresenter(wxWindow* parent, AnimationProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline AnimationPresenter<Class>::AnimationPresenter(wxWindow* parent, AnimationProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		lastPath = "";
 
-		uint32_t width = parent->GetSize().x - 3 * UI::border - previewHeight;
+		uint32 width = parent->GetSize().x - 3 * UI::border - previewHeight;
 		y += UI::unitHeight;
 		name = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
 		name->SetMaxSize(wxSize(width, UI::unitHeight));
@@ -671,9 +671,9 @@ namespace Sharpheus {
 					return;
 				}
 				name->SetLabel(anim->GetName());
-				uint32_t startFrame = anim->GetStartFrame(), frameCols = anim->GetFrameCols();
-				uint32_t frameWidth = anim->GetFrameWidth(), frameHeight = anim->GetFrameHeight();
-				uint32_t currCol = startFrame % frameCols, currRow = startFrame / frameCols;
+				uint32 startFrame = anim->GetStartFrame(), frameCols = anim->GetFrameCols();
+				uint32 frameWidth = anim->GetFrameWidth(), frameHeight = anim->GetFrameHeight();
+				uint32 currCol = startFrame % frameCols, currRow = startFrame / frameCols;
 				bitmap.Resize(bitmap.GetSize(), wxPoint(-1 * frameWidth * currCol, -1 * frameHeight * currRow));
 				bitmap.Resize(wxSize(frameWidth, frameHeight), wxPoint());
 				bitmap.Rescale(50, 50);
@@ -717,12 +717,12 @@ namespace Sharpheus {
 	// TileSetPresenter
 
 	template<class Class>
-	inline TileSetPresenter<Class>::TileSetPresenter(wxWindow* parent, TileSetProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline TileSetPresenter<Class>::TileSetPresenter(wxWindow* parent, TileSetProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		lastPath = "";
 
-		uint32_t width = parent->GetSize().x - 3 * UI::border - previewHeight;
+		uint32 width = parent->GetSize().x - 3 * UI::border - previewHeight;
 		y += UI::unitHeight;
 		name = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
 		name->SetMaxSize(wxSize(width, UI::unitHeight));
@@ -806,10 +806,10 @@ namespace Sharpheus {
 	// SoundPresenter
 
 	template<class Class>
-	inline SoundPresenter<Class>::SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline SoundPresenter<Class>::SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = parent->GetSize().x - 3 * UI::border - UI::smallButtonSize.x;
+		uint32 width = parent->GetSize().x - 3 * UI::border - UI::smallButtonSize.x;
 		y += UI::unitHeight;
 		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
 		path->SetMaxSize(wxSize(width, UI::unitHeight));
@@ -858,10 +858,10 @@ namespace Sharpheus {
 	// StringListPresenter
 
 	template<class Class>
-	inline StringListPresenter<Class>::StringListPresenter(wxWindow* parent, StringListProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline StringListPresenter<Class>::StringListPresenter(wxWindow* parent, StringListProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
-		uint32_t width = parent->GetSize().x - 2 * UI::border;
+		uint32 width = parent->GetSize().x - 2 * UI::border;
 		y += UI::unitHeight;
 
 		list = new wxListView(parent, wxID_ANY, wxPoint(UI::border, y), wxSize(width, 100), wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL);
@@ -893,13 +893,13 @@ namespace Sharpheus {
 		Presenter::SetCurrent(curr);
 
 		list->DeleteAllItems();
-		uint32_t strCount = provider->GetCount((Class*)curr);
-		for (uint32_t i = 0; i < strCount; ++i) {
+		uint32 strCount = provider->GetCount((Class*)curr);
+		for (uint32 i = 0; i < strCount; ++i) {
 			long ind = list->InsertItem(i, provider->GetString((Class*)curr, i), -1);
 			list->SetItem(ind, 1, "", 0);
 		}
 
-		uint32_t selected = provider->GetCurr((Class*)curr);
+		uint32 selected = provider->GetCurr((Class*)curr);
 		if (selected < strCount) {
 			list->Select(selected);
 		}
@@ -931,7 +931,7 @@ namespace Sharpheus {
 	{
 		if (curr != nullptr) {
 			long selected = list->GetFirstSelected();
-			if (selected >= 0 && (uint32_t)selected < provider->GetCount((Class*)curr)) {
+			if (selected >= 0 && (uint32)selected < provider->GetCount((Class*)curr)) {
 				if (deleteSelected) {
 					provider->RemoveString((Class*)curr, selected);
 					deleteSelected = false;
@@ -957,7 +957,7 @@ namespace Sharpheus {
 	// TrafoPresenter
 
 	template<class Class>
-	inline TrafoPresenter<Class>::TrafoPresenter(wxWindow* parent, TrafoProvider<Class>* provider, Signal signal, uint32_t& y)
+	inline TrafoPresenter<Class>::TrafoPresenter(wxWindow* parent, TrafoProvider<Class>* provider, Signal signal, uint32& y)
 		: TrafoPresenterBase(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		posX->Bind(wxEVT_TEXT_ENTER, &TrafoPresenter<Class>::HandleChange, this);

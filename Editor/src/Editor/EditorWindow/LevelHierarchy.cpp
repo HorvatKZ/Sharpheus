@@ -12,7 +12,7 @@ namespace Sharpheus {
 	LevelHierarchy::LevelHierarchy(wxFrame* parent, const wxPoint& pos, const wxSize& size)
 		: wxTreeCtrl(parent, 10001, pos, size, wxTR_TWIST_BUTTONS | wxTR_NO_LINES | wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
 	{
-		uint32_t i = 0;
+		uint32 i = 0;
 		wxImageList* images = new wxImageList(16, 16);
 		auto iconPaths = ClassRegistry::GetAllIconPaths();
 		for (auto it = iconPaths.begin(); it != iconPaths.end(); ++it) {

@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	uint32_t AboutDialog::logoHeight = 100;
+	const uint32 AboutDialog::logoHeight = 100;
 	
 	AboutDialog::AboutDialog(wxWindow* parent)
 		: wxDialog(parent, wxID_ANY, "About Sharpheus", wxPoint(), wxSize(500, 150))

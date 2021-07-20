@@ -6,8 +6,8 @@
 
 namespace Sharpheus {
 
-	float GameObject::selectCircleRadius = 20.f;
-	Color GameObject::selectColor(255, 255, 0, 128);
+	const float GameObject::selectCircleRadius = 20.f;
+	const Color GameObject::selectColor(255, 255, 0, 128);
 	ID GameObject::nextFreeSafeObjectID = 1;
 
 
@@ -80,7 +80,7 @@ namespace Sharpheus {
 	{
 		Tick(deltaTime);
 
-		for (uint32_t i = 0; i < children.size(); ++i) {
+		for (uint32 i = 0; i < children.size(); ++i) {
 			children[i]->TickAll(deltaTime);
 		}
 	}
@@ -201,7 +201,7 @@ namespace Sharpheus {
 
 	GameObject* GameObject::GetChild(const std::string& name)
 	{
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < children.size() && name != children[i]->name) {
 			++i;
 		}
@@ -214,7 +214,7 @@ namespace Sharpheus {
 	}
 
 
-	GameObject* GameObject::GetChild(uint32_t ind)
+	GameObject* GameObject::GetChild(uint32 ind)
 	{
 		if (ind < children.size()) {
 			return children[ind];
@@ -236,7 +236,7 @@ namespace Sharpheus {
 
 	GameObject* GameObject::GetFirstChildOfType(Type type)
 	{
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < children.size() && !children[i]->Is(type)) {
 			++i;
 		}
@@ -255,7 +255,7 @@ namespace Sharpheus {
 			return nullptr;
 		}
 
-		uint32_t i = children.size() - 1;
+		uint32 i = children.size() - 1;
 		while (i > 0 && !children[i]->Is(type)) {
 			--i;
 		}
@@ -270,7 +270,7 @@ namespace Sharpheus {
 
 	GameObject* GameObject::GetFirstChildOfMask(TypeMasks mask)
 	{
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < children.size() && !children[i]->Is(mask)) {
 			++i;
 		}
@@ -289,7 +289,7 @@ namespace Sharpheus {
 			return nullptr;
 		}
 
-		uint32_t i = children.size() - 1;
+		uint32 i = children.size() - 1;
 		while (i > 0 && !children[i]->Is(mask)) {
 			--i;
 		}
@@ -316,7 +316,7 @@ namespace Sharpheus {
 
 	void GameObject::SetChildByName(GameObject* newChild)
 	{
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < children.size() && children[i]->name != newChild->name) {
 			++i;
 		}
@@ -335,7 +335,7 @@ namespace Sharpheus {
 			return true;
 		}
 
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < children.size() && !children[i]->IsParentOfCurrentCamera()) {
 			++i;
 		}
@@ -354,7 +354,7 @@ namespace Sharpheus {
 		}
 
 		if (!children.empty()) {
-			uint32_t i = children.size() - 1;
+			uint32 i = children.size() - 1;
 			while (i > 0) {
 				GameObject* childSelected = children[i]->GetUpperMostSelected(pos);
 				if (childSelected != nullptr) {
@@ -385,7 +385,7 @@ namespace Sharpheus {
 		success &= Save(fs);
 		success &= fs.WriteEnd();
 
-		uint32_t i = 0;
+		uint32 i = 0;
 		while (i < children.size() && success) {
 			success &= children[i]->SaveAll(fs);
 			++i;
@@ -408,9 +408,9 @@ namespace Sharpheus {
 
 	bool GameObject::Save(FileSaver& fs)
 	{
-		fs.Write((uint8_t)GetType());
+		fs.Write((byte)GetType());
 		fs.Write(name);
-		fs.Write((uint32_t)children.size());
+		fs.Write((uint32)children.size());
 		fs.Write(trafo);
 		fs.Write(isVisible);
 		return fs.GetStatus();

@@ -4,7 +4,7 @@
 
 namespace Sharpheus {
 
-	std::unordered_map<GameObject::Type, ClassInfo*> ClassRegistry::classInfos;
+	std::unordered_map<GameObject::Type, ClassInfoPtr> ClassRegistry::classInfos;
 
 	void ClassRegistry::Init()
 	{

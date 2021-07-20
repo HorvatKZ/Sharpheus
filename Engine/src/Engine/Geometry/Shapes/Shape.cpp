@@ -107,17 +107,17 @@ namespace Sharpheus {
 	{
 		Point* thisCorners = GetSATCorners();
 		Point* otherCorners = other->GetSATCorners();
-		uint8_t thisCornerNum = GetSATCornerNum();
-		uint8_t otherCornerNum = other->GetSATCornerNum();
+		uint8 thisCornerNum = GetSATCornerNum();
+		uint8 otherCornerNum = other->GetSATCornerNum();
 
 		IntersectionData data;
 		float bestThisProjected;
-		for (uint8_t i = 0; i < (IsSATSymmetrical() ? thisCornerNum / 2 : thisCornerNum); ++i) {
+		for (uint8 i = 0; i < (IsSATSymmetrical() ? thisCornerNum / 2 : thisCornerNum); ++i) {
 			Point normal(thisCorners[(i + 1) % thisCornerNum].y - thisCorners[i].y, thisCorners[i].x - thisCorners[(i + 1) % thisCornerNum].x);
 			normal = normal.Normalize();
 			float thisMin = thisCorners[0] * normal, otherMin = otherCorners[0] * normal;
 			float thisMax = thisMin, otherMax = otherMin;
-			for (uint8_t j = 1; j < thisCornerNum; ++j) {
+			for (uint8 j = 1; j < thisCornerNum; ++j) {
 				float projected = thisCorners[j] * normal;
 				if (projected < thisMin) {
 					thisMin = projected;
@@ -126,7 +126,7 @@ namespace Sharpheus {
 					thisMax = projected;
 				}
 			}
-			for (uint8_t j = 1; j < otherCornerNum; ++j) {
+			for (uint8 j = 1; j < otherCornerNum; ++j) {
 				float projected = otherCorners[j] * normal;
 				if (projected < otherMin) {
 					otherMin = projected;
@@ -162,8 +162,8 @@ namespace Sharpheus {
 		}
 
 		float tolerance = 0.01f;
-		uint8_t found = 0;
-		for (uint8_t i = 0; i < thisCornerNum; ++i) {
+		uint8 found = 0;
+		for (uint8 i = 0; i < thisCornerNum; ++i) {
 			float projected = thisCorners[i] * data.normal;
 			if (abs(projected - bestThisProjected) < tolerance) {
 				data.contactPoints[found++] = thisCorners[i];

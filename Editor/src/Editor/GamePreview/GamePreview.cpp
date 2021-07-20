@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	wxPoint GamePreview::shift;
+	const wxPoint GamePreview::shift;
 
 
 	GamePreview::GamePreview(wxWindow* parent, const std::string& projectPath, wxGLContext* glContext, const Window::Props& winProps)

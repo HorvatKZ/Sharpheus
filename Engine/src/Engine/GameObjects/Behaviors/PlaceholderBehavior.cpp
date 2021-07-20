@@ -4,9 +4,9 @@
 
 namespace Sharpheus {
 
-	ClassInfo PlaceholderBehavior::classInfo("Behavior", "behavior.png", {
-		new BehaviorProvider("SubType")
-	});
+	SPH_START_SPEC_CLASSINFO(PlaceholderBehavior, "Behavior", "behavior.png")
+		SPH_PROVIDE_BEHAVIOR("SubType")
+	SPH_END_CLASSINFO
 
 
 	bool PlaceholderBehavior::IsCompatibleWithParent(GameObject* parent)

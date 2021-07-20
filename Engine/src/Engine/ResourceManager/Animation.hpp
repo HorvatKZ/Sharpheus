@@ -8,20 +8,20 @@ namespace Sharpheus {
 	{
 	public:
 		Animation(const std::string& animFile);
-		Animation(Image* atlas, uint32_t frameWidth, uint32_t frameHeight, uint32_t startFrame, uint32_t endFrame);
+		Animation(Image* atlas, uint32 frameWidth, uint32 frameHeight, uint32 startFrame, uint32 endFrame);
 		virtual ~Animation();
 
 		inline const std::string& GetName() { return name; }
 		inline Image* GetAtlas() { return atlas; }
-		inline uint32_t GetFrameWidth() { return frameWidth; }
-		inline uint32_t GetFrameHeight() { return frameHeight; }
-		inline uint32_t GetFrameRows() { return frameRows; }
-		inline uint32_t GetFrameCols() { return frameCols; }
-		inline uint32_t GetStartFrame() { return startFrame; }
-		inline uint32_t GetEndFrame() { return endFrame; }
+		inline uint32 GetFrameWidth() { return frameWidth; }
+		inline uint32 GetFrameHeight() { return frameHeight; }
+		inline uint32 GetFrameRows() { return frameRows; }
+		inline uint32 GetFrameCols() { return frameCols; }
+		inline uint32 GetStartFrame() { return startFrame; }
+		inline uint32 GetEndFrame() { return endFrame; }
 		inline float GetFrameTime() { return frameTime; }
-		inline uint32_t GetNumOfFrames() { return endFrame - startFrame + 1; }
-		inline uint32_t GetNumOfAllFrames() { return frameRows * frameCols; }
+		inline uint32 GetNumOfFrames() { return endFrame - startFrame + 1; }
+		inline uint32 GetNumOfAllFrames() { return frameRows * frameCols; }
 		inline float GetFullTime() { return GetNumOfFrames() * frameTime; }
 
 		inline void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
@@ -35,8 +35,8 @@ namespace Sharpheus {
 	private:
 		std::string name;
 		Image* atlas;
-		uint32_t frameWidth, frameHeight, frameCols, frameRows;
-		uint32_t startFrame, endFrame;
+		uint32 frameWidth, frameHeight, frameCols, frameRows;
+		uint32 startFrame, endFrame;
 		float frameTime = 1.0f;
 		Point* texCoords = nullptr;
 

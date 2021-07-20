@@ -19,10 +19,10 @@ namespace Sharpheus {
 		virtual Point GetLocalPerpendicularAt(const Point& surfaceP) override;
 		virtual Point GetLocalClosestTo(const Point& p) override;
 
-		virtual uint8_t GetPriority() { return IsCircle() ? 2 : 1; }
+		virtual uint8 GetPriority() { return IsCircle() ? 2 : 1; }
 
 		virtual inline Point* GetSATCorners() override { CheckCorners(); return satCorners; }
-		virtual inline uint8_t GetSATCornerNum() override { return 8; }
+		virtual inline uint8 GetSATCornerNum() override { return 8; }
 
 		virtual Intersection GetIntersectionWith(Shape* other) override;
 

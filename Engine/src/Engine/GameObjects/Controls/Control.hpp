@@ -30,13 +30,13 @@ namespace Sharpheus {
 		inline Font* GetFont() { return font; }
 		inline const Color& GetFontColor() { return fontColor; }
 		inline float GetFontSize() { return fontSize; }
-		inline uint8_t GetFontStyle() { return fontStyle; }
+		inline byte GetFontStyle() { return fontStyle; }
 
 		inline void SetText(const std::string& text) { this->text = text; UpdateSizer(); }
 		inline void SetFont(Font* font) { this->font = font; UpdateSizer(); }
 		inline void SetFontColor(const Color& fontColor) { this->fontColor = fontColor; }
 		inline void SetFontSize(float fontSize) { this->fontSize = fontSize; UpdateSizer(); }
-		inline void SetFontStyle(uint8_t fontStyle) { this->fontStyle = fontStyle; UpdateSizer(); }
+		inline void SetFontStyle(byte fontStyle) { this->fontStyle = fontStyle; UpdateSizer(); }
 
 		void SetFontByName(const std::string& name);
 		void SetFontByPath(const std::string& fontFile, const std::string& imgFile);
@@ -52,7 +52,7 @@ namespace Sharpheus {
 		Font* font = nullptr;
 		std::string text;
 		float fontSize = 20.f;
-		uint8_t fontStyle = 0;
+		byte fontStyle = 0;
 		Color fontColor = Color::White;
 
 		bool isCurrentlyClicked = false;

@@ -20,7 +20,7 @@ namespace Sharpheus {
 		inline Point* GetInnerCorners() { CheckInnerCorners(); return innerCorners; }
 
 		virtual inline Point* GetSATCorners() override { CheckCorners(); return satCorners; }
-		virtual inline uint8_t GetSATCornerNum() override { return 8; }
+		virtual inline uint8 GetSATCornerNum() override { return 8; }
 
 		virtual void ForceRefresh() override;
 

@@ -14,9 +14,9 @@ namespace Sharpheus {
 
 		inline bool GetStatus() { return status; }
 
-		bool Write(uint8_t data);
-		bool Write(uint32_t data);
-		bool Write(int32_t data);
+		bool Write(uint8 data);
+		bool Write(uint32 data);
+		bool Write(int32 data);
 		bool Write(size_t data);
 		bool Write(bool data);
 		bool Write(float data);

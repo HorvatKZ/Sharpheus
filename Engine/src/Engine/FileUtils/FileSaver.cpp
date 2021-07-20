@@ -25,7 +25,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(uint8_t data)
+	bool FileSaver::Write(uint8 data)
 	{
 		if (file != NULL) {
 			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
@@ -35,7 +35,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(uint32_t data)
+	bool FileSaver::Write(uint32 data)
 	{
 		if (file != NULL) {
 			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
@@ -45,7 +45,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(int32_t data)
+	bool FileSaver::Write(int32 data)
 	{
 		if (file != NULL) {
 			size_t result = fwrite((const char*)&data, sizeof(data), 1, file);
@@ -89,7 +89,7 @@ namespace Sharpheus {
 	bool FileSaver::Write(const std::string& data)
 	{
 		if (file != NULL) {
-			uint32_t len = data.length();
+			uint32 len = data.length();
 			size_t result = fwrite((const char*)&len, sizeof(len), 1, file);
 			status &= result == 1;
 			if (status) {

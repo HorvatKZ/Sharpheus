@@ -6,16 +6,16 @@
 
 namespace Sharpheus {
 
-	wxColour Presenter::redish(176, 0, 32);
-	wxColour Presenter::greenish(3, 153, 18);
-	wxColour Presenter::blueish(55, 0, 179);
-	wxColour Presenter::greyish(70, 70, 80);
+	const wxColour Presenter::redish(176, 0, 32);
+	const wxColour Presenter::greenish(3, 153, 18);
+	const wxColour Presenter::blueish(55, 0, 179);
+	const wxColour Presenter::greyish(70, 70, 80);
 
-	uint32_t Presenter::previewHeight = 50;
+	const uint32 Presenter::previewHeight = 50;
 
 	// Presenter
 
-	Presenter::Presenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y) : parent(parent), signal(signal)
+	Presenter::Presenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y) : parent(parent), signal(signal)
 	{
 		wxSize limit(parent->GetSize().x / 2 - 2 * UI::border, 16);
 		this->title = new wxStaticText(parent, wxID_ANY, title, wxPoint(UI::border, y + UI::border), limit, wxST_ELLIPSIZE_END);
@@ -31,12 +31,12 @@ namespace Sharpheus {
 
 	// FieldPresenter
 
-	FieldPresenter::FieldPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y)
+	FieldPresenter::FieldPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y)
 		: Presenter(parent, title, signal, y)
 	{
 		wxSize extent = this->title->GetTextExtent(title);
-		uint32_t start = parent->GetSize().x / 2;
-		uint32_t width = parent->GetSize().x - start - UI::border;
+		uint32 start = parent->GetSize().x / 2;
+		uint32 width = parent->GetSize().x - start - UI::border;
 		input = new wxTextCtrl(parent, wxID_ANY, "", wxPoint(start, y), wxSize(width, UI::unitHeight), wxTE_PROCESS_ENTER);
 		y += UI::heightPadding;
 	}
@@ -49,12 +49,12 @@ namespace Sharpheus {
 
 	// HeaderPresenter
 
-	HeaderPresenter::HeaderPresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32_t& y)
+	HeaderPresenter::HeaderPresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32& y)
 		: FieldPresenter(parent, title, signal, y), nameSignal(nameSignal)
 	{
 		InitBitmaps();
 		wxSize titleExtent = this->title->GetTextExtent("Name");
-		uint32_t realWidth = parent->GetVirtualSize().x;
+		uint32 realWidth = parent->GetVirtualSize().x;
 
 		this->title->SetSize(titleExtent);
 		input->SetPosition(wxPoint(2 * UI::border + titleExtent.x, y - UI::heightPadding));
@@ -106,13 +106,13 @@ namespace Sharpheus {
 
 	// TrafoPresenterBase
 
-	TrafoPresenterBase::TrafoPresenterBase(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y)
+	TrafoPresenterBase::TrafoPresenterBase(wxWindow* parent, const std::string& title, Signal signal, uint32& y)
 		: Presenter(parent, title, signal, y)
 	{
 		InitBitmaps();
 
-		uint32_t width = parent->GetSize().x;
-		uint32_t floatCompWidth = (width - 4 * UI::border - UI::extUnitHeight) / 2;
+		uint32 width = parent->GetSize().x;
+		uint32 floatCompWidth = (width - 4 * UI::border - UI::extUnitHeight) / 2;
 		y += UI::unitHeight;
 		posImg = new wxStaticBitmap(parent, wxID_ANY, posBitmap, wxPoint(UI::border, y), wxSize(UI::extUnitHeight, UI::extUnitHeight));
 		posX = new FloatComponentCtrl(parent, "X", wxPoint(2 * UI::border + UI::extUnitHeight, y), floatCompWidth, redish);
@@ -149,12 +149,12 @@ namespace Sharpheus {
 
 	// MainTrafoPresenter
 
-	MainTrafoPresenter::MainTrafoPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y)
+	MainTrafoPresenter::MainTrafoPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y)
 		: TrafoPresenterBase(parent, title, signal, y)
 	{
 		InitBitmaps();
 
-		uint32_t width = parent->GetSize().x;
+		uint32 width = parent->GetSize().x;
 		rot->SetWidth(rot->GetWidth() - 24 - UI::border);
 		trafoTypeSwitch = new wxBitmapButton(parent, wxID_ANY, localBitmap, wxPoint(width - UI::border - UI::extUnitHeight, y - UI::heightPadding - UI::border), wxSize(UI::extUnitHeight, UI::extUnitHeight));
 		trafoTypeSwitch->Bind(wxEVT_BUTTON, &MainTrafoPresenter::TypeSwitchPressed, this);
@@ -217,11 +217,11 @@ namespace Sharpheus {
 
 	// TileMapPresenter
 
-	TileMapPresenter::TileMapPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y)
+	TileMapPresenter::TileMapPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y)
 		: Presenter(parent, title, signal, y)
 	{
 		y += UI::unitHeight;
-		uint32_t x = (parent->GetClientSize().x - UI::smallButtonSize.x) / 2;
+		uint32 x = (parent->GetClientSize().x - UI::smallButtonSize.x) / 2;
 		openButton = new wxButton(parent, wxID_ANY, "Open", wxPoint(x, y), UI::smallButtonSize);
 		openButton->Bind(wxEVT_BUTTON, &TileMapPresenter::HandleChange, this);
 		y += UI::heightPadding;

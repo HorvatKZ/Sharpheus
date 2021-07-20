@@ -16,7 +16,7 @@ namespace Sharpheus {
 	class Presenter
 	{
 	public:
-		Presenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y);
+		Presenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y);
 		virtual ~Presenter();
 
 		virtual void SetCurrent(GameObject* curr) { this->curr = curr; }
@@ -29,19 +29,18 @@ namespace Sharpheus {
 		wxStaticText* title;
 		Signal signal;
 
-		static uint32_t previewHeight;
-
-		static wxColour redish;
-		static wxColour greenish;
-		static wxColour blueish;
-		static wxColour greyish;
+		static const uint32 previewHeight;
+		static const wxColour redish;
+		static const wxColour greenish;
+		static const wxColour blueish;
+		static const wxColour greyish;
 	};
 
 
 	class FieldPresenter : public Presenter
 	{
 	public:
-		FieldPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y);
+		FieldPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y);
 		virtual ~FieldPresenter();
 
 		virtual inline void SetDefault() override { Presenter::SetDefault(); input->SetLabel(""); }
@@ -54,7 +53,7 @@ namespace Sharpheus {
 	class HeaderPresenter : public FieldPresenter
 	{
 	public:
-		HeaderPresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32_t& y);
+		HeaderPresenter(wxWindow* parent, const std::string& title, Signal signal, NameSignal nameSignal, uint32& y);
 		virtual ~HeaderPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -78,7 +77,7 @@ namespace Sharpheus {
 	class StringPresenter : public FieldPresenter
 	{
 	public:
-		StringPresenter(wxWindow* parent, StringProvider<Class>* provider, Signal signal, uint32_t& y);
+		StringPresenter(wxWindow* parent, StringProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~StringPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -94,14 +93,14 @@ namespace Sharpheus {
 	class IntPresenter : public FieldPresenter
 	{
 	public:
-		IntPresenter(wxWindow* parent, IntProvider<Class>* provider, Signal signal, uint32_t& y);
+		IntPresenter(wxWindow* parent, IntProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~IntPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
 
 	protected:
 		IntProvider<Class>* provider;
-		int32_t value;
+		int32 value;
 
 		virtual void HandleChange(wxCommandEvent& e);
 	};
@@ -111,14 +110,14 @@ namespace Sharpheus {
 	class UIntPresenter : public FieldPresenter
 	{
 	public:
-		UIntPresenter(wxWindow* parent, UIntProvider<Class>* provider, Signal signal, uint32_t& y);
+		UIntPresenter(wxWindow* parent, UIntProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~UIntPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
 
 	protected:
 		UIntProvider<Class>* provider;
-		uint32_t value;
+		uint32 value;
 
 		virtual void HandleChange(wxCommandEvent& e);
 	};
@@ -128,7 +127,7 @@ namespace Sharpheus {
 	class FloatPresenter : public FieldPresenter
 	{
 	public:
-		FloatPresenter(wxWindow* parent, FloatProvider<Class>* provider, Signal signal, uint32_t& y);
+		FloatPresenter(wxWindow* parent, FloatProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~FloatPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -145,7 +144,7 @@ namespace Sharpheus {
 	class BoolPresenter : public Presenter
 	{
 	public:
-		BoolPresenter(wxWindow* parent, BoolProvider<Class>* provider, Signal signal, uint32_t& y);
+		BoolPresenter(wxWindow* parent, BoolProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~BoolPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -163,7 +162,7 @@ namespace Sharpheus {
 	class OneWayBoolPresenter : public Presenter
 	{
 	public:
-		OneWayBoolPresenter(wxWindow* parent, OneWayBoolProvider<Class>* provider, Signal signal, uint32_t& y);
+		OneWayBoolPresenter(wxWindow* parent, OneWayBoolProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~OneWayBoolPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -181,7 +180,7 @@ namespace Sharpheus {
 	class PointPresenter : public Presenter
 	{
 	public:
-		PointPresenter(wxWindow* parent, PointProvider<Class>* provider, Signal signal, uint32_t& y);
+		PointPresenter(wxWindow* parent, PointProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~PointPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -200,7 +199,7 @@ namespace Sharpheus {
 	class ColorPresenter : public Presenter
 	{
 	public:
-		ColorPresenter(wxWindow* parent, ColorProvider<Class>* provider, Signal signal, uint32_t& y);
+		ColorPresenter(wxWindow* parent, ColorProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~ColorPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -224,7 +223,7 @@ namespace Sharpheus {
 	class ImagePresenter : public Presenter
 	{
 	public:
-		ImagePresenter(wxWindow* parent, ImageProvider<Class>* provider, Signal signal, uint32_t& y);
+		ImagePresenter(wxWindow* parent, ImageProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~ImagePresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -244,7 +243,7 @@ namespace Sharpheus {
 	class FontPresenter : public Presenter
 	{
 	public:
-		FontPresenter(wxWindow* parent, FontProvider<Class>* provider, Signal signal, uint32_t& y);
+		FontPresenter(wxWindow* parent, FontProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~FontPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -264,7 +263,7 @@ namespace Sharpheus {
 	class FontStylePresenter : public Presenter
 	{
 	public:
-		FontStylePresenter(wxWindow* parent, FontStyleProvider<Class>* provider, Signal signal, uint32_t& y);
+		FontStylePresenter(wxWindow* parent, FontStyleProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~FontStylePresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -283,7 +282,7 @@ namespace Sharpheus {
 	class AnimationPresenter : public Presenter
 	{
 	public:
-		AnimationPresenter(wxWindow* parent, AnimationProvider<Class>* provider, Signal signal, uint32_t& y);
+		AnimationPresenter(wxWindow* parent, AnimationProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~AnimationPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -304,7 +303,7 @@ namespace Sharpheus {
 	class TileSetPresenter : public Presenter
 	{
 	public:
-		TileSetPresenter(wxWindow* parent, TileSetProvider<Class>* provider, Signal signal, uint32_t& y);
+		TileSetPresenter(wxWindow* parent, TileSetProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~TileSetPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -325,7 +324,7 @@ namespace Sharpheus {
 	class SoundPresenter : public Presenter
 	{
 	public:
-		SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32_t& y);
+		SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~SoundPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -344,7 +343,7 @@ namespace Sharpheus {
 	class StringListPresenter : public Presenter
 	{
 	public:
-		StringListPresenter(wxWindow* parent, StringListProvider<Class>* provider, Signal signal, uint32_t& y);
+		StringListPresenter(wxWindow* parent, StringListProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~StringListPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -354,7 +353,7 @@ namespace Sharpheus {
 		StringListProvider<Class>* provider;
 		wxListView* list;
 		wxButton* addButton;
-		uint32_t secondColStart;
+		uint32 secondColStart;
 		bool deleteSelected = false;
 
 		virtual void OnAdd(wxCommandEvent& e);
@@ -366,7 +365,7 @@ namespace Sharpheus {
 	class TrafoPresenterBase : public Presenter
 	{
 	public:
-		TrafoPresenterBase(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y);
+		TrafoPresenterBase(wxWindow* parent, const std::string& title, Signal signal, uint32& y);
 		virtual ~TrafoPresenterBase();
 
 		virtual inline void SetDefault() override {
@@ -397,7 +396,7 @@ namespace Sharpheus {
 	class MainTrafoPresenter : public TrafoPresenterBase
 	{
 	public:
-		MainTrafoPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y);
+		MainTrafoPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y);
 		virtual ~MainTrafoPresenter();
 
 		void SetCurrent(GameObject* curr) override;
@@ -423,7 +422,7 @@ namespace Sharpheus {
 	class TrafoPresenter : public TrafoPresenterBase
 	{
 	public:
-		TrafoPresenter(wxWindow* parent, TrafoProvider<Class>* provider, Signal signal, uint32_t& y);
+		TrafoPresenter(wxWindow* parent, TrafoProvider<Class>* provider, Signal signal, uint32& y);
 		virtual ~TrafoPresenter();
 
 		void SetCurrent(GameObject* curr) override;
@@ -438,7 +437,7 @@ namespace Sharpheus {
 	class TileMapPresenter : public Presenter
 	{
 	public:
-		TileMapPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32_t& y);
+		TileMapPresenter(wxWindow* parent, const std::string& title, Signal signal, uint32& y);
 		virtual ~TileMapPresenter();
 
 		void SetCurrent(GameObject* curr) override;

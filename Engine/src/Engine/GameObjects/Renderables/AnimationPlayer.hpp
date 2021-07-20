@@ -18,14 +18,14 @@ namespace Sharpheus {
 		inline void SetTint(const Color& tint) { this->tint = tint; }
 		inline void SetSpeed(float speed) { this->speed = speed; }
 
-		inline uint32_t GetAnimationCount() { return anims.size(); }
-		inline Animation* GetAnimation(uint32_t ind) {
+		inline uint32 GetAnimationCount() { return anims.size(); }
+		inline Animation* GetAnimation(uint32 ind) {
 			if (ind < anims.size()) {
 				return anims[ind];
 			}
 			return nullptr;
 		}
-		inline const std::string& GetAnimationName(uint32_t ind) {
+		inline const std::string& GetAnimationName(uint32 ind) {
 			Animation* anim = GetAnimation(ind);
 			if (anim == nullptr) {
 				return "";
@@ -33,7 +33,7 @@ namespace Sharpheus {
 			return anim->GetName();
 		}
 
-		inline void SetAnimation(uint32_t ind, Animation* anim) {
+		inline void SetAnimation(uint32 ind, Animation* anim) {
 			if (ind < anims.size()) {
 				anims[ind] = anim;
 			}
@@ -42,7 +42,7 @@ namespace Sharpheus {
 			anims.push_back(anim);
 			SetCurrent(anims.size() - 1);
 		}
-		inline void RemoveAnimationByIndex(uint32_t ind) {
+		inline void RemoveAnimationByIndex(uint32 ind) {
 			if (ind < anims.size()) {
 				anims.erase(anims.begin() + ind);
 				if (currAnimInd != 0 && ind <= currAnimInd) {
@@ -51,7 +51,7 @@ namespace Sharpheus {
 			}
 		}
 		inline void RemoveAnimation(Animation* anim) {
-			uint32_t i = 0;
+			uint32 i = 0;
 			while (i < anims.size() && anims[i] != anim) {
 				++i;
 			}
@@ -61,11 +61,11 @@ namespace Sharpheus {
 		inline Animation* GetCurrentAnimation() { return GetAnimation(GetCurrent()); }
 		inline const std::string& GetCurrentAnimationName() { return GetAnimationName(GetCurrent()); }
 
-		void SetAnimationFromPath(uint32_t ind, const std::string& path);
+		void SetAnimationFromPath(uint32 ind, const std::string& path);
 		void AddAnimationFromPath(const std::string& path);
 
-		inline uint32_t GetCurrent() { return currAnimInd; }
-		inline void SetCurrent(uint32_t ind) {
+		inline uint32 GetCurrent() { return currAnimInd; }
+		inline void SetCurrent(uint32 ind) {
 			if (ind < anims.size() && currAnimInd != ind) {
 				if (playOnceActive) {
 					fallBackInd = ind;
@@ -79,14 +79,14 @@ namespace Sharpheus {
 			}
 		}
 		inline void SetCurrentByName(const std::string& name) {
-			for (uint32_t i = 0; i < anims.size(); ++i) {
+			for (uint32 i = 0; i < anims.size(); ++i) {
 				if (anims[i]->GetName() == name) {
 					return SetCurrent(i);
 				}
 			}
 		}
 
-		inline void PlayOnce(uint32_t ind) {
+		inline void PlayOnce(uint32 ind) {
 			if (!playOnceActive) {
 				fallBackInd = currAnimInd;
 				SetCurrent(ind);
@@ -110,7 +110,7 @@ namespace Sharpheus {
 		Color tint = Color::White;
 		float speed = 1.f;
 		float currTime = 0.f;
-		uint32_t currAnimInd = 0, fallBackInd = 0;
+		uint32 currAnimInd = 0, fallBackInd = 0;
 		bool playOnceActive = false;
 
 		virtual bool Save(FileSaver& fs) override;

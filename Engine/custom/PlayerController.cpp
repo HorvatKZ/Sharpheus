@@ -5,10 +5,10 @@
 
 using namespace Sharpheus;
 
-ClassInfo PlayerController::classInfo("PlayerController", "behavior.png", {
-	new FloatProvider<PlayerController>("Jumpforce", SPH_BIND_GETTER(PlayerController::GetJumpForce), SPH_BIND_SETTER(PlayerController::SetJumpForce)),
-	new FloatProvider<PlayerController>("Speed", SPH_BIND_GETTER(PlayerController::GetSpeed), SPH_BIND_SETTER(PlayerController::SetSpeed))
-});
+SPH_START_CLASSINFO(PlayerController, "behavior.png")
+	SPH_PROVIDE_FLOAT(PlayerController, "Jumpforce", GetJumpForce, SetJumpForce)
+	SPH_PROVIDE_FLOAT(PlayerController, "Speed", GetSpeed, SetSpeed)
+SPH_END_CLASSINFO
 
 
 PlayerController::PlayerController(Sharpheus::Behavior* other) : Behavior(other), ColliderListener(GetID())

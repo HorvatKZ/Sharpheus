@@ -8,7 +8,8 @@
 using namespace Sharpheus;
 
 
-ClassInfo DebugBehavior::classInfo("DebugBehavior", "behavior.png", {});
+SPH_START_CLASSINFO(DebugBehavior, "behavior.png")
+SPH_END_CLASSINFO
 
 
 DebugBehavior::DebugBehavior(Behavior* other) : Behavior(other)

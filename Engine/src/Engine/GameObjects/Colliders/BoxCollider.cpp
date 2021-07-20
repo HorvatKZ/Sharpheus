@@ -7,11 +7,11 @@
 
 namespace Sharpheus {
 
-	ClassInfo BoxCollider::classInfo("BoxCollider", "boxcollider.png", {
-		new BoolProvider<BoxCollider>("Only Trigger", SPH_BIND_GETTER(BoxCollider::IsTrigger), SPH_BIND_SETTER(BoxCollider::SetTrigger)),
-		new UFloatProvider<BoxCollider>("Width", SPH_BIND_GETTER(BoxCollider::GetWidth), SPH_BIND_SETTER(BoxCollider::SetWidth)),
-		new UFloatProvider<BoxCollider>("Height", SPH_BIND_GETTER(BoxCollider::GetHeight), SPH_BIND_SETTER(BoxCollider::SetHeight))
-	});
+	SPH_START_CLASSINFO(BoxCollider, "boxcollider.png")
+		SPH_PROVIDE_BOOL(BoxCollider, "Only Trigger", IsTrigger, SetTrigger)
+		SPH_PROVIDE_UFLOAT(BoxCollider, "Width", GetWidth, SetWidth)
+		SPH_PROVIDE_UFLOAT(BoxCollider, "Height", GetHeight, SetHeight)
+	SPH_END_CLASSINFO
 
 
 	BoxCollider::BoxCollider(GameObject* parent, const std::string& name)

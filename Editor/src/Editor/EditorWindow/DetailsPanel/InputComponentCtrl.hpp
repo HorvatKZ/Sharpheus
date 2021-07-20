@@ -9,11 +9,11 @@ namespace Sharpheus {
 	{
 	public:
 		InputComponentCtrl();
-		InputComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color);
+		InputComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color);
 		virtual ~InputComponentCtrl();
 
-		virtual inline uint32_t GetWidth() { return GetSize().x; }
-		virtual void SetWidth(uint32_t width);
+		virtual inline uint32 GetWidth() { return GetSize().x; }
+		virtual void SetWidth(uint32 width);
 		virtual inline void Clear() { input->SetValue(""); }
 
 		template <typename EventTag, typename Class, typename EventArg, typename EventHandler>
@@ -25,8 +25,8 @@ namespace Sharpheus {
 		wxStaticText* titleText;
 		wxTextCtrl* input;
 
-		static wxFont titleFont;
-		static uint32_t border;
+		static const wxFont titleFont;
+		static const uint32 border;
 	};
 
 
@@ -34,12 +34,12 @@ namespace Sharpheus {
 	{
 	public:
 		IntComponentCtrl();
-		IntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color,
-			int32_t min = INT32_MIN, int32_t max = INT32_MAX);
+		IntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color,
+			int32 min = INT32_MIN, int32 max = INT32_MAX);
 		virtual ~IntComponentCtrl();
 
-		inline void SetValue(int32_t value) { this->value = value;  input->SetValue(wxString::Format(formater, value)); }
-		inline int32_t GetValue() {
+		inline void SetValue(int32 value) { this->value = value;  input->SetValue(wxString::Format(formater, value)); }
+		inline int32 GetValue() {
 			long realValue;
 			input->GetValue().ToLong(&realValue);
 			return realValue;
@@ -47,7 +47,7 @@ namespace Sharpheus {
 
 	private:
 		wxString formater;
-		int32_t value;
+		int32 value;
 	};
 
 
@@ -55,12 +55,12 @@ namespace Sharpheus {
 	{
 	public:
 		UIntComponentCtrl();
-		UIntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color,
-			uint32_t min = 0, uint32_t max = UINT32_MAX);
+		UIntComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color,
+			uint32 min = 0, uint32 max = UINT32_MAX);
 		virtual ~UIntComponentCtrl();
 
-		inline void SetValue(uint32_t value) { this->value = value;  input->SetValue(wxString::Format(formater, value)); }
-		inline uint32_t GetValue() {
+		inline void SetValue(uint32 value) { this->value = value;  input->SetValue(wxString::Format(formater, value)); }
+		inline uint32 GetValue() {
 			unsigned long realValue;
 			input->GetValue().ToULong(&realValue);
 			return realValue;
@@ -68,7 +68,7 @@ namespace Sharpheus {
 
 	private:
 		wxString formater;
-		uint32_t value;
+		uint32 value;
 	};
 
 
@@ -76,11 +76,11 @@ namespace Sharpheus {
 	{
 	public:
 		ByteComponentCtrl();
-		ByteComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, bool hex = false);
+		ByteComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, bool hex = false);
 		virtual ~ByteComponentCtrl();
 
-		inline void SetValue(uint8_t value) { this->value = value;  input->SetValue(wxString::Format(formater, value)); }
-		inline uint8_t GetValue() {
+		inline void SetValue(byte value) { this->value = value;  input->SetValue(wxString::Format(formater, value)); }
+		inline byte GetValue() {
 			unsigned long realValue;
 			input->GetValue().ToULong(&realValue);
 			return realValue;
@@ -88,7 +88,7 @@ namespace Sharpheus {
 
 	private:
 		wxString formater;
-		uint8_t value;
+		byte value;
 	};
 
 
@@ -96,7 +96,7 @@ namespace Sharpheus {
 	{
 	public:
 		FloatComponentCtrl();
-		FloatComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, uint32_t precision = 3);
+		FloatComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, uint32 precision = 3);
 		virtual ~FloatComponentCtrl();
 
 		inline void SetValue(float value) { input->SetValue(wxString::Format(formater, value)); }
@@ -116,7 +116,7 @@ namespace Sharpheus {
 	{
 	public:
 		AngleComponentCtrl();
-		AngleComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32_t width, const wxColour& color, uint32_t precision = 3);
+		AngleComponentCtrl(wxWindow* parent, const wxString& title, const wxPoint& pos, uint32 width, const wxColour& color, uint32 precision = 3);
 		virtual ~AngleComponentCtrl();
 
 		inline void SetValue(float value) {
