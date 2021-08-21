@@ -14,12 +14,13 @@ namespace Sharpheus {
 		: Presenter(parent, title, signal, y), mainSignal(mainSignal), y(y)
 	{
 		y += UI::unitHeight;
-		wxSize extent = this->title->GetTextExtent(title);
 		uint32 parentWidth = parent->GetSize().x;
 		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(parentWidth - 3 * UI::border - UI::unitHeight, UI::unitHeight));
+		typeSelector->SetEditable(false);
+		typeSelector->Bind(wxEVT_COMBOBOX, &BehaviorPicker::HandleChange, this);
 		createNewTypeButton = new wxButton(parent, wxID_ANY, "+", wxPoint(parentWidth - UI::unitHeight - UI::border, y), wxSize(UI::unitHeight, UI::unitHeight));
 		createNewTypeButton->Bind(wxEVT_BUTTON, &BehaviorPicker::CreateBehavior, this);
-		y += 30;
+		y += UI::heightPadding;
 	}
 
 	BehaviorPicker::~BehaviorPicker()
@@ -33,18 +34,14 @@ namespace Sharpheus {
 		SPHE_ASSERT(curr->Is(GameObject::Type::Behavior), "Non-behavior type is passed to BehaviorPicker");
 
 		Presenter::SetCurrent(curr);
-		wxREMOVE(typeSelector);
 
 		uint32 parentWidth = parent->GetSize().x;
-		wxArrayString arr;
+		typeSelector->Clear();
 		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
 			if (BehaviorCreator::IsCompatibleWithParent((*it).first, curr->GetParent())) {
-				arr.Add(wxString::Format("%d - %s", (*it).first, (*it).second));
+				typeSelector->Append(wxString::Format("%d - %s", (*it).first, (*it).second));
 			}
 		}
-		typeSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y + UI::unitHeight), wxSize(parentWidth - 3 * UI::border - UI::unitHeight, UI::unitHeight), arr);
-		typeSelector->SetEditable(false);
-		typeSelector->Bind(wxEVT_COMBOBOX, &BehaviorPicker::HandleChange, this);
 	}
 
 	void BehaviorPicker::HandleChange(wxCommandEvent& e)

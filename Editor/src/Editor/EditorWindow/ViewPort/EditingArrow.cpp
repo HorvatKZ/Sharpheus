@@ -20,7 +20,7 @@ namespace Sharpheus {
 	{
 		this->trafo = trafo;
 		sprite->SetWorldTrafo(trafo);
-		sprite->RenderAll();
+		sprite->Render();
 	}
 
 	EditingArrow::EditType EditingArrow::ClickOn(const Point& clickPos)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../AxisShapedGameObject.hpp"
+#include "../AxisGameObject.hpp"
 #include "Engine/ResourceManager/Font.hpp"
 
 #define SPH_TEXT_SETSTYLE(Property, flag) \
@@ -16,7 +16,7 @@
 
 namespace Sharpheus {
 
-	class SPH_EXPORT Text : public AxisShapedGameObject
+	class SPH_EXPORT Text : public AxisGameObject
 	{
 	public:
 		Text(GameObject* parent, const std::string& name);
@@ -44,6 +44,8 @@ namespace Sharpheus {
 		SPH_TEXT_SETSTYLE(Italic, SPH_FONT_ITALIC);
 		SPH_TEXT_SETSTYLE(Underlined, SPH_FONT_UNDERLINED);
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(Text)
@@ -56,8 +58,6 @@ namespace Sharpheus {
 		byte style = 0;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void Render() override;
 
 		void UpdateSizer() override;
 	};

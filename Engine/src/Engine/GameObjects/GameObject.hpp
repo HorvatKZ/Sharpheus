@@ -91,8 +91,7 @@ namespace Sharpheus {
 		virtual void CopyFrom(GameObject* other);
 
 		void					TickAll(float deltaTime);
-		void					RenderAll();
-		void					RenderAsSelected();
+		virtual void			RenderAsSelected();
 
 		virtual inline void		SetLevel(class Level* level) { this->level = level; }
 		inline GameObject*		GetParent() { return parent; }
@@ -111,6 +110,12 @@ namespace Sharpheus {
 		inline bool				IsVisible() { return isVisible; }
 		inline void				SetVisible(bool visibility) { isVisible = visibility; }
 		inline void				SwitchVisiblity() { isVisible = !isVisible; }
+		inline bool				IsAllVisible() {
+			if (parent == nullptr) {
+				return isVisible;
+			}
+			return isVisible && parent->IsAllVisible();
+		}
 
 		void									AddChild(GameObject* child);
 		GameObject*								GetChild(const std::string& name);
@@ -128,6 +133,9 @@ namespace Sharpheus {
 		void									SetChildByName(GameObject* newChild);
 
 		virtual inline Type		GetType() = 0;
+
+		inline bool operator==(const GameObject& other) { return listenerID == other.listenerID; }
+		inline bool operator!=(const GameObject& other) { return listenerID != other.listenerID; }
 
 		bool		IsParentOfCurrentCamera();
 		GameObject* GetUpperMostSelected(const Point& pos);
@@ -182,8 +190,7 @@ namespace Sharpheus {
 
 		virtual inline bool IsCurrentCamera() { return false; }
 
-		virtual void Tick(float deltaTime);
-		virtual void Render();
+		virtual void Tick(float deltaTime) {}
 		virtual void RenderSelection();
 
 		virtual void UpdateWorldTrafo(const Transform& parentWorldTrafo);

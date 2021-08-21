@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../AxisShapedGameObject.hpp"
+#include "../AxisGameObject.hpp"
 #include "Engine/ResourceManager/Image.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT ParticleEmitter : public AxisShapedGameObject
+	class SPH_EXPORT ParticleEmitter : public AxisGameObject
 	{
 	public:
 		struct ParticleState {
@@ -59,6 +59,8 @@ namespace Sharpheus {
 			hasCustomFunc = false;
 		}
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(ParticleEmitter)
@@ -86,7 +88,6 @@ namespace Sharpheus {
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
-		virtual void Render() override;
 
 		virtual void RenderSelection() override;
 		virtual bool IsSelected(const Point& pos) override;

@@ -137,14 +137,6 @@ namespace Sharpheus {
 	}
 
 
-	void Collider::Render()
-	{
-		if (visible) {
-			RenderShape();
-		}
-	}
-
-
 	void Collider::OnObjectDestroyed(const GameObjectDestroyedEvent& e)
 	{
 		ID objID = e.source->GetID();

@@ -6,6 +6,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(TileMap, "tilemap.png")
+		SPH_PROVIDE_LAYER(TileMap, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_TILESET(TileMap, "TileSet", GetTileSet, SetTileSet, SetTileSetFromPath)
 		SPH_PROVIDE_COLOR(TileMap, "Tint", GetTint, SetTint)
 		SPH_PROVIDE_TILEMAP("TileMap Editor")
@@ -15,7 +16,7 @@ namespace Sharpheus {
 
 
 	TileMap::TileMap(GameObject* parent, const std::string& name) :
-		AxisShapedGameObject(parent, name, new Rect()) {
+		AxisGameObject(parent, name, new Rect()) {
 		prevAxis[0] = Point::Right;
 		prevAxis[1] = Point::Up;
 		Set({ 0,0 }, 1);
@@ -28,7 +29,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKTYPE(other, TileMap);
 
-		AxisShapedGameObject::CopyFrom(other);
+		AxisGameObject::CopyFrom(other);
 		TileMap* trueOther = (TileMap*)other;
 		SetTileSet(trueOther->tiles);
 		tint = trueOther->tint;
@@ -168,7 +169,7 @@ namespace Sharpheus {
 
 	bool TileMap::Save(FileSaver& fs)
 	{
-		AxisShapedGameObject::Save(fs);
+		AxisGameObject::Save(fs);
 		fs.Write(tiles);
 		fs.Write(tint);
 
@@ -188,7 +189,7 @@ namespace Sharpheus {
 
 	bool TileMap::Load(FileLoader& fl)
 	{
-		AxisShapedGameObject::Load(fl);
+		AxisGameObject::Load(fl);
 		TileSet* tileSet;
 		fl.Read(&tileSet);
 		SetTileSet(tileSet);
@@ -212,6 +213,7 @@ namespace Sharpheus {
 			chunks.insert({ IntPoint(x, y), ChunkData(arr, count) });
 		}
 
+		UpdateSizer();
 		return fl.GetStatus();
 	}
 

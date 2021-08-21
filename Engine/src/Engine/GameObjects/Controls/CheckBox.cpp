@@ -5,6 +5,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(CheckBox, "checkbox.png")
+		SPH_PROVIDE_LAYER(CheckBox, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_IMAGE(CheckBox, "Checked image", GetCheckedImg, SetCheckedImg, SetCheckedImgFromPath)
 		SPH_PROVIDE_IMAGE(CheckBox, "Unchecked image", GetUncheckedImg, SetUncheckedImg, SetUncheckedImgFromPath)
 		SPH_PROVIDE_COLOR(CheckBox, "Tint", GetTint, SetTint)

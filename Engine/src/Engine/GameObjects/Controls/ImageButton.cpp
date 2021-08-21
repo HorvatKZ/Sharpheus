@@ -6,6 +6,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(ImageButton, "imagebutton.png")
+		SPH_PROVIDE_LAYER(ImageButton, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_IMAGE(ImageButton, "Image", GetImg, SetImg, SetImgFromPath)
 		SPH_PROVIDE_COLOR(ImageButton, "Tint", GetColor, SetColor)
 		SPH_PROVIDE_STRING(ImageButton, "Text", GetText, SetText)

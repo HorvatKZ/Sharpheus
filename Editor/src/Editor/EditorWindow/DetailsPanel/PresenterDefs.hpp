@@ -995,4 +995,62 @@ namespace Sharpheus {
 		}
 	}
 
+
+	// LayerPresenter
+
+	template<class Class>
+	inline LayerPresenter<Class>::LayerPresenter(wxWindow* parent, LayerProvider<Class>* provider, Signal signal, uint32& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		y += UI::unitHeight;
+		uint32 parentWidth = parent->GetSize().x;
+		layerSelector = new wxComboBox(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(parentWidth - 3 * UI::border - UI::unitHeight, UI::unitHeight));
+		layerSelector->SetEditable(false);
+		layerSelector->Bind(wxEVT_COMBOBOX, &LayerPresenter::HandleChange, this);
+		layerEditorButton = new wxBitmapButton(parent, wxID_ANY, ImageManager::GetImage("layers.png", ImageManager::PathType::DETAILSPANEL), wxPoint(parentWidth - UI::unitHeight - UI::border, y), wxSize(UI::unitHeight, UI::unitHeight));
+		layerEditorButton->Bind(wxEVT_BUTTON, &LayerPresenter::OnLayerEditor, this);
+		y += UI::heightPadding;
+	}
+
+	template<class Class>
+	inline LayerPresenter<Class>::~LayerPresenter()
+	{
+		wxREMOVE(layerSelector);
+		wxREMOVE(layerEditorButton);
+	}
+
+	template<class Class>
+	inline void LayerPresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+		
+		layerSelector->Clear();
+		auto layers = ProjectData::GetLevel()->GetLayerNames();
+		for (auto it = layers->begin(); it != layers->end(); ++it) {
+			layerSelector->Append(*it);
+		}
+		
+		layerSelector->SetSelection(layerSelector->FindString(provider->Get((Class*)curr)));
+	}
+
+	template<class Class>
+	inline void LayerPresenter<Class>::HandleChange(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			bool success = provider->Set((Class*)curr, wxStr2StdStr(layerSelector->GetValue()));
+			if (success) {
+				signal();
+			} else {
+				SPHE_ERROR("Error setting the current GameObject's layer");
+				layerSelector->SetSelection(layerSelector->FindString(provider->Get((Class*)curr)));
+			}
+		}
+	}
+
+	template<class Class>
+	inline void LayerPresenter<Class>::OnLayerEditor(wxCommandEvent& e)
+	{
+		EditorCommands::LayerEditor();
+	}
+
 }

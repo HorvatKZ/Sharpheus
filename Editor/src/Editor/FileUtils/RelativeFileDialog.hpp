@@ -8,7 +8,7 @@ namespace Sharpheus {
 	class RelativeFileDialog
 	{
 	public:
-		RelativeFileDialog(wxWindow* parent, const wxString& title, const wxString& dir, const wxString& types);
+		RelativeFileDialog(wxWindow* parent, const wxString& title, const wxString& dir, const wxString& types, const wxString& defaultFile = "");
 		virtual ~RelativeFileDialog();
 
 		bool Show();
@@ -16,14 +16,14 @@ namespace Sharpheus {
 
 	private:
 		wxWindow* parent;
-		wxString title, dir, types;
+		wxString title, dir, types, defaultFile;
 		wxString path;
 	};
 
 
 	template<bool isSave>
-	inline RelativeFileDialog<isSave>::RelativeFileDialog(wxWindow* parent, const wxString& title, const wxString& dir, const wxString& types)
-		: parent(parent), title(title), dir(dir), types(types)
+	inline RelativeFileDialog<isSave>::RelativeFileDialog(wxWindow* parent, const wxString& title, const wxString& dir, const wxString& types, const wxString& defaultFile)
+		: parent(parent), title(title), dir(dir), types(types), defaultFile(defaultFile)
 	{
 	}
 
@@ -39,7 +39,7 @@ namespace Sharpheus {
 	{
 		int result = wxID_OK;
 		while (result == wxID_OK) {
-			wxFileDialog dialog(parent, title, dir, "", types, isSave ? wxFD_SAVE | wxFD_OVERWRITE_PROMPT : wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+			wxFileDialog dialog(parent, title, dir, defaultFile, types, isSave ? wxFD_SAVE | wxFD_OVERWRITE_PROMPT : wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 			result = dialog.ShowModal();
 
 			if (result == wxID_OK) {

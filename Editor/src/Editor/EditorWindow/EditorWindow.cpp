@@ -22,8 +22,8 @@ namespace Sharpheus {
 		toolBar = new ToolBar(this, wxPoint(0, 0), wxSize(144, 30), viewPort);
 
 		levelHierarchy->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::CurrentChanged));
-		details->BindCallbacks(SPH_BIND_THIS_2(EditorWindow::CurrentNameChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged), SPH_BIND_THIS_1(EditorWindow::BehaviorChanged));
-		viewPort->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::CurrentChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged));
+		details->BindCallbacks(SPH_BIND_THIS_2(EditorWindow::CurrentNameChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged), SPH_BIND_THIS_0(EditorWindow::CurrentTrafoChanged), SPH_BIND_THIS_1(EditorWindow::BehaviorChanged));
+		viewPort->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::CurrentChanged), SPH_BIND_THIS_0(EditorWindow::CurrentTrafoChanged));
 		toolBar->BindCallbacks(SPH_BIND_THIS_1(EditorWindow::StartGame), SPH_BIND_THIS_0(EditorWindow::StopGame));
 
 		sizer = new wxGridBagSizer(4, 4);
@@ -90,14 +90,22 @@ namespace Sharpheus {
 	void EditorWindow::CurrentNameChanged(const std::string& oldName, const std::string& newName)
 	{
 		levelHierarchy->CurrentNameChanged(oldName, newName);
-		details->CurrentNameChanged(oldName, newName);
+		details->CurrentNameChanged();
+	}
+
+
+	void EditorWindow::CurrentTrafoChanged()
+	{
+		GameObject* curr = EditorData::GetCurrent();
+		details->CurrentTrafoChanged();
+		viewPort->Refresh();
 	}
 
 
 	void EditorWindow::CurrentDataChanged()
 	{
 		GameObject* curr = EditorData::GetCurrent();
-		details->CurrentDataChanged(curr);
+		details->CurrentDataChanged();
 		viewPort->Refresh();
 	}
 

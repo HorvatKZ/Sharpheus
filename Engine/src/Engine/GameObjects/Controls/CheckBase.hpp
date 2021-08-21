@@ -28,6 +28,8 @@ namespace Sharpheus {
 		virtual inline bool GetState() override { return isChecked; }
 		inline bool IsChecked() { return isChecked; }
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 	protected:
@@ -38,8 +40,6 @@ namespace Sharpheus {
 		bool textOnRight = true;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void Render() override;
 
 		virtual inline bool DoesChangeOnRelease() override { return false; }
 		virtual void ChangeOnClick() = 0;

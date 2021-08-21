@@ -94,7 +94,7 @@ namespace Sharpheus {
 			if (status) {
 				char* str = new char[len + 1];
 				result = fread(str, sizeof(char) * (len + 1), 1, file);
-				status &= result == 1;
+				status &= (result == 1 && str[len] == '\0');
 				data = str;
 				delete str;
 			}

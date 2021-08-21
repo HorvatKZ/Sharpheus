@@ -5,6 +5,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(RadioButton, "radio.png")
+		SPH_PROVIDE_LAYER(RadioButton, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_UINT(RadioButton, "Group ID", GetGroupId, SetGroupId)
 		SPH_PROVIDE_IMAGE(RadioButton, "Checked image", GetCheckedImg, SetCheckedImg, SetCheckedImgFromPath)
 		SPH_PROVIDE_IMAGE(RadioButton, "Unchecked image", GetUncheckedImg, SetUncheckedImg, SetUncheckedImgFromPath)

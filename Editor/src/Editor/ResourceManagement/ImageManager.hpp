@@ -11,7 +11,7 @@ namespace Sharpheus {
 		enum class PathType
 		{
 			ABSOLUTE_PATH, RELATIVE_PATH,
-			DETAILSPANEL, GAMEOBJECTS, TOOLBAR, EXPLORER
+			DETAILSPANEL, GAMEOBJECTS, TOOLBAR, EXPLORER, MENUBAR
 		};
 
 		static void Init();

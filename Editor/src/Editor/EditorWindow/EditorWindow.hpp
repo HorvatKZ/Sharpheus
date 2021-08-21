@@ -25,6 +25,7 @@ namespace Sharpheus {
 		void LevelChanged();
 		void CurrentChanged();
 		void CurrentNameChanged(const std::string& oldName, const std::string& newName);
+		void CurrentTrafoChanged();
 		void CurrentDataChanged();
 		void BehaviorChanged(uint32 subType);
 		void StartGame(bool withCurrent);

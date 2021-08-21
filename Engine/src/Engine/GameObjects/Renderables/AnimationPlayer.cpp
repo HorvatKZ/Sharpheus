@@ -6,6 +6,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(AnimationPlayer, "animplayer.png")
+		SPH_PROVIDE_LAYER(AnimationPlayer, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_STRINGLIST(AnimationPlayer, "Animations", GetAnimationCount, GetCurrent, GetAnimationName, SetCurrent,
 			SetAnimationFromPath, AddAnimationFromPath, RemoveAnimationByIndex)
 		SPH_PROVIDE_COLOR(AnimationPlayer, "Tint", GetTint, SetTint)
@@ -14,14 +15,14 @@ namespace Sharpheus {
 
 
 	AnimationPlayer::AnimationPlayer(GameObject* parent, const std::string& name) :
-		ShapedGameObject(parent, name, new Rect()) {}
+		RenderableGameObject(parent, name, new Rect()) {}
 
 
 	void AnimationPlayer::CopyFrom(GameObject* other)
 	{
 		SPH_CHECKTYPE(other, AnimationPlayer);
 
-		ShapedGameObject::CopyFrom(other);
+		RenderableGameObject::CopyFrom(other);
 		AnimationPlayer* trueOther = (AnimationPlayer*)other;
 		SetCurrent(trueOther->currAnimInd);
 		anims.clear();
@@ -88,7 +89,7 @@ namespace Sharpheus {
 
 	bool AnimationPlayer::Save(FileSaver& fs)
 	{
-		ShapedGameObject::Save(fs);
+		RenderableGameObject::Save(fs);
 		fs.Write((uint32)anims.size());
 		for (uint32 i = 0; i < anims.size(); ++i) {
 			fs.Write(anims[i]);
@@ -102,7 +103,7 @@ namespace Sharpheus {
 
 	bool AnimationPlayer::Load(FileLoader& fl)
 	{
-		ShapedGameObject::Load(fl);
+		RenderableGameObject::Load(fl);
 		uint32 animCount = 0;
 		fl.Read(animCount);
 		for (uint32 i = 0; i < animCount; ++i) {

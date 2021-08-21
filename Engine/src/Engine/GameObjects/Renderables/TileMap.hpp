@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../AxisShapedGameObject.hpp"
+#include "../AxisGameObject.hpp"
 #include "Engine/ResourceManager/TileSet.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT TileMap : public AxisShapedGameObject
+	class SPH_EXPORT TileMap : public AxisGameObject
 	{
 	public:
 		struct IntPoint {
@@ -77,6 +77,8 @@ namespace Sharpheus {
 		void Set(const IntPoint& pos, byte value);
 		void Clear(const IntPoint& pos);
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(TileMap)
@@ -89,8 +91,6 @@ namespace Sharpheus {
 		static const int32 chunkSize;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void Render() override;
 
 		virtual void RenderSelection() override;
 		virtual bool IsSelected(const Point& pos) override;

@@ -5,7 +5,7 @@
 namespace Sharpheus {
 
 	Control::Control(GameObject* parent, const std::string& name, Shape* shape)
-		: AxisShapedGameObject(parent, name, shape)
+		: AxisGameObject(parent, name, shape)
 	{
 		Subscribe<MousePressedEvent>(SPH_BIND(Control::OnClick));
 		Subscribe<MouseReleasedEvent>(SPH_BIND(Control::OnRelease));
@@ -22,7 +22,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKMASK(other, Control);
 
-		AxisShapedGameObject::CopyFrom(other);
+		AxisGameObject::CopyFrom(other);
 		Control* trueOther = (Control*)other;
 		text = trueOther->text;
 		font = trueOther->font;
@@ -45,20 +45,9 @@ namespace Sharpheus {
 	}
 
 
-	bool Control::IsActive()
-	{
-		GameObject* curr = this;
-		while (curr != nullptr && curr->IsVisible()) {
-			curr = curr->GetParent();
-		}
-
-		return curr == nullptr;
-	}
-
-
 	bool Control::Load(FileLoader& fl)
 	{
-		AxisShapedGameObject::Load(fl);
+		AxisGameObject::Load(fl);
 		fl.Read(text);
 		fl.Read(&font);
 		fl.Read(fontColor);
@@ -71,7 +60,7 @@ namespace Sharpheus {
 
 	bool Control::Save(FileSaver& fs)
 	{
-		AxisShapedGameObject::Save(fs);
+		AxisGameObject::Save(fs);
 		fs.Write(text);
 		fs.Write(font);
 		fs.Write(fontColor);
@@ -83,7 +72,7 @@ namespace Sharpheus {
 
 	void Control::OnClick(const MousePressedEvent& e)
 	{
-		if (IsActive() && IsSelected(e.gamePos)) {
+		if (IsSelected(e.gamePos)) {
 			isCurrentlyClicked = true;
 			ChangeOnClick();
 

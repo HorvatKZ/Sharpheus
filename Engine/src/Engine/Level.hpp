@@ -41,15 +41,15 @@ namespace Sharpheus {
 		void Delete(GameObject* obj, bool forceNow = false);
 		bool Move(GameObject* obj, GameObject* newParent);
 		std::string RenameGameObject(GameObject* obj, const std::string& newName, bool deregisterOld = true);
-		void Deregister(class GameObject* obj);
-		void SetRegistry(class GameObject* obj);
+		void Deregister(GameObject* obj);
+		void SetRegistry(GameObject* obj);
 
 		inline void RequestInit(class Behavior* behavior) { behaviorsToInit.push(behavior); }
 
 		inline CollisionSystem& GetCollSys() { return collSys; }
-		inline class GameObject* GetRoot() { return root; }
+		inline GameObject* GetRoot() { return root; }
 
-		inline class GameObject* GetGameObject(const std::string& name) {
+		inline GameObject* GetGameObject(const std::string& name) {
 			auto it = gameObjects.find(name);
 			if (it == gameObjects.end()) {
 				return nullptr;
@@ -70,16 +70,44 @@ namespace Sharpheus {
 		bool Load(const std::string& base, const std::string& path);
 		bool LoadLevelData(const std::string& fullpath);
 
+		bool CreateLayer(const std::string& name);
+		bool CreateLayer(const std::string& name, uint32 ind);
+		bool RenameLayer(uint32 ind, const std::string& newName);
+		bool RenameLayer(const std::string& oldName, const std::string& newName);
+		bool RemoveLayer(uint32 ind, uint32 moveToLayer);
+		bool RemoveLayer(const std::string& name, const std::string& moveToLayer);
+		bool SwapLayers(uint32 firstLayer, uint32 secondLayer);
+		bool SwapLayers(const std::string& firstLayer, const std::string& secondLayer);
+		bool AddToLayer(RenderableGameObject* obj, const std::string& layer);
+		bool RemoveFromLayers(RenderableGameObject* obj);
+		bool IsLayerVisible(uint32 ind);
+		void SetLayerVisible(uint32 ind, bool visiblity);
+		inline bool IsLayerVisible(const std::string& name) { return IsLayerVisible(GetLayerInd(name)); }
+		inline void SetLayerVisible(const std::string& name, bool visiblity) { SetLayerVisible(GetLayerInd(name), visiblity); }
+		inline const std::vector<std::string>* GetLayerNames() { return &layerNames; }
+		inline uint32 GetLayerNum() { return layers.size(); }
+		static inline bool IsDeletableLayer(const std::string& layer) { return layer != "Default" && layer != "HUD"; }
+
 		bool SaveAsScene(GameObject* obj, const std::string& path);
 		bool AttachSceneTo(GameObject* obj, const std::string& path);
 
 	private:
+		struct Layer {
+			std::string name;
+			bool visible;
+			std::unordered_set<RenderableGameObject*> objects;
+
+			Layer(const std::string& name) : name(name), visible(true) {}
+		};
+
 		std::string name;
 		std::string path, projectPath, fullPath, base;
-		class GameObject* root;
+		GameObject* root;
 		CollisionSystem collSys;
-		std::unordered_map<std::string, class GameObject*> gameObjects;
-		std::queue<class GameObject*> objsToDelete;
+		std::unordered_map<std::string, GameObject*> gameObjects;
+		std::vector<Layer> layers;
+		std::vector<std::string> layerNames;
+		std::queue<GameObject*> objsToDelete;
 		std::queue<class Behavior*> behaviorsToInit;
 
 		bool SaveLevelData(FileSaver& file);
@@ -90,10 +118,19 @@ namespace Sharpheus {
 		void InitBehaviors();
 		void DeleteObjects();
 
-		void RegisterWithUniqueName(class GameObject* newObject);
+		void RegisterWithUniqueName(GameObject* newObject);
 
 		std::string GenerateUniqueName(const std::string& originalName);
 		bool		IsNameFree(const std::string& name);
+
+		inline uint32 GetLayerInd(const std::string& name) {
+			uint32 i = 0;
+			while (i < layers.size() && layers[i].name != name) {
+				++i;
+			}
+
+			return i;
+		}
 	};
 
 }

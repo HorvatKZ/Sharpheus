@@ -40,6 +40,11 @@ namespace Sharpheus {
 		virtual float GetYMin();
 		virtual float GetYMax();
 
+		virtual inline Shape* GetShape() {
+			SetSizer(GetWidth(), GetHeight());
+			return shape;
+		}
+
 		virtual bool Load(FileLoader& fl) override;
 
 		void WindowResized(const WindowResizedEvent& e);

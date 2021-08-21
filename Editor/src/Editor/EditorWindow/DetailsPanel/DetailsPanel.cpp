@@ -20,7 +20,7 @@ namespace Sharpheus {
 		typeName = new wxStaticText(this, wxID_ANY, "", wxPoint(30, 35));
 		typeIcon = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap, wxPoint(10, 35), wxSize(16, 16));
 		headerPresenter = new HeaderPresenter(this, "Name", std::move(currDataChangedCallback), std::move(currNameChangedCallback), freeY);
-		mainTrafo = new MainTrafoPresenter(this, "Transform", std::move(currDataChangedCallback), freeY);
+		mainTrafo = new MainTrafoPresenter(this, "Transform", std::move(currTrafoChangedCallback), freeY);
 	}
 
 
@@ -33,10 +33,11 @@ namespace Sharpheus {
 
 
 	void DetailsPanel::BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback,
-		std::function<void()>&& currDataChangedCallback, std::function<void(uint32)>&& behaviorChangedCallback)
+		std::function<void()>&& currDataChangedCallback, std::function<void()>&& currTrafoChangedCallback, std::function<void(uint32)>&& behaviorChangedCallback)
 	{
 		this->currNameChangedCallback = std::move(currNameChangedCallback);
 		this->currDataChangedCallback = std::move(currDataChangedCallback);
+		this->currTrafoChangedCallback = std::move(currTrafoChangedCallback);
 		this->behaviorChangedCallback = std::move(behaviorChangedCallback);
 	}
 
@@ -63,15 +64,21 @@ namespace Sharpheus {
 	}
 
 
-	void DetailsPanel::CurrentNameChanged(const std::string& oldName, const std::string& newName)
+	void DetailsPanel::CurrentNameChanged()
 	{
 		headerPresenter->Refresh();
 	}
 
 
-	void DetailsPanel::CurrentDataChanged(GameObject* curr)
+	void DetailsPanel::CurrentDataChanged()
 	{
 		RefreshPresenters();
+	}
+
+
+	void DetailsPanel::CurrentTrafoChanged()
+	{
+		mainTrafo->Refresh();
 	}
 
 
@@ -263,6 +270,9 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::TRAFO:
 				presenters.push_back(new TrafoPresenter<Class>(this, (TrafoProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::LAYER:
+				presenters.push_back(new LayerPresenter<Class>(this, (LayerProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::BEHAVIOR:
 				presenters.push_back(new BehaviorPicker(this, provider->GetName(), behaviorChangedCallback, currDataChangedCallback, y));

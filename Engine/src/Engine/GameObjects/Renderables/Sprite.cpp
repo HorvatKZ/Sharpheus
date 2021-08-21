@@ -6,20 +6,21 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(Sprite, "sprite.png")
+		SPH_PROVIDE_LAYER(Sprite, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_IMAGE(Sprite, "Image", GetImage, SetImage, SetImageFromPath)
 		SPH_PROVIDE_COLOR(Sprite, "Tint", GetTint, SetTint)
 	SPH_END_CLASSINFO
 
 
 	Sprite::Sprite(GameObject* parent, const std::string& name) :
-		ShapedGameObject(parent, name, new Rect()) {}
+		RenderableGameObject(parent, name, new Rect()) {}
 
 
 	void Sprite::CopyFrom(GameObject* other)
 	{
 		SPH_CHECKTYPE(other, Sprite);
 
-		ShapedGameObject::CopyFrom(other);
+		RenderableGameObject::CopyFrom(other);
 		Sprite* trueOther = (Sprite*)other;
 		SetImage(trueOther->image);
 		tint = trueOther->tint;
@@ -42,7 +43,7 @@ namespace Sharpheus {
 
 	bool Sprite::Save(FileSaver& fs)
 	{
-		ShapedGameObject::Save(fs);
+		RenderableGameObject::Save(fs);
 		fs.Write(image);
 		fs.Write(tint);
 		return fs.GetStatus();
@@ -51,7 +52,7 @@ namespace Sharpheus {
 
 	bool Sprite::Load(FileLoader& fl)
 	{
-		ShapedGameObject::Load(fl);
+		RenderableGameObject::Load(fl);
 		Image* img;
 		fl.Read(&img);
 		SetImage(img);

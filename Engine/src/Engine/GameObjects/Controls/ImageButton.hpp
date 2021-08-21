@@ -20,6 +20,8 @@ namespace Sharpheus {
 		inline void SetImgFromPath(const std::string& path, bool filtered);
 		inline void SetClickedImgFromPath(const std::string& path, bool filtered);
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(ImageButton)
@@ -29,8 +31,6 @@ namespace Sharpheus {
 		Image* clickedImg = nullptr;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void Render() override;
 
 		virtual void UpdateSizer() override;
 	};

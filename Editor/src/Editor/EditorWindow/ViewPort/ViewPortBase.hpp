@@ -15,7 +15,7 @@ namespace Sharpheus {
 		ViewPortBase(wxFrame* parent, const wxPoint& pos, const wxSize& size);
 		virtual ~ViewPortBase();
 
-		void BindCallbacks(std::function<void()>&& currDataChangedCallback);
+		void BindCallbacks(std::function<void()>&& currTrafoChangedCallback);
 
 		void OnPaintEvent(wxPaintEvent& evt);
 		void PaintNow();
@@ -28,7 +28,7 @@ namespace Sharpheus {
 		wxGLContext* glContext = nullptr;
 
 		wxPoint prevMousePos;
-		std::function<void()> currDataChangedCallback;
+		std::function<void()> currTrafoChangedCallback;
 
 		virtual void OnResize(wxSizeEvent& e);
 		virtual void OnScroll(wxMouseEvent& e);

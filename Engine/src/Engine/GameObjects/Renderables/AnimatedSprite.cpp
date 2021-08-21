@@ -6,6 +6,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(AnimatedSprite, "animsprite.png")
+		SPH_PROVIDE_LAYER(AnimatedSprite, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_ANIM(AnimatedSprite, "Animation", GetAnimation, SetAnimation, SetAnimationFromPath)
 		SPH_PROVIDE_COLOR(AnimatedSprite, "Tint", GetTint, SetTint)
 		SPH_PROVIDE_FLOAT(AnimatedSprite, "Speed", GetSpeed, SetSpeed)
@@ -13,14 +14,14 @@ namespace Sharpheus {
 
 
 	AnimatedSprite::AnimatedSprite(GameObject* parent, const std::string& name) :
-		ShapedGameObject(parent, name, new Rect()) {}
+		RenderableGameObject(parent, name, new Rect()) {}
 
 
 	void AnimatedSprite::CopyFrom(GameObject* other)
 	{
 		SPH_CHECKTYPE(other, AnimatedSprite);
 
-		ShapedGameObject::CopyFrom(other);
+		RenderableGameObject::CopyFrom(other);
 		AnimatedSprite* trueOther = (AnimatedSprite*)other;
 		SetAnimation(trueOther->anim);
 		tint = trueOther->tint;
@@ -57,7 +58,7 @@ namespace Sharpheus {
 
 	bool AnimatedSprite::Save(FileSaver& fs)
 	{
-		ShapedGameObject::Save(fs);
+		RenderableGameObject::Save(fs);
 		fs.Write(anim);
 		fs.Write(tint);
 		fs.Write(speed);
@@ -67,7 +68,7 @@ namespace Sharpheus {
 
 	bool AnimatedSprite::Load(FileLoader& fl)
 	{
-		ShapedGameObject::Load(fl);
+		RenderableGameObject::Load(fl);
 		Animation* anim;
 		fl.Read(&anim);
 		SetAnimation(anim);

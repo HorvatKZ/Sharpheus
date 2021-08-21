@@ -7,6 +7,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(Text, "text.png")
+		SPH_PROVIDE_LAYER(Text, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_STRING(Text, "Content", GetContent, SetContent)
 		SPH_PROVIDE_FONT(Text, "Font", GetFont, SetFont, SetFontByName, SetFontByPath)
 		SPH_PROVIDE_COLOR(Text, "Color", GetColor, SetColor)
@@ -16,7 +17,7 @@ namespace Sharpheus {
 
 
 	Text::Text(GameObject* parent, const std::string& name) :
-		AxisShapedGameObject(parent, name, new Rect())
+		AxisGameObject(parent, name, new Rect())
 	{
 		ForceUpdateAxes();
 	}
@@ -26,7 +27,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKTYPE(other, Text);
 
-		AxisShapedGameObject::CopyFrom(other);
+		AxisGameObject::CopyFrom(other);
 		Text* trueOther = (Text*)other;
 		content = trueOther->content;
 		font = trueOther->font;
@@ -55,7 +56,7 @@ namespace Sharpheus {
 
 	bool Text::Save(FileSaver& fs)
 	{
-		AxisShapedGameObject::Save(fs);
+		AxisGameObject::Save(fs);
 		fs.Write(content);
 		fs.Write(font);
 		fs.Write(color);
@@ -79,12 +80,13 @@ namespace Sharpheus {
 
 	bool Text::Load(FileLoader& fl)
 	{
-		AxisShapedGameObject::Load(fl);
+		AxisGameObject::Load(fl);
 		fl.Read(content);
 		fl.Read(&font);
 		fl.Read(color);
 		fl.Read(size);
 		fl.Read(style);
+		UpdateSizer();
 		return fl.GetStatus();
 	}
 

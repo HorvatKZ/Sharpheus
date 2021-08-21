@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../ShapedGameObject.hpp"
+#include "../RenderableGameObject.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT AxisShapedGameObject : public ShapedGameObject
+	class SPH_EXPORT AxisGameObject : public RenderableGameObject
 	{
 	public:
-		AxisShapedGameObject(GameObject* parent, const std::string& name, Shape* shape);
-		virtual ~AxisShapedGameObject() = default;
+		AxisGameObject(GameObject* parent, const std::string& name, Shape* shape);
+		virtual ~AxisGameObject() = default;
 		virtual void CopyFrom(GameObject* other) override;
 
 		virtual void SetWorldTrafo(const Transform& trafo) override;

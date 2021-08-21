@@ -92,7 +92,6 @@ namespace Sharpheus::TileMapEditor {
 		}
 
 		if (isHighlightOn) {
-			tileMap->RenderAll();
 			tileMap->RenderAsSelected();
 		}
 		

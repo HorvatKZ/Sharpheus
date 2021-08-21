@@ -13,11 +13,13 @@ namespace Sharpheus {
 		virtual ~DetailsPanel();
 
 		void BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback,
-			std::function<void()>&& currDataChangedCallback, std::function<void(uint32)>&& behaviorChangedCallback);
+			std::function<void()>&& currDataChangedCallback, std::function<void()>&& currTrafoChangedCallback,
+			std::function<void(uint32)>&& behaviorChangedCallback);
 
 		void CurrentChanged(GameObject* curr);
-		void CurrentNameChanged(const std::string& oldName, const std::string& newName);
-		void CurrentDataChanged(GameObject* curr);
+		void CurrentNameChanged();
+		void CurrentDataChanged();
+		void CurrentTrafoChanged();
 
 	private:
 		wxStaticText* title;
@@ -28,7 +30,7 @@ namespace Sharpheus {
 		std::vector<Presenter*> presenters;
 
 		std::function<void(const std::string&, const std::string&)> currNameChangedCallback = nullptr;
-		std::function<void()> currDataChangedCallback = nullptr;
+		std::function<void()> currDataChangedCallback = nullptr, currTrafoChangedCallback = nullptr;
 		std::function<void(uint32)> behaviorChangedCallback = nullptr;
 
 		uint32 freeY;

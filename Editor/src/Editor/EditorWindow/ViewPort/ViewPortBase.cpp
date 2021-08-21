@@ -24,9 +24,9 @@ namespace Sharpheus {
 	}
 
 
-	void ViewPortBase::BindCallbacks(std::function<void()>&& currDataChangedCallback)
+	void ViewPortBase::BindCallbacks(std::function<void()>&& currTrafoChangedCallback)
 	{
-		this->currDataChangedCallback = std::move(currDataChangedCallback);
+		this->currTrafoChangedCallback = std::move(currTrafoChangedCallback);
 	}
 
 

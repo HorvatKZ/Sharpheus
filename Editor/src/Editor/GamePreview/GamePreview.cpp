@@ -21,10 +21,6 @@ namespace Sharpheus {
 		canvas = new PreviewCanvas(this, glContext, proj);
 		firstTick = wxGetLocalTimeMillis();
 
-		if (winProps.fullscreen) {
-			ShowFullScreen(true);
-		}
-
 		wxIcon icon;
 		icon.CopyFromBitmap(wxBitmap(ProjectData::GetPath() + "Assets\\Icon\\pngicon.png", wxBITMAP_TYPE_PNG));
 		SetIcon(icon);

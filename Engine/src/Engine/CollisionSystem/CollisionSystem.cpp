@@ -58,7 +58,7 @@ namespace Sharpheus {
 	void CollisionSystem::AddCollider(Collider* collider)
 	{
 		colliders.push_back(collider);
-		collider->SetVisible(areCollidersVisible);
+		collider->SetColliderVisible(areCollidersVisible);
 	}
 
 

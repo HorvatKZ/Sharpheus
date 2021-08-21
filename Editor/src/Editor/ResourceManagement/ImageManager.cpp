@@ -45,6 +45,9 @@ namespace Sharpheus {
 			case PathType::EXPLORER:
 				fullPath = EditorData::GetPath() + "Assets\\Editor\\Icons\\Explorer\\" + path;
 				break;
+			case PathType::MENUBAR:
+				fullPath = EditorData::GetPath() + "Assets\\Editor\\Icons\\MenuBar\\" + path;
+				break;
 			default:
 				fullPath = path;
 		}

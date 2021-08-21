@@ -7,13 +7,14 @@ namespace Sharpheus {
 
 	template <class Class, class T> using Getter = std::function<T(Class*)>;
 	template <class Class, class T> using Setter = std::function<void(Class*, T)>;
+	template <class Class, class T> using BSetter = std::function<bool(Class*, T)>;
 
 	
 	class CommonProvider
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, TILESET, SOUND, STRING, STRINGLIST, BEHAVIOR, TILEMAP
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, TILESET, SOUND, STRING, STRINGLIST, BEHAVIOR, TILEMAP, LAYER
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -221,6 +222,25 @@ namespace Sharpheus {
 		std::function<void(Class*, uint32)> removeString;
 	};
 
+
+	template <class Class>
+	class LayerProvider : public CommonProvider
+	{
+	public:
+		LayerProvider(const std::string& name, Getter<Class, const std::string&>&& getter, BSetter<Class, const std::string&>&& setter)
+			: CommonProvider(name), getter(std::move(getter)), setter(std::move(setter)) {}
+		virtual ~LayerProvider() = default;
+
+		virtual inline const std::string& Get(Class* obj) { return getter(obj); }
+		virtual inline bool Set(Class* obj, const std::string& value) { return setter(obj, value); }
+
+		virtual inline Type GetType() override { return Type::LAYER; }
+
+	protected:
+		Getter<Class, const std::string&> getter;
+		BSetter<Class, const std::string&> setter;
+	};
+
 }
 
 
@@ -263,3 +283,5 @@ namespace Sharpheus {
 #define SPH_PROVIDE_STRINGLIST(Class, Title, GetCount, GetCurr, GetStr, SetCurr, PathSetter, PathAdder, Remover) \
 	new StringListProvider<Class>(Title, SPH_BIND_1(Class::GetCount), SPH_BIND_1(Class::GetCurr), SPH_BIND_2(Class::GetStr), \
 	SPH_BIND_2(Class::SetCurr), SPH_BIND_3(Class::PathSetter), SPH_BIND_2(Class::PathAdder), SPH_BIND_2(Class::Remover)),
+#define SPH_PROVIDE_LAYER(Class, Title, Getter, Setter) \
+	new ::Sharpheus::LayerProvider<Class>(Title, SPH_BIND_GETTER(Class::Getter), SPH_BIND_SETTER(Class::Setter)),

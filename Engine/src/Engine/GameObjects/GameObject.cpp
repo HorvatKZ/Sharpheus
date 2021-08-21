@@ -86,21 +86,8 @@ namespace Sharpheus {
 	}
 
 
-	void GameObject::RenderAll()
-	{
-		if (isVisible) {
-			Render();
-
-			for (GameObject* child : children) {
-				child->RenderAll();
-			}
-		}
-	}
-
-
 	void GameObject::RenderAsSelected()
 	{
-		Render();
 		RenderSelection();
 	}
 
@@ -127,7 +114,7 @@ namespace Sharpheus {
 
 	bool GameObject::IsSelected(const Point& pos)
 	{
-		if (!isVisible) {
+		if (!IsAllVisible()) {
 			return false;
 		}
 
@@ -343,9 +330,10 @@ namespace Sharpheus {
 		return i < children.size();
 	}
 
+
 	GameObject* GameObject::GetUpperMostSelected(const Point& pos)
 	{
-		if (!isVisible) {
+		if (!IsAllVisible()) {
 			return nullptr;
 		}
 
@@ -414,16 +402,6 @@ namespace Sharpheus {
 		fs.Write(trafo);
 		fs.Write(isVisible);
 		return fs.GetStatus();
-	}
-
-
-	void GameObject::Tick(float deltaTime)
-	{
-	}
-
-
-	void GameObject::Render()
-	{
 	}
 
 

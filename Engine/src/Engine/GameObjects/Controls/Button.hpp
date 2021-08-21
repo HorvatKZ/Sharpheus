@@ -18,6 +18,8 @@ namespace Sharpheus {
 		inline void SetWidth(float width) { this->width = width; UpdateSizer(); }
 		inline void SetHeight(float height) { this->height = height; UpdateSizer(); }
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(Button)
@@ -26,8 +28,6 @@ namespace Sharpheus {
 		float width = 0.f, height = 0.f;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void Render() override;
 
 		virtual void UpdateSizer() override;
 	};

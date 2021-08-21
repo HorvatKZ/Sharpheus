@@ -33,7 +33,11 @@ namespace Sharpheus {
 
 	bool ShapedGameObject::IsSelected(const Point& pos)
 	{
-		if (!isVisible) {
+		if (!IsAllVisible()) {
+			return false;
+		}
+
+		if (shape == nullptr) {
 			return false;
 		}
 

@@ -3,6 +3,7 @@
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/Registry/EditorData.hpp"
+#include "Editor/EditorWindow/MenuBar/LayerEditorDialog.hpp"
 #include "Editor/EditorWindow/MenuBar/AnimationCreatorDialog.hpp"
 #include "Editor/EditorWindow/MenuBar/TileSetCreatorDialog.hpp"
 #include "Editor/Exporting/Exporter.hpp"
@@ -101,7 +102,7 @@ namespace Sharpheus {
 
 	bool EditorCommands::SaveLevelAs()
 	{
-		RelativeSaveDialog saveDialog(editorWindow, "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
+		RelativeSaveDialog saveDialog(editorWindow, "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus", ProjectData::GetLevel()->GetName());
 
 		if (!saveDialog.Show())
 			return true;
@@ -163,6 +164,14 @@ namespace Sharpheus {
 		bool success = ProjectData::GetLevel()->SaveAsScene(curr, wxStr2StdStr(saveDialog.GetPath()));
 		SPHE_ASSERT(success, "Cannot save current GameObject as a scene. Check the log files for more information");
 		return success;
+	}
+
+
+	void EditorCommands::LayerEditor()
+	{
+		LayerEditorDialog dial(editorWindow);
+		dial.ShowModal();
+		currChangedCallback();
 	}
 
 

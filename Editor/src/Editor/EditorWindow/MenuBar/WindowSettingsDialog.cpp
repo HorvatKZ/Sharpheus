@@ -7,14 +7,14 @@ namespace Sharpheus {
 
 	const uint32 WindowSettingsDialog::labelWidth = 40;
 	const std::vector<wxString> WindowSettingsDialog::resolutionOptions = {
-		"3840x2160",
-		"2560x1440",
-		"3360x1440",
+		"800x600",
+		"1280x720",
+		"1366x768",
 		"1920x1080",
 		"2520x1080",
-		"1366x768",
-		"1280x720",
-		"800x600",
+		"2560x1440",
+		"3360x1440",
+		"3840x2160",
 		"Custom"
 	};
 

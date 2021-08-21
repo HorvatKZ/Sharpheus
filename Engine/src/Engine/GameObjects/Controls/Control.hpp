@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../AxisShapedGameObject.hpp"
+#include "../AxisGameObject.hpp"
 #include "Engine/Events/LocalEvent.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
 
@@ -11,7 +11,7 @@ namespace Sharpheus {
 	SPH_DEF_EVENT_FUNC(ControlChangedEvent);
 
 
-	class SPH_EXPORT Control : public AxisShapedGameObject
+	class SPH_EXPORT Control : public AxisGameObject
 	{
 	public:
 		Control(GameObject* parent, const std::string& name, Shape* shape);
@@ -38,10 +38,10 @@ namespace Sharpheus {
 		inline void SetFontSize(float fontSize) { this->fontSize = fontSize; UpdateSizer(); }
 		inline void SetFontStyle(byte fontStyle) { this->fontStyle = fontStyle; UpdateSizer(); }
 
+		virtual inline void SetLevel(class Level* level) override { this->level = level; SetLayer("HUD"); }
+
 		void SetFontByName(const std::string& name);
 		void SetFontByPath(const std::string& fontFile, const std::string& imgFile);
-
-		bool IsActive();
 
 		virtual inline bool GetState() = 0;
 		inline bool IsCurrentlyClicked() { return isCurrentlyClicked; }

@@ -167,58 +167,58 @@ namespace Sharpheus {
 	{
 		std::string key, value;
 		GetNextKeyValue(fin, key, value);
-		if (key == "id") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "id") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"id\"");
 			valid = false;
 		}
 		uint8 id = std::stoi(value);
 		CharData& data = chars[id];
 
 		GetNextKeyValue(fin, key, value);
-		if (key == "x") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "x") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"x\"");
 			valid = false;
 		}
 		uint32 x = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		if (key == "y") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "y") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"y\"");
 			valid = false;
 		}
 		uint32 y = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		if (key == "width") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "width") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"width\"");
 			valid = false;
 		}
 		uint32 width = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		if (key == "height") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "height") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"height\"");
 			valid = false;
 		}
 		uint32 height = std::stoi(value);
 
 		GetNextKeyValue(fin, key, value);
-		if (key == "xoffset") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "xoffset") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"xoffset\"");
 			valid = false;
 		}
 		data.xoffset = std::stoi(value) / originalSize;
 
 		GetNextKeyValue(fin, key, value);
-		if (key == "yoffset") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "yoffset") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"yoffset\"");
 			valid = false;
 		}
 		data.yoffset = std::stoi(value) / originalSize;
 
 		GetNextKeyValue(fin, key, value);
-		if (key == "xadvance") {
-			SPH_ERROR("Not appropriate format");
+		if (key != "xadvance") {
+			SPH_ERROR("Font: Not appropriate format. Cannot find \"xadvance\"");
 			valid = false;
 		}
 		data.xadvance = std::stoi(value) / originalSize;

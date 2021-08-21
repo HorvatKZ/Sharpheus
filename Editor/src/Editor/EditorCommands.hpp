@@ -21,6 +21,8 @@ namespace Sharpheus {
 		static bool AttachSceneToCurrent(const wxString& scenePath);
 		static bool SaveCurrentAsScene();
 
+		static void LayerEditor();
+
 		static void CreateAnimation();
 		static void EditAnimation(const wxString& animPath);
 

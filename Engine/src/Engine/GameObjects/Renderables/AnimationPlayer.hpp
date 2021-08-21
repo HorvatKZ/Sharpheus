@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../ShapedGameObject.hpp"
+#include "../RenderableGameObject.hpp"
 #include "Engine/ResourceManager/Animation.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT AnimationPlayer : public ShapedGameObject
+	class SPH_EXPORT AnimationPlayer : public RenderableGameObject
 	{
 	public:
 		AnimationPlayer(GameObject* parent, const std::string& name);
@@ -101,6 +101,8 @@ namespace Sharpheus {
 			}
 		}
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(AnimationPlayer)
@@ -116,7 +118,6 @@ namespace Sharpheus {
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
-		virtual void Render() override;
 
 		void FallBack();
 	};

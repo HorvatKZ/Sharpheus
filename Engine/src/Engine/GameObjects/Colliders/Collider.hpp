@@ -41,10 +41,10 @@ namespace Sharpheus {
 		inline void SetTrigger(bool isTrigger) { this->isTrigger = isTrigger; }
 
 		inline bool IsDynamic() { return parent->Is(Type::PhysicsObject); }
-		inline bool IsVisible() { return visible; }
-		inline void SetVisible(bool visible) { this->visible = visible; }
-		inline void Show() { visible = true; }
-		inline void Hide() { visible = false; }
+		inline bool IsColliderVisible() { return colliderVisible; }
+		inline void SetColliderVisible(bool visible) { this->colliderVisible = visible; }
+		inline void Show() { colliderVisible = true; }
+		inline void Hide() { colliderVisible = false; }
 
 		inline void SubscribeCollision(ID subscriberID, CollisionEventFunc&& func) {
 			onCollisionSubscribers[subscriberID] = std::move(func);
@@ -75,13 +75,16 @@ namespace Sharpheus {
 			currInside->clear();
 		}
 
-		inline bool operator==(const Collider& other) { return listenerID == other.listenerID; }
-		inline bool operator!=(const Collider& other) { return listenerID != other.listenerID; }
+		inline void RenderShapeIfColliderVisible() {
+			if (IsAllVisible()) {
+				RenderShape();
+			}
+		}
 
 		virtual bool Load(FileLoader& fl) override;
 
 	protected:
-		bool visible = false;
+		bool colliderVisible = false;
 		bool isTrigger = false;
 		float furthest = 0.f;
 		float lastDeltaTime = 0.f;
@@ -97,7 +100,6 @@ namespace Sharpheus {
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
-		virtual void Render() override;
 		virtual void RenderShape() = 0;
 
 		virtual void OnObjectDestroyed(const GameObjectDestroyedEvent& e);

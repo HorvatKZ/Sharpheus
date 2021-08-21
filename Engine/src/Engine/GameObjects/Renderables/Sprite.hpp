@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../ShapedGameObject.hpp"
+#include "../RenderableGameObject.hpp"
 #include "Engine/ResourceManager/Image.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT Sprite : public ShapedGameObject
+	class SPH_EXPORT Sprite : public RenderableGameObject
 	{
 	public:
 		Sprite(GameObject* parent, const std::string& name);
@@ -27,6 +27,8 @@ namespace Sharpheus {
 
 		void SetImageFromPath(const std::string& path, bool filtered);
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(Sprite)
@@ -36,8 +38,6 @@ namespace Sharpheus {
 		Color tint = Color::White;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void Render() override;
 	};
 
 }

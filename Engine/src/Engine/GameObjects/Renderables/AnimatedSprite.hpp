@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../ShapedGameObject.hpp"
+#include "../RenderableGameObject.hpp"
 #include "Engine/ResourceManager/Animation.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT AnimatedSprite : public ShapedGameObject
+	class SPH_EXPORT AnimatedSprite : public RenderableGameObject
 	{
 	public:
 		AnimatedSprite(GameObject* parent, const std::string& name);
@@ -30,6 +30,8 @@ namespace Sharpheus {
 
 		void SetAnimationFromPath(const std::string& path);
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(AnimatedSprite)
@@ -43,7 +45,6 @@ namespace Sharpheus {
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
-		virtual void Render() override;
 	};
 
 }

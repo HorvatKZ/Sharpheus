@@ -6,6 +6,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(ParticleEmitter, "particleemitter.png")
+		SPH_PROVIDE_LAYER(ParticleEmitter, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_IMAGE(ParticleEmitter, "Particle", GetParticle, SetParticle, SetParticleByPath)
 		SPH_PROVIDE_POINT(ParticleEmitter, "Particle scale", GetParticleScale, SetParticleScale)
 		SPH_PROVIDE_COLOR(ParticleEmitter, "Particle tint", GetTint, SetTint)
@@ -22,7 +23,7 @@ namespace Sharpheus {
 
 
 	ParticleEmitter::ParticleEmitter(GameObject* parent, const std::string& name)
-		: AxisShapedGameObject(parent, name, new Oval())
+		: AxisGameObject(parent, name, new Oval())
 	{
 	}
 
@@ -36,7 +37,7 @@ namespace Sharpheus {
 	{
 		SPH_CHECKTYPE(other, ParticleEmitter);
 
-		AxisShapedGameObject::CopyFrom(other);
+		AxisGameObject::CopyFrom(other);
 		ParticleEmitter* trueOther = (ParticleEmitter*)other;
 		SetParticle(trueOther->particle);
 		scale = trueOther->scale;
@@ -61,7 +62,7 @@ namespace Sharpheus {
 
 	bool ParticleEmitter::Load(FileLoader& fl)
 	{
-		AxisShapedGameObject::Load(fl);
+		AxisGameObject::Load(fl);
 		fl.Read(&particle);
 		fl.Read(scale);
 		fl.Read(tint);
@@ -77,13 +78,14 @@ namespace Sharpheus {
 			fl.Read(burstN);
 		}
 
+		UpdateSizer();
 		return fl.GetStatus();
 	}
 
 
 	bool ParticleEmitter::Save(FileSaver& fs)
 	{
-		AxisShapedGameObject::Save(fs);
+		AxisGameObject::Save(fs);
 		fs.Write(particle);
 		fs.Write(scale);
 		fs.Write(tint);

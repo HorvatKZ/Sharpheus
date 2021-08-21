@@ -32,9 +32,9 @@ namespace Sharpheus {
 	}
 
 
-	void ViewPort::BindCallbacks(std::function<void()>&& currChangedCallback, std::function<void()>&& currDataChangedCallback)
+	void ViewPort::BindCallbacks(std::function<void()>&& currChangedCallback, std::function<void()>&& currTrafoChangedCallback)
 	{
-		ViewPortBase::BindCallbacks(std::move(currDataChangedCallback));
+		ViewPortBase::BindCallbacks(std::move(currTrafoChangedCallback));
 		this->currChangedCallback = std::move(currChangedCallback);
 	}
 
@@ -125,7 +125,7 @@ namespace Sharpheus {
 
 			if (editType != EditingArrow::EditType::NONE) {
 				curr->SetWorldTrafo(currTrafo);
-				currDataChangedCallback();
+				currTrafoChangedCallback();
 			}
 		}
 		prevMousePos = mousePos;

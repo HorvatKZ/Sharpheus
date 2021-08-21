@@ -448,4 +448,24 @@ namespace Sharpheus {
 		virtual void HandleChange(wxCommandEvent& e);
 	};
 
+
+	template <class Class>
+	class LayerPresenter : public Presenter
+	{
+	public:
+		LayerPresenter(wxWindow* parent, LayerProvider<Class>* provider, Signal signal, uint32& y);
+		virtual ~LayerPresenter();
+
+		void SetCurrent(GameObject* curr) override;
+
+	protected:
+		wxComboBox* layerSelector = nullptr;
+		wxBitmapButton* layerEditorButton;
+
+		LayerProvider<Class>* provider;
+
+		virtual void HandleChange(wxCommandEvent& e);
+
+		void OnLayerEditor(wxCommandEvent& e);
+	};
 }

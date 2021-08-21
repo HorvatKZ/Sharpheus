@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../ShapedGameObject.hpp"
+#include "../RenderableGameObject.hpp"
 #include "Engine/ResourceManager/Image.hpp"
 
 
 namespace Sharpheus {
 
-	class SPH_EXPORT Quad : public ShapedGameObject
+	class SPH_EXPORT Quad : public RenderableGameObject
 	{
 	public:
 		Quad(GameObject* parent, const std::string& name);
@@ -20,6 +20,8 @@ namespace Sharpheus {
 		inline void SetHeight(float height) { this->height = height; SetSizer(width, height); }
 		inline void SetColor(const Color& color) { this->color = color; }
 
+		virtual void Render() override;
+
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(Quad)
@@ -29,8 +31,6 @@ namespace Sharpheus {
 		Color color = Color::White;
 
 		virtual bool Save(FileSaver& fs) override;
-
-		virtual void Render() override;
 	};
 
 }

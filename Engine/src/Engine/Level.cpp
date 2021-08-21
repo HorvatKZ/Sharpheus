@@ -23,6 +23,9 @@ namespace Sharpheus {
 
 		Camera* camera = Create<Camera>(root, "Camera");
 		camera->SetCurrent();
+
+		CreateLayer("Default");
+		CreateLayer("HUD");
 	}
 
 
@@ -49,7 +52,13 @@ namespace Sharpheus {
 
 	void Level::Render()
 	{
-		root->RenderAll();
+		for (uint32 i = 0; i < layers.size(); ++i) {
+			if (layers[i].visible) {
+				for (auto it = layers[i].objects.begin(); it != layers[i].objects.end(); ++it) {
+					(*it)->RenderIfVisible();
+				}
+			}
+		}
 	}
 
 
@@ -199,6 +208,8 @@ namespace Sharpheus {
 		delete root;
 		collSys.Clear();
 		RadioButton::Clear();
+		layers.clear();
+		layerNames.clear();
 
 		FileLoader fl((base + path).c_str());
 
@@ -225,6 +236,225 @@ namespace Sharpheus {
 
 		SPH_ASSERT(success, "An error occured during loading level data from \"{1}\"", name, fullpath);
 		return success;
+	}
+
+
+	bool Level::CreateLayer(const std::string& name)
+	{
+		if (name.empty()) {
+			SPH_ERROR("CreateLayer: Layer's name cannot be empty");
+			return false;
+		}
+
+		uint32 ind = GetLayerInd(name);
+		if (ind != layers.size()) {
+			SPH_ERROR("CreateLayer: Layer \"{0}\" already exists", name);
+			return false;
+		}
+
+		layers.push_back(Layer(name));
+		layerNames.push_back(name);
+		return true;
+	}
+
+
+	bool Level::CreateLayer(const std::string& name, uint32 index)
+	{
+		if (name.empty()) {
+			SPH_ERROR("CreateLayer: Layer's name cannot be empty");
+			return false;
+		}
+
+		uint32 ind = GetLayerInd(name);
+		if (ind != layers.size()) {
+			SPH_ERROR("CreateLayer: Layer \"{0}\" already exists", name);
+			return false;
+		}
+
+		layers.insert(layers.begin() + index, Layer(name));
+		layerNames.insert(layerNames.begin() + index, name);
+		return true;
+	}
+
+
+	bool Level::RenameLayer(uint32 index, const std::string& newName)
+	{
+		uint32 ind = GetLayerInd(newName);
+		if (ind != layers.size()) {
+			SPH_ERROR("RenameLayer: New layer \"{0}\" already exists", newName);
+			return false;
+		}
+
+		if (index >= layers.size()) {
+			SPH_ERROR("RenameLayer: No layer with index \"{0}\" exists", index);
+			return false;
+		}
+
+		if (!IsDeletableLayer(layerNames[index])) {
+			SPH_ERROR("RenameLayer: Cannot rename \"Default\" and \"HUD\" layers");
+			return false;
+		}
+
+		layers[index].name = newName;
+		layerNames[index] = newName;
+		for (auto it = layers[index].objects.begin(); it != layers[index].objects.end(); ++it) {
+			(*it)->SetLayerByLevel(newName);
+		}
+		return true;
+	}
+
+
+	bool Level::RenameLayer(const std::string& oldName, const std::string& newName)
+	{
+		if (oldName.empty() || newName.empty()) {
+			SPH_ERROR("RenameLayer: Layer's name cannot be empty");
+			return false;
+		}
+
+		if (oldName == newName) {
+			return true;
+		}
+
+		return RenameLayer(GetLayerInd(oldName), newName);
+	}
+
+
+	bool Level::RemoveLayer(uint32 index, uint32 moveToLayer)
+	{
+		if (!IsDeletableLayer(layerNames[index])) {
+			SPH_ERROR("RemoveLayer: Cannot remove \"Default\" and \"HUD\" layers");
+			return false;
+		}
+
+		if (index == moveToLayer) {
+			SPH_ERROR("RemoveLayer: Layer to delete and move to layer are the same");
+			return false;
+		}
+
+		if (index >= layers.size()) {
+			SPH_ERROR("RemoveLayer: No layer to delete with index \"{0}\" exists", index);
+			return false;
+		}
+
+		if (moveToLayer >= layers.size()) {
+			SPH_ERROR("RemoveLayer: No layer to move to with index \"{0}\" exists", moveToLayer);
+			return false;
+		}
+
+		for (auto it = layers[index].objects.begin(); it != layers[index].objects.end(); ++it) {
+			layers[moveToLayer].objects.insert(*it);
+			(*it)->SetLayerByLevel(layerNames[moveToLayer]);
+		}
+		layers.erase(layers.begin() + index);
+		layerNames.erase(layerNames.begin() + index);
+		return true;
+	}
+
+
+	bool Level::RemoveLayer(const std::string& name, const std::string& moveToLayer)
+	{
+		if (name.empty() || moveToLayer.empty()) {
+			SPH_ERROR("RemoveLayer: Layer's name cannot be empty");
+			return false;
+		}
+
+		return RemoveLayer(GetLayerInd(name), GetLayerInd(moveToLayer));
+	}
+
+
+	bool Level::SwapLayers(uint32 firstLayer, uint32 secondLayer)
+	{
+		if (firstLayer == secondLayer) {
+			return true;
+		}
+
+		if (firstLayer >= layers.size()) {
+			SPH_ERROR("SwapLayers: First layer with index \"{0}\" does not exist", firstLayer);
+			return false;
+		}
+
+		if (secondLayer >= layers.size()) {
+			SPH_ERROR("SwapLayers: Second layer with index \"{0}\" does not exist", secondLayer);
+			return false;
+		}
+
+		std::swap(layers[firstLayer], layers[secondLayer]);
+		std::swap(layerNames[firstLayer], layerNames[secondLayer]);
+		return true;
+	}
+
+
+	bool Level::SwapLayers(const std::string& firstLayer, const std::string& secondLayer)
+	{
+		if (firstLayer.empty() || secondLayer.empty()) {
+			SPH_ERROR("SwapLayers: Layer's name cannot be empty");
+			return false;
+		}
+
+		return SwapLayers(GetLayerInd(firstLayer), GetLayerInd(secondLayer));
+	}
+
+
+	bool Level::AddToLayer(RenderableGameObject* obj, const std::string& layer)
+	{
+		if (layer.empty()) {
+			SPH_ERROR("AddToLayer: Layer's name cannot be empty");
+			return false;
+		}
+
+		uint32 ind = GetLayerInd(layer);
+		if (ind == layers.size()) {
+			SPH_ERROR("AddToLayer: Layer \"{0}\" does not exist", layer);
+			return false;
+		}
+
+		if (!obj->GetLayer().empty()) {
+			bool result = RemoveFromLayers(obj);
+			if (!result) {
+				return false;
+			}
+		}
+
+		layers[ind].objects.insert(obj);
+		obj->SetLayerByLevel(layer);
+		return true;
+	}
+
+
+	bool Level::RemoveFromLayers(RenderableGameObject* obj)
+	{
+		if (obj->GetLayer().empty()) {
+			return true;
+		}
+
+		uint32 ind = GetLayerInd(obj->GetLayer());
+		if (ind == layers.size()) {
+			SPH_ERROR("RemoveFromLayers: Layer \"{0}\" does not exist", obj->GetLayer());
+			return false;
+		}
+
+		layers[ind].objects.erase(obj);
+		return true;
+	}
+
+
+	bool Level::IsLayerVisible(uint32 ind)
+	{
+		if (ind >= layers.size()) {
+			SPH_ERROR("IsLayerVisible: No layer with index \"{0}\" exists", ind);
+			return false;
+		}
+		return layers[ind].visible;
+	}
+
+
+	void Level::SetLayerVisible(uint32 ind, bool visiblity)
+	{
+		if (ind >= layers.size()) {
+			SPH_ERROR("SetLayerVisible: No layer with index \"{0}\" exists", ind);
+			return;
+		}
+		layers[ind].visible = visiblity;
 	}
 
 
@@ -261,6 +491,12 @@ namespace Sharpheus {
 		fs.Write(name);
 		fs.Write(projectPath);
 		fs.WriteEnd();
+		fs.Write((uint32)layerNames.size());
+		for (uint32 i = 0; i < layers.size(); ++i) {
+			fs.Write(layers[i].name);
+			fs.Write(layers[i].visible);
+		}
+		fs.WriteEnd();
 		return fs.GetStatus();
 	}
 
@@ -269,7 +505,18 @@ namespace Sharpheus {
 	{
 		fl.Read(name);
 		fl.Read(projectPath);
-		return fl.TryReadingEnd();
+		bool success = fl.TryReadingEnd();
+		uint32 n;
+		fl.Read(n);
+		for (uint32 i = 0; i < n; ++i) {
+			std::string layer;
+			fl.Read(layer);
+			CreateLayer(layer);
+			bool isVisible;
+			fl.Read(isVisible);
+			SetLayerVisible(i, isVisible);
+		}
+		return success && fl.TryReadingEnd();
 	}
 
 

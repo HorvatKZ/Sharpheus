@@ -29,6 +29,8 @@ namespace Sharpheus {
 		level->AppendSeparator();
 		level->Append(10105, wxT("Attach Scene"));
 		level->Append(10106, wxT("Save as Scene"));
+		level->AppendSeparator();
+		level->Append(10107, wxT("Layer Editor\tCtrl+L"));
 		Append(level, "Level");
 
 		wxMenu* editor = new wxMenu;
@@ -55,6 +57,7 @@ namespace Sharpheus {
 		Connect(10104, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveLevelAs));
 		Connect(10105, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AttachScene));
 		Connect(10106, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::SaveAsScene));
+		Connect(10107, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::LayerEditor));
 		Connect(10201, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::GridSettings));
 		Connect(10202, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AnimatorCreator));
 		Connect(10203, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::TileSetCreator));
@@ -139,6 +142,12 @@ namespace Sharpheus {
 	void MenuBar::SaveAsScene(wxCommandEvent& e)
 	{
 		EditorCommands::SaveCurrentAsScene();
+	}
+
+
+	void MenuBar::LayerEditor(wxCommandEvent& e)
+	{
+		EditorCommands::LayerEditor();
 	}
 
 

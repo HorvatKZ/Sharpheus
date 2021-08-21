@@ -6,6 +6,7 @@
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(Button, "button.png")
+		SPH_PROVIDE_LAYER(Button, "Layer", GetLayer, SetLayer)
 		SPH_PROVIDE_UFLOAT(Button, "Width", GetWidth, SetWidth)
 		SPH_PROVIDE_UFLOAT(Button, "Height", GetHeight, SetHeight)
 		SPH_PROVIDE_COLOR(Button, "Color", GetColor, SetColor)
