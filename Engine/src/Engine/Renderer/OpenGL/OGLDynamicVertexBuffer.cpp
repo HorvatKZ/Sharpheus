@@ -63,7 +63,7 @@ namespace Sharpheus::OpenGL {
 
 			glBindVertexArray(OGL_ID_NONE);
 
-			vertices = new Vertex[maxQuadCount];
+			vertices = new Vertex[4 * maxQuadCount];
 			texIDs = new GLuint[1];
 		}
 	}

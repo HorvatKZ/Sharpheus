@@ -59,7 +59,6 @@ namespace Sharpheus::OpenGL {
 			),
 			glm::vec3(-camTrafo.pos.x, -camTrafo.pos.y, 0)
 		);
-		shader.Use();
 		shader.SetUniform("viewTrafo", mat);
 	}
 

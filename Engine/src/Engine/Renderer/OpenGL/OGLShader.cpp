@@ -12,6 +12,10 @@ namespace Sharpheus::OpenGL {
 
 	ShaderProgram::~ShaderProgram()
 	{
+		if (used) {
+			Unuse();
+		}
+
 		if (programID != OGL_ID_NONE) {
 			glDeleteProgram(programID);
 		}
