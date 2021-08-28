@@ -23,8 +23,8 @@ namespace Sharpheus {
 			inline IntPoint ToRelPos() const { return IntPoint(ModByChunkSize(x), ModByChunkSize(y)); }
 			inline uint8 ToRelInd() const { return ModByChunkSize(y) * chunkSize + ModByChunkSize(x); }
 
-			inline int32 DivByChunkSize(int32 a) const { return (a >= 0) ? (a / chunkSize) : (a / chunkSize - 1); }
-			inline int32 ModByChunkSize(int32 a) const { return (a >= 0) ? (a % chunkSize) : (a % chunkSize + chunkSize); }
+			inline int32 DivByChunkSize(int32 a) const { return (a >= 0) ? (a / chunkSize) : ((a + 1) / chunkSize - 1); }
+			inline int32 ModByChunkSize(int32 a) const { return (a % chunkSize == 0) ? 0 : ((a >= 0) ? (a % chunkSize) : (a % chunkSize + chunkSize)); }
 		};
 
 		struct ChunkData {

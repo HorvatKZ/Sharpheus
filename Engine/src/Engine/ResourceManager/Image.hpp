@@ -2,11 +2,6 @@
 
 #include "Resource.hpp"
 #include "Engine/Renderer/Renderer.hpp"
-#include <GL/glew.h>
-#include <GL/wglew.h>
-#include <GL/GLU.h>
-
-#define TEXTURE_ID_NONE 0
 
 
 namespace Sharpheus {
@@ -25,7 +20,7 @@ namespace Sharpheus {
 		void RenderPart(Point coords[4], Point texCoords[4], const Color& tint = Color::White);
 
 	private:
-		GLuint ID = TEXTURE_ID_NONE;
+		uint32 ID;
 		uint32 width, height;
 		bool filtered;
 

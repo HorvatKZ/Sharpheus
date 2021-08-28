@@ -29,8 +29,13 @@ namespace Sharpheus {
 		virtual void DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color) = 0;
 		virtual void DrawLine(const Point& begin, const Point& end, float thickness, const Color& color) = 0;
 
-		virtual void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint) = 0;
+		virtual void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint, uint32 texID) = 0;
 		virtual void DrawMonocromeQuad(Point coords[4], const Color& color) = 0;
+
+		virtual uint32 CreateTexture(byte* data, uint32 width, uint32 height, uint32 channels, bool filtered) = 0;
+		virtual void FreeTexture(uint32 texID) = 0;
+		virtual bool IsValidTexture(uint32 texID) = 0;
+		virtual uint32 GetInvalidTexture() = 0;
 
 		virtual inline const std::string& GetVersion() = 0;
 

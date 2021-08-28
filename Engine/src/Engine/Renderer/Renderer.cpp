@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Renderer.hpp"
-#include "Renderer_API/OpenGL_Renderer.hpp"
+#include "OpenGL/OGLRenderer.hpp"
 
 
 namespace Sharpheus {
@@ -10,7 +10,7 @@ namespace Sharpheus {
 
 	void Renderer::Init()
 	{
-		renderer = new OpenGL_Renderer();
+		renderer = new OpenGL::Renderer();
 	}
 
 
@@ -50,9 +50,9 @@ namespace Sharpheus {
 	}
 
 
-	void Renderer::DrawQuad(Point coords[4], Point texCoords[4], const Color& tint)
+	void Renderer::DrawQuad(Point coords[4], Point texCoords[4], const Color& tint, uint32 texID)
 	{
-		renderer->DrawQuad(coords, texCoords, tint);
+		renderer->DrawQuad(coords, texCoords, tint, texID);
 	}
 
 	void Renderer::DrawMonocromeQuad(Point coords[4], const Color& color)
@@ -73,6 +73,26 @@ namespace Sharpheus {
 	void Renderer::SetBackgroundColor(const Color& color)
 	{
 		renderer->SetBackgroundColor(color);
+	}
+
+	uint32 Renderer::CreateTexture(byte* data, uint32 width, uint32 height, uint32 channels, bool filtered)
+	{
+		return renderer->CreateTexture(data, width, height, channels, filtered);
+	}
+
+	void Renderer::FreeTexture(uint32 texID)
+	{
+		renderer->FreeTexture(texID);
+	}
+
+	bool Renderer::IsValidTexture(uint32 texID)
+	{
+		return renderer->IsValidTexture(texID);
+	}
+
+	uint32 Renderer::GetInvalidTexture()
+	{
+		return renderer->GetInvalidTexture();
 	}
 
 	const std::string& Renderer::GetAPIVersion()

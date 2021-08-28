@@ -19,9 +19,6 @@ namespace Sharpheus {
 		AxisGameObject(parent, name, new Rect()) {
 		prevAxis[0] = Point::Right;
 		prevAxis[1] = Point::Up;
-		Set({ 0,0 }, 1);
-		Set({ 1,0 }, 1);
-		Set({ 1,1 }, 2);
 	}
 
 
@@ -33,6 +30,12 @@ namespace Sharpheus {
 		TileMap* trueOther = (TileMap*)other;
 		SetTileSet(trueOther->tiles);
 		tint = trueOther->tint;
+		chunks.clear();
+		for (auto it = trueOther->chunks.begin(); it != trueOther->chunks.end(); ++it) {
+			auto it2 = chunks.insert({ it->first, ChunkData() }).first;
+			it2->second.count = it->second.count;
+			memcpy(it2->second.arr, it->second.arr, chunkSize * chunkSize);
+		}
 	}
 
 

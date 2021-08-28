@@ -31,7 +31,6 @@ namespace Sharpheus {
 		EditorData::Clear();
 		ProjectData::Clear();
 		ImageManager::Clear();
-		ResourceManager::Clear();
 		SoundPlayer::Clear();
 		SPHE_INFO("Exiting editor. Thanks for using Sharpheus");
 	}

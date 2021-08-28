@@ -72,7 +72,7 @@ namespace Sharpheus {
 		cw.UsingNamespace("Sharpheus");
 		cw.WriteEmptyLines(2);
 
-		cw.WriteLine("uint32 " + className + "::classVersion = 1;");
+		cw.WriteLine("const uint32 " + className + "::classVersion = 1;");
 		cw.WriteEmptyLine();
 
 		cw.WriteLine("SPH_START_CLASSINFO(" + className + ", \"behavior.png\")");

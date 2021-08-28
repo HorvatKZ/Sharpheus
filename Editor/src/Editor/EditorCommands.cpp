@@ -1,13 +1,13 @@
 #include "editor_pch.h"
 #include "EditorCommands.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
-#include "Editor/Registry/ProjectData.hpp"
-#include "Editor/Registry/EditorData.hpp"
 #include "Editor/EditorWindow/MenuBar/LayerEditorDialog.hpp"
 #include "Editor/EditorWindow/MenuBar/AnimationCreatorDialog.hpp"
 #include "Editor/EditorWindow/MenuBar/TileSetCreatorDialog.hpp"
 #include "Editor/Exporting/Exporter.hpp"
 #include "Editor/TileMapEditor/TileMapEditor.hpp"
+#include "Editor/Registry/ProjectData.hpp"
+#include "Editor/Registry/EditorData.hpp"
 
 
 namespace Sharpheus {

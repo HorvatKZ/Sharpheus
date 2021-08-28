@@ -53,6 +53,7 @@ namespace Sharpheus {
 	Project::~Project()
 	{
 		ProjectControl::Clear();
+		ResourceManager::Clear();
 		delete level;
 	}
 

@@ -19,6 +19,9 @@ namespace Sharpheus {
 
 		inline void MakeOpaque(float percent) { a *= percent; }
 
+		inline glm::vec3 ToVec3() const { return glm::vec3(GetRed(), GetGreen(), GetBlue()); }
+		inline glm::vec4 ToVec4() const { return glm::vec4(GetRed(), GetGreen(), GetBlue(), GetAlpha()); }
+
 		static const Color Black;
 		static const Color Red;
 		static const Color Green;

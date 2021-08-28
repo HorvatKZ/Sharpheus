@@ -15,6 +15,7 @@ namespace Sharpheus {
 		wxGLCanvas::SetCurrent(*glContext);
 		GLenum err = glewInit();
 		SPHE_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
+
 		Renderer::Init();
 		EditorData::SetOGLVersion(Renderer::GetAPIVersion());
 

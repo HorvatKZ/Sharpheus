@@ -37,6 +37,8 @@ namespace Sharpheus {
 		float			GetAngle() const;
 		float			GetAngleWith(const Point& other) const;
 
+		inline glm::vec2 ToVec2() const { return glm::vec2(x, y); }
+
 		static const Point Zero;
 		static const Point Up;
 		static const Point Down;

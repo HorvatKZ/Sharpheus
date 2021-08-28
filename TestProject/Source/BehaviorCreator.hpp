@@ -11,6 +11,7 @@
 #include "CustomBehaviors/PlayerController.hpp"
 #include "CustomBehaviors/TriggerTester.hpp"
 #include "CustomBehaviors/MoueTester.hpp"
+#include "CustomBehaviors/Controller.hpp"
 
 #define SPH_PRESENT_BEHAVIOR(obj) \
 	SPH_START_PRESENTING(obj) \
@@ -19,17 +20,18 @@
 		SPH_PRESENT(PlayerController, 2) \
 		SPH_PRESENT(TriggerTester, 3) \
 		SPH_PRESENT(MoueTester, 4) \
-	SPH_END_PRESENTING()
+		SPH_PRESENT(Controller, 5) \
+	SPH_END_PRESENTING() \
 
 
 class SPH_EXPORT BehaviorCreator
 {
 public:
-	static Sharpheus::Behavior* Create(uint32_t subType, Sharpheus::PlaceholderBehavior* other);
-	static Sharpheus::Behavior* Create(uint32_t subType, Sharpheus::GameObject* parent, const std::string& name);
+	static Sharpheus::Behavior* Create(uint32 subType, Sharpheus::PlaceholderBehavior* other);
+	static Sharpheus::Behavior* Create(uint32 subType, Sharpheus::GameObject* parent, const std::string& name);
 
-	static bool IsCompatibleWithParent(uint32_t subType, Sharpheus::GameObject* parent);
+	static bool IsCompatibleWithParent(uint32 subType, Sharpheus::GameObject* parent);
 
-	static std::unordered_map<uint32_t, std::string> behaviorNames;
+	static std::unordered_map<uint32, std::string> behaviorNames;
 };
 

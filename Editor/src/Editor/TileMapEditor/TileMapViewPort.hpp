@@ -1,9 +1,6 @@
 #pragma once
 
 #include "editor_pch.h"
-#include <GL/glew.h>
-#include <GL/wglew.h>
-#include <wx/glcanvas.h>
 #include "Editor/EditorWindow/ViewPort/ViewPortBase.hpp"
 #include "TileSelecor.hpp"
 

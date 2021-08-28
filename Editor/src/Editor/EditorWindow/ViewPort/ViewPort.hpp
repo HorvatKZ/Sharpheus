@@ -1,9 +1,6 @@
 #pragma once
 
 #include "editor_pch.h"
-#include <GL/glew.h>
-#include <GL/wglew.h>
-#include <wx/glcanvas.h>
 #include "ViewPortBase.hpp"
 #include "EditingArrow.hpp"
 

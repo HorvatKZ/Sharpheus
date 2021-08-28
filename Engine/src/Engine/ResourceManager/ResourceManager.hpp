@@ -19,6 +19,8 @@ namespace Sharpheus {
 		static std::string FullPathToPath(const std::string& fullPath);
 		static inline std::string PathToFullPath(const std::string& path) { return assetsRoot + path; }
 
+		static inline std::string GetShaderPath(const std::string& fname) { return assetsRoot + "Shaders/" + fname; }
+
 		static Font* GetFont(const std::string& fontFile, const std::string& imgFile);
 		static Font* GetFont(const std::string& fontFile, Image* img);
 		static Font* GetFont(const std::string& name);

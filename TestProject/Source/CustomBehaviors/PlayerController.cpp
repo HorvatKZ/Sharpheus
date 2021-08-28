@@ -5,10 +5,10 @@
 
 using namespace Sharpheus;
 
-ClassInfo PlayerController::classInfo("PlayerController", "behavior.png", {
-	new FloatProvider<PlayerController>("Jumpforce", SPH_BIND_GETTER(PlayerController::GetJumpForce), SPH_BIND_SETTER(PlayerController::SetJumpForce)),
-	new FloatProvider<PlayerController>("Speed", SPH_BIND_GETTER(PlayerController::GetSpeed), SPH_BIND_SETTER(PlayerController::SetSpeed))
-});
+SPH_START_CLASSINFO(PlayerController, "behavior.png")
+SPH_PROVIDE_FLOAT(PlayerController, "Jumpforce", GetJumpForce, SetJumpForce)
+SPH_PROVIDE_FLOAT(PlayerController, "Speed", GetSpeed, SetSpeed)
+SPH_END_CLASSINFO
 
 
 PlayerController::PlayerController(Sharpheus::Behavior* other) : Behavior(other), ColliderListener(GetID())
@@ -58,24 +58,24 @@ void PlayerController::OnKeyPressed(const Sharpheus::KeyPressedEvent& e)
 {
 	Transform trafo = anim->GetTrafo();
 	switch (e.code) {
-		case KeyCode::W:
-			if (canJump) {
-				((PhysicsObject*)parent)->SetVelocityY(-jumpForce);
-				canJump = false;
-			}
-			break;
-		case KeyCode::A:
-			((PhysicsObject*)parent)->SetVelocityX(-speed);
-			anim->SetCurrentByName("Walk");
-			trafo.scale.x = -1;
-			anim->SetTrafo(trafo);
-			break;
-		case KeyCode::D:
-			((PhysicsObject*)parent)->SetVelocityX(speed);
-			anim->SetCurrentByName("Walk");
-			trafo.scale.x = 1;
-			anim->SetTrafo(trafo);
-			break;
+	case KeyCode::W:
+		if (canJump) {
+			((PhysicsObject*)parent)->SetVelocityY(-jumpForce);
+			canJump = false;
+		}
+		break;
+	case KeyCode::A:
+		((PhysicsObject*)parent)->SetVelocityX(-speed);
+		anim->SetCurrentByName("Walk");
+		trafo.scale.x = -1;
+		anim->SetTrafo(trafo);
+		break;
+	case KeyCode::D:
+		((PhysicsObject*)parent)->SetVelocityX(speed);
+		anim->SetCurrentByName("Walk");
+		trafo.scale.x = 1;
+		anim->SetTrafo(trafo);
+		break;
 	}
 }
 
@@ -83,12 +83,12 @@ void PlayerController::OnKeyPressed(const Sharpheus::KeyPressedEvent& e)
 void PlayerController::OnKeyHold(const Sharpheus::KeyHoldEvent& e)
 {
 	switch (e.code) {
-		case KeyCode::A:
-			((PhysicsObject*)parent)->SetVelocityX(-speed);
-			break;
-		case KeyCode::D:
-			((PhysicsObject*)parent)->SetVelocityX(speed);
-			break;
+	case KeyCode::A:
+		((PhysicsObject*)parent)->SetVelocityX(-speed);
+		break;
+	case KeyCode::D:
+		((PhysicsObject*)parent)->SetVelocityX(speed);
+		break;
 	}
 }
 
@@ -96,11 +96,11 @@ void PlayerController::OnKeyHold(const Sharpheus::KeyHoldEvent& e)
 void PlayerController::OnKeyReleased(const Sharpheus::KeyReleasedEvent& e)
 {
 	switch (e.code) {
-		case KeyCode::A:
-		case KeyCode::D:
-			((PhysicsObject*)parent)->SetVelocityX(0);
-			anim->SetCurrentByName("Idle");
-			break;
+	case KeyCode::A:
+	case KeyCode::D:
+		((PhysicsObject*)parent)->SetVelocityX(0);
+		anim->SetCurrentByName("Idle");
+		break;
 	}
 }
 
@@ -145,6 +145,6 @@ bool PlayerController::IsCompatibleWithParent(GameObject* parent)
 	if (parent->GetFirstChildOfType(Type::AnimationPlayer) == nullptr) {
 		return false;
 	}
-	
+
 	return true;
 }

@@ -160,6 +160,9 @@ namespace Sharpheus {
 			Deregister(obj);
 		}
 		std::string correctNewName = GenerateUniqueName(newName);
+		if (obj == root) {
+			name = correctNewName;
+		}
 		gameObjects[correctNewName] = obj;
 		return correctNewName;
 	}
@@ -212,6 +215,11 @@ namespace Sharpheus {
 		layerNames.clear();
 
 		FileLoader fl((base + path).c_str());
+
+		if (!fl.GetStatus()) {
+			SPH_ERROR("Connot open level file \"{0}\"", path);
+			return false;
+		}
 
 		bool success = true;
 		success &= LoadLevelData(fl);
