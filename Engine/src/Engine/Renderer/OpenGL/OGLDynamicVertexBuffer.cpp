@@ -2,9 +2,13 @@
 #include "OGLDynamicVertexBuffer.hpp"
 #include "OGLShader.hpp"
 
-#define SPH_OGL_SETVAOATTRIBUTE(field, ind, type, n) \
+#define SPH_OGL_SET_VAO_ATTRIBUTE(field, ind, type, n) \
 	glEnableVertexAttribArray(ind); \
-	glVertexAttribPointer(ind, n, type, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, field)); 
+	glVertexAttribPointer(ind, n, type, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, field));
+
+#define SPH_OGL_SET_VAO_INT_ATTRIBUTE(field, ind, type, n) \
+	glEnableVertexAttribArray(ind); \
+	glVertexAttribIPointer(ind, n, type, sizeof(Vertex), (const void*)offsetof(Vertex, field)); 
 
 namespace Sharpheus::OpenGL {
 
@@ -16,62 +20,69 @@ namespace Sharpheus::OpenGL {
 
 	DynamicVertexBuffer::~DynamicVertexBuffer()
 	{
-		if (vao != OGL_ID_NONE) {
+		if (vao != SPH_OGL_ID_NONE) {
 			glDeleteVertexArrays(1, &vao);
 		}
 
-		if (vbo != OGL_ID_NONE) {
+		if (vbo != SPH_OGL_ID_NONE) {
 			glDeleteBuffers(1, &vbo);
 		}
 
-		if (ib != OGL_ID_NONE) {
+		if (ib != SPH_OGL_ID_NONE) {
 			glDeleteBuffers(1, &ib);
 		}
 
 		delete[] vertices;
-		delete[] texIDs;
 	}
 
 
-	void DynamicVertexBuffer::Init(GLuint maxQuadCount)
+	void DynamicVertexBuffer::Init()
 	{
 		SPH_LOG("Creating Dynamic Vertex Buffer");
 		glGenVertexArrays(1, &vao);
-		SPH_ASSERT(vao != OGL_ID_NONE, "OpenGL error: Could not generate VAO");
+		SPH_ASSERT(vao != SPH_OGL_ID_NONE, "OpenGL error: Could not generate VAO");
 
 		glGenBuffers(1, &vbo);
-		SPH_ASSERT(vao != OGL_ID_NONE, "OpenGL error: Could not generate VBO");
+		SPH_ASSERT(vao != SPH_OGL_ID_NONE, "OpenGL error: Could not generate VBO");
 
 		glGenBuffers(1, &ib);
-		SPH_ASSERT(vao != OGL_ID_NONE, "OpenGL error: Could not generate IB");
+		SPH_ASSERT(vao != SPH_OGL_ID_NONE, "OpenGL error: Could not generate IB");
 
-		if (vao != OGL_ID_NONE && vbo != OGL_ID_NONE && ib != OGL_ID_NONE) {
+		if (vao != SPH_OGL_ID_NONE && vbo != SPH_OGL_ID_NONE && ib != SPH_OGL_ID_NONE) {
 			glBindVertexArray(vao);
 
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 4 * maxQuadCount, nullptr, GL_DYNAMIC_DRAW);
 
-			SPH_OGL_SETVAOATTRIBUTE(pos, 0, GL_FLOAT, 2);
-			SPH_OGL_SETVAOATTRIBUTE(tex, 1, GL_FLOAT, 2);
-			SPH_OGL_SETVAOATTRIBUTE(col, 2, GL_FLOAT, 4);
-			SPH_OGL_SETVAOATTRIBUTE(slot, 3, GL_UNSIGNED_INT, 1);
+			SPH_OGL_SET_VAO_ATTRIBUTE(pos, 0, GL_FLOAT, 2);
+			SPH_OGL_SET_VAO_ATTRIBUTE(tex, 1, GL_FLOAT, 2);
+			SPH_OGL_SET_VAO_ATTRIBUTE(col, 2, GL_FLOAT, 4);
+			SPH_OGL_SET_VAO_INT_ATTRIBUTE(slot, 3, GL_BYTE, 1);
 
 			GLuint* indices = GenerateIndices(maxQuadCount);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * 6 * maxQuadCount, (void*)indices, GL_STATIC_DRAW);
 			delete[] indices;
 
-			glBindVertexArray(OGL_ID_NONE);
+			glBindVertexArray(SPH_OGL_ID_NONE);
+
+			glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &texSlotNum);
+			if (texSlotNum > SPH_OGL_MAX_SUPPORTED_TEXTURE_SLOTS) {
+				texSlotNum = SPH_OGL_MAX_SUPPORTED_TEXTURE_SLOTS;
+			}
 
 			vertices = new Vertex[4 * maxQuadCount];
-			texIDs = new GLuint[1];
 		}
 	}
 
 
 	void DynamicVertexBuffer::PushQuad(Vertex vertices[4], GLuint texID)
 	{
-		GLuint slot = (texID == OGL_ID_NONE) ? 0 : (GetSlotFromTexID(texID) + 1);
+		if (count == maxQuadCount) {
+			Flush();
+		}
+
+		GLuint slot = (texID == SPH_OGL_ID_NONE) ? 0 : (GetSlotFromTexID(texID) + 1);
 		vertices[0].slot = slot;
 		vertices[1].slot = slot;
 		vertices[2].slot = slot;
@@ -83,16 +94,20 @@ namespace Sharpheus::OpenGL {
 
 	void DynamicVertexBuffer::Flush()
 	{
-		shader.Use();
-		for (uint8 i = 0; i < texIDSize; ++i) {
-			glBindTextureUnit(i, texIDs[i]);
+		for (auto it = texIDs.begin(); it != texIDs.end(); ++it) {
+			glBindTextureUnit(it->second, it->first);
 		}
+
+		shader.Use();
 		glBindVertexArray(vao);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * 4 * count, vertices);
 		glDrawElements(GL_TRIANGLES, 6 * count, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(OGL_ID_NONE);
+		glBindVertexArray(SPH_OGL_ID_NONE);
 		shader.Unuse();
+
 		count = 0;
+		nextFreeTexSlot = 0;
+		texIDs.clear();
 	}
 
 

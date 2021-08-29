@@ -31,7 +31,7 @@ namespace Sharpheus::OpenGL {
 		}
 
 		inline void Unuse() {
-			glUseProgram(OGL_ID_NONE);
+			glUseProgram(SPH_OGL_ID_NONE);
 			used = false;
 		}
 

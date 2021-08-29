@@ -16,7 +16,7 @@ namespace Sharpheus::OpenGL {
 			Unuse();
 		}
 
-		if (programID != OGL_ID_NONE) {
+		if (programID != SPH_OGL_ID_NONE) {
 			glDeleteProgram(programID);
 		}
 	}
@@ -31,8 +31,12 @@ namespace Sharpheus::OpenGL {
 
 		glUseProgram(programID);
 		GLint loc = GetUniformLoc("Textures");
-		//int slot = 0;
-		glUniform1i(loc, 0);
+		GLint* slots = new GLint[SPH_OGL_MAX_SUPPORTED_TEXTURE_SLOTS];
+		for (uint32 i = 0; i < SPH_OGL_MAX_SUPPORTED_TEXTURE_SLOTS; ++i) {
+			slots[i] = i;
+		}
+		glUniform1iv(loc, 1, slots);
+		delete[] slots;
 	}
 
 
@@ -43,7 +47,7 @@ namespace Sharpheus::OpenGL {
 		GLuint fs_ID = LoadShader(GL_FRAGMENT_SHADER, fragmentShader.c_str());
 
 		programID = glCreateProgram();
-		if (programID == OGL_ID_NONE) {
+		if (programID == SPH_OGL_ID_NONE) {
 			GLenum err = glGetError();
 			SPH_ERROR("OpenGL Error: {0} - {1}. Could not create shader program", err, gluErrorString(err));
 		}
@@ -77,15 +81,15 @@ namespace Sharpheus::OpenGL {
 	{
 		GLuint loadedShader = glCreateShader(type);
 
-		if (loadedShader == OGL_ID_NONE) {
+		if (loadedShader == SPH_OGL_ID_NONE) {
 			SPH_ERROR("Error in creating \"{0}\" shader (glCreateShader)!", fname);
-			return OGL_ID_NONE;
+			return SPH_OGL_ID_NONE;
 		}
 
 		FILE* file = fopen(ResourceManager::GetShaderPath(fname).c_str(), "rb");
 		if (file == NULL) {
 			SPH_ERROR("Cannot open shader \"{0}\" to load", fname);
-			return OGL_ID_NONE;
+			return SPH_OGL_ID_NONE;
 		}
 
 		fseek(file, 0L, SEEK_END);
@@ -98,7 +102,7 @@ namespace Sharpheus::OpenGL {
 			SPH_ERROR("Cannot read content from shader \"{0}\"", fname);
 			fclose(file);
 			delete[] content;
-			return OGL_ID_NONE;
+			return SPH_OGL_ID_NONE;
 		}
 		fclose(file);
 		content[fileSize] = '\0';
@@ -110,7 +114,7 @@ namespace Sharpheus::OpenGL {
 
 		if (!GetAndLogStatus(loadedShader, "Shader \"" + fname + "\" successfully compiled;", "Error in compiling shader \"" + fname + "\";", GL_COMPILE_STATUS)) {
 			glDeleteShader(loadedShader);
-			return OGL_ID_NONE;
+			return SPH_OGL_ID_NONE;
 		}
 
 		return loadedShader;

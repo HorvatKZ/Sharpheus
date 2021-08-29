@@ -14,14 +14,13 @@ namespace Sharpheus::OpenGL {
 		GLenum err = glewInit();
 		SPH_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
 		version = (char*)glGetString(GL_VERSION);
-		dynamicVB.Init(1);
+		dynamicVB.Init();
 		SPH_INFO("OpenGL Batch Renderer created. Running OpenGL v{0}", version);
 	}
 
 
 	Renderer::~Renderer()
 	{
-
 	}
 
 
@@ -65,6 +64,7 @@ namespace Sharpheus::OpenGL {
 
 	void Renderer::EndFrame()
 	{
+		dynamicVB.Flush();
 		shader.Unuse();
 		glFlush();
 	}
@@ -116,13 +116,12 @@ namespace Sharpheus::OpenGL {
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 		
 		glm::vec4 color = tint.ToVec4();
-		temp[0] = Vertex(coords[0].ToVec2(), texCoords[0].ToVec2(), color, 1);
-		temp[1] = Vertex(coords[1].ToVec2(), texCoords[1].ToVec2(), color, 1);
-		temp[2] = Vertex(coords[2].ToVec2(), texCoords[2].ToVec2(), color, 1);
-		temp[3] = Vertex(coords[3].ToVec2(), texCoords[3].ToVec2(), color, 1);
+		temp[0] = Vertex(coords[0].ToVec2(), texCoords[0].ToVec2(), color);
+		temp[1] = Vertex(coords[1].ToVec2(), texCoords[1].ToVec2(), color);
+		temp[2] = Vertex(coords[2].ToVec2(), texCoords[2].ToVec2(), color);
+		temp[3] = Vertex(coords[3].ToVec2(), texCoords[3].ToVec2(), color);
 
 		dynamicVB.PushQuad(temp, texID);
-		dynamicVB.Flush();
 	}
 
 	
@@ -132,13 +131,12 @@ namespace Sharpheus::OpenGL {
 
 		glm::vec4 col = color.ToVec4();
 		glm::vec2 tex(0, 0);
-		temp[0] = Vertex(coords[0].ToVec2(), tex, col, 0);
-		temp[1] = Vertex(coords[1].ToVec2(), tex, col, 0);
-		temp[2] = Vertex(coords[2].ToVec2(), tex, col, 0);
-		temp[3] = Vertex(coords[3].ToVec2(), tex, col, 0);
+		temp[0] = Vertex(coords[0].ToVec2(), tex, col);
+		temp[1] = Vertex(coords[1].ToVec2(), tex, col);
+		temp[2] = Vertex(coords[2].ToVec2(), tex, col);
+		temp[3] = Vertex(coords[3].ToVec2(), tex, col);
 
 		dynamicVB.PushQuad(temp);
-		dynamicVB.Flush();
 	}
 
 
@@ -146,12 +144,12 @@ namespace Sharpheus::OpenGL {
 	{
 		if (data == nullptr) {
 			SPH_ERROR("OpenGL Error: Cannot create texture from nullptr data");
-			return OGL_ID_NONE;
+			return SPH_OGL_ID_NONE;
 		}
 
 		GLuint texID;
 		glGenTextures(1, &texID);
-		if (texID == OGL_ID_NONE) {
+		if (texID == SPH_OGL_ID_NONE) {
 			GLenum err = glGetError();
 			SPH_ERROR("OpenGL Error: {0} - {1}. Could not create texture", err, gluErrorString(err));
 		}
@@ -172,7 +170,7 @@ namespace Sharpheus::OpenGL {
 
 	void Renderer::FreeTexture(uint32 texID)
 	{
-		if (texID != OGL_ID_NONE) {
+		if (texID != SPH_OGL_ID_NONE) {
 			glDeleteTextures(1, &texID);
 		}
 	}
@@ -180,13 +178,13 @@ namespace Sharpheus::OpenGL {
 
 	bool Renderer::IsValidTexture(uint32 texID)
 	{
-		return texID != OGL_ID_NONE;
+		return texID != SPH_OGL_ID_NONE;
 	}
 
 
 	uint32 Renderer::GetInvalidTexture()
 	{
-		return OGL_ID_NONE;
+		return SPH_OGL_ID_NONE;
 	}
 
 }
