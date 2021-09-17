@@ -24,6 +24,8 @@ namespace Sharpheus {
 		Project(const std::string& name, const std::string& path, const std::string& defaultLevelName, const std::string& defaultLevelPath);
 		virtual ~Project();
 
+		inline void MarkAsSubProject() { isSubProject = true; }
+
 		bool Load(const std::string& path);
 		bool SaveProjectData();
 		bool SaveProjectDataToHpp(const std::string& path);
@@ -47,11 +49,16 @@ namespace Sharpheus {
 		inline void SetName(const std::string& name) { data.name = name; }
 		inline void SetDefaultLevelPath(const std::string& defaultLevelPath) { data.defaultLevelPath = defaultLevelPath; }
 
+		static inline float GetTimeOfRun() { return timeOfRun; }
+
 	private:
 		Data data;
 		Level* level = nullptr;
 		std::string path, basePath;
 		float lastTime = 0.f;
+		bool isSubProject = false;
+
+		static uint32 timeOfRun;
 
 		bool LoadProjectData(const std::string& path);
 	};

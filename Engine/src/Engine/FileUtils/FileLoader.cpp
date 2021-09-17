@@ -191,6 +191,20 @@ namespace Sharpheus {
 	}
 
 
+	bool FileLoader::Read(Audio** data)
+	{
+		std::string path;
+		Read(path);
+		if (path == "nullptr") {
+			*data = nullptr;
+			return GetStatus();
+		}
+
+		*data = ResourceManager::GetAudio(path);
+		return GetStatus();
+	}
+
+
 	bool FileLoader::ReadLine()
 	{
 		char c;

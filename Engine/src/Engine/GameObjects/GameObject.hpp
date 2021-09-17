@@ -61,6 +61,7 @@ namespace Sharpheus {
 
 			// Sounds
 			MusicPlayer = 0x50,
+			SoundEffects = 0x51,
 
 			// Controls
 			Button = 0x60,

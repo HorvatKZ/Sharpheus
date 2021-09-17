@@ -139,6 +139,9 @@ namespace Sharpheus {
 				case GameObject::Type::MusicPlayer:
 					CreatePresenterFrom<MusicPlayer>(provider, y);
 					break;
+				case GameObject::Type::SoundEffects:
+					CreatePresenterFrom<SoundEffects>(provider, y);
+					break;
 				case GameObject::Type::Button:
 					CreatePresenterFrom<Button>(provider, y);
 					break;
@@ -262,8 +265,8 @@ namespace Sharpheus {
 			case CommonProvider::Type::TILESET:
 				presenters.push_back(new TileSetPresenter<Class>(this, (TileSetProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
-			case CommonProvider::Type::SOUND:
-				presenters.push_back(new SoundPresenter<Class>(this, (SoundProvider<Class>*)provider, currDataChangedCallback, y));
+			case CommonProvider::Type::AUDIO:
+				presenters.push_back(new AudioPresenter<Class>(this, (AudioProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::STRINGLIST:
 				presenters.push_back(new StringListPresenter<Class>(this, (StringListProvider<Class>*)provider, currDataChangedCallback, y));

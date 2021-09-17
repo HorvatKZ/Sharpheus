@@ -8,6 +8,9 @@
 
 namespace Sharpheus {
 
+	uint32 Project::timeOfRun = 0;
+
+
 	Project::Project()
 	{
 		ProjectControl::Init();
@@ -53,7 +56,9 @@ namespace Sharpheus {
 	Project::~Project()
 	{
 		ProjectControl::Clear();
-		ResourceManager::Clear();
+		if (!isSubProject) {
+			ResourceManager::Clear();
+		}
 		delete level;
 	}
 
@@ -91,11 +96,12 @@ namespace Sharpheus {
 			level->Load(basePath + "Levels\\", loadLevel);
 			ProjectControl::Resume();
 		}
-
+		
 		if (!ProjectControl::IsPaused()) {
 			level->Tick(allTime - lastTime);
 		}
 		lastTime = allTime;
+		timeOfRun = allTime;
 	}
 
 

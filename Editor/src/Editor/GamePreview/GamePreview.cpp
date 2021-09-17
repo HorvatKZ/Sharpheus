@@ -16,6 +16,7 @@ namespace Sharpheus {
 
 		proj = new Project();
 		bool success = proj->Load(projectPath);
+		proj->MarkAsSubProject();
 		SPHE_ASSERT(success, "Cannot start GamePreview, because the .lvl file is damaged");
 
 		canvas = new PreviewCanvas(this, glContext, proj);

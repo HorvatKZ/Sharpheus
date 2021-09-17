@@ -27,6 +27,7 @@ IncludeDir["GLEW"] = "%{wks.location}/external/GLEW/include"
 IncludeDir["glm"] = "%{wks.location}/Engine/external/glm"
 IncludeDir["stb_image"] = "%{wks.location}/Engine/external/stb_image"
 IncludeDir["spdlog"] = "%{wks.location}/external/spdlog/include"
+IncludeDir["SoLoud"] = "%{wks.location}/external/SoLoud/include"
 IncludeDir["wxWidgets"] = "%{wks.location}/external/wxWidgets/include"
 IncludeDir["wxWidgets_win"] = "%{wks.location}/external/wxWidgets/include/msvc"
 
@@ -38,6 +39,7 @@ group "Dependencies"
 	include "external/GLFW"
 	include "external/GLEW"
 	include "external/spdlog"
+	include "external/SoLoud"
 group ""
 
 

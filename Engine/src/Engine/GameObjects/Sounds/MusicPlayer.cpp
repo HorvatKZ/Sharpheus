@@ -1,14 +1,17 @@
 #include "pch.h"
 #include "MusicPlayer.hpp"
-#include "Engine/ResourceManager/SoundPlayer.hpp"
+#include "Engine/ResourceManager/AudioPlayer.hpp"
+#include "Engine/ResourceManager/ResourceManager.hpp"
 
 
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(MusicPlayer, "musicplayer.png")
-		SPH_PROVIDE_SOUND(MusicPlayer, "Music", GetMusicPath, SetMusicPath)
+		SPH_PROVIDE_AUDIO(MusicPlayer, "Music", GetMusic, SetMusic, SetMusicFromPath)
 		SPH_PROVIDE_BOOL(MusicPlayer, "Default start", DoesStartByDefault, SetStartByDefault)
 		SPH_PROVIDE_BOOL(MusicPlayer, "Looping", IsLooping, SetLooping)
+		SPH_PROVIDE_UINT(MusicPlayer, "Volume", GetVolume, SetVolume)
+		SPH_PROVIDE_UFLOAT(MusicPlayer, "Playspeed", GetPlaySpeed, SetPlaySpeed)
 	SPH_END_CLASSINFO
 
 
@@ -20,7 +23,7 @@ namespace Sharpheus {
 
 	MusicPlayer::~MusicPlayer()
 	{
-		SoundPlayer::Stop(musicPath);
+		Stop();
 	}
 
 
@@ -30,10 +33,18 @@ namespace Sharpheus {
 
 		GameObject::CopyFrom(other);
 		MusicPlayer* trueOther = (MusicPlayer*)other;
-		musicPath = trueOther->musicPath;
+		music = trueOther->music;
 		loop = trueOther->loop;
 		startByDefault = trueOther->startByDefault;
+		volume = trueOther->volume;
+		playSpeed = trueOther->playSpeed;
 		wantToStart = startByDefault;
+	}
+
+
+	void MusicPlayer::SetMusicFromPath(const std::string& musicPath)
+	{
+		SetMusic(ResourceManager::GetAudio(musicPath));
 	}
 
 
@@ -45,16 +56,39 @@ namespace Sharpheus {
 
 	void MusicPlayer::Stop()
 	{
-		SoundPlayer::Stop(musicPath);
+		if (isPlaying) {
+			AudioPlayer::Stop(handle);
+			isPlaying = false;
+		}
+	}
+
+
+	void MusicPlayer::Pause()
+	{
+		if (isPlaying) {
+			AudioPlayer::Pause(handle);
+		}
+	}
+
+
+	void MusicPlayer::Resume()
+	{
+		if (isPlaying) {
+			AudioPlayer::Resume(handle);
+		}
 	}
 
 
 	bool MusicPlayer::Load(FileLoader& fl)
 	{
 		GameObject::Load(fl);
-		fl.Read(musicPath);
+		Audio* audio;
+		fl.Read(&audio);
+		SetMusic(audio);
 		fl.Read(loop);
 		fl.Read(startByDefault);
+		fl.Read(volume);
+		fl.Read(playSpeed);
 		wantToStart = startByDefault;
 		return fl.GetStatus();
 	}
@@ -63,19 +97,21 @@ namespace Sharpheus {
 	bool MusicPlayer::Save(FileSaver& fs)
 	{
 		GameObject::Save(fs);
-		fs.Write(musicPath);
+		fs.Write(music);
 		fs.Write(loop);
 		fs.Write(startByDefault);
+		fs.Write(volume);
+		fs.Write(playSpeed);
 		return fs.GetStatus();
 	}
 
 
 	void MusicPlayer::Tick(float deltaTime)
 	{
-		if (wantToStart && !musicPath.empty()) {
-			bool success = SoundPlayer::Play(musicPath, loop);
+		if (wantToStart && music != nullptr) {
+			handle = AudioPlayer::Play(music, loop, volume, playSpeed);
 			wantToStart = false;
-			SPH_ASSERT(success, "{0} is not a valid *.wav file", musicPath);
+			isPlaying = true;
 		}
 	}
 

@@ -14,6 +14,7 @@
 #include "Colliders/CapsuleCollider.hpp"
 #include "Colliders/PhysicsObject.hpp"
 #include "Sounds/MusicPlayer.hpp"
+#include "Sounds/SoundEffects.hpp"
 #include "Controls/Button.hpp"
 #include "Controls/ImageButton.hpp"
 #include "Controls/CheckBox.hpp"

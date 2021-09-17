@@ -33,39 +33,47 @@ namespace Sharpheus {
 			return anim->GetName();
 		}
 
-		inline void SetAnimation(uint32 ind, Animation* anim) {
+		inline bool SetAnimation(uint32 ind, Animation* anim) {
 			if (ind < anims.size()) {
 				anims[ind] = anim;
+				return true;
 			}
+			return false;
 		}
-		inline void AddAnimation(Animation* anim) {
+		inline bool AddAnimation(Animation* anim) {
+			if (anim == nullptr) {
+				return false;
+			}
 			anims.push_back(anim);
 			SetCurrent(anims.size() - 1);
+			return true;
 		}
-		inline void RemoveAnimationByIndex(uint32 ind) {
+		inline bool RemoveAnimationByIndex(uint32 ind) {
 			if (ind < anims.size()) {
 				anims.erase(anims.begin() + ind);
 				if (currAnimInd != 0 && ind <= currAnimInd) {
 					--currAnimInd;
 				}
+				return true;
 			}
+			return false;
 		}
-		inline void RemoveAnimation(Animation* anim) {
+		inline bool RemoveAnimation(Animation* anim) {
 			uint32 i = 0;
 			while (i < anims.size() && anims[i] != anim) {
 				++i;
 			}
-			RemoveAnimationByIndex(i);
+			return RemoveAnimationByIndex(i);
 		}
 
 		inline Animation* GetCurrentAnimation() { return GetAnimation(GetCurrent()); }
 		inline const std::string& GetCurrentAnimationName() { return GetAnimationName(GetCurrent()); }
 
-		void SetAnimationFromPath(uint32 ind, const std::string& path);
-		void AddAnimationFromPath(const std::string& path);
+		bool SetAnimationFromPath(uint32 ind, const std::string& path);
+		bool AddAnimationFromPath(const std::string& path);
 
 		inline uint32 GetCurrent() { return currAnimInd; }
-		inline void SetCurrent(uint32 ind) {
+		inline bool SetCurrent(uint32 ind) {
 			if (ind < anims.size() && currAnimInd != ind) {
 				if (playOnceActive) {
 					fallBackInd = ind;
@@ -76,9 +84,11 @@ namespace Sharpheus {
 					Animation* anim = anims[ind];
 					SetSizer(anim->GetFrameWidth(), anim->GetFrameHeight());
 				}
+				return true;
 			}
+			return false;
 		}
-		inline void SetCurrentByName(const std::string& name) {
+		inline bool SetCurrentByName(const std::string& name) {
 			for (uint32 i = 0; i < anims.size(); ++i) {
 				if (anims[i]->GetName() == name) {
 					return SetCurrent(i);

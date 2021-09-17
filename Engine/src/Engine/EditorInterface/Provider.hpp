@@ -14,7 +14,7 @@ namespace Sharpheus {
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, TILESET, SOUND, STRING, STRINGLIST, BEHAVIOR, TILEMAP, LAYER
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, TILESET, AUDIO, STRING, STRINGLIST, BEHAVIOR, TILEMAP, LAYER
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -93,7 +93,6 @@ namespace Sharpheus {
 	template <class Class> using TrafoProvider		= Provider<Class, const Transform&,		CommonProvider::Type::TRAFO>;
 	template <class Class> using ColorProvider		= Provider<Class, const Color&,			CommonProvider::Type::COLOR>;
 	template <class Class> using StringProvider		= Provider<Class, const std::string&,	CommonProvider::Type::STRING>;
-	template <class Class> using SoundProvider		= Provider<Class, const std::string&,	CommonProvider::Type::SOUND>;
 
 
 	template <class Class>
@@ -147,6 +146,7 @@ namespace Sharpheus {
 
 	template <class Class> using AnimationProvider	= ResourceProvider<Class, class Animation*, CommonProvider::Type::ANIM>;
 	template <class Class> using TileSetProvider	= ResourceProvider<Class, class TileSet*, CommonProvider::Type::TILESET>;
+	template <class Class> using AudioProvider		= ResourceProvider<Class, class Audio*, CommonProvider::Type::AUDIO>;
 
 
 	template <class Class>
@@ -189,37 +189,54 @@ namespace Sharpheus {
 	class StringListProvider : public CommonProvider
 	{
 	public:
-		StringListProvider(const std::string& name,
+		enum class ContentType {
+			REGULAR, ANIM, AUDIO
+		};
+
+		StringListProvider(const std::string& name, ContentType contentType,
 			std::function<uint32(Class*)>&& getCount,
 			std::function<uint32(Class*)>&& getCurr,
 			std::function<const std::string& (Class*, uint32)>&& getString,
-			std::function<void(Class*, uint32)>&& setCurr,
-			std::function<void(Class*, uint32, const std::string&)>&& setString,
-			std::function<void(Class*, const std::string&)>&& addString,
-			std::function<void(Class*, uint32)>&& removeString)
-			: CommonProvider(name),
+			std::function<bool(Class*, uint32)>&& setCurr,
+			std::function<bool(Class*, uint32, const std::string&)>&& setString,
+			std::function<bool(Class*, const std::string&)>&& addString,
+			std::function<bool(Class*, uint32)>&& removeString)
+			: CommonProvider(name), contentType(contentType),
 			getCount(std::move(getCount)), getCurr(std::move(getCurr)), getString(std::move(getString)), setCurr(std::move(setCurr)),
-			setString(std::move(setString)), addString(std::move(addString)), removeString(std::move(removeString)) {}
+			setString(std::move(setString)), addString(std::move(addString)), removeString(std::move(removeString)), usesCurr(true) {}
+		StringListProvider(const std::string& name, ContentType contentType,
+			std::function<uint32(Class*)>&& getCount,
+			std::function<const std::string& (Class*, uint32)>&& getString,
+			std::function<bool(Class*, uint32, const std::string&)>&& setString,
+			std::function<bool(Class*, const std::string&)>&& addString,
+			std::function<bool(Class*, uint32)>&& removeString)
+			: CommonProvider(name), contentType(contentType),
+			getCount(std::move(getCount)), getString(std::move(getString)), setString(std::move(setString)),
+			addString(std::move(addString)), removeString(std::move(removeString)), usesCurr(false) {}
 		virtual ~StringListProvider() = default;
 
 		virtual inline Type GetType() override { return Type::STRINGLIST; }
+		virtual inline ContentType GetContentType() { return contentType; }
 
 		virtual inline uint32 GetCount(Class* obj) { return getCount(obj); }
-		virtual inline uint32 GetCurr(Class* obj) { return getCurr(obj); }
+		virtual inline uint32 GetCurr(Class* obj) { if (usesCurr) { return getCurr(obj); } return 0; }
 		virtual inline const std::string& GetString(Class* obj, uint32 ind) { return getString(obj, ind); }
-		virtual inline void SetCurr(Class* obj, uint32 ind) { return setCurr(obj, ind); }
-		virtual inline void SetString(Class* obj, uint32 ind, const std::string& str) { return setString(obj, ind, str); }
-		virtual inline void AddString(Class* obj, const std::string& str) { return addString(obj, str); }
-		virtual inline void RemoveString(Class* obj, uint32 ind) { return removeString(obj, ind); }
+		virtual inline bool SetCurr(Class* obj, uint32 ind) { if (usesCurr) { return setCurr(obj, ind); } return false; }
+		virtual inline bool SetString(Class* obj, uint32 ind, const std::string& str) { return setString(obj, ind, str); }
+		virtual inline bool AddString(Class* obj, const std::string& str) { return addString(obj, str); }
+		virtual inline bool RemoveString(Class* obj, uint32 ind) { return removeString(obj, ind); }
+		virtual inline bool UsesCurr() { return usesCurr; }
 
 	private:
 		std::function<uint32(Class*)> getCount;
 		std::function<uint32(Class*)> getCurr;
 		std::function<const std::string& (Class*, uint32)> getString;
-		std::function<void(Class*, uint32)> setCurr;
-		std::function<void(Class*, uint32, const std::string&)> setString;
-		std::function<void(Class*, const std::string&)> addString;
-		std::function<void(Class*, uint32)> removeString;
+		std::function<bool(Class*, uint32)> setCurr;
+		std::function<bool(Class*, uint32, const std::string&)> setString;
+		std::function<bool(Class*, const std::string&)> addString;
+		std::function<bool(Class*, uint32)> removeString;
+		bool usesCurr;
+		ContentType contentType;
 	};
 
 
@@ -263,7 +280,6 @@ namespace Sharpheus {
 #define SPH_PROVIDE_COLOR(Class, Title, Getter, Setter)		SPH_PROVIDE(Color, Class, Title, Getter, Setter)
 #define SPH_PROVIDE_FONTSTYLE(Class, Title, Getter, Setter)	SPH_PROVIDE(FontStyle, Class, Title, Getter, Setter)
 #define SPH_PROVIDE_STRING(Class, Title, Getter, Setter)	SPH_PROVIDE(String, Class, Title, Getter, Setter)
-#define SPH_PROVIDE_SOUND(Class, Title, Getter, Setter)		SPH_PROVIDE(Sound, Class, Title, Getter, Setter)
 
 #define SPH_PROVIDE_1WAYBOOL(Class, Title, Getter, Setter, Way)				SPH_PROVIDE_EXTRA(OneWayBool, Class, Title, Getter, Setter, Way)
 #define SPH_PROVIDE_INT_RANGE(Class, Title, Getter, Setter, Min, Max)		SPH_PROVIDE_EXTRA(Int, Class, Title, Getter, Setter, Min, Max)
@@ -274,14 +290,18 @@ namespace Sharpheus {
 #define SPH_PROVIDE_IMAGE(Class, Title, Getter, Setter, PathSetter)		SPH_PROVIDE_RESOURCE(Image, 3, Class, Title, Getter, Setter, PathSetter)
 #define SPH_PROVIDE_ANIM(Class, Title, Getter, Setter, PathSetter)		SPH_PROVIDE_RESOURCE(Animation, 2, Class, Title, Getter, Setter, PathSetter)
 #define SPH_PROVIDE_TILESET(Class, Title, Getter, Setter, PathSetter)	SPH_PROVIDE_RESOURCE(TileSet, 2, Class, Title, Getter, Setter, PathSetter)
+#define SPH_PROVIDE_AUDIO(Class, Title, Getter, Setter, PathSetter)		SPH_PROVIDE_RESOURCE(Audio, 2, Class, Title, Getter, Setter, PathSetter)
 
 #define SPH_PROVIDE_BEHAVIOR(Title) SPH_PROVIDE_SIGNAL(Behavior, Title)
 #define SPH_PROVIDE_TILEMAP(Title)	SPH_PROVIDE_SIGNAL(TileMap, Title)
 
 #define SPH_PROVIDE_FONT(Class, Title, Getter, Setter, NameSetter, PathSetter) \
 	SPH_PROVIDE_EXTRA(Font, Class, Title, Getter, Setter, SPH_BIND_SETTER(Class::NameSetter), SPH_BIND_3(Class::PathSetter))
-#define SPH_PROVIDE_STRINGLIST(Class, Title, GetCount, GetCurr, GetStr, SetCurr, PathSetter, PathAdder, Remover) \
-	new StringListProvider<Class>(Title, SPH_BIND_1(Class::GetCount), SPH_BIND_1(Class::GetCurr), SPH_BIND_2(Class::GetStr), \
-	SPH_BIND_2(Class::SetCurr), SPH_BIND_3(Class::PathSetter), SPH_BIND_2(Class::PathAdder), SPH_BIND_2(Class::Remover)),
+#define SPH_PROVIDE_STRINGLIST_CURR(Class, Title, InnerContentType, GetCount, GetCurr, GetStr, SetCurr, SetStr, AddStr, RemStr) \
+	new StringListProvider<Class>(Title, StringListProvider<Class>::ContentType::InnerContentType , SPH_BIND_1(Class::GetCount), SPH_BIND_1(Class::GetCurr), \
+	SPH_BIND_2(Class::GetStr), SPH_BIND_2(Class::SetCurr), SPH_BIND_3(Class::SetStr), SPH_BIND_2(Class::AddStr), SPH_BIND_2(Class::RemStr)),
+#define SPH_PROVIDE_STRINGLIST_NOCURR(Class, Title, InnerContentType, GetCount, GetStr, SetStr, AddStr, RemStr) \
+	new StringListProvider<Class>(Title, StringListProvider<Class>::ContentType::InnerContentType, SPH_BIND_1(Class::GetCount), \
+	SPH_BIND_2(Class::GetStr), SPH_BIND_3(Class::SetStr), SPH_BIND_2(Class::AddStr), SPH_BIND_2(Class::RemStr)),
 #define SPH_PROVIDE_LAYER(Class, Title, Getter, Setter) \
 	new ::Sharpheus::LayerProvider<Class>(Title, SPH_BIND_GETTER(Class::Getter), SPH_BIND_SETTER(Class::Setter)),

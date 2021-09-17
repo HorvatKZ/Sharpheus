@@ -803,10 +803,10 @@ namespace Sharpheus {
 	}
 
 
-	// SoundPresenter
+	// AudioPresenter
 
 	template<class Class>
-	inline SoundPresenter<Class>::SoundPresenter(wxWindow* parent, SoundProvider<Class>* provider, Signal signal, uint32& y)
+	inline AudioPresenter<Class>::AudioPresenter(wxWindow* parent, AudioProvider<Class>* provider, Signal signal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
 	{
 		uint32 width = parent->GetSize().x - 3 * UI::border - UI::smallButtonSize.x;
@@ -814,42 +814,44 @@ namespace Sharpheus {
 		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
 		path->SetMaxSize(wxSize(width, UI::unitHeight));
 		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(2 * UI::border + width, y - 3), UI::smallButtonSize);
-		browse->Bind(wxEVT_BUTTON, &SoundPresenter<Class>::HandleChange, this);
+		browse->Bind(wxEVT_BUTTON, &AudioPresenter<Class>::HandleChange, this);
 		y += UI::heightPadding;
 	}
 
 	template<class Class>
-	inline SoundPresenter<Class>::~SoundPresenter()
+	inline AudioPresenter<Class>::~AudioPresenter()
 	{
 		wxREMOVE(path);
 		wxREMOVE(browse);
 	}
 
 	template<class Class>
-	inline void SoundPresenter<Class>::SetCurrent(GameObject* curr)
+	inline void AudioPresenter<Class>::SetCurrent(GameObject* curr)
 	{
 		Presenter::SetCurrent(curr);
-		path->SetLabel(provider->Get((Class*)curr));
+
+		Audio* audio = provider->Get((Class*)curr);
+		path->SetLabel((audio == nullptr) ? "None" : audio->GetPath());
 	}
 
 	template<class Class>
-	inline void SoundPresenter<Class>::SetDefault()
+	inline void AudioPresenter<Class>::SetDefault()
 	{
 		Presenter::SetDefault();
 		this->path->SetLabel("");
 	}
 
 	template<class Class>
-	inline void SoundPresenter<Class>::HandleChange(wxCommandEvent& e)
+	inline void AudioPresenter<Class>::HandleChange(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
-			RelativeOpenDialog browseDialog(parent, "Browse for sound file", ProjectData::GetPath() + "Assets\\",
-				"Wave file(*.wav) | *.wav");
+			RelativeOpenDialog browseDialog(parent, "Browse for audio file", ProjectData::GetPath() + "Assets\\",
+				"Sound file(*.mp3, *.wav, *.flac, *.ogg) | *.mp3; *.wav; *.flac; *.ogg");
 
 			if (!browseDialog.Show())
 				return;
 
-			provider->Set((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
 			signal();
 		}
 	}
@@ -915,13 +917,39 @@ namespace Sharpheus {
 	inline void StringListPresenter<Class>::OnAdd(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
-			RelativeOpenDialog browseDialog(parent, "Browse for animation", ProjectData::GetPath() + "Assets\\",
-				"Sharpheus animation files(*.anim.sharpheus) | *.anim.sharpheus");
+			StringListProvider<Class>::ContentType contentType = provider->GetContentType();
+			wxString response;
+			switch (contentType) {
+				case StringListProvider<Class>::ContentType::ANIM:
+					{
+						RelativeOpenDialog browseDialog(parent, "Browse for animation", ProjectData::GetPath() + "Assets\\",
+						"Sharpheus animation files(*.anim.sharpheus) | *.anim.sharpheus");
 
-			if (!browseDialog.Show())
-				return;
+						if (!browseDialog.Show()) return;
+						response = browseDialog.GetPath();
+					}
+					break;
+				case StringListProvider<Class>::ContentType::AUDIO:
+					{
+						RelativeOpenDialog browseDialog(parent, "Browse for audio file", ProjectData::GetPath() + "Assets\\",
+							"Sound file(*.mp3, *.wav, *.flac, *.ogg) | *.mp3; *.wav; *.flac; *.ogg");
 
-			provider->AddString((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+						if (!browseDialog.Show()) return;
+						response = browseDialog.GetPath();
+					}
+					break;
+				default:
+					{
+						wxTextEntryDialog textEntryDialog(parent, "New entry:", "StringListPresenter");
+						textEntryDialog.SetTextValidator(wxFILTER_EMPTY);
+
+						if (textEntryDialog.ShowModal() == wxID_CANCEL) return;
+						response = textEntryDialog.GetValue();
+					}
+					break;
+			}
+			bool result = provider->AddString((Class*)curr, wxStr2StdStr(response));
+			SPHE_ASSERT(result, "Could not add value!");
 			signal();
 		}
 	}
@@ -933,12 +961,17 @@ namespace Sharpheus {
 			long selected = list->GetFirstSelected();
 			if (selected >= 0 && (uint32)selected < provider->GetCount((Class*)curr)) {
 				if (deleteSelected) {
-					provider->RemoveString((Class*)curr, selected);
-					deleteSelected = false;
-					signal();
+					bool result = provider->RemoveString((Class*)curr, selected);
+					if (result) {
+						deleteSelected = false;
+						signal();
+					} else {
+						SPHE_ERROR("Could not remove value!")
+					}
 				}
-				else if (selected != provider->GetCurr((Class*)curr)) {
-					provider->SetCurr((Class*)curr, selected);
+				else if (provider->UsesCurr() && selected != provider->GetCurr((Class*)curr)) {
+					bool result = provider->SetCurr((Class*)curr, selected);
+					SPHE_ASSERT(result, "Could not set value as current!");
 				}
 			}
 		}

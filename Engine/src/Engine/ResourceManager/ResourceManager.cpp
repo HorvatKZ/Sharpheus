@@ -10,6 +10,7 @@ namespace Sharpheus {
 	std::unordered_map<std::string, Font*> ResourceManager::fontsByNames;
 	std::unordered_map<std::string, Animation*> ResourceManager::animations;
 	std::unordered_map<std::string, TileSet*> ResourceManager::tileSets;
+	std::unordered_map<std::string, Audio*> ResourceManager::audios;
 	Image* ResourceManager::circle = nullptr;
 
 
@@ -87,9 +88,7 @@ namespace Sharpheus {
 		}
 
 		Image* newImage = new Image(path, filtered);
-		if (newImage->IsValid()) {
-			images[extPath] = newImage;
-		}
+		images[extPath] = newImage;
 		return newImage;
 	}
 
@@ -117,6 +116,19 @@ namespace Sharpheus {
 		TileSet* newTileSet = new TileSet(path);
 		tileSets[path] = newTileSet;
 		return newTileSet;
+	}
+
+
+	Audio* ResourceManager::GetAudio(const std::string& path)
+	{
+		auto it = audios.find(path);
+		if (it != audios.end()) {
+			return (*it).second;
+		}
+
+		Audio* newAudio = new Audio(path);
+		audios[path] = newAudio;
+		return newAudio;
 	}
 
 

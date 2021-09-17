@@ -7,7 +7,7 @@ namespace Sharpheus {
 
 	SPH_START_CLASSINFO(AnimationPlayer, "animplayer.png")
 		SPH_PROVIDE_LAYER(AnimationPlayer, "Layer", GetLayer, SetLayer)
-		SPH_PROVIDE_STRINGLIST(AnimationPlayer, "Animations", GetAnimationCount, GetCurrent, GetAnimationName, SetCurrent,
+		SPH_PROVIDE_STRINGLIST_CURR(AnimationPlayer, "Animations", ANIM, GetAnimationCount, GetCurrent, GetAnimationName, SetCurrent,
 			SetAnimationFromPath, AddAnimationFromPath, RemoveAnimationByIndex)
 		SPH_PROVIDE_COLOR(AnimationPlayer, "Tint", GetTint, SetTint)
 		SPH_PROVIDE_FLOAT(AnimationPlayer, "Speed", GetSpeed, SetSpeed)
@@ -33,15 +33,15 @@ namespace Sharpheus {
 	}
 
 
-	void AnimationPlayer::SetAnimationFromPath(uint32 ind, const std::string& path)
+	bool AnimationPlayer::SetAnimationFromPath(uint32 ind, const std::string& path)
 	{
-		SetAnimation(ind, ResourceManager::GetAnimation(path));
+		return SetAnimation(ind, ResourceManager::GetAnimation(path));
 	}
 
 
-	void AnimationPlayer::AddAnimationFromPath(const std::string& path)
+	bool AnimationPlayer::AddAnimationFromPath(const std::string& path)
 	{
-		AddAnimation(ResourceManager::GetAnimation(path));
+		return AddAnimation(ResourceManager::GetAnimation(path));
 	}
 
 

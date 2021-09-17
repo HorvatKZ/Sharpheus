@@ -23,6 +23,7 @@ namespace Sharpheus {
 		classInfos[GameObject::Type::CircleCollider]			= &CircleCollider::classInfo;
 		classInfos[GameObject::Type::CapsuleCollider]			= &CapsuleCollider::classInfo;
 		classInfos[GameObject::Type::MusicPlayer]				= &MusicPlayer::classInfo;
+		classInfos[GameObject::Type::SoundEffects]				= &SoundEffects::classInfo;
 		classInfos[GameObject::Type::Button]					= &Button::classInfo;
 		classInfos[GameObject::Type::ImageButton]				= &ImageButton::classInfo;
 		classInfos[GameObject::Type::CheckBox]					= &CheckBox::classInfo;

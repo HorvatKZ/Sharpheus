@@ -3,6 +3,7 @@
 #include "Engine/ResourceManager/Font.hpp"
 #include "Engine/ResourceManager/Animation.hpp"
 #include "Engine/ResourceManager/TileSet.hpp"
+#include "Engine/ResourceManager/Audio.hpp"
 
 
 namespace Sharpheus {
@@ -170,6 +171,18 @@ namespace Sharpheus {
 
 
 	bool FileSaver::Write(TileSet* data)
+	{
+		if (data == nullptr) {
+			Write(std::string("nullptr"));
+			return GetStatus();
+		}
+
+		Write(data->GetPath());
+		return GetStatus();
+	}
+
+
+	bool FileSaver::Write(Audio* data)
 	{
 		if (data == nullptr) {
 			Write(std::string("nullptr"));

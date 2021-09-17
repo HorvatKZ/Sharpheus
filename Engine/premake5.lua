@@ -33,7 +33,8 @@ project "Engine"
 		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.spdlog}"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.SoLoud}"
 	}
 
 	links
@@ -41,8 +42,8 @@ project "Engine"
 		"GLFW",
 		"GLEW",
 		"spdlog",
+		"SoLoud",
 		"opengl32.lib",
-		"Winmm.lib",
 		"Glu32.lib"
 	}
 	

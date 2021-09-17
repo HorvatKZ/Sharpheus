@@ -39,6 +39,7 @@ project "Editor"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.SoLoud}",
 		"%{IncludeDir.wxWidgets}"
 	}
 

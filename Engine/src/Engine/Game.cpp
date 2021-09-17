@@ -6,7 +6,7 @@
 #include "ResourceManager/ResourceManager.hpp"
 #include "Events/EventHandler.hpp"
 #include "Events/EventListener.hpp"
-#include "ResourceManager/SoundPlayer.hpp"
+#include "ResourceManager/AudioPlayer.hpp"
 
 #ifdef SPH_EXPORTED
 	#include "ExportedProjectData.hpp"
@@ -34,7 +34,7 @@ namespace Sharpheus {
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
 
 		win = new OpenGL_Window();
-		SoundPlayer::Init();
+		AudioPlayer::Init();
 
 #ifdef SPH_EXPORTED
 		proj = new Project(projectData, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER));
@@ -50,7 +50,7 @@ namespace Sharpheus {
 		Renderer::Clear();
 		ResourceManager::Clear();
 		EventHandler::Clear();
-		SoundPlayer::Clear();
+		AudioPlayer::Clear();
 
 		SPH_INFO("Game successfully exited");
 		Logger::Clear();
