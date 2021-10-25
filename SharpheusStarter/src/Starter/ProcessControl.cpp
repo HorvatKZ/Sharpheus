@@ -314,8 +314,10 @@ namespace Sharpheus {
 		success &= WriteBinary(lvl, projPath);
 		success &= WriteBinaryEOLN(lvl);
 		success &= WriteBinary(lvl, (uint32_t)2);
-		success &= WriteBinary(lvl, "Default");
-		success &= WriteBinary(lvl, "HUD");
+		success &= WriteBinary(lvl, wxString("Default"));
+		success &= WriteBinary(lvl, (uint8_t)1);
+		success &= WriteBinary(lvl, wxString("HUD"));
+		success &= WriteBinary(lvl, (uint8_t)1);
 		success &= WriteBinaryEOLN(lvl);
 		success &= WriteBinary(lvl, (uint8_t)1);
 		success &= WriteBinary(lvl, level);

@@ -70,6 +70,12 @@ namespace Sharpheus::OpenGL {
 	}
 
 
+	void Renderer::SetSecondary(bool isSecondary)
+	{
+		dynamicVB.SetSecondary(isSecondary);
+	}
+
+
 	void Renderer::DrawHorizontalLine(float begin, float end, float place, float thickness, const Color& color)
 	{
 		float halfThickness = thickness / 2;

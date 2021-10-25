@@ -17,6 +17,8 @@ namespace Sharpheus::OpenGL {
 		void StartFrame(const Point& shift) override;
 		void EndFrame() override;
 
+		void SetSecondary(bool isSecondary) override;
+
 		void DrawHorizontalLine(float begin, float end, float place, float thickness, const Color& color) override;
 		void DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color) override;
 		void DrawLine(const Point& begin, const Point& end, float thickness, const Color& color) override;

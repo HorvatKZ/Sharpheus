@@ -14,6 +14,8 @@ namespace Sharpheus {
 		virtual void StartFrame(const Point& shift) = 0;
 		virtual void EndFrame() = 0;
 
+		virtual void SetSecondary(bool isSecondary) = 0;
+
 		inline Camera* GetCamera() { return camera; }
 		void SetCamera(Camera* camera) {
 			if (this->camera != nullptr && this->camera != camera) {

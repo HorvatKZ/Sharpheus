@@ -12,18 +12,14 @@
 
 namespace Sharpheus {
 
-	wxWindow* EditorCommands::editorWindow = nullptr;
 	std::function<void()> EditorCommands::levelChangedCallback;
 	std::function<void()> EditorCommands::currChangedCallback;
 	
-	static TileMapEditor::Editor* tme = nullptr;
+	bool EditorCommands::isPlaying = false;
+	TileMapEditor::Editor* EditorCommands::tme = nullptr;
 
-	static inline void OnTMEClosed(wxCloseEvent& e) { tme = nullptr; e.Skip(); }
-
-
-	void EditorCommands::Init(wxWindow* _editorWindow, std::function<void()>&& _levelChangedCallback, std::function<void()>&& _currChangedCallback)
+	void EditorCommands::Init(std::function<void()>&& _levelChangedCallback, std::function<void()>&& _currChangedCallback)
 	{
-		editorWindow = _editorWindow;
 		levelChangedCallback = std::move(_levelChangedCallback);
 		currChangedCallback = std::move(_currChangedCallback);
 	}
@@ -42,7 +38,7 @@ namespace Sharpheus {
 			SaveLevel();
 		}
 
-		wxTextEntryDialog levelNameDialog(editorWindow, "Level name:", "New Level");
+		wxTextEntryDialog levelNameDialog(EditorData::GetMainWindow(), "Level name:", "New Level");
 		levelNameDialog.SetTextValidator(wxFILTER_EMPTY);
 
 		if (levelNameDialog.ShowModal() == wxID_CANCEL)
@@ -61,7 +57,7 @@ namespace Sharpheus {
 			SaveLevel();
 		}
 
-		RelativeOpenDialog openDialog(editorWindow, "Open Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
+		RelativeOpenDialog openDialog(EditorData::GetMainWindow(), "Open Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
 
 		if (!openDialog.Show())
 			return true;
@@ -102,7 +98,7 @@ namespace Sharpheus {
 
 	bool EditorCommands::SaveLevelAs()
 	{
-		RelativeSaveDialog saveDialog(editorWindow, "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus", ProjectData::GetLevel()->GetName());
+		RelativeSaveDialog saveDialog(EditorData::GetMainWindow(), "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus", ProjectData::GetLevel()->GetName());
 
 		if (!saveDialog.Show())
 			return true;
@@ -121,7 +117,7 @@ namespace Sharpheus {
 			return false;
 		}
 
-		RelativeOpenDialog openDialog(editorWindow, "Attach Scene", ProjectData::GetPath() + "Scenes\\", "Sharpheus scene file(*.scene.sharpheus) | *.scene.sharpheus");
+		RelativeOpenDialog openDialog(EditorData::GetMainWindow(), "Attach Scene", ProjectData::GetPath() + "Scenes\\", "Sharpheus scene file(*.scene.sharpheus) | *.scene.sharpheus");
 
 		if (!openDialog.Show())
 			return true;
@@ -156,7 +152,7 @@ namespace Sharpheus {
 			return false;
 		}
 
-		RelativeSaveDialog saveDialog(editorWindow, "Save as Scene", ProjectData::GetPath() + "Scenes\\", "Sharpheus scene file(*.scene.sharpheus) | *.scene.sharpheus");
+		RelativeSaveDialog saveDialog(EditorData::GetMainWindow(), "Save as Scene", ProjectData::GetPath() + "Scenes\\", "Sharpheus scene file(*.scene.sharpheus) | *.scene.sharpheus");
 
 		if (!saveDialog.Show())
 			return true;
@@ -169,7 +165,7 @@ namespace Sharpheus {
 
 	void EditorCommands::LayerEditor()
 	{
-		LayerEditorDialog dial(editorWindow);
+		LayerEditorDialog dial(EditorData::GetMainWindow());
 		dial.ShowModal();
 		currChangedCallback();
 	}
@@ -177,28 +173,28 @@ namespace Sharpheus {
 
 	void EditorCommands::CreateAnimation()
 	{
-		AnimationCreatorDialog creator(editorWindow);
+		AnimationCreatorDialog creator(EditorData::GetMainWindow());
 		HandleAnimationCreator(creator);
 	}
 
 
 	void EditorCommands::EditAnimation(const wxString& animPath)
 	{
-		AnimationCreatorDialog creator(editorWindow, animPath);
+		AnimationCreatorDialog creator(EditorData::GetMainWindow(), animPath);
 		HandleAnimationCreator(creator);
 	}
 
 
 	void EditorCommands::CreateTileSet()
 	{
-		TileSetCreatorDialog creator(editorWindow);
+		TileSetCreatorDialog creator(EditorData::GetMainWindow());
 		HandleTileSetCreator(creator);
 	}
 
 
 	void EditorCommands::EditTileSet(const wxString& tileSetPath)
 	{
-		TileSetCreatorDialog creator(editorWindow, tileSetPath);
+		TileSetCreatorDialog creator(EditorData::GetMainWindow(), tileSetPath);
 		HandleTileSetCreator(creator);
 	}
 
@@ -220,6 +216,11 @@ namespace Sharpheus {
 	{
 		if (tme != nullptr) {
 			SPHE_WARN("TileMap Editor is already open");
+			return;
+		}
+
+		if (IsPlaying()) {
+			SPHE_WARN("Exit game preview before using the TileMap Editor");
 			return;
 		}
 

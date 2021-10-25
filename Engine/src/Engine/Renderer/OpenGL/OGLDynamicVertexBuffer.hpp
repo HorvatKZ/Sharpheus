@@ -16,13 +16,16 @@ namespace Sharpheus::OpenGL {
 		void PushQuad(Vertex vertices[4], GLuint texID = SPH_OGL_ID_NONE);
 		void Flush();
 
+		void SetSecondary(bool isSecondary);
+
 	private:
 		class ShaderProgram& shader;
-		GLuint vao = SPH_OGL_ID_NONE, vbo = SPH_OGL_ID_NONE, ib = SPH_OGL_ID_NONE;
+		GLuint vao = SPH_OGL_ID_NONE, vao2 = SPH_OGL_ID_NONE, vbo = SPH_OGL_ID_NONE, ib = SPH_OGL_ID_NONE;
 		Vertex* vertices = nullptr;
 		uint32 maxQuadCount = SPH_OGL_MAX_QUADS_IN_BATCH, count = 0, nextFreeTexSlot = 0;
 		std::unordered_map<GLuint, GLuint> texIDs;
 		GLint texSlotNum = 0;
+		bool isSecondary = false;
 
 		GLuint* GenerateIndices(GLuint maxQuadCount);
 		inline void SetIndex(GLuint* indices, uint32 i, uint32 j, uint32 index) { indices[6 * i + j] = 4 * i + index; }

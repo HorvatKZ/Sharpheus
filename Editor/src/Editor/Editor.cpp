@@ -67,7 +67,7 @@ namespace Sharpheus {
 #endif
 		}
 		win->SetTitle("Sharpheus Editor - " + ProjectData::GetProj()->GetName());
-		EditorCommands::Init(win, SPH_BIND_WITH_0(EditorWindow::LevelChanged, win), SPH_BIND_WITH_0(EditorWindow::CurrentChanged, win));
+		EditorCommands::Init(SPH_BIND_WITH_0(EditorWindow::LevelChanged, win), SPH_BIND_WITH_0(EditorWindow::CurrentChanged, win));
 
 		win->InitContent();
 		win->Show();

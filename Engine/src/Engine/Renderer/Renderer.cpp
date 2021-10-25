@@ -32,6 +32,18 @@ namespace Sharpheus {
 	}
 
 
+	void Renderer::UsePrimary()
+	{
+		renderer->SetSecondary(false);
+	}
+
+
+	void Renderer::UseSecondary()
+	{
+		renderer->SetSecondary(true);
+	}
+
+
 	void Renderer::DrawHorizontalLine(float begin, float end, float place, float thickness, const Color& color)
 	{
 		renderer->DrawHorizontalLine(begin, end, place, thickness, color);

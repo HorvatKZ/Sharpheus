@@ -7,6 +7,8 @@
 
 namespace Sharpheus {
 
+	typedef std::function<void()> RenderFunc;
+
 	class SPH_EXPORT Level
 	{
 	public:
@@ -79,7 +81,9 @@ namespace Sharpheus {
 		bool SwapLayers(uint32 firstLayer, uint32 secondLayer);
 		bool SwapLayers(const std::string& firstLayer, const std::string& secondLayer);
 		bool AddToLayer(RenderableGameObject* obj, const std::string& layer);
+		bool AddToLayer(ID id, RenderFunc&& func, const std::string& layer);
 		bool RemoveFromLayers(RenderableGameObject* obj);
+		bool RemoveFromLayers(ID id);
 		bool IsLayerVisible(uint32 ind);
 		void SetLayerVisible(uint32 ind, bool visiblity);
 		inline bool IsLayerVisible(const std::string& name) { return IsLayerVisible(GetLayerInd(name)); }
@@ -96,6 +100,7 @@ namespace Sharpheus {
 			std::string name;
 			bool visible;
 			std::unordered_set<RenderableGameObject*> objects;
+			std::unordered_map<ID, RenderFunc> funcs;
 
 			Layer(const std::string& name) : name(name), visible(true) {}
 		};

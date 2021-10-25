@@ -57,6 +57,10 @@ namespace Sharpheus {
 				for (auto it = layers[i].objects.begin(); it != layers[i].objects.end(); ++it) {
 					(*it)->RenderIfVisible();
 				}
+
+				for (auto it = layers[i].funcs.begin(); it != layers[i].funcs.end(); ++it) {
+					it->second();
+				}
 			}
 		}
 	}
@@ -431,6 +435,24 @@ namespace Sharpheus {
 	}
 
 
+	bool Level::AddToLayer(ID id, RenderFunc&& func, const std::string& layer)
+	{
+		if (layer.empty()) {
+			SPH_ERROR("AddToLayer: Layer's name cannot be empty");
+			return false;
+		}
+
+		uint32 ind = GetLayerInd(layer);
+		if (ind == layers.size()) {
+			SPH_ERROR("AddToLayer: Layer \"{0}\" does not exist", layer);
+			return false;
+		}
+
+		layers[ind].funcs.insert(std::make_pair(id, std::move(func)));
+		return true;
+	}
+
+
 	bool Level::RemoveFromLayers(RenderableGameObject* obj)
 	{
 		if (obj->GetLayer().empty()) {
@@ -445,6 +467,21 @@ namespace Sharpheus {
 
 		layers[ind].objects.erase(obj);
 		return true;
+	}
+
+
+	bool Level::RemoveFromLayers(ID id)
+	{
+		bool success = false;
+		for (uint32 i = 0; i < layers.size(); ++i) {
+			auto it = layers[i].funcs.find(id);
+			if (it != layers[i].funcs.end()) {
+				layers[i].funcs.erase(it);
+				success = true;
+			}
+		}
+
+		return success;
 	}
 
 

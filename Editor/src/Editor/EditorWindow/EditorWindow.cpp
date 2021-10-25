@@ -124,7 +124,13 @@ namespace Sharpheus {
 			toolBar->CancelPlay();
 		}
 
-		viewPort->SetPlaying(true);
+		if (EditorCommands::IsTMEActive()) {
+			toolBar->CancelPlay();
+			SPHE_WARN("Close the TileMap Editor before playing!");
+			return;
+		}
+
+		EditorCommands::SetPlaying(true);
 		originalCamera = Renderer::GetCamera();
 		delete game;
 		game = new GamePreview(this, withCurrent ? ProjectData::GetLevel()->GetFullPath() : ProjectData::GetProjectPath(),
@@ -136,7 +142,7 @@ namespace Sharpheus {
 
 	void EditorWindow::StopGame()
 	{
-		viewPort->SetPlaying(false);
+		EditorCommands::SetPlaying(false);
 		game->Destroy();
 		game = nullptr;
 		originalCamera->SetCurrent();

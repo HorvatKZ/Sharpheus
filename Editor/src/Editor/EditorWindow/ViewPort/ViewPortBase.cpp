@@ -1,5 +1,6 @@
 #include "editor_pch.h"
 #include "ViewPortBase.hpp"
+#include "Editor/EditorCommands.hpp"
 
 
 namespace Sharpheus {
@@ -32,15 +33,19 @@ namespace Sharpheus {
 
 	void ViewPortBase::OnPaintEvent(wxPaintEvent& evt)
 	{
-		wxPaintDC dc(this);
-		Render(dc);
+		if (!EditorCommands::IsPlaying()) {
+			wxPaintDC dc(this);
+			Render(dc);
+		}
 	}
 
 
 	void ViewPortBase::PaintNow()
 	{
-		wxClientDC dc(this);
-		Render(dc);
+		if (!EditorCommands::IsPlaying()) {
+			wxClientDC dc(this);
+			Render(dc);
+		}
 	}
 
 

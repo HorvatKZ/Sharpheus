@@ -24,6 +24,10 @@ namespace Sharpheus::OpenGL {
 			glDeleteVertexArrays(1, &vao);
 		}
 
+		if (vao2 != SPH_OGL_ID_NONE) {
+			glDeleteVertexArrays(1, &vao2);
+		}
+
 		if (vbo != SPH_OGL_ID_NONE) {
 			glDeleteBuffers(1, &vbo);
 		}
@@ -43,10 +47,10 @@ namespace Sharpheus::OpenGL {
 		SPH_ASSERT(vao != SPH_OGL_ID_NONE, "OpenGL error: Could not generate VAO");
 
 		glGenBuffers(1, &vbo);
-		SPH_ASSERT(vao != SPH_OGL_ID_NONE, "OpenGL error: Could not generate VBO");
+		SPH_ASSERT(vbo != SPH_OGL_ID_NONE, "OpenGL error: Could not generate VBO");
 
 		glGenBuffers(1, &ib);
-		SPH_ASSERT(vao != SPH_OGL_ID_NONE, "OpenGL error: Could not generate IB");
+		SPH_ASSERT(ib != SPH_OGL_ID_NONE, "OpenGL error: Could not generate IB");
 
 		if (vao != SPH_OGL_ID_NONE && vbo != SPH_OGL_ID_NONE && ib != SPH_OGL_ID_NONE) {
 			glBindVertexArray(vao);
@@ -99,7 +103,7 @@ namespace Sharpheus::OpenGL {
 		}
 
 		shader.Use();
-		glBindVertexArray(vao);
+		glBindVertexArray(isSecondary ? vao2 : vao);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * 4 * count, vertices);
 		glDrawElements(GL_TRIANGLES, 6 * count, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(SPH_OGL_ID_NONE);
@@ -108,6 +112,41 @@ namespace Sharpheus::OpenGL {
 		count = 0;
 		nextFreeTexSlot = 0;
 		texIDs.clear();
+	}
+
+
+	void DynamicVertexBuffer::SetSecondary(bool isSecondary)
+	{
+		this->isSecondary = isSecondary;
+		if (isSecondary) {
+			SPH_LOG("Creating and using Secondary Dynamic Vertex Buffer");
+			if (vao2 != SPH_OGL_ID_NONE) {
+				glDeleteVertexArrays(1, &vao2);
+			}
+			glGenVertexArrays(1, &vao2);
+			SPH_ASSERT(vao2 != SPH_OGL_ID_NONE, "OpenGL error: Could not generate secondary VAO");
+
+			glBindVertexArray(vao2);
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+			SPH_OGL_SET_VAO_ATTRIBUTE(pos, 0, GL_FLOAT, 2);
+			SPH_OGL_SET_VAO_ATTRIBUTE(tex, 1, GL_FLOAT, 2);
+			SPH_OGL_SET_VAO_ATTRIBUTE(col, 2, GL_FLOAT, 4);
+			SPH_OGL_SET_VAO_INT_ATTRIBUTE(slot, 3, GL_BYTE, 1);
+			
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+
+			glBindVertexArray(SPH_OGL_ID_NONE);
+		} else {
+			SPH_LOG("Switching back to Primary Dynamic Vertex Buffer");
+			glBindVertexArray(vao);
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+
+			glBindVertexArray(SPH_OGL_ID_NONE);
+		}
 	}
 
 

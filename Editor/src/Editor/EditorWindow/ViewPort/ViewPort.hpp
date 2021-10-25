@@ -16,7 +16,6 @@ namespace Sharpheus {
 		void BindCallbacks(std::function<void()>&& currChangedCallback, std::function<void()>&& currDataChangedCallback);
 		void InitEditingArrow();
 
-		inline void SetPlaying(bool value) { isPlaying = value; }
 		inline void SetGrid(bool value) { isGridOn = value; }
 		inline bool IsGridOn() { return isGridOn; }
 		inline void SetSnapToGrid(bool value) { isSnapToGrid = value; }
@@ -29,7 +28,6 @@ namespace Sharpheus {
 		std::function<void()> currChangedCallback;
 		bool isGridOn = true;
 		bool isSnapToGrid = false;
-		bool isPlaying = false;
 
 		void OnMouseMove(wxMouseEvent& e) override;
 		void Render(wxDC& dc) override;

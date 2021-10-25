@@ -14,6 +14,7 @@ namespace Sharpheus {
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
 		wxGLCanvas::SetCurrent(*glContext);
+		Renderer::UseSecondary();
 
 		Bind(wxEVT_PAINT, &PreviewCanvas::OnPaintEvent, this);
 	}
@@ -22,6 +23,7 @@ namespace Sharpheus {
 	PreviewCanvas::~PreviewCanvas()
 	{
 		delete glContext;
+		Renderer::UsePrimary();
 	}
 
 
@@ -41,6 +43,7 @@ namespace Sharpheus {
 
 	void PreviewCanvas::Render(wxDC& dc)
 	{
+		//wxGLCanvas::SetCurrent(*glContext);
 		Renderer::StartFrame(renderShift);
 
 		proj->Render();

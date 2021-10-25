@@ -12,6 +12,8 @@ namespace Sharpheus::TileMapEditor {
 	{
 		glContext = new wxGLContext(this, other);
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+		wxGLCanvas::SetCurrent(*glContext);
+		Renderer::UseSecondary();
 
 		commonParent->SetWorldTrafo(tileMap->GetWorldTrafo());
 
@@ -25,6 +27,7 @@ namespace Sharpheus::TileMapEditor {
 
 	ViewPort::~ViewPort()
 	{
+		Renderer::UsePrimary();
 	}
 
 
