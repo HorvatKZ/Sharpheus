@@ -311,7 +311,7 @@ namespace Sharpheus {
 		wxFile lvl;
 		success &= lvl.Open(root + "\\Levels\\" + level + ".lvl.sharpheus", wxFile::write);
 		success &= WriteBinary(lvl, level);
-		success &= WriteBinary(lvl, projPath);
+		success &= WriteBinary(lvl, name + ".proj.sharpheus");
 		success &= WriteBinaryEOLN(lvl);
 		success &= WriteBinary(lvl, (uint32_t)2);
 		success &= WriteBinary(lvl, wxString("Default"));

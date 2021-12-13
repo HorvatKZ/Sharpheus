@@ -536,7 +536,7 @@ namespace Sharpheus {
 	bool Level::SaveLevelData(FileSaver& fs)
 	{
 		fs.Write(name);
-		fs.Write(projectPath);
+		fs.Write(projectName);
 		fs.WriteEnd();
 		fs.Write((uint32)layerNames.size());
 		for (uint32 i = 0; i < layers.size(); ++i) {
@@ -551,7 +551,7 @@ namespace Sharpheus {
 	bool Level::LoadLevelData(FileLoader& fl)
 	{
 		fl.Read(name);
-		fl.Read(projectPath);
+		fl.Read(projectName);
 		bool success = fl.TryReadingEnd();
 		uint32 n;
 		fl.Read(n);

@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "Level.hpp"
 #include "Window/Window.hpp"
+#include "EngineVersion.hpp"
 
 
 namespace Sharpheus {
@@ -12,15 +13,16 @@ namespace Sharpheus {
 	public:
 		struct Data {
 			Data() {}
-			Data(const std::string& name, const std::string& defaultLevelPath, const WinProps& winProps)
-				: name(name), defaultLevelPath(defaultLevelPath), winProps(winProps) {}
+			Data(const std::string& name, const std::string& defaultLevelPath, const WinProps& winProps, const EngineVersion& version)
+				: name(name), defaultLevelPath(defaultLevelPath), winProps(winProps), version(version) {}
 
 			std::string name, defaultLevelPath;
 			WinProps winProps;
+			EngineVersion version;
 		};
 
 		Project();
-		Project(const Data& data, const std::string& path);
+		Project(const Data& data, const std::string& path, const std::string& fileName);
 		Project(const std::string& name, const std::string& path, const std::string& defaultLevelName, const std::string& defaultLevelPath);
 		virtual ~Project();
 
@@ -51,10 +53,15 @@ namespace Sharpheus {
 
 		static inline float GetTimeOfRun() { return timeOfRun; }
 
+		inline uint32 GetProjEngineVersionInt() { return projEngineVersionInt; }
+		inline std::string GetProjEngineVersionStr() { return projEngineVersionStr; }
+
 	private:
 		Data data;
 		Level* level = nullptr;
-		std::string path, basePath;
+		std::string path, basePath, fileName;
+		uint32 projEngineVersionInt;
+		std::string projEngineVersionStr;
 		float lastTime = 0.f;
 		bool isSubProject = false;
 
