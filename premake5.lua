@@ -13,7 +13,7 @@ workspace "Sharpheus"
 		"MultiProcessorCompile"
 	}
 
-	configuration "vs*"
+	filter "action:vs*"
         buildoptions { "/bigobj" } 
 
 outputdir = "%{cfg.buildcfg}"
