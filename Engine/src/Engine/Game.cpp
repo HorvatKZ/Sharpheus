@@ -37,7 +37,7 @@ namespace Sharpheus {
 		AudioPlayer::Init();
 
 #ifdef SPH_EXPORTED
-		proj = new Project(projectData, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER));
+		proj = new Project(projectData, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER), projectData.name + "proj.sharpheus");
 		win->SetProps(proj->GetWinProps());
 #endif 
 	}

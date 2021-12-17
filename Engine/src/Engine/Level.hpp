@@ -64,8 +64,8 @@ namespace Sharpheus {
 		inline bool HasPath() { return !path.empty(); }
 		inline const std::string& GetPath() { return path; }
 		inline const std::string& GetFullPath() { return fullPath; }
-		inline const std::string& GetProjectPath() { return projectPath; }
-		inline void SetProjectPath(const std::string& projectPath) { this->projectPath = projectPath; }
+		inline const std::string& GetProjectFileName() { return projectName; }
+		inline void SetProjectFileName(const std::string& projectName) { this->projectName = projectName; }
 
 		bool Save();
 		bool Save(const std::string& base, const std::string& path);
@@ -106,7 +106,7 @@ namespace Sharpheus {
 		};
 
 		std::string name;
-		std::string path, projectPath, fullPath, base;
+		std::string path, projectName, fullPath, base;
 		GameObject* root;
 		CollisionSystem collSys;
 		std::unordered_map<std::string, GameObject*> gameObjects;

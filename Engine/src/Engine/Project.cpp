@@ -17,8 +17,8 @@ namespace Sharpheus {
 	}
 
 
-	Project::Project(const Data& data, const std::string& basePath)
-		: data(data), basePath(basePath)
+	Project::Project(const Data& data, const std::string& basePath, const std::string& fileName)
+		: data(data), basePath(basePath), fileName(fileName)
 	{
 		ProjectControl::Init();
 
@@ -28,8 +28,7 @@ namespace Sharpheus {
 		ResourceManager::Init(this->basePath);
 		SetWinProps(data.winProps);
 
-		level = new Level();
-		level->Load(this->basePath + "Levels\\", data.defaultLevelPath);
+		LoadLevel(data.defaultLevelPath);
 	}
 
 
@@ -40,14 +39,16 @@ namespace Sharpheus {
 
 		data.name = name;
 		data.defaultLevelPath = defaultLevelPath;
+		data.version = EngineVersion::latest;
 		SetWinProps(data.winProps);
 
 		size_t pos = path.find_last_of('\\');
 		basePath = path.substr(0, pos + 1);
 		ResourceManager::Init(basePath);
 
+		fileName = path.substr(pos + 1);
 		level = new Level(defaultLevelName);
-		level->SetProjectPath(path);
+		level->SetProjectFileName(fileName);
 		level->Save(basePath + "Levels\\", defaultLevelPath);
 		SaveProjectData();	
 	}
@@ -70,7 +71,7 @@ namespace Sharpheus {
 		}
 		
 		bool success = level->Load(basePath + "Levels\\", path);
-		level->SetProjectPath(this->path);
+		level->SetProjectFileName(this->fileName);
 		return success;
 	}
 
@@ -85,7 +86,7 @@ namespace Sharpheus {
 	{
 		delete level;
 		level = new Level(name);
-		level->SetProjectPath(path);
+		level->SetProjectFileName(fileName);
 	}
 
 
@@ -122,14 +123,15 @@ namespace Sharpheus {
 			success &= LoadProjectData(path);
 			level = new Level();
 			success &= level->Load(basePath + "Levels\\", data.defaultLevelPath);
-			level->SetProjectPath(path);
+			level->SetProjectFileName(path.substr(basePath.length() + 7));
 			return success;
 		}
 		else if (type == "lvl") {
 			bool success = true;
 			level = new Level();
 			success &= level->LoadLevelData(path);
-			success &= LoadProjectData(level->GetProjectPath());
+			std::string projPath = path.substr(0, path.find_last_of("Level\\"));
+			success &= LoadProjectData(projPath + level->GetProjectFileName());
 			std::string base = basePath + "Levels\\";
 			std::string relativePath = path.substr(base.length());
 			success &= level->Load(base, relativePath);
@@ -156,6 +158,9 @@ namespace Sharpheus {
 		success &= fs.WriteEnd();
 		success &= fs.Write(data.defaultLevelPath);
 		success &= fs.WriteEnd();
+		success &= fs.Write(data.version.num);
+		success &= fs.Write(data.version.str);
+		success &= fs.WriteEnd();
 		SPH_ASSERT(success, "Cannot save project data to \"{0}\"", path);
 		return success;
 	}
@@ -180,7 +185,8 @@ namespace Sharpheus {
 		f << "Project::Data projectData(\"" << data.name << "\", \"" << defLevel << "\", "
 			<< "WinProps(\"" << data.name << "\", " << data.winProps.width << ", " << data.winProps.height << ", "
 			<< data.winProps.fullscreen << ", " << data.winProps.vsync << ", Color(" << (uint32)data.winProps.background.r << ", "
-			<< (uint32)data.winProps.background.g << ", " << (uint32)data.winProps.background.b << ")));\n";
+			<< (uint32)data.winProps.background.g << ", " << (uint32)data.winProps.background.b << ")), EngineVersion(" <<
+			data.version.num << ", " << data.version.str << "));\n";
 		f << "}\n";
 		f.close();
 		SPH_ASSERT(success, "Cannot save project data to \"{0}\"", path);
@@ -216,6 +222,9 @@ namespace Sharpheus {
 		success &= fl.Read(data.winProps.background);
 		success &= fl.TryReadingEnd();
 		success &= fl.Read(data.defaultLevelPath);
+		success &= fl.TryReadingEnd();
+		success &= fl.Read(data.version.num);
+		success &= fl.Read(data.version.str);
 		success &= fl.TryReadingEnd();
 		SetWinProps(data.winProps);
 		SPH_ASSERT(success, "Cannot read project data from \"{0}\"", path);

@@ -11,7 +11,7 @@ namespace Sharpheus {
 	wxString EditorData::path;
 	wxString EditorData::configFile;
 	EditorData::GridProps EditorData::gridProps;
-	wxString EditorData::version("v.pre-alpha");
+	wxString EditorData::version(EngineVersion::latest.str);
 	wxString EditorData::oglVersion("Not determined");
 	wxFrame* EditorData::editorWindow = nullptr;
 	wxGLContext* EditorData::mainContext = nullptr;
