@@ -7,9 +7,10 @@ namespace Sharpheus {
 	uint32_t NewProjectDialog::border = 5;
 	wxSize NewProjectDialog::buttonSize(90, 26);
 	wxFont NewProjectDialog::titleFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
-	std::unordered_map<wxString, wxString> NewProjectDialog::ides({
+	std::map<wxString, wxString, std::greater<wxString>> NewProjectDialog::ides({
+		{"Visual Studio 2017", "vs2017"},
 		{"Visual Studio 2019", "vs2019"},
-		{"Visual Studio 2017", "vs2017"}
+		{"Visual Studio 2022", "vs2022"}
 	});
 
 

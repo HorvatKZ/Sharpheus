@@ -3,6 +3,8 @@
 #include "ProjectData.hpp"
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
+#include <wx/textfile.h>
+#include <wx/stdpaths.h>
 
 
 namespace Sharpheus {
@@ -11,15 +13,20 @@ namespace Sharpheus {
 	wxString EditorData::path;
 	wxString EditorData::configFile;
 	EditorData::GridProps EditorData::gridProps;
-	wxString EditorData::version(EngineVersion::latest.str);
+	wxString EditorData::version(EngineVersion::latest.GetVName());
 	wxString EditorData::oglVersion("Not determined");
 	wxFrame* EditorData::editorWindow = nullptr;
 	wxGLContext* EditorData::mainContext = nullptr;
 
 
-	void EditorData::Init(const wxString& _configFile)
+	void EditorData::Init()
 	{
-		configFile = _configFile;
+		configFile = wxStandardPaths::Get().GetUserConfigDir() + "\\Sharpheus\\editorConfig.txt";
+		if (!wxFileExists(configFile)) {
+			SPHE_ERROR("The config file does not exist. Please run the SharpheusStarter to resolve this issue");
+			wxExit();
+		}
+
 		wxFileInputStream file(configFile);
 		wxTextInputStream config(file);
 		path = config.ReadLine();

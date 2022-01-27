@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Colliders/Collider.hpp"
+#include "Engine/GameObjects/Colliders/Collider.hpp"
 #include "Engine/CollisionSystem/CollisionEvent.hpp"
 
 

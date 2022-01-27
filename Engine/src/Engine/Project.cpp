@@ -40,11 +40,14 @@ namespace Sharpheus {
 		data.name = name;
 		data.defaultLevelPath = defaultLevelPath;
 		data.version = EngineVersion::latest;
-		SetWinProps(data.winProps);
 
 		size_t pos = path.find_last_of('\\');
 		basePath = path.substr(0, pos + 1);
-		ResourceManager::Init(basePath);
+
+		if (Renderer::IsInited()) {
+			SetWinProps(data.winProps);
+			ResourceManager::Init(basePath);
+		}
 
 		fileName = path.substr(pos + 1);
 		level = new Level(defaultLevelName);
@@ -158,8 +161,7 @@ namespace Sharpheus {
 		success &= fs.WriteEnd();
 		success &= fs.Write(data.defaultLevelPath);
 		success &= fs.WriteEnd();
-		success &= fs.Write(data.version.num);
-		success &= fs.Write(data.version.str);
+		success &= fs.Write(data.version.GetVName());
 		success &= fs.WriteEnd();
 		SPH_ASSERT(success, "Cannot save project data to \"{0}\"", path);
 		return success;
@@ -185,8 +187,7 @@ namespace Sharpheus {
 		f << "Project::Data projectData(\"" << data.name << "\", \"" << defLevel << "\", "
 			<< "WinProps(\"" << data.name << "\", " << data.winProps.width << ", " << data.winProps.height << ", "
 			<< data.winProps.fullscreen << ", " << data.winProps.vsync << ", Color(" << (uint32)data.winProps.background.r << ", "
-			<< (uint32)data.winProps.background.g << ", " << (uint32)data.winProps.background.b << ")), EngineVersion(" <<
-			data.version.num << ", " << data.version.str << "));\n";
+			<< (uint32)data.winProps.background.g << ", " << (uint32)data.winProps.background.b << ")), EngineVersion(" << data.version.GetVName() << "));\n";
 		f << "}\n";
 		f.close();
 		SPH_ASSERT(success, "Cannot save project data to \"{0}\"", path);
@@ -205,10 +206,6 @@ namespace Sharpheus {
 
 	bool Project::LoadProjectData(const std::string& path)
 	{
-		size_t pos = path.find_last_of('\\');
-		basePath = path.substr(0, pos + 1);
-		ResourceManager::Init(basePath);
-
 		this->path = path;
 		bool success = true;
 		FileLoader fl(path);
@@ -223,10 +220,19 @@ namespace Sharpheus {
 		success &= fl.TryReadingEnd();
 		success &= fl.Read(data.defaultLevelPath);
 		success &= fl.TryReadingEnd();
-		success &= fl.Read(data.version.num);
-		success &= fl.Read(data.version.str);
+		std::string vname;
+		success &= fl.Read(vname);
 		success &= fl.TryReadingEnd();
-		SetWinProps(data.winProps);
+		data.version = EngineVersion(vname);
+
+		if (Renderer::IsInited()) {
+			size_t pos = path.find_last_of('\\');
+			basePath = path.substr(0, pos + 1);
+			ResourceManager::Init(basePath);
+
+			SetWinProps(data.winProps);
+		}
+
 		SPH_ASSERT(success, "Cannot read project data from \"{0}\"", path);
 		return success;
 	}

@@ -15,7 +15,7 @@ namespace Sharpheus {
 			Color camOutlineColor = Color(255, 32, 64, 200);
 		};
 
-		static void Init(const wxString& configFile);
+		static void Init();
 		static void Clear();
 
 		static inline class GameObject* GetCurrent() { return curr; }
@@ -45,6 +45,8 @@ namespace Sharpheus {
 		static wxString oglVersion;
 		static wxFrame* editorWindow;
 		static wxGLContext* mainContext;
+
+		static void CreateConfigFile();
 	};
 
 	typedef EditorData::GridProps ViewPortGridProps;

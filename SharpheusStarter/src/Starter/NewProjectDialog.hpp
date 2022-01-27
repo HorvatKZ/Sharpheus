@@ -36,7 +36,7 @@ namespace Sharpheus {
 
 		bool build;
 		wxString projectName, levelName, folderPath, ide;
-		static std::unordered_map<wxString, wxString> ides;
+		static std::map<wxString, wxString, std::greater<wxString>> ides;
 		static uint32_t border;
 		static wxSize buttonSize;
 		static wxFont titleFont;

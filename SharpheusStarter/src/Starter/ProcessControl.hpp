@@ -36,13 +36,6 @@ namespace Sharpheus {
 		static bool CopyItem(const wxString& from, const wxString& to);
 		static bool GenerateSolution(const wxString& solutionFolder, const wxString& name, const wxString& ide, const wxString& commonFolder);
 		static bool CreateSharpheusFiles(const wxString& root, const wxString& name, const wxString& level);
-
-		static bool WriteBinary(class wxFile& file, uint32_t value);
-		static bool WriteBinary(class wxFile& file, bool value);
-		static bool WriteBinary(class wxFile& file, uint8_t value);
-		static bool WriteBinary(class wxFile& file, float value);
-		static bool WriteBinary(class wxFile& file, const wxString& value);
-		static bool WriteBinaryEOLN(class wxFile& file);
 	};
 
 }

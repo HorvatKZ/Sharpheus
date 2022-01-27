@@ -1,5 +1,6 @@
 // C++
 #include <unordered_map>
+#include <map>
 #include <functional>
 
 // wxWidgets
@@ -7,3 +8,4 @@
 
 // Starter
 #include "typedefs.h"
+#include "Macros.h"

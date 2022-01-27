@@ -19,7 +19,7 @@ namespace Sharpheus {
 	Editor::Editor()
 	{
 		Logger::Init();
-		EditorData::Init(wxStr2StdStr(wxStandardPaths::Get().GetUserConfigDir() + "\\Sharpheus\\editorConfig.txt"));
+		EditorData::Init();
 		ClassRegistry::Init();
 		AudioPlayer::Init();
 		SPHE_INFO("Welcome to Sharpheus Editor");

@@ -22,7 +22,9 @@ namespace Sharpheus {
 		collSys.SetRoot(root);
 
 		Camera* camera = Create<Camera>(root, "Camera");
-		camera->SetCurrent();
+		if (Renderer::IsInited()) {
+			camera->SetCurrent();
+		}
 
 		CreateLayer("Default");
 		CreateLayer("HUD");
@@ -31,7 +33,7 @@ namespace Sharpheus {
 
 	Level::~Level()
 	{
-		if (Renderer::GetCamera()->GetRoot() == root) {
+		if (Renderer::IsInited() && Renderer::GetCamera()->GetRoot() == root) {
 			Renderer::SetCamera(nullptr);
 		}
 		delete root;

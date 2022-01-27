@@ -3,11 +3,15 @@
 #include <wx/filename.h>
 #include "ProjectList.hpp"
 #include "ProcessControl.hpp"
+#include "Engine/Project.hpp"
+#include "Common/StringUtils.hpp"
 
 
 namespace Sharpheus {
 
 	uint32_t ProjectList::border = 10;
+	uint32_t ProjectList::elemWidth = 150;
+	uint32_t ProjectList::elemHeight = 125;
 
 	ProjectList::ProjectList(wxWindow* parent, const wxPoint& pos, const wxSize& size, const wxString& projectsFile)
 		: wxPanel(parent, wxID_ANY, pos, size), projectsFile(projectsFile)
@@ -90,6 +94,12 @@ namespace Sharpheus {
 		if (!projectPath.empty()) {
 			if (::wxFileName::FileExists(projectPath)) {
 				projects.Add(projectPath);
+
+				Project* proj = new Project();
+				proj->LoadProjectData(wxStr2StdStr(projectPath));
+				projectVersions.push_back(proj->GetVersion());
+				delete proj;
+
 				wxString projectFile = projectPath.Mid(projectPath.find_last_of('\\') + 1);
 				wxString projectName = projectFile.Left(projectFile.Length() - 15); // 15 = length of .proj.sharpheus
 				projectNames.Add(projectName);
@@ -117,14 +127,67 @@ namespace Sharpheus {
 		uint32_t j = 0;
 		for (uint32_t i = 0; i < projectNames.size(); ++i) {
 			if (ShouldBeDisplayed(projectNames[i])) {
-				uint32_t extent = GetTextExtent(projectNames[i]).x;
-				dc.DrawBitmap(icon, wxPoint(border + j % perRow * (150 + border) + 25, border + j / perRow * (125 + border)));
-				dc.DrawLabel(projectNames[i], wxRect(j % perRow * (150 + border) + border + (150 - extent) / 2, j / perRow * (125 + border) + border + 100, extent, 22));
-				if (j == curr) {
-					dc.DrawBitmap(delIcon, wxPoint(border + j % perRow * (150 + border) + 105, border + j / perRow * (125 + border) - 5));
-				}
+				DrawElem(dc, perRow, i, j);
 				++j;
 			}
+		}
+	}
+
+
+	void ProjectList::DrawElem(wxDC& dc, uint32 perRow, uint32 ind, uint32 place)
+	{
+		wxString projName = projectNames[ind];
+		uint32_t extent = GetTextExtent(projName).x;
+		while (extent > elemWidth) {
+			projName = projName.SubString(0, projName.Length() - 6) + "...";
+			extent = GetTextExtent(projName).x;
+		}
+
+		dc.DrawBitmap(icon, wxPoint(
+			border + place % perRow * (elemWidth + border) + (elemWidth - icon.GetWidth()) / 2,
+			border + place / perRow * (elemHeight + border)
+		));
+		dc.DrawLabel(projectNames[ind], wxRect(
+			place % perRow * (elemWidth + border) + border + (elemWidth - extent) / 2,
+			place / perRow * (elemHeight + border) + border + icon.GetHeight(),
+			extent, 22
+		));
+
+		const EngineVersion& projV = projectVersions[ind];
+		extent = GetTextExtent(projV.GetVName()).x;
+		uint32 halfborder = border / 2;
+		dc.SetPen(*wxTRANSPARENT_PEN);
+		if (projV.IsUnknown()) {
+			dc.SetTextForeground(*wxBLACK);
+			dc.SetBrush(wxBrush(wxColour(237, 85, 59)));
+		} else if (projV < EngineVersion::latest) {
+			dc.SetTextForeground(*wxBLACK);
+			dc.SetBrush(wxBrush(wxColour(246, 213, 92)));
+		} else if (projV == EngineVersion::latest) {
+			dc.SetTextForeground(*wxBLACK);
+			dc.SetBrush(wxBrush(wxColour(60, 174, 163)));
+		} else {
+			dc.SetTextForeground(*wxWHITE);
+			dc.SetBrush(wxBrush(wxColour(32, 99, 155)));
+		}
+		dc.DrawRoundedRectangle(wxRect(
+			place % perRow * (elemWidth + border) + 2 * border + halfborder,
+			place / perRow * (elemHeight + border) + halfborder,
+			extent + border, GetTextExtent(projV.GetVName()).y + border
+		), halfborder);
+		dc.DrawLabel(projV.GetVName(), wxRect(
+			place % perRow * (elemWidth + border) + 3 * border,
+			place / perRow * (elemHeight + border) + border,
+			extent, 22
+		));
+		dc.SetTextForeground(*wxBLACK);
+		dc.SetBrush(*wxWHITE_BRUSH);
+
+		if (place == curr) {
+			dc.DrawBitmap(delIcon, wxPoint(
+				border + place % perRow * (elemWidth + border) + 105,
+				border + place / perRow * (elemHeight + border) - 5
+			));
 		}
 	}
 
@@ -153,6 +216,7 @@ namespace Sharpheus {
 					wxFileName::Rmdir(projects[i].Left(projects[i].find_last_of('\\')), wxPATH_RMDIR_RECURSIVE);
 					projects.Remove(projects[i]);
 					projectNames.Remove(projectNames[i]);
+					projectVersions.erase(projectVersions.begin() + i);
 					Refresh();
 				}
 			}
@@ -182,6 +246,20 @@ namespace Sharpheus {
 		}
 
 		if (j > ind) {
+			const EngineVersion& projV = projectVersions[i - 1];
+			if (projV.IsUnknown()) {
+				wxMessageBox("Unable to open project\nThe project version is unknown", "Uknown project version", wxICON_ERROR | wxOK | wxCENTRE);
+				return;
+			} else if (projV < EngineVersion::latest) {
+				int answer = wxMessageBox("This is a project with an older version. Opening it will result in undoable version conversion\nProceed?", "Version conversion", wxICON_INFORMATION | wxYES | wxNO | wxCENTRE);
+				if (answer == wxNO) {
+					return;
+				}
+			} else if (projV > EngineVersion::latest) {
+				wxMessageBox("This is a project with a newer version\nPlease download a newer version of Sharpheus to open it", "Newer version", wxICON_WARNING | wxOK | wxCENTRE);
+				return;
+			}
+
 			ProcessControl::OpenProj(projects[i - 1]);
 		}
 	}

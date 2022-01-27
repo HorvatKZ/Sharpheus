@@ -29,6 +29,7 @@ namespace Sharpheus {
 		inline void MarkAsSubProject() { isSubProject = true; }
 
 		bool Load(const std::string& path);
+		bool LoadProjectData(const std::string& path);
 		bool SaveProjectData();
 		bool SaveProjectDataToHpp(const std::string& path);
 		bool LoadLevel(const std::string& path);
@@ -39,6 +40,7 @@ namespace Sharpheus {
 		inline void Render() { level->Render(); }
 
 		inline const std::string& GetName() const { return data.name; }
+		inline const EngineVersion& GetVersion() const { return data.version; }
 		inline const WinProps& GetWinProps() const { return data.winProps; }
 		inline const std::string& GetPath() const { return path; }
 		inline const std::string& GetBasePath() const { return basePath; }
@@ -53,21 +55,14 @@ namespace Sharpheus {
 
 		static inline float GetTimeOfRun() { return timeOfRun; }
 
-		inline uint32 GetProjEngineVersionInt() { return projEngineVersionInt; }
-		inline std::string GetProjEngineVersionStr() { return projEngineVersionStr; }
-
 	private:
 		Data data;
 		Level* level = nullptr;
 		std::string path, basePath, fileName;
-		uint32 projEngineVersionInt;
-		std::string projEngineVersionStr;
 		float lastTime = 0.f;
 		bool isSubProject = false;
 
 		static uint32 timeOfRun;
-
-		bool LoadProjectData(const std::string& path);
 	};
 
 }

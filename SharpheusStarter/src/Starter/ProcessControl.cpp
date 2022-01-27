@@ -5,6 +5,8 @@
 #include <wx/filefn.h>
 #include <wx/dir.h>
 #include "ProcessControl.hpp"
+#include "Engine/Project.hpp"
+#include "Common/StringUtils.hpp"
 
 
 namespace Sharpheus {
@@ -287,98 +289,15 @@ namespace Sharpheus {
 
 	bool ProcessControl::CreateSharpheusFiles(const wxString& root, const wxString& name, const wxString& level)
 	{
-		bool success = true;
+		std::string root_s = wxStr2StdStr(root);
+		std::string name_s = wxStr2StdStr(name);
+		std::string level_s = wxStr2StdStr(level);
 
-		wxFile proj;
-		wxString projPath = root + "\\" + name + ".proj.sharpheus";
-		success &= proj.Open(projPath, wxFile::write);
-		success &= WriteBinary(proj, name);
-		success &= WriteBinaryEOLN(proj);
-		success &= WriteBinary(proj, name);
-		success &= WriteBinary(proj, (uint32_t)1280);
-		success &= WriteBinary(proj, (uint32_t)720);
-		success &= WriteBinary(proj, false);
-		success &= WriteBinary(proj, false);
-		success &= WriteBinary(proj, (uint8_t)32);
-		success &= WriteBinary(proj, (uint8_t)64);
-		success &= WriteBinary(proj, (uint8_t)128);
-		success &= WriteBinary(proj, (uint8_t)255);
-		success &= WriteBinaryEOLN(proj);
-		success &= WriteBinary(proj, level + ".lvl.sharpheus");
-		success &= WriteBinaryEOLN(proj);
-		success &= proj.Close();
-
-		wxFile lvl;
-		success &= lvl.Open(root + "\\Levels\\" + level + ".lvl.sharpheus", wxFile::write);
-		success &= WriteBinary(lvl, level);
-		success &= WriteBinary(lvl, name + ".proj.sharpheus");
-		success &= WriteBinaryEOLN(lvl);
-		success &= WriteBinary(lvl, (uint32_t)2);
-		success &= WriteBinary(lvl, wxString("Default"));
-		success &= WriteBinary(lvl, (uint8_t)1);
-		success &= WriteBinary(lvl, wxString("HUD"));
-		success &= WriteBinary(lvl, (uint8_t)1);
-		success &= WriteBinaryEOLN(lvl);
-		success &= WriteBinary(lvl, (uint8_t)1);
-		success &= WriteBinary(lvl, level);
-		success &= WriteBinary(lvl, (uint32_t)1);
-		success &= WriteBinary(lvl, 0.f);
-		success &= WriteBinary(lvl, 0.f);
-		success &= WriteBinary(lvl, 1.f);
-		success &= WriteBinary(lvl, 1.f);
-		success &= WriteBinary(lvl, 0.f);
-		success &= WriteBinary(lvl, (uint8_t)1);
-		success &= WriteBinaryEOLN(lvl);
-		success &= WriteBinary(lvl, (uint8_t)16);
-		success &= WriteBinary(lvl, wxString("Camera"));
-		success &= WriteBinary(lvl, (uint32_t)0);
-		success &= WriteBinary(lvl, 0.f);
-		success &= WriteBinary(lvl, 0.f);
-		success &= WriteBinary(lvl, 1.f);
-		success &= WriteBinary(lvl, 1.f);
-		success &= WriteBinary(lvl, 0.f);
-		success &= WriteBinary(lvl, (uint8_t)1);
-		success &= WriteBinary(lvl, true);
-		success &= WriteBinaryEOLN(lvl);
-		success &= lvl.Close();
+		bool success = wxMkDir(root + "\\Levels");
+		Project* proj = new Project(name_s, root_s + "\\" + name_s + ".proj.sharpheus", level_s, level_s + ".lvl.sharpheus");
+		delete proj;
 
 		return success;
-	}
-
-	bool ProcessControl::WriteBinary(wxFile& file, uint32_t value)
-	{
-		return file.Write(&value, sizeof(value)) == sizeof(value);
-	}
-
-	bool ProcessControl::WriteBinary(wxFile& file, bool value)
-	{
-		uint8_t realValue = value ? 1 : 0;
-		return WriteBinary(file, realValue);
-	}
-
-	bool ProcessControl::WriteBinary(wxFile& file, uint8_t value)
-	{
-		return file.Write(&value, sizeof(value)) == sizeof(value);
-	}
-
-	bool ProcessControl::WriteBinary(wxFile& file, float value)
-	{
-		return file.Write(&value, sizeof(value)) == sizeof(value);
-	}
-
-	bool ProcessControl::WriteBinary(wxFile& file, const wxString& value)
-	{
-		bool success = true;
-		uint32_t len = value.Length();
-		success &= file.Write(&len, sizeof(len)) == sizeof(len);
-		success &= file.Write(value.c_str(), len + 1) == len + 1;
-		return success;
-	}
-
-	bool ProcessControl::WriteBinaryEOLN(wxFile& file)
-	{
-		uint8_t eoln = '\n';
-		return WriteBinary(file, eoln);
 	}
 
 }

@@ -17,6 +17,13 @@ namespace Sharpheus {
 	void Renderer::Clear()
 	{
 		delete renderer;
+		renderer = nullptr;
+	}
+
+
+	bool Renderer::IsInited()
+	{
+		return renderer != nullptr;
 	}
 
 

@@ -10,6 +10,7 @@ namespace Sharpheus {
 	public:
 		static void Init();
 		static void Clear();
+		static bool IsInited();
 
 		static void StartFrame(const Point& shift = Point());
 		static void EndFrame();
