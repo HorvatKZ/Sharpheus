@@ -28,7 +28,6 @@ namespace Sharpheus {
 		static inline const std::unordered_map<std::string, Font*>* GetFontTable() { return &fontsByNames; }
 
 		static Image* GetImage(const std::string& path, bool filtered = false);
-		static inline Image* GetCircle() { return circle; }
 
 		static Animation* GetAnimation(const std::string& path);
 
@@ -44,7 +43,6 @@ namespace Sharpheus {
 		static std::unordered_map<std::string, Animation*> animations;
 		static std::unordered_map<std::string, TileSet*> tileSets;
 		static std::unordered_map<std::string, Audio*> audios;
-		static Image* circle;
 
 		static std::string Concat(const std::string& first, const std::string& second);
 	};

@@ -6,8 +6,6 @@
 
 namespace Sharpheus {
 
-	Point Image::fullTexCoords[] = { Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1) };
-
 	Image::Image(const std::string& path, bool filtered) : Resource(path), filtered(filtered), ID(Renderer::GetInvalidTexture())
 	{
 		LoadImg();
@@ -22,7 +20,7 @@ namespace Sharpheus {
 
 	void Image::Render(Point coords[4], const Color& tint)
 	{
-		Renderer::DrawQuad(coords, fullTexCoords, tint, ID);
+		Renderer::DrawQuad(coords, Renderer::GetFullTexCoords(), tint, ID);
 	}
 
 

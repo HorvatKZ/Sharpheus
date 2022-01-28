@@ -12,8 +12,12 @@ layout(binding = 0) uniform sampler2D textures[32];
 void main()
 {
 	vec4 color = fs_in_col;
-	if (fs_in_slot != 0) {
-		color *= texture(textures[fs_in_slot - 1], fs_in_tex);
+	if (fs_in_slot == 1) { // Circle
+		if (length(fs_in_tex * 2.0 - 1.0) > 1.0) {
+			color.a = 0.0;
+		}
+	} else if (fs_in_slot != 0) {
+		color *= texture(textures[fs_in_slot - 2], fs_in_tex);
 	}
 
 	fs_out_col = color;

@@ -24,8 +24,6 @@ namespace Sharpheus {
 		uint32 width, height;
 		bool filtered;
 
-		static Point fullTexCoords[4];
-
 		void LoadImg();
 	};
 

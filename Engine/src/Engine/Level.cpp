@@ -65,6 +65,8 @@ namespace Sharpheus {
 				}
 			}
 		}
+
+		collSys.Render();
 	}
 
 

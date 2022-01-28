@@ -37,7 +37,7 @@ namespace Sharpheus {
 
 	void CircleCollider::RenderSelection()
 	{
-		ResourceManager::GetCircle()->Render(shape->GetCorners(), selectColor);
+		Renderer::DrawCircle(shape->GetCorners(), selectColor);
 	}
 
 
@@ -60,7 +60,7 @@ namespace Sharpheus {
 
 	void CircleCollider::RenderShape()
 	{
-		ResourceManager::GetCircle()->Render(shape->GetCorners(), isTrigger ? triggerColor : colliderColor);
+		Renderer::DrawCircle(shape->GetCorners(), isTrigger ? triggerColor : colliderColor);
 	}
 
 }

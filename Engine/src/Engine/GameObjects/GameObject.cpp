@@ -413,7 +413,7 @@ namespace Sharpheus {
 			worldTrafo.pos + Point(selectCircleRadius, selectCircleRadius),
 			worldTrafo.pos + Point(-selectCircleRadius, selectCircleRadius)
 		};
-		ResourceManager::GetCircle()->Render(coords, selectColor);
+		Renderer::DrawCircle(coords, selectColor);
 	}
 
 

@@ -82,17 +82,13 @@ namespace Sharpheus::OpenGL {
 
 	void DynamicVertexBuffer::PushQuad(Vertex vertices[4], GLuint texID)
 	{
-		if (count == maxQuadCount) {
-			Flush();
-		}
+		PushQuadWithSlot(vertices, (texID == SPH_OGL_ID_NONE) ? 0 : (GetSlotFromTexID(texID) + 2));
+	}
 
-		GLuint slot = (texID == SPH_OGL_ID_NONE) ? 0 : (GetSlotFromTexID(texID) + 1);
-		vertices[0].slot = slot;
-		vertices[1].slot = slot;
-		vertices[2].slot = slot;
-		vertices[3].slot = slot;
-		memcpy(this->vertices + 4 * count, vertices, 4 * sizeof(Vertex));
-		++count;
+
+	void DynamicVertexBuffer::PushCircle(Vertex vertices[4])
+	{
+		PushQuadWithSlot(vertices, 1);
 	}
 
 
@@ -147,6 +143,21 @@ namespace Sharpheus::OpenGL {
 
 			glBindVertexArray(SPH_OGL_ID_NONE);
 		}
+	}
+
+
+	void DynamicVertexBuffer::PushQuadWithSlot(Vertex vertices[4], GLuint slot)
+	{
+		if (count == maxQuadCount) {
+			Flush();
+		}
+
+		vertices[0].slot = slot;
+		vertices[1].slot = slot;
+		vertices[2].slot = slot;
+		vertices[3].slot = slot;
+		memcpy(this->vertices + 4 * count, vertices, 4 * sizeof(Vertex));
+		++count;
 	}
 
 

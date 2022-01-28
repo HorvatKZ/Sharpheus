@@ -22,8 +22,11 @@ namespace Sharpheus {
 		static void DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color);
 		static void DrawLine(const Point& begin, const Point& end, float thickness, const Color& color);
 
-		static void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint, uint32 texID);
-		static void DrawMonocromeQuad(Point coords[4], const Color& color);
+		static void DrawQuad(const Point coords[4], const Point texCoords[4], const Color& tint, uint32 texID);
+		static void DrawMonocromeQuad(const Point coords[4], const Color& color);
+
+		static void DrawCircle(const Point coords[4], const Color& tint);
+		static void DrawCirclePart(const Point coords[4], const Point texCoords[4], const Color& tint);
 
 		static inline class Camera* GetCamera() { return renderer->GetCamera(); }
 		static void SetCamera(class Camera* camera);
@@ -36,10 +39,13 @@ namespace Sharpheus {
 		static bool IsValidTexture(uint32 texID);
 		static uint32 GetInvalidTexture();
 
+		static inline const Point* const GetFullTexCoords() { return fullTexCoords; }
+
 		static const std::string& GetAPIVersion();
 
 	private:
 		static Renderer_API* renderer;
+		static const Point fullTexCoords[4];
 	};
 
 }

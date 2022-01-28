@@ -14,6 +14,7 @@ namespace Sharpheus::OpenGL {
 
 		void Init();
 		void PushQuad(Vertex vertices[4], GLuint texID = SPH_OGL_ID_NONE);
+		void PushCircle(Vertex vertices[4]);
 		void Flush();
 
 		void SetSecondary(bool isSecondary);
@@ -26,6 +27,8 @@ namespace Sharpheus::OpenGL {
 		std::unordered_map<GLuint, GLuint> texIDs;
 		GLint texSlotNum = 0;
 		bool isSecondary = false;
+
+		void PushQuadWithSlot(Vertex vertices[4], GLuint slot);
 
 		GLuint* GenerateIndices(GLuint maxQuadCount);
 		inline void SetIndex(GLuint* indices, uint32 i, uint32 j, uint32 index) { indices[6 * i + j] = 4 * i + index; }

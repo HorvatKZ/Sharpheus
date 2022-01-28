@@ -86,8 +86,8 @@ namespace Sharpheus {
 
 		Point upper[] = { corners[0], corners[1], innerCorners[1], innerCorners[0] };
 		Point lower[] = { innerCorners[3], innerCorners[2], corners[2], corners[3] };
-		ResourceManager::GetCircle()->RenderPart(upper, upperTexCoords, color);
-		ResourceManager::GetCircle()->RenderPart(lower, lowerTexCoords, color);
+		Renderer::DrawCirclePart(upper, upperTexCoords, color);
+		Renderer::DrawCirclePart(lower, lowerTexCoords, color);
 	}
 
 

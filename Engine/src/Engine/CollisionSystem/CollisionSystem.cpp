@@ -94,4 +94,13 @@ namespace Sharpheus {
 		}
 	}
 
+	void CollisionSystem::Render()
+	{
+		if (areCollidersVisible) {
+			for (Collider* collider : colliders) {
+				collider->RenderShape();
+			}
+		}
+	}
+
 }

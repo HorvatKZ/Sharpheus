@@ -23,8 +23,11 @@ namespace Sharpheus::OpenGL {
 		void DrawVerticalLine(float begin, float end, float place, float thickness, const Color& color) override;
 		void DrawLine(const Point& begin, const Point& end, float thickness, const Color& color) override;
 
-		void DrawQuad(Point coords[4], Point texCoords[4], const Color& tint, uint32 texID) override;
-		void DrawMonocromeQuad(Point coords[4], const Color& color) override;
+		void DrawQuad(const Point coords[4], const Point texCoords[4], const Color& tint, uint32 texID) override;
+		void DrawMonocromeQuad(const Point coords[4], const Color& color) override;
+
+		void DrawCircle(const Point coords[4], const Color& tint) override;
+		void DrawCirclePart(const Point coords[4], const Point texCoords[4], const Color& tint) override;
 
 		uint32 CreateTexture(byte* data, uint32 width, uint32 height, uint32 channels, bool filtered) override;
 		void FreeTexture(uint32 texID) override;
@@ -34,7 +37,7 @@ namespace Sharpheus::OpenGL {
 		inline const std::string& GetVersion() override { return version; }
 
 	private:
-		ShaderProgram shader;
+		ShaderProgram mainShader;
 		DynamicVertexBuffer dynamicVB;
 		Vertex temp[4];
 		static std::string version;

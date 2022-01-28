@@ -11,15 +11,11 @@ namespace Sharpheus {
 	std::unordered_map<std::string, Animation*> ResourceManager::animations;
 	std::unordered_map<std::string, TileSet*> ResourceManager::tileSets;
 	std::unordered_map<std::string, Audio*> ResourceManager::audios;
-	Image* ResourceManager::circle = nullptr;
 
 
 	void ResourceManager::Init(const std::string& projectPath)
 	{
 		assetsRoot = projectPath + "Assets\\";
-		if (circle == nullptr) {
-			circle = new Image("Shapes\\circle.png", true);
-		}
 	}
 
 
@@ -31,8 +27,6 @@ namespace Sharpheus {
 		for (auto it = fontsByPaths.begin(); it != fontsByPaths.end(); ++it) {
 			delete (*it).second;
 		}
-		delete circle;
-		circle = nullptr;
 	}
 
 

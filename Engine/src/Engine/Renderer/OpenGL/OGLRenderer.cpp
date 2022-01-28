@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "OGLRenderer.hpp"
 #include "Engine/GameObjects/Camera.hpp"
+#include "Engine/Renderer/Renderer.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -9,7 +10,7 @@ namespace Sharpheus::OpenGL {
 	std::string Renderer::version;
 
 	Renderer::Renderer()
-		: shader("shader.glsl.vert", "shader.glsl.frag"), dynamicVB(shader)
+		: mainShader("shader.glsl.vert", "shader.glsl.frag"), dynamicVB(mainShader)
 	{
 		GLenum err = glewInit();
 		SPH_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
@@ -28,7 +29,7 @@ namespace Sharpheus::OpenGL {
 	{
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 
-		shader.Use();
+		mainShader.Use();
 		glClearColor(bgColor.GetRed(), bgColor.GetGreen(), bgColor.GetBlue(), 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -58,14 +59,13 @@ namespace Sharpheus::OpenGL {
 			),
 			glm::vec3(-camTrafo.pos.x, -camTrafo.pos.y, 0)
 		);
-		shader.SetUniform("viewTrafo", mat);
+		mainShader.SetUniform("viewTrafo", mat);
 	}
 
 
 	void Renderer::EndFrame()
 	{
 		dynamicVB.Flush();
-		shader.Unuse();
 		glFlush();
 	}
 
@@ -117,7 +117,7 @@ namespace Sharpheus::OpenGL {
 	}
 
 
-	void Renderer::DrawQuad(Point coords[4], Point texCoords[4], const Color& tint, uint32 texID)
+	void Renderer::DrawQuad(const Point coords[4], const Point texCoords[4], const Color& tint, uint32 texID)
 	{
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 		
@@ -131,7 +131,7 @@ namespace Sharpheus::OpenGL {
 	}
 
 	
-	void Renderer::DrawMonocromeQuad(Point coords[4], const Color& color)
+	void Renderer::DrawMonocromeQuad(const Point coords[4], const Color& color)
 	{
 		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
 
@@ -143,6 +143,26 @@ namespace Sharpheus::OpenGL {
 		temp[3] = Vertex(coords[3].ToVec2(), tex, col);
 
 		dynamicVB.PushQuad(temp);
+	}
+
+
+	void Renderer::DrawCircle(const Point coords[4], const Color& tint)
+	{
+		DrawCirclePart(coords, ::Sharpheus::Renderer::GetFullTexCoords(), tint);
+	}
+
+
+	void Renderer::DrawCirclePart(const Point coords[4], const Point texCoords[4], const Color& tint)
+	{
+		SPH_ASSERT(camera != nullptr, "No camera attached to the renderer");
+
+		glm::vec4 color = tint.ToVec4();
+		temp[0] = Vertex(coords[0].ToVec2(), texCoords[0].ToVec2(), color);
+		temp[1] = Vertex(coords[1].ToVec2(), texCoords[1].ToVec2(), color);
+		temp[2] = Vertex(coords[2].ToVec2(), texCoords[2].ToVec2(), color);
+		temp[3] = Vertex(coords[3].ToVec2(), texCoords[3].ToVec2(), color);
+
+		dynamicVB.PushCircle(temp);
 	}
 
 

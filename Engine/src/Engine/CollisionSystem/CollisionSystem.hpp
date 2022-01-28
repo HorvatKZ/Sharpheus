@@ -23,6 +23,8 @@ namespace Sharpheus {
 		void HideColliders();
 		inline bool AreCollidersVisible() { return areCollidersVisible; }
 
+		void Render();
+
 	private:
 		std::vector<class Collider*> colliders;
 		bool areCollidersVisible = false;

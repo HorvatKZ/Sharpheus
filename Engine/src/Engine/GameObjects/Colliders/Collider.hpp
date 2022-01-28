@@ -16,6 +16,7 @@ namespace Sharpheus {
 
 	class SPH_EXPORT Collider : public ShapedGameObject
 	{
+		friend class CollisionSystem;
 	public:
 		Collider(GameObject* parent, const std::string& name, Shape* shape);
 		virtual ~Collider();
@@ -73,12 +74,6 @@ namespace Sharpheus {
 			lastInside = currInside;
 			currInside = tmp;
 			currInside->clear();
-		}
-
-		inline void RenderShapeIfColliderVisible() {
-			if (IsAllVisible()) {
-				RenderShape();
-			}
 		}
 
 		virtual bool Load(FileLoader& fl) override;
