@@ -106,6 +106,11 @@ namespace Sharpheus {
 			return;
 		}
 
+		/*if (!wxRenameFile(newProject.GetFullPath() + "\\Solution\\Project", newProject.GetFullPath() + "\\Solution\\" + name)) {
+			wxMessageBox("Could not rename files", "Error", wxICON_ERROR | wxOK | wxCENTRE);
+			return;
+		}*/
+
 		wxFileName solution = newProject;
 		solution.AppendDir(name);
 		solution.SetName("Solution");
@@ -293,7 +298,8 @@ namespace Sharpheus {
 		std::string name_s = wxStr2StdStr(name);
 		std::string level_s = wxStr2StdStr(level);
 
-		bool success = wxMkDir(root + "\\Levels");
+		bool success = (wxMkDir(root + "\\Levels") == 0);
+		success &= (wxMkDir(root + "\\Scenes") == 0);
 		Project* proj = new Project(name_s, root_s + "\\" + name_s + ".proj.sharpheus", level_s, level_s + ".lvl.sharpheus");
 		delete proj;
 

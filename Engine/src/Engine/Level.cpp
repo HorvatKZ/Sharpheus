@@ -3,10 +3,12 @@
 #include "GameObjects/GameObjects.h"
 #include "FileUtils/FileLoader.hpp"
 #include "FileUtils/FileSaver.hpp"
-#include "BehaviorCreator.hpp"
 
 
 namespace Sharpheus {
+
+	BehaviorCreatorBase* Level::bc = nullptr;
+
 
 	Level::Level()
 	{
@@ -22,9 +24,7 @@ namespace Sharpheus {
 		collSys.SetRoot(root);
 
 		Camera* camera = Create<Camera>(root, "Camera");
-		if (Renderer::IsInited()) {
-			camera->SetCurrent();
-		}
+		camera->SetCurrent();
 
 		CreateLayer("Default");
 		CreateLayer("HUD");
@@ -33,9 +33,10 @@ namespace Sharpheus {
 
 	Level::~Level()
 	{
-		if (Renderer::IsInited() && Renderer::GetCamera()->GetRoot() == root) {
+		if (Renderer::IsInited() && Renderer::GetCamera() != nullptr && Renderer::GetCamera()->GetRoot() == root) {
 			Renderer::SetCamera(nullptr);
 		}
+		RadioButton::Clear();
 		delete root;
 	}
 
@@ -123,7 +124,8 @@ namespace Sharpheus {
 	{
 		GameObject::Type type = other->GetType();
 		if (type == GameObject::Type::Behavior) {
-			GameObject* behavior = BehaviorCreator::Create(((Behavior*)other)->GetSubType(), parent, newName);
+			SPH_ASSERT(bc != nullptr, "BehaviorCreator is not set for Level");
+			GameObject* behavior = bc->Create(((Behavior*)other)->GetSubType(), parent, newName);
 			Attach(behavior);
 			return behavior;
 		}
@@ -623,8 +625,9 @@ namespace Sharpheus {
 			obj = Create(realType, parent, objName);
 		} else {
 			uint32 subType;
+			SPH_ASSERT(bc != nullptr, "BehaviorCreator is not set for Level");
 			success &= fl.Read(subType);
-			obj = BehaviorCreator::Create(subType, parent, objName);
+			obj = bc->Create(subType, parent, objName);
 			Attach(obj);
 		}
 		

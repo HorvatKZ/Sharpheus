@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	class FileLoader
+	class SPH_EXPORT FileLoader
 	{
 	public:
 		FileLoader(const std::string& path);

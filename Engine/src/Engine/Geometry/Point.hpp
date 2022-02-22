@@ -15,9 +15,10 @@ namespace Sharpheus {
 		Point			operator-(const Point& other) const;
 		float			operator*(const Point& other) const;
 		Point			operator*(float other) const;
-		friend Point	operator*(float lhs, const Point& rhs);
 		Point			operator/(float other) const;
-		friend Point	operator/(float lhs, const Point& rhs);
+
+		SPH_EXPORT friend Point	operator*(float lhs, const Point& rhs);
+		SPH_EXPORT friend Point	operator/(float lhs, const Point& rhs);
 
 		Point&			operator+=(const Point& other);
 		Point&			operator-=(const Point& other);
@@ -49,3 +50,4 @@ namespace Sharpheus {
 	};
 
 }
+

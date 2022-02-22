@@ -13,8 +13,8 @@ namespace Sharpheus {
 
 		static void CreateBehaviorHeader(const wxString& filePath, const wxString& className, const wxString& parent, uint32 subType);
 		static void CreateBehaviorSource(const wxString& filePath, const wxString& headerInclude, const wxString& className, const wxString& parent, uint32 subType);
-		static void UpdateCreateBehaviorHeader(const wxString& filePath, const wxString& newClassPath, const wxString& newClassName, uint32 newSubType, std::unordered_map<uint32, std::string>& oldClasses);
-		static void UpdateCreateBehaviorSource(const wxString& filePath, const wxString& newClassName, uint32 newSubType, std::unordered_map<uint32, std::string>& oldClasses);
+		static void UpdateCreateBehaviorHeader(const wxString& filePath, const wxString& newClassPath, const wxString& newClassName, uint32 newSubType, const std::unordered_map<uint32, std::string>& oldClasses);
+		static void UpdateCreateBehaviorSource(const wxString& filePath, const wxString& newClassName, uint32 newSubType, const std::unordered_map<uint32, std::string>& oldClasses);
 
 		void Include(const wxString& file);
 		void IncludeCompilerPath(const wxString& file);

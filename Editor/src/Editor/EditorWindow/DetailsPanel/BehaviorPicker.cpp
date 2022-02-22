@@ -37,8 +37,8 @@ namespace Sharpheus {
 
 		uint32 parentWidth = parent->GetSize().x;
 		typeSelector->Clear();
-		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
-			if (BehaviorCreator::IsCompatibleWithParent((*it).first, curr->GetParent())) {
+		for (auto it = ::BehaviorCreator::behaviorNames.begin(); it != ::BehaviorCreator::behaviorNames.end(); ++it) {
+			if (::BehaviorCreator::Instance()->IsCompatibleWithParent((*it).first, curr->GetParent())) {
 				typeSelector->Append(wxString::Format("%d - %s", (*it).first, (*it).second));
 			}
 		}
@@ -68,7 +68,7 @@ namespace Sharpheus {
 		bool unique = true;
 		wxString newClass = dialog.GetName();
 		newClass.MakeUpper();
-		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end() && unique; ++it) {
+		for (auto it = ::BehaviorCreator::behaviorNames.begin(); it != ::BehaviorCreator::behaviorNames.end() && unique; ++it) {
 			wxString oldClass = (*it).second;
 			oldClass.MakeUpper();
 			if (oldClass == newClass) {
@@ -86,7 +86,7 @@ namespace Sharpheus {
 	{
 		wxString newClass = className;
 		newClass.MakeUpper();
-		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
+		for (auto it = ::BehaviorCreator::behaviorNames.begin(); it != ::BehaviorCreator::behaviorNames.end(); ++it) {
 			wxString oldClass = (*it).second;
 			oldClass.MakeUpper();
 			if (oldClass == newClass) {
@@ -106,8 +106,8 @@ namespace Sharpheus {
 		cppPath.Replace("\\", "/");
 		ClassWriter::CreateBehaviorHeader(ProjectData::GetPath() + hppPath, className, parentClassName, ID);
 		ClassWriter::CreateBehaviorSource(ProjectData::GetPath() + cppPath, className + ".hpp", className, parentClassName, ID);
-		ClassWriter::UpdateCreateBehaviorHeader(ProjectData::GetPath() + "Source\\BehaviorCreator.hpp", hppPath.Mid(7), className, ID, BehaviorCreator::behaviorNames);
-		ClassWriter::UpdateCreateBehaviorSource(ProjectData::GetPath() + "Source\\BehaviorCreator.cpp", className, ID, BehaviorCreator::behaviorNames);
+		ClassWriter::UpdateCreateBehaviorHeader(ProjectData::GetPath() + "Source\\BehaviorCreator.hpp", hppPath.Mid(7), className, ID, ::BehaviorCreator::behaviorNames);
+		ClassWriter::UpdateCreateBehaviorSource(ProjectData::GetPath() + "Source\\BehaviorCreator.cpp", className, ID, ::BehaviorCreator::behaviorNames);
 	}
 
 

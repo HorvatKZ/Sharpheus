@@ -19,19 +19,28 @@ outputdir = "%{cfg.buildcfg}"
 bindir = "%{wks.location}/../../Exported/"
 bintempdir = "%{wks.location}/../../bin-temp/Exported"
 
+pythondir = os.getenv("PY_DIR")
+
 IncludeDir = {}
 IncludeDir["GLFW"] = "%{CommonSource}/external/GLFW/include"
 IncludeDir["GLEW"] = "%{CommonSource}/external/GLEW/include"
 IncludeDir["glm"] = "%{CommonSource}/Engine/external/glm"
+IncludeDir["python"] = "%{pythondir}/include"
+IncludeDir["pybind"] = "%{CommonSource}/Engine/external/pybind11/include"
 IncludeDir["stb_image"] = "%{CommonSource}/Engine/external/stb_image"
 IncludeDir["spdlog"] = "%{CommonSource}/external/spdlog/include"
 
+LibDir = {}
+LibDir["python"] = "%{pythondir}/libs"
 
 group "Dependencies"
 	include "../GLFW"
 	include "../GLEW"
 	include "../spdlog"
 group ""
+
+
+include "../Engine"
 
 
 project "Exported"
@@ -50,13 +59,9 @@ project "Exported"
 
 	files
 	{
-        "%{BaseDirEngine}/src/**.h",
-        "%{BaseDirEngine}/src/**.hpp",
-		"%{BaseDirEngine}/src/**.cpp",
-		"%{BaseDirEngine}/external/glm/glm/**.hpp",
-		"%{BaseDirEngine}/external/glm/glm/**.inl",
-		"%{BaseDirEngine}/external/stb_image/stb_image.h",
-		"%{BaseDirEngine}/external/stb_image/stb_image.cpp",
+		"%{BaseDirEngine}/src/main.cpp",
+		"%{BaseDirEngine}/src/Engine/Game.hpp",
+		"%{BaseDirEngine}/src/Engine/Game.cpp",
 		"%{wks.location}/../../Source/**.h",
         "%{wks.location}/../../Source/**.hpp",
 		"%{wks.location}/../../Source/**.cpp",

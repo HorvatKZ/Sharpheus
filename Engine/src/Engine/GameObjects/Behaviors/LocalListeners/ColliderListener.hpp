@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	class SPH_EXPORT ColliderListener
+	class ColliderListener
 	{
 	public:
 		ColliderListener(ID listenerID) : listenerID(listenerID) {}

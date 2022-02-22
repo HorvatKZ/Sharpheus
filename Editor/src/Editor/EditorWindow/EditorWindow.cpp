@@ -183,7 +183,7 @@ namespace Sharpheus {
 	void EditorWindow::ChangeBehavior(uint32 subType)
 	{
 		GameObject* curr = EditorData::GetCurrent();
-		if (!BehaviorCreator::IsCompatibleWithParent(subType, curr->GetParent())) {
+		if (!::BehaviorCreator::Instance()->IsCompatibleWithParent(subType, curr->GetParent())) {
 			SPHE_ERROR("This Behavior type is not compatible with its parent!");
 			return;
 		}
@@ -198,7 +198,7 @@ namespace Sharpheus {
 			return;
 		}
 
-		GameObject* behavior = BehaviorCreator::Create(subType, (PlaceholderBehavior*)curr);
+		GameObject* behavior = ::BehaviorCreator::Instance()->Create(subType, (PlaceholderBehavior*)curr);
 		EditorData::SetCurrent(behavior);
 		CurrentChanged();
 	}

@@ -35,7 +35,7 @@ project "Editor"
         "src",
 		"%{wks.location}/Engine/src",
 		"%{wks.location}/Engine/src/Engine/Gameobjects/Behaviors",
-		"%{wks.location}/Engine/custom",
+		"%{wks.location}/DevProject/Source",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.spdlog}",
@@ -46,6 +46,7 @@ project "Editor"
 	links
 	{
 		"Engine",
+		"DevProject",
 		"GLEW",
 		"opengl32.lib",
 		"Glu32.lib"

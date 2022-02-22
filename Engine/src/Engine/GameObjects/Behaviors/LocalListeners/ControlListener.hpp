@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	class SPH_EXPORT ControlListener
+	class ControlListener
 	{
 	public:
 		ControlListener(ID listenerID) : listenerID(listenerID) {}

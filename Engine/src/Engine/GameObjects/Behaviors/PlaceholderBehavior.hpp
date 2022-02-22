@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	class PlaceholderBehavior : public Behavior
+	class SPH_EXPORT PlaceholderBehavior : public Behavior
 	{
 	public:
 		PlaceholderBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name) {}

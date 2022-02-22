@@ -1,6 +1,6 @@
 #pragma once
 
-// C++
+// STL
 #include <functional>
 #include <string>
 #include <vector>

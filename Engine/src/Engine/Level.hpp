@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "GameObjects/GameObjects.h"
 #include "CollisionSystem/CollisionSystem.hpp"
+#include "BehaviorCreatorBase.hpp"
 
 
 namespace Sharpheus {
@@ -95,6 +96,8 @@ namespace Sharpheus {
 		bool SaveAsScene(GameObject* obj, const std::string& path);
 		bool AttachSceneTo(GameObject* obj, const std::string& path);
 
+		static inline void SetBehaviorCreator(BehaviorCreatorBase* _bc) { bc = _bc; }
+
 	private:
 		struct Layer {
 			std::string name;
@@ -114,6 +117,8 @@ namespace Sharpheus {
 		std::vector<std::string> layerNames;
 		std::queue<GameObject*> objsToDelete;
 		std::queue<class Behavior*> behaviorsToInit;
+
+		static BehaviorCreatorBase* bc;
 
 		bool SaveLevelData(FileSaver& file);
 		bool LoadLevelData(FileLoader& file);

@@ -10,6 +10,7 @@
 #include "EditorCommands.hpp"
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
+#include "BehaviorCreator.hpp"
 
 
 wxIMPLEMENT_APP(Sharpheus::Editor);
@@ -18,21 +19,17 @@ namespace Sharpheus {
 
 	Editor::Editor()
 	{
-		Logger::Init();
+		Engine::Init(::BehaviorCreator::Instance());
 		EditorData::Init();
 		ClassRegistry::Init();
-		AudioPlayer::Init();
-		SPHE_INFO("Welcome to Sharpheus Editor");
 	}
 
 	Editor::~Editor()
 	{
-		Logger::Clear();
 		EditorData::Clear();
 		ProjectData::Clear();
 		ImageManager::Clear();
-		AudioPlayer::Clear();
-		SPHE_INFO("Exiting editor. Thanks for using Sharpheus");
+		Engine::Clear();
 	}
 
 
@@ -45,7 +42,7 @@ namespace Sharpheus {
 		}
 		else {
 #ifdef SPH_DEV
-			ProjectData::InitNew("Test Project", "D:\\Programming\\Sharpheus\\TestProject\\TestProject.proj.sharpheus",
+			ProjectData::InitNew("Test Project", "D:\\Programming\\Sharpheus\\DevProject\\DevProject.proj.sharpheus",
 				"Level", "Level.lvl.sharpheus");
 #else
 			wxFileName binFolder(wxStandardPaths::Get().GetDataDir());

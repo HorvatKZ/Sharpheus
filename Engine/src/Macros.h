@@ -16,6 +16,7 @@
 	#define SPH_BREAK() 
 #endif
 
+
 // Binds
 #define SPH_BIND_0(x) std::bind(&x)
 #define SPH_BIND_1(x) std::bind(&x, std::placeholders::_1)

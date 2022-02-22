@@ -32,7 +32,7 @@ namespace Sharpheus {
 		uint32 maxId = 0;
 		wxArrayString parentClasses;
 		parentClasses.Add("Sharpheus::Behavior");
-		for (auto it = BehaviorCreator::behaviorNames.begin(); it != BehaviorCreator::behaviorNames.end(); ++it) {
+		for (auto it = ::BehaviorCreator::behaviorNames.begin(); it != ::BehaviorCreator::behaviorNames.end(); ++it) {
 			parentClasses.Add((*it).second);
 			
 			if ((*it).first > maxId) {

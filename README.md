@@ -77,6 +77,7 @@
 + glm 0.9.9.8
 + spdlog 1.8.2
 + SoLoud 2020.02.07
++ pybind11 2.9.0
 + Premake 5.0 alpha 15
 
 ### Development:

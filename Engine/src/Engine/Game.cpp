@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "Game.hpp"
 
+#include "Engine.hpp"
 #include "ProjectControl.hpp"
 #include "Window/OpenGL_Window.hpp"
 #include "ResourceManager/ResourceManager.hpp"
 #include "Events/EventHandler.hpp"
 #include "Events/EventListener.hpp"
-#include "ResourceManager/AudioPlayer.hpp"
 
 #ifdef SPH_EXPORTED
 	#include "ExportedProjectData.hpp"
@@ -28,15 +28,13 @@ namespace Sharpheus {
 
 	Game::Game() : GameBase()
 	{
-		Logger::Init();
-		SPH_INFO("Welcome to Sharpheus!");
+#ifdef SPH_EXPORTED
+		Engine::Init(BehaviorCreator::Instance());
 
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
 
 		win = new OpenGL_Window();
-		AudioPlayer::Init();
 
-#ifdef SPH_EXPORTED
 		proj = new Project(projectData, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER), projectData.name + "proj.sharpheus");
 		win->SetProps(proj->GetWinProps());
 #endif 
@@ -47,13 +45,8 @@ namespace Sharpheus {
 	{
 		delete win;
 		delete proj;
-		Renderer::Clear();
-		ResourceManager::Clear();
 		EventHandler::Clear();
-		AudioPlayer::Clear();
-
-		SPH_INFO("Game successfully exited");
-		Logger::Clear();
+		Engine::Clear();
 	}
 
 

@@ -36,3 +36,6 @@
 # Others
 **.zip
 
+# Exceptions
+!Template/bin
+!Template/bin/**/*.dll

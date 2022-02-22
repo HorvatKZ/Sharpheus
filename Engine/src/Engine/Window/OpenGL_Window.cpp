@@ -53,6 +53,7 @@ namespace Sharpheus {
 	{
 		EventHandler::UnSubscribeAll(0);
 		glfwDestroyWindow(win);
+		Renderer::Clear();
 	}
 
 

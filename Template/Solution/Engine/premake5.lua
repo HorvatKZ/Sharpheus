@@ -20,23 +20,26 @@ project "Engine"
 		"%{BaseDirEngine}/external/glm/glm/**.hpp",
 		"%{BaseDirEngine}/external/glm/glm/**.inl",
 		"%{BaseDirEngine}/external/stb_image/stb_image.h",
-		"%{BaseDirEngine}/external/stb_image/stb_image.cpp",
-		"%{wks.location}/../Source/**.h",
-        "%{wks.location}/../Source/**.hpp",
-		"%{wks.location}/../Source/**.cpp"
+		"%{BaseDirEngine}/external/stb_image/stb_image.cpp"
 	}
 
 	includedirs
 	{
 		"%{BaseDirEngine}/src",
 		"%{BaseDirEngine}/src/Engine/Gameobjects/Behaviors",
-		"%{wks.location}/../Source",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.python}",
+		"%{IncludeDir.pybind}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.SoLoud}"
+	}
+
+	libdirs
+	{	
+		"%{LibDir.python}"
 	}
 
 	links

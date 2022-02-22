@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	class OSPaths
+	class SPH_EXPORT OSPaths
 	{
 	public:
 		enum class Folder {

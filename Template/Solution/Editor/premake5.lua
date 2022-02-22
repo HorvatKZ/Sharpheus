@@ -47,6 +47,7 @@ project "Editor"
 	links
 	{
 		"Engine",
+		"Project",
 		"GLEW",
 		"opengl32.lib",
 		"Glu32.lib"

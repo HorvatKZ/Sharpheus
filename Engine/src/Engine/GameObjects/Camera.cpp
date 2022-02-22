@@ -95,7 +95,7 @@ namespace Sharpheus {
 	void Camera::SetCurrent(bool set /*= true*/)
 	{
 		isCurrent = set;
-		if (set) {
+		if (Renderer::IsInited() && set) {
 			Renderer::SetCamera(this);
 		}
 	}

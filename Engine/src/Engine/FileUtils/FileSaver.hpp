@@ -6,7 +6,7 @@
 
 namespace Sharpheus {
 
-	class FileSaver
+	class SPH_EXPORT FileSaver
 	{
 	public:
 		FileSaver(const std::string& path);
