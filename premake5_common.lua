@@ -14,7 +14,7 @@ workspace "%{WorkspaceName}"
 	}
 
 	filter "action:vs*"
-        buildoptions { "/bigobj" } 
+        buildoptions { "/bigobj", "/wd4018", "/wd4133", "/wd4244", "/wd4251", "/wd4267", "/wd26812" } 
 
 outputdir = "%{cfg.buildcfg}"
 bindir = "%{wks.location}/bin/" .. outputdir

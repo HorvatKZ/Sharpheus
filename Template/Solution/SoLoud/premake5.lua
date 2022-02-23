@@ -26,7 +26,8 @@ project "SoLoud"
 
     defines
 	{
-		"WITH_MINIAUDIO"
+		"WITH_MINIAUDIO",
+        "_CRT_SECURE_NO_WARNINGS"
 	}
 
     includedirs

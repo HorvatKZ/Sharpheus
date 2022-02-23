@@ -5,16 +5,11 @@
 
 namespace Sharpheus {
 
-	class ControlListener
+	class SPH_EXPORT ControlListener
 	{
 	public:
 		ControlListener(ID listenerID) : listenerID(listenerID) {}
-		virtual ~ControlListener() {
-			for (auto it = controlChangeSubscriptions.begin(); it != controlChangeSubscriptions.end(); ++it) {
-				(*it).second->UnSubscribeForChange(listenerID);
-				(*it).second->UnSubscribeForDestruction(listenerID);
-			}
-		}
+		virtual ~ControlListener();
 
 		inline void SubscribeControlChanged(Control* control, ControlChangedEventFunc&& func) {
 			control->SubscribeForDestruction(listenerID, SPH_BIND(ControlListener::OnLocalSourceDestroyed));

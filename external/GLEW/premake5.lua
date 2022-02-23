@@ -33,7 +33,8 @@ project "GLEW"
         
         defines 
 		{ 
-			"GLEW_STATIC"
+			"GLEW_STATIC",
+            "_CRT_SECURE_NO_WARNINGS"
 		}
 
 

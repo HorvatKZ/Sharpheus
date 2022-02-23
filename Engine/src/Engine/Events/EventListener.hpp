@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	class EventListener
+	class SPH_EXPORT EventListener
 	{
 	public:
 		EventListener();

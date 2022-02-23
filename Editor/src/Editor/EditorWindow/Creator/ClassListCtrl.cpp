@@ -76,6 +76,7 @@ namespace Sharpheus {
         if (selected.IsOk()) {
             return GetItemText(selected);
         }
+        return "";
     }
 
     void ClassListCtrl::OnSelect(wxTreeEvent& e)

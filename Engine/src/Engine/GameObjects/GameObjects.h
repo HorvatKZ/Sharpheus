@@ -21,4 +21,3 @@
 #include "Controls/RadioButton.hpp"
 #include "Behaviors/Behavior.hpp"
 #include "Behaviors/PlaceholderBehavior.hpp"
-#include "Behaviors/LocalListeners/ColliderListener.hpp"

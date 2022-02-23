@@ -94,6 +94,7 @@ namespace Sharpheus {
 					return SetCurrent(i);
 				}
 			}
+			return false;
 		}
 
 		inline void PlayOnce(uint32 ind) {

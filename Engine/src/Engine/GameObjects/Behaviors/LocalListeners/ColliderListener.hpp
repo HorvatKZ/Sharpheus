@@ -6,28 +6,11 @@
 
 namespace Sharpheus {
 
-	class ColliderListener
+	class SPH_EXPORT ColliderListener
 	{
 	public:
 		ColliderListener(ID listenerID) : listenerID(listenerID) {}
-		virtual ~ColliderListener() {
-			for (auto it = collisionSubscriptions.begin(); it != collisionSubscriptions.end(); ++it) {
-				(*it).second->UnSubscribeCollision(listenerID);
-				if (!IsSubscribedTo((*it).second->GetID())) {
-					(*it).second->UnSubscribeForDestruction(listenerID);
-				}
-			}
-			for (auto it = triggerEnterSubscriptions.begin(); it != triggerEnterSubscriptions.end(); ++it) {
-				(*it).second->UnSubscribeTriggerEnter(listenerID);
-				if (!IsSubscribedTo((*it).second->GetID())) {
-					(*it).second->UnSubscribeForDestruction(listenerID);
-				}
-			}
-			for (auto it = triggerExitSubscriptions.begin(); it != triggerExitSubscriptions.end(); ++it) {
-				(*it).second->UnSubscribeTriggerExit(listenerID);
-				(*it).second->UnSubscribeForDestruction(listenerID);
-			}
-		}
+		virtual ~ColliderListener();
 
 		inline void SubscribeCollision(Collider* collider, CollisionEventFunc&& func) {
 			if (!IsSubscribedTo(collider->GetID())) {
@@ -100,7 +83,7 @@ namespace Sharpheus {
 		std::unordered_map<ID, Collider*> triggerEnterSubscriptions;
 		std::unordered_map<ID, Collider*> triggerExitSubscriptions;
 
-		bool IsSubscribedTo(ID id) {
+		inline bool IsSubscribedTo(ID id) {
 			auto it0 = collisionSubscriptions.find(id);
 			if (it0 != collisionSubscriptions.end()) {
 				return true;
