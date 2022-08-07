@@ -5,7 +5,7 @@
 
 using namespace Sharpheus;
 
-SPH_START_CLASSINFO(PlayerController, "behavior.png")
+SPH_START_CLASSINFO(PlayerController, "behaviorcpp.png")
 SPH_PROVIDE_FLOAT(PlayerController, "Jumpforce", GetJumpForce, SetJumpForce)
 SPH_PROVIDE_FLOAT(PlayerController, "Speed", GetSpeed, SetSpeed)
 SPH_END_CLASSINFO

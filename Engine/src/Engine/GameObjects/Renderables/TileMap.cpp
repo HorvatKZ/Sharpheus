@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TileMap.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
+#include "Engine/Renderer/Renderer.hpp"
 
 
 namespace Sharpheus {

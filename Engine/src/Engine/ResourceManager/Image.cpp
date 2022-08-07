@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Image.hpp"
+#include "Engine/Renderer/Renderer.hpp"
 
 #include <stb_image.h>
 

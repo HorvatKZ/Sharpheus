@@ -5,6 +5,7 @@
 namespace Sharpheus {
 
 	std::string ResourceManager::assetsRoot;
+	std::string ResourceManager::scriptRoot;
 	std::unordered_map<std::string, Image*> ResourceManager::images;
 	std::unordered_map<std::string, Font*> ResourceManager::fontsByPaths;
 	std::unordered_map<std::string, Font*> ResourceManager::fontsByNames;
@@ -16,6 +17,7 @@ namespace Sharpheus {
 	void ResourceManager::Init(const std::string& projectPath)
 	{
 		assetsRoot = projectPath + "Assets\\";
+		scriptRoot = projectPath + "Scripts\\";
 	}
 
 

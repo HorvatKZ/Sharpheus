@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Resource.hpp"
-#include "Engine/Renderer/Renderer.hpp"
 
 
 namespace Sharpheus {

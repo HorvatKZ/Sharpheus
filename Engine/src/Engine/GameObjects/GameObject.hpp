@@ -38,6 +38,7 @@ namespace Sharpheus {
 			None = 0x00,
 			Collection = 0x01,
 			Behavior = 0x02,
+			PythonBehavior = 0x03,
 
 			// Cameras
 			Camera = 0x10,

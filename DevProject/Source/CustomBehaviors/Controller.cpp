@@ -8,7 +8,7 @@ using namespace Sharpheus;
 
 const uint32 Controller::classVersion = 1;
 
-SPH_START_CLASSINFO(Controller, "behavior.png")
+SPH_START_CLASSINFO(Controller, "behaviorcpp.png")
 // Provide necessary data members here for the Editor to present them
 SPH_END_CLASSINFO
 

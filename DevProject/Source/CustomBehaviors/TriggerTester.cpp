@@ -7,7 +7,7 @@
 using namespace Sharpheus;
 
 
-SPH_START_CLASSINFO(TriggerTester, "behavior.png")
+SPH_START_CLASSINFO(TriggerTester, "behaviorcpp.png")
 SPH_END_CLASSINFO
 
 

@@ -7,6 +7,8 @@ project "Engine"
 	targetdir (bindir)
 	objdir (bintempdir)
 
+    targetextension(".pyd")
+
 	pchheader "pch.h"
 	pchsource "src/pch.cpp"
 

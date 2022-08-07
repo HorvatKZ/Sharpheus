@@ -154,6 +154,9 @@ namespace Sharpheus {
 				case GameObject::Type::RadioButton:
 					CreatePresenterFrom<RadioButton>(provider, y);
 					break;
+				case GameObject::Type::PythonBehavior:
+					CreatePresenterFrom<PythonBehavior>(provider, y);
+					break;
 				case GameObject::Type::Behavior:
 					SPH_PRESENT_BEHAVIOR(obj);
 					break;

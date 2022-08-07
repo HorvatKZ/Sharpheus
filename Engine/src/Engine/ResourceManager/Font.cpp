@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Font.hpp"
+#include "Engine/Renderer/Renderer.hpp"
 
 
 namespace Sharpheus {

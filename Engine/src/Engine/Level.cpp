@@ -3,6 +3,7 @@
 #include "GameObjects/GameObjects.h"
 #include "FileUtils/FileLoader.hpp"
 #include "FileUtils/FileSaver.hpp"
+#include "Engine/Renderer/Renderer.hpp"
 
 
 namespace Sharpheus {
@@ -114,6 +115,8 @@ namespace Sharpheus {
 				return Create<RadioButton>(parent, newName);
 			case GameObject::Type::Behavior:
 				return Create<PlaceholderBehavior>(parent, newName);
+			case GameObject::Type::PythonBehavior:
+				return Create<PythonBehavior>(parent, newName);
 		}
 
 		return nullptr;

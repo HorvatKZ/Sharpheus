@@ -22,6 +22,8 @@ namespace Sharpheus {
 
 		static inline std::string GetShaderPath(const std::string& fname) { return assetsRoot + "Shaders/" + fname; }
 
+		static inline std::string GetScriptPath(const std::string& fname) { return scriptRoot + fname + ".py"; }
+
 		static Font* GetFont(const std::string& fontFile, const std::string& imgFile);
 		static Font* GetFont(const std::string& fontFile, Image* img);
 		static Font* GetFont(const std::string& name);
@@ -37,6 +39,7 @@ namespace Sharpheus {
 
 	private:
 		static std::string assetsRoot;
+		static std::string scriptRoot;
 		static std::unordered_map<std::string, Image*> images;
 		static std::unordered_map<std::string, Font*> fontsByPaths;
 		static std::unordered_map<std::string, Font*> fontsByNames;

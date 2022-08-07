@@ -76,7 +76,7 @@ namespace Sharpheus {
 		cw.WriteLine("const uint32 " + className + "::classVersion = 1;");
 		cw.WriteEmptyLine();
 
-		cw.WriteLine("SPH_START_CLASSINFO(" + className + ", \"behavior.png\")");
+		cw.WriteLine("SPH_START_CLASSINFO(" + className + ", \"behaviorcpp.png\")");
 		cw.WriteLine(1, "// Provide necessary data members here for the Editor to present them");
 		cw.WriteLine("SPH_END_CLASSINFO");
 		cw.WriteEmptyLines(2);

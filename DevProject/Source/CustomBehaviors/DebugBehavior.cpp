@@ -8,7 +8,7 @@
 using namespace Sharpheus;
 
 
-SPH_START_CLASSINFO(DebugBehavior, "behavior.png")
+SPH_START_CLASSINFO(DebugBehavior, "behaviorcpp.png")
 SPH_END_CLASSINFO
 
 

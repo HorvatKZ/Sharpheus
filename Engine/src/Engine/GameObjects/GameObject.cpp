@@ -2,6 +2,7 @@
 #include "GameObject.hpp"
 #include "Engine/Level.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
+#include "Engine/Renderer/Renderer.hpp"
 
 
 namespace Sharpheus {

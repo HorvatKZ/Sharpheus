@@ -2,7 +2,7 @@
 
 namespace Sharpheus {
 
-	class PythonInterface
+	class SPH_EXPORT PythonInterface
 	{
 	public:
 		static void Init();

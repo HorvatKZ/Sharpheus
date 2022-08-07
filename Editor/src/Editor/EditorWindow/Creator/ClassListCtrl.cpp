@@ -34,7 +34,9 @@ namespace Sharpheus {
             Info("ImageButton", "imagebutton.png", GameObject::Type::ImageButton, 2),
             Info("CheckBox", "checkbox.png", GameObject::Type::CheckBox, 2),
             Info("RadioButton", "radio.png", GameObject::Type::RadioButton, 2),
-            Info("Behavior", "behavior.png", GameObject::Type::Behavior, 1)
+            Info("Behaviors", "behavior.png", GameObject::Type::None, 1),
+            Info("CppBehavior", "behaviorcpp.png", GameObject::Type::Behavior, 2),
+            Info("PythonBehavior", "behaviorpy.png", GameObject::Type::PythonBehavior, 2)
     };
 
 

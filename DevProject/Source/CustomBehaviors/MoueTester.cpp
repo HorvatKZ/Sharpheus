@@ -5,7 +5,7 @@
 using namespace Sharpheus;
 
 
-SPH_START_CLASSINFO(MoueTester, "behavior.png")
+SPH_START_CLASSINFO(MoueTester, "behaviorcpp.png")
 SPH_END_CLASSINFO
 
 

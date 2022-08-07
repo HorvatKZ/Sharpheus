@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	SPH_START_CLASSINFO(Behavior, "behavior.png")
+	SPH_START_SPEC_CLASSINFO(Behavior,"CppBehavior", "behaviorcpp.png")
 	SPH_END_CLASSINFO
 
 

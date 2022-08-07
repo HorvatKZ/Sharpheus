@@ -4,7 +4,7 @@
 
 namespace Sharpheus {
 
-	SPH_START_SPEC_CLASSINFO(PlaceholderBehavior, "Behavior", "behavior.png")
+	SPH_START_SPEC_CLASSINFO(PlaceholderBehavior, "CppBehavior", "behaviorcpp.png")
 		SPH_PROVIDE_BEHAVIOR("SubType")
 	SPH_END_CLASSINFO
 
