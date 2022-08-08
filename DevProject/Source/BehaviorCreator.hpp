@@ -5,6 +5,7 @@
 #include "Behavior.hpp"
 #include "Engine/BehaviorCreatorBase.hpp"
 #include "PlaceholderBehavior.hpp"
+#include "PythonBehavior.hpp"
 #include "CustomMacros.h"
 
 // Custom behaviors
@@ -17,11 +18,12 @@
 #define SPH_PRESENT_BEHAVIOR(obj) \
 	SPH_START_PRESENTING(obj) \
 		SPH_PRESENT(PlaceholderBehavior, 0) \
-		SPH_PRESENT(DebugBehavior, 1) \
-		SPH_PRESENT(PlayerController, 2) \
-		SPH_PRESENT(TriggerTester, 3) \
-		SPH_PRESENT(MoueTester, 4) \
-		SPH_PRESENT(Controller, 5) \
+		SPH_PRESENT(PythonBehavior, 1) \
+		SPH_PRESENT(DebugBehavior, 2) \
+		SPH_PRESENT(PlayerController, 3) \
+		SPH_PRESENT(TriggerTester, 4) \
+		SPH_PRESENT(MoueTester, 5) \
+		SPH_PRESENT(Controller, 6) \
 	SPH_END_PRESENTING() \
 
 

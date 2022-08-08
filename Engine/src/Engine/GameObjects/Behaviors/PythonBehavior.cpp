@@ -16,30 +16,39 @@ namespace Sharpheus {
 
 	PythonBehavior::~PythonBehavior()
 	{
-		delete scriptFile;
+		PythonInterface::Exec("Freeing module: " + moduleName, [&] {
+			delete scriptFile;
+		});
+	}
+
+
+	bool PythonBehavior::IsCompatibleWithParent(GameObject* parent)
+	{
+		return parent != nullptr;
+	}
+
+
+	void PythonBehavior::Init()
+	{
+		scriptFile = PythonInterface::Import(moduleName);
+
+		bool hasRender = false;
+		PythonInterface::Exec("Check if " + moduleName + " has render func", [&] {
+			hasRender = py::hasattr(*scriptFile, "render");
+		});
+
+		if (hasRender) {
+			SubscribeForRender(level, "Default", [&] {
+				PythonInterface::Exec(moduleName + ".render()", [&] {
+					auto func = scriptFile->attr("render")();
+				});
+			});
+		}
 	}
 
 
 	void PythonBehavior::Tick(float deltaTime)
 	{
-		if (!didExec) {
-			PythonInterface::Exec([&] {
-				auto sys = py::module::import("sys");
-				sys.attr("path").cast<py::list>().insert(0, ResourceManager::GetScriptsRoot());
-				sys.attr("path").cast<py::list>().insert(0, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER));
-				scriptFile = new py::object(py::module::import("test"));
-			});
-			
-			SubscribeForRender(level, "Default", [&] {
-				PythonInterface::Exec([&] {
-					auto func = scriptFile->attr("render");
-					func();
-				});
-			});
-				
-			didExec = true;
-			
-		}
 	}
 
 }

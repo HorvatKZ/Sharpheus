@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "PythonInterface.hpp"
 #include "Engine/Renderer/Renderer.hpp"
+#include "Engine/ResourceManager/ResourceManager.hpp"
+#include "Engine/FileUtils/OSPaths.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
@@ -150,17 +152,29 @@ namespace Sharpheus {
 		}
 	}
 
+	py::object* PythonInterface::Import(const std::string& moduleName)
+	{
+		py::object* moduleFile = nullptr;
+		PythonInterface::Exec("Importing " + moduleName, [&moduleFile, moduleName] {
+			moduleFile = new py::object(py::module::import(moduleName.c_str()));
+		});
+		return moduleFile;
+	}
 
-	void PythonInterface::Exec(const std::function<void()>& func)
+
+	void PythonInterface::Exec(const std::string& info, const std::function<void()>& func)
 	{
 		try {
 			if (!interpreter_inited) {
 				py::initialize_interpreter();
+				auto sys = py::module::import("sys");
+				sys.attr("path").cast<py::list>().insert(0, ResourceManager::GetScriptsRoot());
+				sys.attr("path").cast<py::list>().insert(0, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER));
 				interpreter_inited = true;
 			}
 			func();
 		} catch (py::error_already_set& e) {
-			SPH_ERROR(e.what());
+			SPH_ERROR("PythonInterface::Exec " + info + " " + e.what());
 		}
 	}
 
