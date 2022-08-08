@@ -11,6 +11,9 @@
 **.pch
 **.i
 
+# Python
+**/__pycache__/
+
 # Logs
 /logs
 **.log

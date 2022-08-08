@@ -22,6 +22,7 @@ namespace Sharpheus {
 
 		static inline std::string GetShaderPath(const std::string& fname) { return assetsRoot + "Shaders/" + fname; }
 
+		static inline std::string GetScriptsRoot() { return scriptRoot; }
 		static inline std::string GetScriptPath(const std::string& fname) { return scriptRoot + fname + ".py"; }
 
 		static Font* GetFont(const std::string& fontFile, const std::string& imgFile);

@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "PythonBehavior.hpp"
+#include "Engine/FileUtils/OSPaths.hpp"
+#include "Engine/PythonInterface/PythonInterface.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
-
-#include <pybind11/embed.h>
+#include <pybind11/pybind11.h>
 
 namespace py = pybind11;
 
@@ -13,18 +14,27 @@ namespace Sharpheus {
 	SPH_END_CLASSINFO
 
 
+	PythonBehavior::~PythonBehavior()
+	{
+		delete scriptFile;
+	}
+
+
 	void PythonBehavior::Tick(float deltaTime)
 	{
 		if (!didExec) {
+			PythonInterface::Exec([&] {
+				auto sys = py::module::import("sys");
+				sys.attr("path").cast<py::list>().insert(0, ResourceManager::GetScriptsRoot());
+				sys.attr("path").cast<py::list>().insert(0, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER));
+				scriptFile = new py::object(py::module::import("test"));
+			});
 			
-			SubscribeForRender(level, "HUD", [] {
-				try {
-					py::scoped_interpreter guard{};
-					py::eval_file(ResourceManager::GetScriptPath("test"));
-				}
-				catch (py::error_already_set& e) {
-					SPH_ERROR(e.what());
-				}
+			SubscribeForRender(level, "Default", [&] {
+				PythonInterface::Exec([&] {
+					auto func = scriptFile->attr("render");
+					func();
+				});
 			});
 				
 			didExec = true;

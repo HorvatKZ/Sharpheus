@@ -36,4 +36,4 @@ namespace Sharpheus {
 
 #define SPH_START_SPEC_CLASSINFO(Class, DisplayName, Icon) const ::Sharpheus::ClassInfo Class::classInfo(DisplayName, Icon, { \
 
-#define SPH_END_CLASSINFO }); \
+#define SPH_END_CLASSINFO });
