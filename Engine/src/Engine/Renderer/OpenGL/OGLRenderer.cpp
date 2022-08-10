@@ -12,8 +12,7 @@ namespace Sharpheus::OpenGL {
 	Renderer::Renderer()
 		: mainShader("shader.glsl.vert", "shader.glsl.frag"), dynamicVB(mainShader)
 	{
-		GLenum err = glewInit();
-		SPH_ASSERT(err == GLEW_OK, "Error during GLEW initialization!");
+		SPH_VERIFY(glewInit() == GLEW_OK, "Error during GLEW initialization!");
 		version = (char*)glGetString(GL_VERSION);
 		dynamicVB.Init();
 		SPH_INFO("OpenGL Batch Renderer created. Running OpenGL v{0}", version);

@@ -51,12 +51,20 @@
 	#define SPH_WARN(...)
 	#define SPH_ERROR(...)
 	#define SPH_FATAL(...)
+
+	#define SPH_ASSERT_0(cond)
 	#define SPH_ASSERT(cond, ...)
+	#define SPH_VERIFY_0(cond) cond
+	#define SPH_VERIFY(cond, ...) cond
 #else
 	#define SPH_LOG(...) ::Sharpheus::Logger::GetEngineLogger()->trace(__VA_ARGS__)
 	#define SPH_INFO(...) ::Sharpheus::Logger::GetEngineLogger()->info( __VA_ARGS__)
 	#define SPH_WARN(...) ::Sharpheus::Logger::GetEngineLogger()->warn(__VA_ARGS__)
-	#define SPH_ERROR(...) { ::Sharpheus::Logger::GetEngineLogger()->error(__VA_ARGS__); SPH_BREAK(); }
-	#define SPH_FATAL(...) { ::Sharpheus::Logger::GetEngineLogger()->critical(__VA_ARGS__); SPH_BREAK(); }
-	#define SPH_ASSERT(cond, ...) { if (!(cond)) SPH_ERROR(__VA_ARGS__); }
+	#define SPH_ERROR(...) ::Sharpheus::Logger::LogEngineError(__VA_ARGS__)
+	#define SPH_FATAL(...) ::Sharpheus::Logger::LogEngineFatal(__VA_ARGS__)
+
+	#define SPH_ASSERT_0(cond) { if (!(cond)) SPH_ERROR(#cond); }
+	#define SPH_ASSERT(cond, ...) { if (!(cond)) SPH_ERROR(std::string(#cond) + __VA_ARGS__); }
+	#define SPH_VERIFY_0(cond) (!(cond) ? [&]() -> bool {SPH_ERROR(#cond); return false; }() : true )
+	#define SPH_VERIFY(cond, ...) (!(cond) ? ([&]() -> bool {SPH_ERROR(std::string(#cond) + __VA_ARGS__); return false; }()) : true )
 #endif

@@ -31,18 +31,20 @@ namespace Sharpheus {
 	void PythonBehavior::Init()
 	{
 		scriptFile = PythonInterface::Import(moduleName);
-
-		bool hasRender = false;
-		PythonInterface::Exec("Check if " + moduleName + " has render func", [&] {
-			hasRender = py::hasattr(*scriptFile, "render");
-		});
-
-		if (hasRender) {
-			SubscribeForRender(level, "Default", [&] {
-				PythonInterface::Exec(moduleName + ".render()", [&] {
-					auto func = scriptFile->attr("render")();
-				});
+		
+		if (SPH_VERIFY_0(scriptFile != nullptr)) {
+			bool hasRender = false;
+			PythonInterface::Exec("Check if " + moduleName + " has render func", [&] {
+				hasRender = py::hasattr(*scriptFile, "render");
 			});
+
+			if (hasRender) {
+				SubscribeForRender(level, "Default", [&] {
+					PythonInterface::Exec(moduleName + ".render()", [&] {
+						auto func = scriptFile->attr("render")();
+					});
+				});
+			}
 		}
 	}
 

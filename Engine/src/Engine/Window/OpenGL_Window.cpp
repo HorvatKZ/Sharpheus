@@ -18,8 +18,7 @@ namespace Sharpheus {
 
 	OpenGL_Window::OpenGL_Window(const Window::Props& props) : Window(props)
 	{
-		int success = glfwInit();
-		SPH_ASSERT(success == GLFW_TRUE, "Error during GLFW initialization!");
+		SPH_VERIFY(glfwInit() == GLFW_TRUE, "Error during GLFW initialization!");
 
 		glfwSetErrorCallback(GLFWErrorCallback);
 		win = glfwCreateWindow(props.width, props.height, props.title.c_str(), props.fullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);

@@ -14,8 +14,7 @@ namespace Sharpheus {
 	void RenderableListener::SubscribeForRender(Level* level, const std::string& layerName, std::function<void()>&& func)
 	{
 		_level = level;
-		bool success = level->AddToLayer(listenerID, std::move(func), layerName);
-		SPH_ASSERT(success, "Could not subscribe for render");
+		SPH_VERIFY(level->AddToLayer(listenerID, std::move(func), layerName), "Could not subscribe for render");
 		isSubscribed = true;
 	}
 
@@ -23,8 +22,7 @@ namespace Sharpheus {
 	void RenderableListener::UnSubscribeForRender()
 	{
 		if (_level != nullptr && isSubscribed) {
-			bool success = _level->RemoveFromLayers(listenerID);
-			SPH_ASSERT(success, "Could not unsubscribe for render");
+			SPH_VERIFY(_level->RemoveFromLayers(listenerID), "Could not unsubscribe for render");
 			isSubscribed = false;
 		}
 	}
