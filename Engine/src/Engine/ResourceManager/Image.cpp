@@ -19,13 +19,13 @@ namespace Sharpheus {
 	}
 
 
-	void Image::Render(Point coords[4], const Color& tint)
+	void Image::Render(const Point coords[4], const Color& tint) const
 	{
 		Renderer::DrawQuad(coords, Renderer::GetFullTexCoords(), tint, ID);
 	}
 
 
-	void Image::RenderPart(Point coords[4], Point texCoords[4], const Color& tint)
+	void Image::RenderPart(const Point coords[4], const Point texCoords[4], const Color& tint) const
 	{
 		Renderer::DrawQuad(coords, texCoords, tint, ID);
 	}

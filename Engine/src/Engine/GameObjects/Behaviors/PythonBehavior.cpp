@@ -3,6 +3,7 @@
 #include "Engine/FileUtils/OSPaths.hpp"
 #include "Engine/PythonInterface/PythonInterface.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
+#include "Engine/Level.hpp"
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;
@@ -33,15 +34,20 @@ namespace Sharpheus {
 		scriptFile = PythonInterface::Import(moduleName);
 		
 		if (SPH_VERIFY_0(scriptFile != nullptr)) {
-			bool hasRender = false;
-			PythonInterface::Exec("Check if " + moduleName + " has render func", [&] {
-				hasRender = py::hasattr(*scriptFile, "render");
+			bool hasRenderFunc = false;
+			std::string renderLayer = level->GetLayerNames()->front();
+			PythonInterface::Exec("Check functions of " + moduleName, [&] {
+				hasRenderFunc = py::hasattr(*scriptFile, "render");
+				hasTickFunc = py::hasattr(*scriptFile, "tick");
+				if (py::hasattr(*scriptFile, "render_layer")) {
+					renderLayer = scriptFile->attr("render_layer").cast<std::string>();
+				}
 			});
 
-			if (hasRender) {
-				SubscribeForRender(level, "Default", [&] {
+			if (hasRenderFunc) {
+				SubscribeForRender(level, renderLayer, [&] {
 					PythonInterface::Exec(moduleName + ".render()", [&] {
-						auto func = scriptFile->attr("render")();
+						scriptFile->attr("render")();
 					});
 				});
 			}
@@ -51,6 +57,11 @@ namespace Sharpheus {
 
 	void PythonBehavior::Tick(float deltaTime)
 	{
+		if (hasTickFunc) {
+			PythonInterface::Exec(moduleName + ".tick()", [&] {
+				scriptFile->attr("tick")(deltaTime);
+			});
+		}
 	}
 
 }

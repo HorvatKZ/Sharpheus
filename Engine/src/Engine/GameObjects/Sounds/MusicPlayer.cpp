@@ -82,7 +82,7 @@ namespace Sharpheus {
 	bool MusicPlayer::Load(FileLoader& fl)
 	{
 		GameObject::Load(fl);
-		Audio* audio;
+		const Audio* audio;
 		fl.Read(&audio);
 		SetMusic(audio);
 		fl.Read(loop);

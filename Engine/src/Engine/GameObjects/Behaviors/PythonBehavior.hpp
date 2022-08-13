@@ -20,7 +20,7 @@ namespace Sharpheus {
 	protected:
 		std::string moduleName = "test";
 		pybind11::object* scriptFile = nullptr;
-
+		bool hasTickFunc = false;
 
 		virtual void Tick(float deltaTime) override;
 	};

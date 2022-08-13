@@ -41,7 +41,7 @@ namespace Sharpheus {
 	void Text::Render()
 	{
 		if (font != nullptr && !content.empty()) {
-			font->Render(content, worldTrafo.pos, xAxis, yAxis, size, color, style);
+			font->Render(content, worldTrafo.pos, size, color, xAxis, yAxis, style);
 		}
 	}
 

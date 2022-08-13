@@ -8,33 +8,33 @@ namespace Sharpheus {
 	{
 	public:
 		Animation(const std::string& animFile);
-		Animation(Image* atlas, uint32 frameWidth, uint32 frameHeight, uint32 startFrame, uint32 endFrame);
+		Animation(const Image* atlas, uint32 frameWidth, uint32 frameHeight, uint32 startFrame, uint32 endFrame);
 		virtual ~Animation();
 
-		inline const std::string& GetName() { return name; }
-		inline Image* GetAtlas() { return atlas; }
-		inline uint32 GetFrameWidth() { return frameWidth; }
-		inline uint32 GetFrameHeight() { return frameHeight; }
-		inline uint32 GetFrameRows() { return frameRows; }
-		inline uint32 GetFrameCols() { return frameCols; }
-		inline uint32 GetStartFrame() { return startFrame; }
-		inline uint32 GetEndFrame() { return endFrame; }
-		inline float GetFrameTime() { return frameTime; }
-		inline uint32 GetNumOfFrames() { return endFrame - startFrame + 1; }
-		inline uint32 GetNumOfAllFrames() { return frameRows * frameCols; }
-		inline float GetFullTime() { return GetNumOfFrames() * frameTime; }
+		inline const std::string& GetName() const { return name; }
+		inline const Image* GetAtlas() const { return atlas; }
+		inline uint32 GetFrameWidth() const { return frameWidth; }
+		inline uint32 GetFrameHeight() const { return frameHeight; }
+		inline uint32 GetFrameRows() const { return frameRows; }
+		inline uint32 GetFrameCols() const { return frameCols; }
+		inline uint32 GetStartFrame() const { return startFrame; }
+		inline uint32 GetEndFrame() const { return endFrame; }
+		inline float GetFrameTime() const { return frameTime; }
+		inline uint32 GetNumOfFrames() const { return endFrame - startFrame + 1; }
+		inline uint32 GetNumOfAllFrames() const { return frameRows * frameCols; }
+		inline float GetFullTime() const { return GetNumOfFrames() * frameTime; }
 
 		inline void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
 		inline void SetName(const std::string& name) { this->name = name; }
 
-		void Render(Point coords[4], float time, const Color& tint);
+		void Render(const Point coords[4], float time, const Color& tint = Color::White) const;
 
 		bool Save();
 		bool Save(const std::string& path);
 
 	private:
 		std::string name;
-		Image* atlas;
+		const Image* atlas;
 		uint32 frameWidth, frameHeight, frameCols, frameRows;
 		uint32 startFrame, endFrame;
 		float frameTime = 1.0f;

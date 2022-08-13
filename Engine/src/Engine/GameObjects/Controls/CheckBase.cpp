@@ -47,7 +47,7 @@ namespace Sharpheus {
 	bool CheckBase::Load(FileLoader& fl)
 	{
 		Control::Load(fl);
-		Image* tempImg;
+		const Image* tempImg;
 		fl.Read(&tempImg);
 		SetCheckedImg(tempImg);
 		fl.Read(&tempImg);
@@ -71,7 +71,7 @@ namespace Sharpheus {
 
 	void CheckBase::Render()
 	{
-		Image* toDraw = isChecked ? checkedImg : uncheckedImg;
+		const Image* toDraw = isChecked ? checkedImg : uncheckedImg;
 		if (toDraw != nullptr) {
 			toDraw->Render(shape->GetCorners(), tint);
 
@@ -85,7 +85,7 @@ namespace Sharpheus {
 				else {
 					startPos -= xShift * xAxis;
 				}
-				font->Render(text, startPos, xAxis, yAxis, fontSize, fontColor, fontStyle);
+				font->Render(text, startPos, fontSize, fontColor, xAxis, yAxis, fontStyle);
 			}
 		}
 	}

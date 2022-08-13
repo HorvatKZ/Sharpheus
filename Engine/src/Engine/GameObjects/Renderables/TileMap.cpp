@@ -194,7 +194,7 @@ namespace Sharpheus {
 	bool TileMap::Load(FileLoader& fl)
 	{
 		AxisGameObject::Load(fl);
-		TileSet* tileSet;
+		const TileSet* tileSet;
 		fl.Read(&tileSet);
 		SetTileSet(tileSet);
 		fl.Read(tint);

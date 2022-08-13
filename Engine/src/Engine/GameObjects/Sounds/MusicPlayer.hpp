@@ -17,10 +17,10 @@ namespace Sharpheus {
 		inline bool DoesStartByDefault() { return startByDefault; }
 		inline uint32 GetVolume() { return volume; }
 		inline float GetPlaySpeed() { return playSpeed; }
-		inline Audio* GetMusic() { return music; }
+		inline const Audio* GetMusic() { return music; }
 		inline void SetLooping(bool loop) { this->loop = loop; }
 		inline void SetStartByDefault(bool startByDefault) { this->startByDefault = startByDefault; }
-		inline void SetMusic(Audio* music) { this->music = music; }
+		inline void SetMusic(const Audio* music) { this->music = music; }
 		void SetMusicFromPath(const std::string& musicPath);
 		inline void SetVolume(uint32 volume) {
 			this->volume = volume;
@@ -45,7 +45,7 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(MusicPlayer)
 
 	protected:
-		Audio* music = nullptr;
+		const Audio* music = nullptr;
 		bool wantToStart = true, isPlaying = false;
 		bool loop = false, startByDefault = true;
 		uint32 volume = 100;

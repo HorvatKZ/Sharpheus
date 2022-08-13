@@ -12,11 +12,11 @@ namespace Sharpheus {
 		virtual ~ImageButton();
 		virtual void CopyFrom(GameObject* other) override;
 
-		inline Image* GetImg() { return img; }
-		inline Image* GetClickedImg() { return clickedImg; }
+		inline const Image* GetImg() { return img; }
+		inline const Image* GetClickedImg() { return clickedImg; }
 
-		inline void SetImg(Image* img) { this->img = img; UpdateSizer(); }
-		inline void SetClickedImg(Image* clickedImg) { this->clickedImg = clickedImg; UpdateSizer(); }
+		inline void SetImg(const Image* img) { this->img = img; UpdateSizer(); }
+		inline void SetClickedImg(const Image* clickedImg) { this->clickedImg = clickedImg; UpdateSizer(); }
 		inline void SetImgFromPath(const std::string& path, bool filtered);
 		inline void SetClickedImgFromPath(const std::string& path, bool filtered);
 
@@ -27,8 +27,8 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(ImageButton)
 
 	protected:
-		Image* img = nullptr;
-		Image* clickedImg = nullptr;
+		const Image* img = nullptr;
+		const Image* clickedImg = nullptr;
 
 		virtual bool Save(FileSaver& fs) override;
 

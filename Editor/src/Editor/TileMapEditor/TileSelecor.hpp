@@ -12,7 +12,7 @@ namespace Sharpheus::TileMapEditor {
 		TileSelector(wxFrame* parent, const wxPoint& pos, const wxSize& size);
 		virtual ~TileSelector();
 
-		void SetTileSet(TileSet* tileSet);
+		void SetTileSet(const TileSet* tileSet);
 
 		void OnPaintEvent(wxPaintEvent& evt);
 		void PaintNow();
@@ -20,7 +20,7 @@ namespace Sharpheus::TileMapEditor {
 		inline byte GetSelectedTile() { return selected; }
 
 	private:
-		TileSet* tileSet = nullptr;
+		const TileSet* tileSet = nullptr;
 		wxImage atlas;
 		std::vector<wxBitmap> tileImgs;
 		uint32 scrollHeight;

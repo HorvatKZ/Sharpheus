@@ -11,7 +11,7 @@ namespace Sharpheus {
 	const float Font::underlineHeight = -0.35f;
 	const float Font::underlineThickness = 0.05f;
 
-	Font::Font(const std::string& fontFile, Image* img)
+	Font::Font(const std::string& fontFile, const Image* img)
 		: Resource(fontFile), img(img)
 	{
 		ReadFontData();
@@ -23,8 +23,8 @@ namespace Sharpheus {
 	}
 
 
-	void Font::Render(const std::string& text, const Point& center, const Point& xAxis, const Point& yAxis,
-		float size, const Color& color, byte style)
+	void Font::Render(const std::string& text, const Point& center, float size, const Color& color,
+		const Point& xAxis, const Point& yAxis, byte style) const
 	{
 		Point halfExtent = GetExtent(text, size, style) * 0.5f;
 		Point renderPos = center - xAxis * halfExtent.x - yAxis * halfExtent.y;
@@ -44,7 +44,7 @@ namespace Sharpheus {
 	}
 
 
-	Point Font::GetExtent(const std::string& text, float size, byte style)
+	Point Font::GetExtent(const std::string& text, float size, byte style) const
 	{
 		float width = 0.f;
 		for (uint32 i = 0; i < text.length(); ++i) {
@@ -62,7 +62,7 @@ namespace Sharpheus {
 
 
 	void Font::RenderChar(char character, Point& pos, const Point& xAxis, const Point& yAxis,
-		float size, const Color& color, byte style)
+		float size, const Color& color, byte style) const
 	{
 		CharData data = chars[character];
 

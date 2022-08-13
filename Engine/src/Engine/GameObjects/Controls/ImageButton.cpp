@@ -60,7 +60,7 @@ namespace Sharpheus {
 	bool ImageButton::Load(FileLoader& fl)
 	{
 		ButtonBase::Load(fl);
-		Image* tempImg;
+		const Image* tempImg;
 		fl.Read(&tempImg);
 		SetImg(tempImg);
 		fl.Read(&tempImg);
@@ -88,7 +88,7 @@ namespace Sharpheus {
 		}
 
 		if (font != nullptr && !text.empty()) {
-			font->Render(text, worldTrafo.pos, xAxis, yAxis, fontSize, useClickedNow ? clickedFontColor : fontColor, fontStyle);
+			font->Render(text, worldTrafo.pos, fontSize, useClickedNow ? clickedFontColor : fontColor, xAxis, yAxis, fontStyle);
 		}
 	}
 

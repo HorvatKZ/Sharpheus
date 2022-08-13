@@ -26,7 +26,7 @@ namespace Sharpheus::TileMapEditor {
 	}
 
 
-	void TileSelector::SetTileSet(TileSet* tileSet)
+	void TileSelector::SetTileSet(const TileSet* tileSet)
 	{
 		if (tileSet != nullptr && !tileSet->IsValid()) {
 			SPHE_ERROR("TileSelector: Invalid TileSet");

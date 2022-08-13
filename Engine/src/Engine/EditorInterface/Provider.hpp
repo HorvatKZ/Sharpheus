@@ -114,12 +114,12 @@ namespace Sharpheus {
 
 
 	template <class Class>
-	class ImageProvider : public Provider<Class, class Image*, CommonProvider::Type::IMAGE>
+	class ImageProvider : public Provider<Class, const class Image*, CommonProvider::Type::IMAGE>
 	{
 	public:
-		ImageProvider(const std::string& name, Getter<Class, class Image*>&& getter, Setter<Class, class Image*>&& setter,
+		ImageProvider(const std::string& name, Getter<Class, const class Image*>&& getter, Setter<Class, const class Image*>&& setter,
 			std::function<void(Class*, const std::string&, bool)>&& pathSetter)
-			: Provider<Class, class Image*, CommonProvider::Type::IMAGE>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
+			: Provider<Class, const class Image*, CommonProvider::Type::IMAGE>(name, std::move(getter), std::move(setter)), pathSetter(std::move(pathSetter)) {}
 		virtual ~ImageProvider() = default;
 
 		virtual inline void SetByPath(Class* obj, const std::string& path, bool filtered) { pathSetter(obj, path, filtered); }
@@ -144,18 +144,18 @@ namespace Sharpheus {
 		std::function<void(Class*, const std::string&)> pathSetter;
 	};
 
-	template <class Class> using AnimationProvider	= ResourceProvider<Class, class Animation*, CommonProvider::Type::ANIM>;
-	template <class Class> using TileSetProvider	= ResourceProvider<Class, class TileSet*, CommonProvider::Type::TILESET>;
-	template <class Class> using AudioProvider		= ResourceProvider<Class, class Audio*, CommonProvider::Type::AUDIO>;
+	template <class Class> using AnimationProvider	= ResourceProvider<Class, const class Animation*, CommonProvider::Type::ANIM>;
+	template <class Class> using TileSetProvider	= ResourceProvider<Class, const class TileSet*, CommonProvider::Type::TILESET>;
+	template <class Class> using AudioProvider		= ResourceProvider<Class, const class Audio*, CommonProvider::Type::AUDIO>;
 
 
 	template <class Class>
-	class FontProvider : public Provider<Class, class Font*, CommonProvider::Type::FONT>
+	class FontProvider : public Provider<Class, const class Font*, CommonProvider::Type::FONT>
 	{
 	public:
-		FontProvider(const std::string& name, Getter<Class, class Font*>&& getter, Setter<Class, class Font*>&& setter,
+		FontProvider(const std::string& name, Getter<Class, const class Font*>&& getter, Setter<Class, const class Font*>&& setter,
 			std::function<void(Class*, const std::string&)>&& setByName, std::function<void(Class*, const std::string&, const std::string&)>&& setByPath)
-			: Provider<Class, class Font*, CommonProvider::Type::FONT>(name, std::move(getter), std::move(setter)),
+			: Provider<Class, const class Font*, CommonProvider::Type::FONT>(name, std::move(getter), std::move(setter)),
 			setByName(std::move(setByName)), setByPath(std::move(setByPath)) {}
 		virtual ~FontProvider() = default;
 

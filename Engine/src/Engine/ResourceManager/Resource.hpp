@@ -12,10 +12,10 @@ namespace Sharpheus {
 		Resource(const std::string& path);
 		virtual ~Resource();
 
-		inline bool IsValid() { return valid; }
-		inline bool HasPath() { return !path.empty(); }
-		inline const std::string& GetPath() { return path; }
-		inline const std::string& GetFullPath() { return fullPath; }
+		inline bool IsValid() const { return valid; }
+		inline bool HasPath() const { return !path.empty(); }
+		inline const std::string& GetPath() const { return path; }
+		inline const std::string& GetFullPath() const { return fullPath; }
 
 	protected:
 		std::string path, fullPath;

@@ -13,9 +13,9 @@ namespace Sharpheus {
 		virtual void CopyFrom(GameObject* other) override;
 
 		inline uint32 GetNumOfAudios() { return audios.size(); }
-		inline Audio* GetAudio(uint32 ind) { return audios[ind]; }
+		inline const Audio* GetAudio(uint32 ind) { return audios[ind]; }
 		inline const std::string& GetAudioName(uint32 ind) { return audios[ind]->GetName(); }
-		inline bool SetAudio(uint32 ind, Audio* audio) {
+		inline bool SetAudio(uint32 ind, const Audio* audio) {
 			if (ind >= audios.size() || audio == nullptr) {
 				return false;
 			}
@@ -23,7 +23,7 @@ namespace Sharpheus {
 			return true;
 		}
 
-		inline bool AddAudio(Audio* audio) {
+		inline bool AddAudio(const Audio* audio) {
 			if (audio == nullptr) {
 				return false;
 			}
@@ -41,7 +41,7 @@ namespace Sharpheus {
 		
 		bool SetAudioFromPath(uint32 ind, const std::string& path);
 		bool AddAudioFromPath(const std::string& path);
-		bool RemoveAudio(Audio* audio);
+		bool RemoveAudio(const Audio* audio);
 
 		void Play(uint32 ind, uint32 volume, float playSpeed);
 		void Play(const std::string& name, uint32 volume, float playSpeed);
@@ -63,7 +63,7 @@ namespace Sharpheus {
 			bool operator()(const EffectInstance& lhs, const EffectInstance& rhs) { return lhs.endTime > rhs.endTime; }
 		};
 
-		std::vector<Audio*> audios;
+		std::vector<const Audio*> audios;
 		std::priority_queue<EffectInstance, std::vector<EffectInstance>, EffectInstanceCompare> activeHandles;
 
 		virtual bool Save(FileSaver& fs) override;

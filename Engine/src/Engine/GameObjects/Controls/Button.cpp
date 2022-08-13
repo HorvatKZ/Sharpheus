@@ -68,7 +68,7 @@ namespace Sharpheus {
 		Renderer::DrawMonocromeQuad(shape->GetCorners(), (isCurrentlyClicked && useClickedColors) ? clickedColor : color);
 
 		if (font != nullptr && !text.empty()) {
-			font->Render(text, worldTrafo.pos, xAxis, yAxis, fontSize, (isCurrentlyClicked && useClickedColors) ? clickedFontColor : fontColor, fontStyle);
+			font->Render(text, worldTrafo.pos, fontSize, (isCurrentlyClicked && useClickedColors) ? clickedFontColor : fontColor, xAxis, yAxis, fontStyle);
 		}
 	}
 

@@ -22,7 +22,7 @@ namespace Sharpheus {
 		virtual ~ParticleEmitter();
 		virtual void CopyFrom(GameObject* other) override;
 
-		inline Image* GetParticle() { return particle; }
+		inline const Image* GetParticle() { return particle; }
 		inline const Point& GetParticleScale() { return scale; }
 		inline const Color& GetTint() { return tint; }
 		inline bool IsShrink() { return shrink; }
@@ -35,7 +35,7 @@ namespace Sharpheus {
 		inline float GetGravity() { return gravity; }
 		inline float GetFriction() { return friction; }
 
-		inline void SetParticle(Image* particle) { this->particle = particle; }
+		inline void SetParticle(const Image* particle) { this->particle = particle; }
 		inline void SetParticleScale(const Point& scale) { this->scale = scale; }
 		inline void SetTint(const Color& tint) { this->tint = tint; }
 		inline void SetShrink(bool shrink) { this->shrink = shrink; }
@@ -66,7 +66,7 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(ParticleEmitter)
 	
 	protected:
-		Image* particle = nullptr;
+		const Image* particle = nullptr;
 		Point scale = Point(1.f, 1.f);
 		Color tint = Color::White;
 		bool shrink = false;

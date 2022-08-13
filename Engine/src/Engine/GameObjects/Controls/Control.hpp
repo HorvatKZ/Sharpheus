@@ -27,13 +27,13 @@ namespace Sharpheus {
 		}
 
 		inline const std::string& GetText() { return text; }
-		inline Font* GetFont() { return font; }
+		inline const Font* GetFont() { return font; }
 		inline const Color& GetFontColor() { return fontColor; }
 		inline float GetFontSize() { return fontSize; }
 		inline byte GetFontStyle() { return fontStyle; }
 
 		inline void SetText(const std::string& text) { this->text = text; UpdateSizer(); }
-		inline void SetFont(Font* font) { this->font = font; UpdateSizer(); }
+		inline void SetFont(const Font* font) { this->font = font; UpdateSizer(); }
 		inline void SetFontColor(const Color& fontColor) { this->fontColor = fontColor; }
 		inline void SetFontSize(float fontSize) { this->fontSize = fontSize; UpdateSizer(); }
 		inline void SetFontStyle(byte fontStyle) { this->fontStyle = fontStyle; UpdateSizer(); }
@@ -49,7 +49,7 @@ namespace Sharpheus {
 		virtual bool Load(FileLoader& fl) override;
 
 	protected:
-		Font* font = nullptr;
+		const Font* font = nullptr;
 		std::string text;
 		float fontSize = 20.f;
 		byte fontStyle = 0;

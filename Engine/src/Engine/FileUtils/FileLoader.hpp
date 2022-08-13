@@ -24,11 +24,11 @@ namespace Sharpheus {
 		bool Read(Point& data);
 		bool Read(Color& data);
 		bool Read(Transform& data);
-		bool Read(class Image** data);
-		bool Read(class Font** data);
-		bool Read(class Animation** data);
-		bool Read(class TileSet** data);
-		bool Read(class Audio** data);
+		bool Read(const class Image** data);
+		bool Read(const class Font** data);
+		bool Read(const class Animation** data);
+		bool Read(const class TileSet** data);
+		bool Read(const class Audio** data);
 
 		bool ReadLine();
 

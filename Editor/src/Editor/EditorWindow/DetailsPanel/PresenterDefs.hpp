@@ -426,7 +426,7 @@ namespace Sharpheus {
 	inline void ImagePresenter<Class>::SetCurrent(GameObject* curr)
 	{
     	Presenter::SetCurrent(curr);
-		Image* image = provider->Get((Class*)curr);
+		const Image* image = provider->Get((Class*)curr);
 		if (image != nullptr) {
 			std::string path = image->GetPath();
 			if (path != lastPath) {
@@ -511,7 +511,7 @@ namespace Sharpheus {
 			fontPicker->Append((*it).first);
 		}
 		
-		Font* font = provider->Get((Class*)curr);
+		const Font* font = provider->Get((Class*)curr);
 		if (font != nullptr) {
 			fontPicker->SetValue(font->GetName());
 		}
@@ -659,7 +659,7 @@ namespace Sharpheus {
 	inline void AnimationPresenter<Class>::SetCurrent(GameObject* curr)
 	{
 		Presenter::SetCurrent(curr);
-		Animation* anim = provider->Get((Class*)curr);
+		const Animation* anim = provider->Get((Class*)curr);
 		if (anim != nullptr) {
 			std::string path = anim->GetPath();
 			if (path != lastPath) {
@@ -745,7 +745,7 @@ namespace Sharpheus {
 	inline void TileSetPresenter<Class>::SetCurrent(GameObject* curr)
 	{
 		Presenter::SetCurrent(curr);
-		TileSet* tileSet = provider->Get((Class*)curr);
+		const TileSet* tileSet = provider->Get((Class*)curr);
 		if (tileSet != nullptr) {
 			std::string path = tileSet->GetPath();
 			if (path != lastPath) {
@@ -788,7 +788,7 @@ namespace Sharpheus {
 				return;
 
 			std::string pathInStr = wxStr2StdStr(browseDialog.GetPath());
-			TileSet* old = provider->Get((Class*)curr);
+			const TileSet* old = provider->Get((Class*)curr);
 			if (old != nullptr && pathInStr != old->GetPath()) {
 				int response = wxMessageBox("Changing the TileSet could alter the TileMap's state. Are you sure you want to change it?", "Changing TileSet", wxYES | wxNO | wxICON_WARNING | wxCENTRE);;
 				if (response == wxNO) {
@@ -830,7 +830,7 @@ namespace Sharpheus {
 	{
 		Presenter::SetCurrent(curr);
 
-		Audio* audio = provider->Get((Class*)curr);
+		const Audio* audio = provider->Get((Class*)curr);
 		path->SetLabel((audio == nullptr) ? "None" : audio->GetPath());
 	}
 

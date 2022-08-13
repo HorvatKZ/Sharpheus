@@ -25,18 +25,18 @@ namespace Sharpheus {
 		static inline std::string GetScriptsRoot() { return scriptRoot; }
 		static inline std::string GetScriptPath(const std::string& fname) { return scriptRoot + fname + ".py"; }
 
-		static Font* GetFont(const std::string& fontFile, const std::string& imgFile);
-		static Font* GetFont(const std::string& fontFile, Image* img);
-		static Font* GetFont(const std::string& name);
+		static const Font* GetFont(const std::string& fontFile, const std::string& imgFile);
+		static const Font* GetFont(const std::string& fontFile, const Image* img);
+		static const Font* GetFont(const std::string& name);
 		static inline const std::unordered_map<std::string, Font*>* GetFontTable() { return &fontsByNames; }
 
-		static Image* GetImage(const std::string& path, bool filtered = false);
+		static const Image* GetImage(const std::string& path, bool filtered = false);
 
-		static Animation* GetAnimation(const std::string& path);
+		static const Animation* GetAnimation(const std::string& path);
 
-		static TileSet* GetTileSet(const std::string& path);
+		static const TileSet* GetTileSet(const std::string& path);
 
-		static Audio* GetAudio(const std::string& path);
+		static const Audio* GetAudio(const std::string& path);
 
 	private:
 		static std::string assetsRoot;

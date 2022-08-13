@@ -53,7 +53,7 @@ namespace Sharpheus {
 	bool Sprite::Load(FileLoader& fl)
 	{
 		RenderableGameObject::Load(fl);
-		Image* img;
+		const Image* img;
 		fl.Read(&img);
 		SetImage(img);
 		fl.Read(tint);

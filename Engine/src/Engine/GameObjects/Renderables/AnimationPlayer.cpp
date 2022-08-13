@@ -47,7 +47,7 @@ namespace Sharpheus {
 
 	void AnimationPlayer::Tick(float deltaTime)
 	{
-		Animation* anim = GetAnimation(currAnimInd);
+		const Animation* anim = GetAnimation(currAnimInd);
 		if (anim != nullptr) {
 			currTime += deltaTime * speed;
 			float animFullTime = anim->GetFullTime();
@@ -107,7 +107,7 @@ namespace Sharpheus {
 		uint32 animCount = 0;
 		fl.Read(animCount);
 		for (uint32 i = 0; i < animCount; ++i) {
-			Animation* anim;
+			const Animation* anim;
 			fl.Read(&anim);
 			AddAnimation(anim);
 		}

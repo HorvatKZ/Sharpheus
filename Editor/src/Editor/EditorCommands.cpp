@@ -258,7 +258,7 @@ namespace Sharpheus {
 		if (creator.ShowModal() == wxID_CANCEL)
 			return;
 
-		Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), creator.UseFilter());
+		const Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), creator.UseFilter());
 		Animation* anim = new Animation(atlas, creator.GetFrameWidth(), creator.GetFrameHeight(), creator.GetStartFrame(), creator.GetEndFrame());
 		anim->SetName(wxStr2StdStr(creator.GetName()));
 		anim->SetFrameTime(creator.GetFrameTime());
@@ -274,7 +274,7 @@ namespace Sharpheus {
 		if (creator.ShowModal() == wxID_CANCEL)
 			return;
 
-		Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), creator.UseFilter());
+		const Image* atlas = ResourceManager::GetImage(wxStr2StdStr(creator.GetAtlas()), creator.UseFilter());
 		TileSet* tileSet = new TileSet(atlas, creator.GetFrameWidth(), creator.GetFrameHeight());
 		tileSet->SetName(wxStr2StdStr(creator.GetName()));
 		bool success = tileSet->Save(wxStr2StdStr(creator.GetPath()));

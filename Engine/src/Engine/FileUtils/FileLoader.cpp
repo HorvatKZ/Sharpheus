@@ -133,7 +133,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(Image** data)
+	bool FileLoader::Read(const Image** data)
 	{
 		std::string path;
 		bool filtered;
@@ -148,10 +148,10 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(Font** data)
+	bool FileLoader::Read(const Font** data)
 	{
 		std::string path;
-		Image* img;
+		const Image* img;
 		Read(path);
 		if (path == "nullptr") {
 			*data = nullptr;
@@ -163,7 +163,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(Animation** data)
+	bool FileLoader::Read(const Animation** data)
 	{
 		std::string path;
 		Read(path);
@@ -177,7 +177,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(TileSet** data)
+	bool FileLoader::Read(const TileSet** data)
 	{
 		std::string path;
 		Read(path);
@@ -191,7 +191,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileLoader::Read(Audio** data)
+	bool FileLoader::Read(const Audio** data)
 	{
 		std::string path;
 		Read(path);

@@ -14,7 +14,7 @@ namespace Sharpheus {
 	}
 
 
-	TileSet::TileSet(Image* atlas, uint32 frameWidth, uint32 frameHeight)
+	TileSet::TileSet(const Image* atlas, uint32 frameWidth, uint32 frameHeight)
 		: Resource(), atlas(atlas), frameWidth(frameWidth), frameHeight(frameHeight)
 	{
 		if (atlas != nullptr) {
@@ -35,7 +35,7 @@ namespace Sharpheus {
 	}
 
 
-	void TileSet::Render(Point coords[4], byte ind, const Color& tint)
+	void TileSet::Render(const Point coords[4], byte ind, const Color& tint) const
 	{
 		atlas->RenderPart(coords, texCoords + 4 * ind, tint);
 	}

@@ -11,12 +11,12 @@ namespace Sharpheus {
 		Image(const std::string& path, bool filtered = false);
 		~Image();
 
-		inline uint32 GetWidth() { return width; }
-		inline uint32 GetHeight() { return height; }
-		inline bool IsFiltered() { return filtered; }
+		inline uint32 GetWidth() const { return width; }
+		inline uint32 GetHeight() const { return height; }
+		inline bool IsFiltered() const { return filtered; }
 
-		void Render(Point coords[4], const Color& tint = Color::White);
-		void RenderPart(Point coords[4], Point texCoords[4], const Color& tint = Color::White);
+		void Render(const Point coords[4], const Color& tint = Color::White) const;
+		void RenderPart(const Point coords[4], const Point texCoords[4], const Color& tint = Color::White) const;
 
 	private:
 		uint32 ID;

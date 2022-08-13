@@ -14,7 +14,7 @@ namespace Sharpheus {
 	}
 
 
-	Animation::Animation(Image* atlas, uint32 frameWidth, uint32 frameHeight, uint32 startFrame, uint32 endFrame)
+	Animation::Animation(const Image* atlas, uint32 frameWidth, uint32 frameHeight, uint32 startFrame, uint32 endFrame)
 		: Resource(), atlas(atlas), frameWidth(frameWidth), frameHeight(frameHeight), startFrame(startFrame), endFrame(endFrame)
 	{
 		if (atlas != nullptr) {
@@ -34,7 +34,7 @@ namespace Sharpheus {
 	}
 
 
-	void Animation::Render(Point coords[4], float time, const Color& tint)
+	void Animation::Render(const Point coords[4], float time, const Color& tint) const
 	{
 		time = glm::clamp(time, 0.f, GetFullTime());
 

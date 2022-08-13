@@ -13,16 +13,16 @@ namespace Sharpheus {
 	class Font : public Resource
 	{
 	public:
-		Font(const std::string& fontFile, Image* img);
+		Font(const std::string& fontFile, const Image* img);
 		virtual ~Font();
 
-		inline Image* GetImage() { return img; }
-		inline const std::string& GetName() { return name; }
+		inline const Image* GetImage() const { return img; }
+		inline const std::string& GetName() const { return name; }
 
-		void Render(const std::string& text, const Point& center, const Point& xAxis, const Point& yAxis,
-			float size, const Color& color, byte style = 0);
+		void Render(const std::string& text, const Point& center, float size, const Color& color = Color::White,
+			const Point& xAxis = Point::Right, const Point& yAxis = Point::Down, byte style = 0) const;
 
-		Point GetExtent(const std::string& text, float size, byte style = 0);
+		Point GetExtent(const std::string& text, float size, byte style = 0) const;
 
 	private:
 		struct CharData {
@@ -30,7 +30,7 @@ namespace Sharpheus {
 			float width, height, xoffset, yoffset, xadvance;
 		};
 
-		Image* img;
+		const Image* img;
 		std::string name;
 		float lineHeight;
 		CharData chars[128];
@@ -42,7 +42,7 @@ namespace Sharpheus {
 		static const float underlineThickness;
 
 		void RenderChar(char character, Point& pos, const Point& xAxis, const Point& yAxis,
-			float size, const Color& color, byte style = 0);
+			float size, const Color& color, byte style = 0) const;
 
 		void ReadFontData();
 		void GetNextKeyValue(FILE* fin, std::string& key, std::string& value);

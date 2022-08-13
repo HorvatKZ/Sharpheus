@@ -20,9 +20,9 @@ namespace Sharpheus {
 	}
 
 
-	SoLoud::handle AudioPlayer::Play(Audio* audio, bool looping, uint32 volume, float playSpeed)
+	SoLoud::handle AudioPlayer::Play(const Audio* audio, bool looping, uint32 volume, float playSpeed)
 	{
-		SoLoud::handle handle = soundEngine.play(audio->GetAudio());
+		SoLoud::handle handle = soundEngine.play(audio->audio);
 		soundEngine.setLooping(handle, looping);
 		soundEngine.setVolume(handle, volume / 100.f);
 		soundEngine.setRelativePlaySpeed(handle, playSpeed);

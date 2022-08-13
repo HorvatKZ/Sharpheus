@@ -50,10 +50,10 @@ namespace Sharpheus {
 		virtual ~TileMap() = default;
 		virtual void CopyFrom(GameObject* other) override;
 
-		inline TileSet* GetTileSet() { return tiles; }
+		inline const TileSet* GetTileSet() { return tiles; }
 		inline const Color& GetTint() { return tint; }
 		inline void SetTint(const Color& tint) { this->tint = tint; }
-		inline void SetTileSet(TileSet* tiles) {
+		inline void SetTileSet(const TileSet* tiles) {
 			if (tiles != nullptr && this->tiles != nullptr && tiles->GetNumOfTiles() < this->tiles->GetNumOfTiles()) {
 				SetBack(tiles->GetNumOfTiles());
 			}
@@ -84,7 +84,7 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(TileMap)
 
 	protected:
-		TileSet* tiles = nullptr;
+		const TileSet* tiles = nullptr;
 		Color tint = Color::White;
 		std::unordered_map<IntPoint, ChunkData, IntPointHasher> chunks;
 		Point tileCorners[4], tempCorners[4], prevAxis[2], xShift, yShift;

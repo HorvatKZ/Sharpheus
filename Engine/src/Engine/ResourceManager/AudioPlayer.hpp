@@ -12,7 +12,7 @@ namespace Sharpheus {
 		static void Init();
 		static void Clear();
 
-		static SoLoud::handle Play(Audio* audio, bool looping = false, uint32 volume = 100, float playSpeed = 1.f);
+		static SoLoud::handle Play(const Audio* audio, bool looping = false, uint32 volume = 100, float playSpeed = 1.f);
 		static void Stop(SoLoud::handle handle);
 		static void StopAll();
 

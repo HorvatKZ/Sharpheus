@@ -24,7 +24,7 @@ namespace Sharpheus {
 		virtual void CopyFrom(GameObject* other) override;
 
 		inline const std::string& GetContent() { return content; }
-		inline Font* GetFont() { return font; }
+		inline const Font* GetFont() { return font; }
 		inline const Color& GetColor() { return color; }
 		inline float GetSize() { return size; }
 		inline byte GetStyle() { return style; }
@@ -36,7 +36,7 @@ namespace Sharpheus {
 		void SetFontByPath(const std::string& fontFile, const std::string& imgFile);
 
 		inline void SetContent(const std::string& content) { this->content = content; UpdateSizer(); }
-		inline void SetFont(Font* font) { this->font = font; UpdateSizer(); }
+		inline void SetFont(const Font* font) { this->font = font; UpdateSizer(); }
 		inline void SetColor(const Color& color) { this->color = color; }
 		inline void SetSize(float size) { this->size = size; UpdateSizer(); }
 		inline void SetStyle(byte style) { this->style = style; UpdateSizer(); }
@@ -52,7 +52,7 @@ namespace Sharpheus {
 
 	protected:
 		std::string content;
-		Font* font = nullptr;
+		const Font* font = nullptr;
 		Color color = Color::White;
 		float size = 20.f;
 		byte style = 0;

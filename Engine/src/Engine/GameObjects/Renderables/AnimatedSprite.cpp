@@ -69,7 +69,7 @@ namespace Sharpheus {
 	bool AnimatedSprite::Load(FileLoader& fl)
 	{
 		RenderableGameObject::Load(fl);
-		Animation* anim;
+		const Animation* anim;
 		fl.Read(&anim);
 		SetAnimation(anim);
 		fl.Read(tint);

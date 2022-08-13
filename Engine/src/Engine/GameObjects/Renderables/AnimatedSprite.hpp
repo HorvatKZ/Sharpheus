@@ -13,12 +13,12 @@ namespace Sharpheus {
 		virtual ~AnimatedSprite() = default;
 		virtual void CopyFrom(GameObject* other) override;
 
-		inline Animation* GetAnimation() { return anim; }
+		inline const Animation* GetAnimation() { return anim; }
 		inline const Color& GetTint() { return tint; }
 		inline float GetSpeed() { return speed; }
 		inline void SetTint(const Color& tint) { this->tint = tint; }
 		inline void SetSpeed(float speed) { this->speed = speed; }
-		inline void SetAnimation(Animation* anim) {
+		inline void SetAnimation(const Animation* anim) {
 			this->anim = anim;
 			currTime = 0.f;
 			if (anim != nullptr) {
@@ -37,7 +37,7 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(AnimatedSprite)
 
 	protected:
-		Animation* anim = nullptr;
+		const Animation* anim = nullptr;
 		Color tint = Color::White;
 		float speed = 1.f;
 		float currTime = 0.f;

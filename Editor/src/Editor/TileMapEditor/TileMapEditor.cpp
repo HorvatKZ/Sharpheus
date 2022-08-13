@@ -47,7 +47,7 @@ namespace Sharpheus::TileMapEditor {
 	void Editor::ChangeTileSet(GameObject* obj)
 	{
 		if (obj->Is(GameObject::Type::TileMap) && (TileMap*)obj == tileMap) {
-			TileSet* tileSet = tileMap->GetTileSet();
+			const TileSet* tileSet = tileMap->GetTileSet();
 			if (tileSet == nullptr && !tileSet->IsValid()) {
 				SPHE_ERROR("TileMap Editor: The new TileSet is not valid");
 				Destroy();

@@ -13,10 +13,10 @@ namespace Sharpheus {
 		virtual ~Sprite() = default;
 		virtual void CopyFrom(GameObject * other) override;
 
-		inline Image* GetImage() { return image; }
+		inline const Image* GetImage() { return image; }
 		inline const Color& GetTint() { return tint; }
 		inline void SetTint(const Color& tint) { this->tint = tint; }
-		inline void SetImage(Image* image) {
+		inline void SetImage(const Image* image) {
 			this->image = image;
 			if (image != nullptr) {
 				SetSizer(image->GetWidth(), image->GetHeight());
@@ -34,7 +34,7 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(Sprite)
 
 	protected:
-		Image* image = nullptr;
+		const Image* image = nullptr;
 		Color tint = Color::White;
 
 		virtual bool Save(FileSaver& fs) override;

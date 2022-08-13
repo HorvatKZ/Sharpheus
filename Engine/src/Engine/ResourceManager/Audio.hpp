@@ -8,17 +8,17 @@ namespace Sharpheus {
 
 	class SPH_EXPORT Audio : public Resource
 	{
+		friend class AudioPlayer;
 	public:
 		Audio(const std::string& path);
 		~Audio();
 
-		inline const std::string& GetName() { return name; }
-		inline float GetLength() { return audio.getLength(); }
-		inline SoLoud::Wav& GetAudio() { return audio; }
+		inline const std::string& GetName() const { return name; }
+		inline float GetLength() const { return audio.getLength(); }
 
 	private:
 		std::string name;
-		SoLoud::Wav audio;
+		mutable SoLoud::Wav audio; // SoLoud is not const correct
 
 		void InitName();
 	};

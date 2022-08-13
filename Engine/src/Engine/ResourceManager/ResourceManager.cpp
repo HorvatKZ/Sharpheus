@@ -42,7 +42,7 @@ namespace Sharpheus {
 	}
 
 
-	Font* ResourceManager::GetFont(const std::string& fontFile, const std::string& imgFile)
+	const Font* ResourceManager::GetFont(const std::string& fontFile, const std::string& imgFile)
 	{
 		std::string concated = Concat(fontFile, imgFile);
 		auto it = fontsByPaths.find(concated);
@@ -50,7 +50,7 @@ namespace Sharpheus {
 			return (*it).second;
 		}
 
-		Image* fontImg = GetImage(imgFile, true);
+		const Image* fontImg = GetImage(imgFile, true);
 		Font* newFont = new Font(fontFile, fontImg);
 		fontsByPaths[concated] = newFont;
 		fontsByNames[newFont->GetName()] = newFont;
@@ -58,13 +58,13 @@ namespace Sharpheus {
 	}
 
 
-	Font* ResourceManager::GetFont(const std::string& fontFile, Image* img)
+	const Font* ResourceManager::GetFont(const std::string& fontFile, const Image* img)
 	{
 		return GetFont(fontFile, img->GetPath());
 	}
 
 
-	Font* ResourceManager::GetFont(const std::string& name)
+	const Font* ResourceManager::GetFont(const std::string& name)
 	{
 		auto it = fontsByNames.find(name);
 		if (it != fontsByNames.end()) {
@@ -75,7 +75,7 @@ namespace Sharpheus {
 	}
 
 
-	Image* ResourceManager::GetImage(const std::string& path, bool filtered)
+	const Image* ResourceManager::GetImage(const std::string& path, bool filtered)
 	{
 		std::string extPath = path + (filtered ? "_f" : "");
 		auto it = images.find(extPath);
@@ -89,7 +89,7 @@ namespace Sharpheus {
 	}
 
 
-	Animation* ResourceManager::GetAnimation(const std::string& path)
+	const Animation* ResourceManager::GetAnimation(const std::string& path)
 	{
 		auto it = animations.find(path);
 		if (it != animations.end()) {
@@ -102,7 +102,7 @@ namespace Sharpheus {
 	}
 
 
-	TileSet* ResourceManager::GetTileSet(const std::string& path)
+	const TileSet* ResourceManager::GetTileSet(const std::string& path)
 	{
 		auto it = tileSets.find(path);
 		if (it != tileSets.end()) {
@@ -115,7 +115,7 @@ namespace Sharpheus {
 	}
 
 
-	Audio* ResourceManager::GetAudio(const std::string& path)
+	const Audio* ResourceManager::GetAudio(const std::string& path)
 	{
 		auto it = audios.find(path);
 		if (it != audios.end()) {

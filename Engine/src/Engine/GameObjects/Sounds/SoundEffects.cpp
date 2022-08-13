@@ -48,7 +48,7 @@ namespace Sharpheus {
 		uint32 n;
 		fl.Read(n);
 		for (uint32 i = 0; i < n; ++i) {
-			Audio* audio = nullptr;
+			const Audio* audio = nullptr;
 			fl.Read(&audio);
 			AddAudio(audio);
 		}
@@ -88,7 +88,7 @@ namespace Sharpheus {
 	}
 
 
-	bool SoundEffects::RemoveAudio(Audio* audio)
+	bool SoundEffects::RemoveAudio(const Audio* audio)
 	{
 		return RemoveAudioByInd(GetIndOfAudio(audio->GetName()));
 	}

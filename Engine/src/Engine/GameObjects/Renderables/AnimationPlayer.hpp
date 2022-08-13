@@ -19,28 +19,28 @@ namespace Sharpheus {
 		inline void SetSpeed(float speed) { this->speed = speed; }
 
 		inline uint32 GetAnimationCount() { return anims.size(); }
-		inline Animation* GetAnimation(uint32 ind) {
+		inline const Animation* GetAnimation(uint32 ind) {
 			if (ind < anims.size()) {
 				return anims[ind];
 			}
 			return nullptr;
 		}
 		inline const std::string& GetAnimationName(uint32 ind) {
-			Animation* anim = GetAnimation(ind);
+			const Animation* anim = GetAnimation(ind);
 			if (anim == nullptr) {
 				return "";
 			}
 			return anim->GetName();
 		}
 
-		inline bool SetAnimation(uint32 ind, Animation* anim) {
+		inline bool SetAnimation(uint32 ind, const Animation* anim) {
 			if (ind < anims.size()) {
 				anims[ind] = anim;
 				return true;
 			}
 			return false;
 		}
-		inline bool AddAnimation(Animation* anim) {
+		inline bool AddAnimation(const Animation* anim) {
 			if (anim == nullptr) {
 				return false;
 			}
@@ -58,7 +58,7 @@ namespace Sharpheus {
 			}
 			return false;
 		}
-		inline bool RemoveAnimation(Animation* anim) {
+		inline bool RemoveAnimation(const Animation* anim) {
 			uint32 i = 0;
 			while (i < anims.size() && anims[i] != anim) {
 				++i;
@@ -66,7 +66,7 @@ namespace Sharpheus {
 			return RemoveAnimationByIndex(i);
 		}
 
-		inline Animation* GetCurrentAnimation() { return GetAnimation(GetCurrent()); }
+		inline const Animation* GetCurrentAnimation() { return GetAnimation(GetCurrent()); }
 		inline const std::string& GetCurrentAnimationName() { return GetAnimationName(GetCurrent()); }
 
 		bool SetAnimationFromPath(uint32 ind, const std::string& path);
@@ -81,7 +81,7 @@ namespace Sharpheus {
 				else {
 					currAnimInd = ind;
 					currTime = 0.f;
-					Animation* anim = anims[ind];
+					const Animation* anim = anims[ind];
 					SetSizer(anim->GetFrameWidth(), anim->GetFrameHeight());
 				}
 				return true;
@@ -119,7 +119,7 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(AnimationPlayer)
 
 	protected:
-		std::vector<Animation*> anims;
+		std::vector<const Animation*> anims;
 		Color tint = Color::White;
 		float speed = 1.f;
 		float currTime = 0.f;
