@@ -31,7 +31,7 @@ namespace Sharpheus {
 		inline uint32 GetBurstN() { return burstN; }
 		inline float GetLifeTime() { return lifeTime; }
 		inline float GetSpeed() { return speed; }
-		inline float GetEmitionTime() { return emitionTime; }
+		inline float GetEmissionTime() { return emissionTime; }
 		inline float GetGravity() { return gravity; }
 		inline float GetFriction() { return friction; }
 
@@ -44,7 +44,7 @@ namespace Sharpheus {
 		inline void SetBurstN(uint32 burstN) { this->burstN = burstN; }
 		inline void SetLifeTime(float lifeTime) { this->lifeTime = lifeTime; }
 		inline void SetSpeed(float speed) { this->speed = speed; }
-		inline void SetEmitionTime(float emitionTime) { this->emitionTime = emitionTime; }
+		inline void SetEmissionTime(float emissionTime) { this->emissionTime = emissionTime; }
 		inline void SetGravity(float gravity) { this->gravity = gravity; }
 		inline void SetFriction(float friction) { this->friction = glm::clamp(friction, 0.f, 1.f); }
 
@@ -74,7 +74,7 @@ namespace Sharpheus {
 		bool burst = false;
 		float lifeTime = 1.f;
 		float speed = 100.f;
-		float emitionTime = 1.f;
+		float emissionTime = 1.f;
 		float gravity = 0.f;
 		float friction = 0.f;
 		uint32 burstN = 1;

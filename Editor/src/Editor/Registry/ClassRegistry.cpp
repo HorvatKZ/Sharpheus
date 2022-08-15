@@ -9,7 +9,7 @@ namespace Sharpheus {
 	void ClassRegistry::Init()
 	{
 		classInfos[GameObject::Type::Collection]				= &Collection::classInfo;
-		classInfos[GameObject::Type::Behavior]					= &Behavior::classInfo;
+		classInfos[GameObject::Type::CppBehavior]				= &Behavior::classInfo;
 		classInfos[GameObject::Type::PythonBehavior]			= &PythonBehavior::classInfo;
 		classInfos[GameObject::Type::Camera]					= &Camera::classInfo;
 		classInfos[GameObject::Type::Sprite]					= &Sprite::classInfo;

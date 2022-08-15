@@ -38,8 +38,6 @@ namespace Sharpheus {
 			this->friction = glm::clamp(friction, 0.f, 1.f);
 		}
 
-		void ResolveCollision(const CollData& cd);
-
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(PhysicsObject)
@@ -54,6 +52,8 @@ namespace Sharpheus {
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void Tick(float deltaTime) override;
+
+		void ResolveCollision(const CollData& cd);
 	};
 
 }

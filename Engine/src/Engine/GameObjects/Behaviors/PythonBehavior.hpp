@@ -15,6 +15,7 @@ namespace Sharpheus {
 		PythonBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name), RenderableListener(GetID()) {}
 		virtual ~PythonBehavior();
 
+		SPH_DECL_GAMEOBJECT(PythonBehavior);
 		SPH_DECL_BEHAVIOR(PythonBehavior, 1);
 
 	protected:

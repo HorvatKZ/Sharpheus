@@ -113,7 +113,7 @@ namespace Sharpheus {
 				return Create<CheckBox>(parent, newName);
 			case GameObject::Type::RadioButton:
 				return Create<RadioButton>(parent, newName);
-			case GameObject::Type::Behavior:
+			case GameObject::Type::CppBehavior:
 				return Create<PlaceholderBehavior>(parent, newName);
 			case GameObject::Type::PythonBehavior:
 				return Create<PythonBehavior>(parent, newName);
@@ -126,7 +126,7 @@ namespace Sharpheus {
 	GameObject* Level::Create(GameObject* other, GameObject* parent, const std::string& newName)
 	{
 		GameObject::Type type = other->GetType();
-		if (type == GameObject::Type::Behavior) {
+		if (type == GameObject::Type::CppBehavior) {
 			SPH_ASSERT(bc != nullptr, "BehaviorCreator is not set for Level");
 			GameObject* behavior = bc->Create(((Behavior*)other)->GetSubType(), parent, newName);
 			Attach(behavior);
@@ -624,7 +624,7 @@ namespace Sharpheus {
 
 		success &= fl.Read(objName);
 		GameObject* obj;
-		if (realType != GameObject::Type::Behavior) {
+		if (realType != GameObject::Type::CppBehavior) {
 			obj = Create(realType, parent, objName);
 		} else {
 			uint32 subType;

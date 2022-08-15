@@ -69,10 +69,17 @@ namespace Sharpheus {
 	}
 
 
+	void Export_Shapes(py::module_& handle)
+	{
+		// TODO shapes
+	}
+
+
 	void Export_Geometry(py::module_& handle)
 	{
 		Export_Point(handle);
 		Export_Trafo(handle);
+		Export_Shapes(handle);
 	}
 
 }

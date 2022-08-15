@@ -188,7 +188,7 @@ namespace Sharpheus {
 			return;
 		}
 
-		if (curr->GetType() != GameObject::Type::Behavior) {
+		if (curr->GetType() != GameObject::Type::CppBehavior) {
 			SPHE_ERROR("Wrong signal... The current GameObject is not a Behavior");
 			return;
 		}

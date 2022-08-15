@@ -22,30 +22,13 @@ namespace Sharpheus {
 		virtual ~Collider();
 		virtual void CopyFrom(GameObject* other) override;
 
-		virtual CollDataPair CalcCollision(Collider* other);
-		virtual void OnCollision(const CollData& cd, Collider* other);
-
-		virtual void CheckTriggering(GameObject* obj);
-
 		void SetLevel(class Level* level) override;
-
-		inline Point GetVelocity() {
-			if (lastDeltaTime == 0) {
-				return Point();
-			}
-
-			Point diff = worldTrafo.pos - lastPos;
-			return Point(diff.x / lastDeltaTime, diff.y / lastDeltaTime);
-		}
 
 		inline bool IsTrigger() { return isTrigger; }
 		inline void SetTrigger(bool isTrigger) { this->isTrigger = isTrigger; }
 
 		inline bool IsDynamic() { return parent->Is(Type::PhysicsObject); }
 		inline bool IsColliderVisible() { return colliderVisible; }
-		inline void SetColliderVisible(bool visible) { this->colliderVisible = visible; }
-		inline void Show() { colliderVisible = true; }
-		inline void Hide() { colliderVisible = false; }
 
 		inline void SubscribeCollision(ID subscriberID, CollisionEventFunc&& func) {
 			onCollisionSubscribers[subscriberID] = std::move(func);
@@ -67,13 +50,6 @@ namespace Sharpheus {
 		inline void UnSubscribeTriggerExit(ID subscriberID) {
 			auto it = onTriggerExitSubscribers.find(subscriberID);
 			if (it != onTriggerExitSubscribers.end()) onTriggerExitSubscribers.erase(it);
-		}
-
-		inline void SwapMaps() {
-			auto tmp = lastInside;
-			lastInside = currInside;
-			currInside = tmp;
-			currInside->clear();
 		}
 
 		virtual bool Load(FileLoader& fl) override;
@@ -100,6 +76,31 @@ namespace Sharpheus {
 		virtual void OnObjectDestroyed(const GameObjectDestroyedEvent& e);
 		virtual void OnTriggerEnter(GameObject* obj);
 		virtual void OnTriggerExit(GameObject* obj, bool objDestroyed = false);
+
+		virtual CollDataPair CalcCollision(Collider* other);
+		virtual void OnCollision(const CollData& cd, Collider* other);
+
+		virtual void CheckTriggering(GameObject* obj);
+
+		inline void SetColliderVisible(bool visible) { this->colliderVisible = visible; }
+		inline void Show() { colliderVisible = true; }
+		inline void Hide() { colliderVisible = false; }
+
+		inline Point GetVelocity() {
+			if (lastDeltaTime == 0) {
+				return Point();
+			}
+
+			Point diff = worldTrafo.pos - lastPos;
+			return Point(diff.x / lastDeltaTime, diff.y / lastDeltaTime);
+		}
+
+		inline void SwapMaps() {
+			auto tmp = lastInside;
+			lastInside = currInside;
+			currInside = tmp;
+			currInside->clear();
+		}
 	};
 
 }

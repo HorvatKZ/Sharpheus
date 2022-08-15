@@ -5,7 +5,7 @@
 
 namespace Sharpheus {
 
-	SPH_START_SPEC_CLASSINFO(Behavior,"CppBehavior", "behaviorcpp.png")
+	SPH_START_SPEC_CLASSINFO(Behavior, "CppBehavior", "behaviorcpp.png")
 	SPH_END_CLASSINFO
 
 
@@ -19,7 +19,7 @@ namespace Sharpheus {
 
 	void Behavior::CopyFrom(GameObject* other)
 	{
-		SPH_CHECKTYPE(other, Behavior);
+		SPH_CHECKTYPE(other, CppBehavior);
 		if (((Behavior*)other)->GetSubType() != GetSubType()) {
 			SPH_ERROR("\"{0}\" tries to copy from different type \"{1}\"", name, other->GetName());
 			return;

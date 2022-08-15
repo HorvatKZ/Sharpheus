@@ -48,10 +48,10 @@ namespace Sharpheus::TileMapEditor {
 	void ViewPort::OnLeftDown(wxMouseEvent& e)
 	{
 		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		TileMap::IntPoint tileCoords = tileMap->ToTile(camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y)));
+		TileMap::IntPoint tileCoords = tileMap->ToTileCoord(camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y)));
 		byte newTile = selector->GetSelectedTile() + 1;
-		if (tileMap->Get(tileCoords) != newTile) {
-			tileMap->Set(tileCoords, newTile);
+		if (tileMap->GetTile(tileCoords) != newTile) {
+			tileMap->SetTile(tileCoords, newTile);
 			((EditorWindow*)EditorData::GetMainWindow())->CurrentDataChanged();
 		}
 		Refresh();
@@ -61,9 +61,9 @@ namespace Sharpheus::TileMapEditor {
 	void ViewPort::OnRightDown(wxMouseEvent& e)
 	{
 		wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-		TileMap::IntPoint tileCoords = tileMap->ToTile(camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y)));
-		if (tileMap->Get(tileCoords) != 0) {
-			tileMap->Clear(tileCoords);
+		TileMap::IntPoint tileCoords = tileMap->ToTileCoord(camera->ScreenPosToGamePos(Point(mousePos.x, mousePos.y)));
+		if (tileMap->GetTile(tileCoords) != 0) {
+			tileMap->ClearTile(tileCoords);
 			((EditorWindow*)EditorData::GetMainWindow())->CurrentDataChanged();
 		}
 		Refresh();

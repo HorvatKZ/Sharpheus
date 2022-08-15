@@ -12,6 +12,10 @@ namespace Sharpheus {
 		Export_Geometry(handle);
 		Export_Renderer(handle);
 		Export_ResourceManager(handle);
+		Export_GameObjects(handle);
+
+		// TODO file utils
+		// TODO events
 	}
 
 }

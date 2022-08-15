@@ -10,7 +10,7 @@ namespace Sharpheus {
 		SPH_PROVIDE_IMAGE(ParticleEmitter, "Particle", GetParticle, SetParticle, SetParticleByPath)
 		SPH_PROVIDE_POINT(ParticleEmitter, "Particle scale", GetParticleScale, SetParticleScale)
 		SPH_PROVIDE_COLOR(ParticleEmitter, "Particle tint", GetTint, SetTint)
-		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Emition time", GetEmitionTime, SetEmitionTime)
+		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Emition time", GetEmissionTime, SetEmissionTime)
 		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Lifetime", GetLifeTime, SetLifeTime)
 		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Speed", GetSpeed, SetSpeed)
 		SPH_PROVIDE_UFLOAT(ParticleEmitter, "Gravity", GetGravity, SetGravity)
@@ -47,7 +47,7 @@ namespace Sharpheus {
 		burst = trueOther->burst;
 		lifeTime = trueOther->lifeTime;
 		speed = trueOther->speed;
-		emitionTime = trueOther->emitionTime;
+		emissionTime = trueOther->emissionTime;
 		gravity = trueOther->gravity;
 		friction = trueOther->friction;
 		burstN = trueOther->burstN;
@@ -71,7 +71,7 @@ namespace Sharpheus {
 		fl.Read(burst);
 		fl.Read(lifeTime);
 		fl.Read(speed);
-		fl.Read(emitionTime);
+		fl.Read(emissionTime);
 		fl.Read(gravity);
 		fl.Read(friction);
 		if (burst) {
@@ -94,7 +94,7 @@ namespace Sharpheus {
 		fs.Write(burst);
 		fs.Write(lifeTime);
 		fs.Write(speed);
-		fs.Write(emitionTime);
+		fs.Write(emissionTime);
 		fs.Write(gravity);
 		fs.Write(friction);
 		if (burst) {
@@ -108,8 +108,8 @@ namespace Sharpheus {
 	void ParticleEmitter::Tick(float deltaTime)
 	{
 		totalTime += deltaTime;
-		if (totalTime > lastEmit + emitionTime) {
-			Emit((totalTime - lastEmit) / emitionTime * (burst ? burstN : 1));
+		if (totalTime > lastEmit + emissionTime) {
+			Emit((totalTime - lastEmit) / emissionTime * (burst ? burstN : 1));
 			lastEmit = totalTime;
 		}
 

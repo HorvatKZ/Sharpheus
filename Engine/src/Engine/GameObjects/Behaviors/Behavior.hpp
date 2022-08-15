@@ -46,7 +46,7 @@ namespace Sharpheus {
 
 		virtual inline ClassInfoPtr GetBehaviorClassInfo() = 0;
 
-		SPH_DECL_GAMEOBJECT(Behavior);
+		SPH_DECL_GAMEOBJECT(CppBehavior);
 
 	protected:
 		virtual bool Save(FileSaver& file);

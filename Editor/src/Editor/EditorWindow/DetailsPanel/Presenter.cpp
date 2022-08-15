@@ -98,7 +98,7 @@ namespace Sharpheus {
 	void HeaderPresenter::OnVisibilityChanged(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
-			curr->SwitchVisiblity();
+			curr->SwitchVisibility();
 			signal();
 		}
 	}

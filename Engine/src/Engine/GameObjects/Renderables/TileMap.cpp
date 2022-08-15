@@ -46,31 +46,31 @@ namespace Sharpheus {
 	}
 
 
-	byte TileMap::Get(const IntPoint& pos)
+	byte TileMap::GetTile(const IntPoint& coord)
 	{
-		IntPoint chunk = pos.ToChunk();
+		IntPoint chunk = coord.ToChunk();
 		auto it = chunks.find(chunk);
 		if (it == chunks.end()) {
 			return 0;
 		}
 
-		return it->second.arr[pos.ToRelInd()];
+		return it->second.arr[coord.ToRelInd()];
 	}
 
-	void TileMap::Set(const IntPoint& pos, byte value)
+	void TileMap::SetTile(const IntPoint& coord, byte value)
 	{
 		if (value == 0) {
-			Clear(pos);
+			ClearTile(coord);
 			return;
 		}
 
-		IntPoint chunk = pos.ToChunk();
+		IntPoint chunk = coord.ToChunk();
 		auto it = chunks.find(chunk);
 		if (it == chunks.end()) {
 			it = chunks.insert({ chunk, ChunkData() }).first;
 			memset(it->second.arr, 0, chunkSize * chunkSize);
 		}
-		uint8 relInd = pos.ToRelInd();
+		uint8 relInd = coord.ToRelInd();
 		byte oldValue = it->second.arr[relInd];
 		if (oldValue == 0) {
 			++(it->second.count);
@@ -79,15 +79,15 @@ namespace Sharpheus {
 	}
 
 
-	void TileMap::Clear(const IntPoint& pos)
+	void TileMap::ClearTile(const IntPoint& coord)
 	{
-		IntPoint chunk = pos.ToChunk();
+		IntPoint chunk = coord.ToChunk();
 		auto it = chunks.find(chunk);
 		if (it == chunks.end()) {
 			return;
 		}
 
-		uint8 relInd = pos.ToRelInd();
+		uint8 relInd = coord.ToRelInd();
 		byte oldValue = it->second.arr[relInd];
 		if (oldValue == 0) {
 			return;
@@ -140,7 +140,7 @@ namespace Sharpheus {
 
 	bool TileMap::IsSelected(const Point& pos)
 	{
-		return tiles != nullptr && Get(ToTile(pos)) != 0;
+		return tiles != nullptr && GetTile(ToTileCoord(pos)) != 0;
 	}
 
 

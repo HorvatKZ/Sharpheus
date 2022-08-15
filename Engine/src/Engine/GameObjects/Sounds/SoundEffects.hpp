@@ -43,8 +43,8 @@ namespace Sharpheus {
 		bool AddAudioFromPath(const std::string& path);
 		bool RemoveAudio(const Audio* audio);
 
-		void Play(uint32 ind, uint32 volume, float playSpeed);
-		void Play(const std::string& name, uint32 volume, float playSpeed);
+		void Play(uint32 ind, uint32 volume = 100, float playSpeed = 1.f);
+		void Play(const std::string& name, uint32 volume = 100, float playSpeed = 1.f);
 		void StopAll();
 
 		virtual bool Load(FileLoader& fl) override;

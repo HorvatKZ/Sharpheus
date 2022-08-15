@@ -37,7 +37,7 @@ namespace Sharpheus {
 			// Basic types
 			None = 0x00,
 			Collection = 0x01,
-			Behavior = 0x02,
+			CppBehavior = 0x02,
 			PythonBehavior = 0x03,
 
 			// Cameras
@@ -111,7 +111,7 @@ namespace Sharpheus {
 
 		inline bool				IsVisible() { return isVisible; }
 		inline void				SetVisible(bool visibility) { isVisible = visibility; }
-		inline void				SwitchVisiblity() { isVisible = !isVisible; }
+		inline void				SwitchVisibility() { isVisible = !isVisible; }
 		inline bool				IsAllVisible() {
 			if (parent == nullptr) {
 				return isVisible;
@@ -119,7 +119,6 @@ namespace Sharpheus {
 			return isVisible && parent->IsAllVisible();
 		}
 
-		void									AddChild(GameObject* child);
 		GameObject*								GetChild(const std::string& name);
 		GameObject*								GetChild(uint32 ind);
 		GameObject*								GetLastChild();
@@ -132,12 +131,11 @@ namespace Sharpheus {
 		inline const std::string&				GetName() { return name; }
 		void									SetName(const std::string& name);
 		void									SetUpName(const std::string& name);
-		void									SetChildByName(GameObject* newChild);
 
 		virtual inline Type		GetType() = 0;
 
-		inline bool operator==(const GameObject& other) { return listenerID == other.listenerID; }
-		inline bool operator!=(const GameObject& other) { return listenerID != other.listenerID; }
+		inline bool operator==(const GameObject& other) const { return listenerID == other.listenerID; }
+		inline bool operator!=(const GameObject& other) const { return listenerID != other.listenerID; }
 
 		bool		IsParentOfCurrentCamera();
 		GameObject* GetUpperMostSelected(const Point& pos);
@@ -184,7 +182,10 @@ namespace Sharpheus {
 		static const Color selectColor;
 		static ID nextFreeSafeObjectID;
 
+		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
+
+		void SetChildByName(GameObject* newChild);
 
 		virtual bool Save(FileSaver& file);
 

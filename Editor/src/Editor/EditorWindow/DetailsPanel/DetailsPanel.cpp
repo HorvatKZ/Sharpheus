@@ -45,9 +45,9 @@ namespace Sharpheus {
 	void DetailsPanel::CurrentChanged(GameObject* curr)
 	{
 		if (curr != nullptr) {
-			if (curr->GetType() == GameObject::Type::Behavior) {
-				if (lastType != GameObject::Type::Behavior || lastSubType != ((Behavior*)curr)->GetSubType()) {
-					lastType = GameObject::Type::Behavior;
+			if (curr->GetType() == GameObject::Type::CppBehavior) {
+				if (lastType != GameObject::Type::CppBehavior || lastSubType != ((Behavior*)curr)->GetSubType()) {
+					lastType = GameObject::Type::CppBehavior;
 					lastSubType = ((Behavior*)curr)->GetSubType();
 					CreatePresenters(curr);
 				}
@@ -157,7 +157,7 @@ namespace Sharpheus {
 				case GameObject::Type::PythonBehavior:
 					CreatePresenterFrom<PythonBehavior>(provider, y);
 					break;
-				case GameObject::Type::Behavior:
+				case GameObject::Type::CppBehavior:
 					SPH_PRESENT_BEHAVIOR(obj);
 					break;
 				default:

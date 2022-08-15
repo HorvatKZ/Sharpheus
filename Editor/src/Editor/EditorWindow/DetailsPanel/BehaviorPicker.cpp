@@ -31,7 +31,7 @@ namespace Sharpheus {
 
 	void BehaviorPicker::SetCurrent(GameObject* curr)
 	{
-		SPHE_ASSERT(curr->Is(GameObject::Type::Behavior), "Non-behavior type is passed to BehaviorPicker");
+		SPHE_ASSERT(curr->Is(GameObject::Type::CppBehavior), "Non-behavior type is passed to BehaviorPicker");
 
 		Presenter::SetCurrent(curr);
 

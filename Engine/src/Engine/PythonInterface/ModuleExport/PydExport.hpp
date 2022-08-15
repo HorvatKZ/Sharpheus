@@ -3,6 +3,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/stl.h>
+#include <pybind11/functional.h>
 
 
 namespace py = ::pybind11;
@@ -16,5 +17,8 @@ namespace Sharpheus {
 	void Export_Geometry(py::module_& handle);
 	void Export_Renderer(py::module_& handle);
 	void Export_ResourceManager(py::module_& handle);
+	void Export_GameObjects(py::module_& handle);
+
+	byte kwargs2FontStyle(const py::kwargs& kwargs);
 
 }

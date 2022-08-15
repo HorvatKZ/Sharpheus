@@ -125,7 +125,7 @@ namespace Sharpheus {
 		m.doc() = "Audio player module for Sharpheus";
 
 		py::class_<SoLoud::handle>(m, "Handle")
-			.def("__repr__", [](SoLoud::handle h) { return "<Sharpheus.AudioPlayer.handle " + std::to_string(h) + ">"; });
+			.def("__repr__", [](SoLoud::handle h) { return "<Sharpheus.AudioPlayer.Handle " + std::to_string(h) + ">"; });
 
 		m.def("play", &AudioPlayer::Play, "audio"_a, "looping"_a = false, "volume"_a = 100, "play_speed"_a = 1.f);
 		m.def("stop", &AudioPlayer::Stop, "handle"_a);

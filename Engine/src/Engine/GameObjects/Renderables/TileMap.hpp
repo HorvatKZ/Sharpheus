@@ -23,27 +23,8 @@ namespace Sharpheus {
 			inline IntPoint ToRelPos() const { return IntPoint(ModByChunkSize(x), ModByChunkSize(y)); }
 			inline uint8 ToRelInd() const { return ModByChunkSize(y) * chunkSize + ModByChunkSize(x); }
 
-			inline int32 DivByChunkSize(int32 a) const { return (a >= 0) ? (a / chunkSize) : ((a + 1) / chunkSize - 1); }
-			inline int32 ModByChunkSize(int32 a) const { return (a % chunkSize == 0) ? 0 : ((a >= 0) ? (a % chunkSize) : (a % chunkSize + chunkSize)); }
-		};
-
-		struct ChunkData {
-			byte* arr;
-			uint8 count = 0;
-
-			ChunkData() : arr(new byte[chunkSize * chunkSize]) {}
-			ChunkData(byte* arr, uint8 count) : arr(arr), count(count) {}
-			ChunkData(ChunkData&& other) : arr(other.arr), count(other.count) { other.arr = nullptr; }
-			ChunkData(const ChunkData& other) = default;
-			ChunkData& operator=(const ChunkData& other) = default;
-			~ChunkData() { delete[] arr; }
-		};
-
-		struct IntPointHasher {
-			std::size_t operator() (const IntPoint& key) const {
-				std::size_t hash = key.x;
-				return (hash << 32) + key.y;
-			}
+			static inline int32 DivByChunkSize(int32 a) { return (a >= 0) ? (a / chunkSize) : ((a + 1) / chunkSize - 1); }
+			static inline int32 ModByChunkSize(int32 a) { return (a % chunkSize == 0) ? 0 : ((a >= 0) ? (a % chunkSize) : (a % chunkSize + chunkSize)); }
 		};
 
 		TileMap(GameObject* parent, const std::string& name);
@@ -64,7 +45,7 @@ namespace Sharpheus {
 
 		void SetTileSetFromPath(const std::string& path);
 
-		inline IntPoint ToTile(const Point& pos) {
+		inline IntPoint ToTileCoord(const Point& pos) {
 			if (tiles == nullptr) {
 				return IntPoint(0, 0);
 			}
@@ -73,9 +54,9 @@ namespace Sharpheus {
 			return IntPoint(localPos.x / tiles->GetFrameWidth(), localPos.y / tiles->GetFrameHeight());
 		}
 
-		byte Get(const IntPoint& pos);
-		void Set(const IntPoint& pos, byte value);
-		void Clear(const IntPoint& pos);
+		byte GetTile(const IntPoint& coord);
+		void SetTile(const IntPoint& coord, byte value);
+		void ClearTile(const IntPoint& coord);
 
 		virtual void Render() override;
 
@@ -84,6 +65,25 @@ namespace Sharpheus {
 		SPH_DECL_GAMEOBJECT(TileMap)
 
 	protected:
+		struct ChunkData {
+			byte* arr;
+			uint8 count = 0;
+
+			ChunkData() : arr(new byte[chunkSize * chunkSize]) {}
+			ChunkData(byte* arr, uint8 count) : arr(arr), count(count) {}
+			ChunkData(ChunkData&& other) : arr(other.arr), count(other.count) { other.arr = nullptr; }
+			ChunkData(const ChunkData& other) = default;
+			ChunkData& operator=(const ChunkData& other) = default;
+			~ChunkData() { delete[] arr; }
+		};
+
+		struct IntPointHasher {
+			std::size_t operator() (const IntPoint& key) const {
+				std::size_t hash = key.x;
+				return (hash << 32) + key.y;
+			}
+		};
+
 		const TileSet* tiles = nullptr;
 		Color tint = Color::White;
 		std::unordered_map<IntPoint, ChunkData, IntPointHasher> chunks;
