@@ -31,6 +31,6 @@ namespace Sharpheus {
 
 		SPH_DECL_EVENT(WindowResized)
 	
-		uint32 newWidth, newHeight;
+		const uint32 newWidth, newHeight;
 	};
 }

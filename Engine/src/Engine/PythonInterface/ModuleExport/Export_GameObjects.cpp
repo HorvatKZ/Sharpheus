@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "PydExport.hpp"
+#include "Engine/CollisionSystem/CollData.hpp"
+#include "Engine/CollisionSystem/CollisionEvent.hpp"
 #include "Engine/GameObjects/GameObjects.h"
 
 
@@ -120,11 +122,35 @@ namespace Sharpheus {
 
 	void Export_Colliders(py::module_& handle)
 	{
+		py::class_<CollData, Event>(handle, "CollData")
+			.def(py::init<const Shape::Intersection&, bool, const Point&, float>(), "geom"_a, "is_dynamic"_a, "v_other"_a, "m_other"_a)
+			.def_readonly("geom", &CollData::geom)
+			.def_readonly("is_dynamic", &CollData::isDynamic)
+			.def_readonly("v_other", &CollData::vOther)
+			.def_readonly("m_other", &CollData::mOther)
+			.def_property_readonly("is", &CollData::Is);
+
+		py::class_<CollisionEvent, Event>(handle, "CollisionEvent")
+			.def(py::init<Collider*, Collider*, const CollData&>(), "source"_a, "with"_a, "cd"_a)
+			.def_readonly("source", &CollisionEvent::source)
+			.def_readonly("with", &CollisionEvent::with)
+			.def_readonly("cd", &CollisionEvent::cd);
+		
+		py::class_<OnEnterEvent, Event>(handle, "OnEnterEvent")
+			.def(py::init<Collider*, GameObject*>(), "source"_a, "obj"_a)
+			.def_readonly("source", &OnEnterEvent::source)
+			.def_readonly("obj", &OnEnterEvent::obj);
+
+		py::class_<OnExitEvent, Event>(handle, "OnExitEvent")
+			.def(py::init<Collider*, GameObject*>(), "source"_a, "obj"_a, "obj_destroyed"_a)
+			.def_readonly("source", &OnExitEvent::source)
+			.def_readonly("obj", &OnExitEvent::obj)
+			.def_readonly("obj_destroyed", &OnExitEvent::objDestroyed);
+
 		py::class_<Collider, ShapedGameObject>(handle, "Collider")
 			.def_property("is_trigger", &Collider::IsTrigger, &Collider::SetTrigger)
 			.def_property_readonly("is_dynamic", &Collider::IsDynamic)
 			.def_property_readonly("is_collider_visible", &Collider::IsColliderVisible);
-		// TODO collision events
 
 		py::class_<BoxCollider, Collider>(handle, "BoxCollider")
 			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a)
@@ -158,6 +184,10 @@ namespace Sharpheus {
 
 	void Export_Controls(py::module_& handle)
 	{
+		py::class_<ControlChangedEvent, Event>(handle, "ControlChangedEvent")
+			.def(py::init<Control*>(), "source"_a)
+			.def_readonly("source", &ControlChangedEvent::source);
+
 		py::class_<Control, AxisGameObject>(handle, "Control")
 			.def_property("text", &Control::GetText, &Control::SetText)
 			.def_property("font", &Control::GetFont, &Control::SetFont, py::return_value_policy::reference)
@@ -172,8 +202,10 @@ namespace Sharpheus {
 
 			.def("set_font_style", [](Control& ctrl, const py::kwargs& kwargs) {
 				ctrl.SetFontStyle(kwargs2FontStyle(kwargs));
-			});
-		// TODO change event
+			})
+			
+			.def("subscribe_for_change", &Control::SubscribeForChange, "subscriber_id"_a, "func"_a)
+			.def("unsubscribe_for_change", &Control::UnSubscribeForChange, "subscriber_id"_a);
 
 		py::class_<ButtonBase, Control>(handle, "ButtonBase")
 			.def_property("color", &ButtonBase::GetColor, &ButtonBase::SetColor)

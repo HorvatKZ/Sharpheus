@@ -14,6 +14,6 @@ namespace Sharpheus {
 
 		SPH_DECL_EVENT(Local)
 
-		T* source;
+		T* const source;
 	};
 }

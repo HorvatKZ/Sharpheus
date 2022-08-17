@@ -24,11 +24,11 @@ namespace Sharpheus {
 		bool Write(const Point& data);
 		bool Write(const Color& data);
 		bool Write(const Transform& data);
-		bool Write(class Image* data);
-		bool Write(class Font* data);
-		bool Write(class Animation* data);
-		bool Write(class TileSet* data);
-		bool Write(class Audio* data);
+		bool Write(const class Image* data);
+		bool Write(const class Font* data);
+		bool Write(const class Animation* data);
+		bool Write(const class TileSet* data);
+		bool Write(const class Audio* data);
 
 		bool WriteEnd();
 

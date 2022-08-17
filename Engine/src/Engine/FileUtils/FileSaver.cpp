@@ -132,7 +132,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(Image* data)
+	bool FileSaver::Write(const Image* data)
 	{
 		if (data == nullptr) {
 			Write(std::string("nullptr"));
@@ -145,7 +145,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(Font* data)
+	bool FileSaver::Write(const Font* data)
 	{
 		if (data == nullptr) {
 			Write(std::string("nullptr"));
@@ -158,7 +158,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(Animation* data)
+	bool FileSaver::Write(const Animation* data)
 	{
 		if (data == nullptr) {
 			Write(std::string("nullptr"));
@@ -170,7 +170,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(TileSet* data)
+	bool FileSaver::Write(const TileSet* data)
 	{
 		if (data == nullptr) {
 			Write(std::string("nullptr"));
@@ -182,7 +182,7 @@ namespace Sharpheus {
 	}
 
 
-	bool FileSaver::Write(Audio* data)
+	bool FileSaver::Write(const Audio* data)
 	{
 		if (data == nullptr) {
 			Write(std::string("nullptr"));

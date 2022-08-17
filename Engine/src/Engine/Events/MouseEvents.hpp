@@ -27,8 +27,8 @@ namespace Sharpheus {
 			: screenPos(screenPos), gamePos(gamePos) {}
 		virtual ~MouseEvent() = default;
 
-		Point screenPos;
-		Point gamePos;
+		const Point screenPos;
+		const Point gamePos;
 	};
 
 
@@ -46,7 +46,7 @@ namespace Sharpheus {
 
 		SPH_DECL_EVENT(MousePressed);
 
-		MouseButton button;
+		const MouseButton button;
 	};
 
 
@@ -64,7 +64,7 @@ namespace Sharpheus {
 
 		SPH_DECL_EVENT(MouseReleased);
 
-		MouseButton button;
+		const MouseButton button;
 	};
 
 
@@ -98,7 +98,7 @@ namespace Sharpheus {
 
 		SPH_DECL_EVENT(MouseScrolled);
 
-		bool isUp;
+		const bool isUp;
 	};
 
 }

@@ -53,7 +53,7 @@ namespace Sharpheus {
 		KeyEvent(int code) : code((KeyCode)code) {}
 		virtual ~KeyEvent() = default;
 
-		KeyCode code;
+		const KeyCode code;
 	};
 
 

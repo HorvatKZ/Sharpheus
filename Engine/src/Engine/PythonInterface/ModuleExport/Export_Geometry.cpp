@@ -71,7 +71,84 @@ namespace Sharpheus {
 
 	void Export_Shapes(py::module_& handle)
 	{
-		// TODO shapes
+		py::class_<Shape> shap(handle, "Shape");
+
+		py::enum_<Shape::Type>(shap, "Type")
+			.value("OVAL", Shape::Type::OVAL)
+			.value("RECT", Shape::Type::RECT)
+			.value("CAPSULE", Shape::Type::CAPSULE);
+
+		py::class_<Shape::Intersection>(shap, "Intersection")
+			.def(py::init<const Point&, const Point&, float>(), "contact"_a, "normal"_a, "depth"_a)
+			.def_readwrite("contact", &Shape::Intersection::contact)
+			.def_readwrite("normal", &Shape::Intersection::normal)
+			.def_readwrite("depth", &Shape::Intersection::depth);
+
+		shap.def_property("pos", &Shape::GetPos, &Shape::SetPos)
+			.def_property("dim", &Shape::GetDim, &Shape::SetDim)
+			.def_property("rot", &Shape::GetRot, &Shape::SetRot)
+			.def_property_readonly("x_axis", &Shape::GetXAxis)
+			.def_property_readonly("y_axis", &Shape::GetXAxis)
+			.def_property_readonly("corners", [](Shape& shap) {
+				std::vector<Point> result;
+				Point* corners = shap.GetCorners();
+				for (uint8 i = 0; i < 4; ++i) {
+					result.push_back(corners[i]);
+				}
+				return result;
+			})
+			.def_property_readonly("sat_corners", [](Shape& shap) {
+				std::vector<Point> result;
+				Point* corners = shap.GetSATCorners();
+				for (uint8 i = 0; i < shap.GetSATCornerNum(); ++i) {
+					result.push_back(corners[i]);
+				}
+				return result;
+			})
+
+			.def("type", &Shape::GetType)
+			.def("is_inside", &Shape::IsInside, "pos"_a)
+			.def("get_local_perpendicular_at", &Shape::GetLocalPerpendicularAt, "surface_point"_a)
+			.def("get_local_closest_to", &Shape::GetLocalClosestTo, "point"_a)
+			.def("get_priority", &Shape::GetPriority)
+
+			.def("get_sat_corner_num", &Shape::GetSATCornerNum)
+			.def("is_sat_symmetrical", &Shape::IsSATSymmetrical)
+
+			.def("is_too_far_from", py::overload_cast<const Shape&>(&Shape::IsTooFarFrom), "other"_a)
+
+			.def("force_refresh", &Shape::ForceRefresh)
+
+			.def("get_intersection_with", &Shape::GetIntersectionWith);
+
+		py::class_<Rect>(handle, "Rect")
+			.def(py::init<const Point&, const Point&, float>(), "pos"_a, "dim"_a, "rot"_a)
+			
+			.def("__repr__", [](Rect& r) { return "<Sharpheus.Rect (pos = (" + std::to_string(r.GetPos().x) + ", " + std::to_string(r.GetPos().y) +
+				"), dim = (" + std::to_string(r.GetDim().x) + ", " + std::to_string(r.GetDim().y) + "), rot = " + std::to_string(r.GetRot()) + ")>"; });;
+
+		py::class_<Oval>(handle, "Oval")
+			.def(py::init<const Point&, const Point&, float>(), "pos"_a, "dim"_a, "rot"_a)
+			.def_property_readonly("is_circle", &Oval::IsCircle)
+			
+			.def("__repr__", [](Oval& o) { return "<Sharpheus.Oval (pos = (" + std::to_string(o.GetPos().x) + ", " + std::to_string(o.GetPos().y) +
+				"), dim = (" + std::to_string(o.GetDim().x) + ", " + std::to_string(o.GetDim().y) + "), rot = " + std::to_string(o.GetRot()) + ")>"; });
+
+		py::class_<Capsule>(handle, "Capsule")
+			.def(py::init<const Point&, const Point&, float>(), "pos"_a, "dim"_a, "rot"_a)
+			.def_property("dome_height", &Capsule::GetDomeHeight, &Capsule::SetDomeHeight)
+			.def_property_readonly("inner_corners", [](Capsule& caps) {
+				std::vector<Point> result;
+				Point* corners = caps.GetInnerCorners();
+				for (uint8 i = 0; i < 4; ++i) {
+					result.push_back(corners[i]);
+				}
+				return result;
+			})
+			
+			.def("__repr__", [](Capsule& c) { return "<Sharpheus.Capsule (pos = (" + std::to_string(c.GetPos().x) + ", " + std::to_string(c.GetPos().y) +
+				"), dim = (" + std::to_string(c.GetDim().x) + ", " + std::to_string(c.GetDim().y) + "), rot = " + std::to_string(c.GetRot()) + 
+				+ ", dome_height = " + std::to_string(c.GetDomeHeight()) + ")>"; });
 	}
 
 

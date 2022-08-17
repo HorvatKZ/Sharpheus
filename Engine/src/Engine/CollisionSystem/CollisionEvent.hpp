@@ -21,8 +21,8 @@ namespace Sharpheus {
 			return "CollisionEvent from" + source->GetName() + " to " + with->GetName();
 		}
 
-		Collider* with;
-		CollData cd;
+		Collider* const with;
+		const CollData cd;
 	};
 
 
@@ -36,7 +36,7 @@ namespace Sharpheus {
 			return "OnEnterEvent from " + source->GetName() + ", obj: " + obj->GetName();
 		}
 
-		GameObject* obj;
+		const GameObject* obj;
 	};
 
 
@@ -51,8 +51,8 @@ namespace Sharpheus {
 			return "OnEnterEvent from " + source->GetName() + ", obj: " + obj->GetName();
 		}
 
-		GameObject* obj;
-		bool objDestroyed;
+		GameObject* const obj;
+		const bool objDestroyed;
 	};
 
 }
