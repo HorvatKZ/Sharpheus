@@ -3,18 +3,20 @@
 #include "Engine/CollisionSystem/CollData.hpp"
 #include "Engine/CollisionSystem/CollisionEvent.hpp"
 #include "Engine/GameObjects/GameObjects.h"
+#include "Engine/Level.hpp"
 
 
 namespace Sharpheus {
 
 	void Export_GameObject(py::module_& handle)
 	{
-		py::class_<GameObject> gobj(handle, "GameObject");
+		py::class_<GameObject, EventListener> gobj(handle, "GameObject");
 
 		py::enum_<GameObject::Type>(gobj, "Type")
 			.value("None", GameObject::Type::None)
 			.value("Collection", GameObject::Type::Collection)
 			.value("CppBehavior", GameObject::Type::CppBehavior)
+			.value("PythonRunnerBehavior", GameObject::Type::PythonRunnerBehavior)
 			.value("PythonBehavior", GameObject::Type::PythonBehavior)
 
 			.value("Camera", GameObject::Type::Camera)
@@ -57,6 +59,7 @@ namespace Sharpheus {
 			.def_property_readonly("parent", &GameObject::GetParent, py::return_value_policy::reference)
 			.def_property_readonly("root", &GameObject::GetRoot, py::return_value_policy::reference)
 			.def_property_readonly("children", &GameObject::GetChildren, py::return_value_policy::reference)
+			.def_property_readonly("level", &GameObject::GetLevel, py::return_value_policy::reference)
 
 			.def("copy_from", &GameObject::CopyFrom)
 
@@ -113,16 +116,29 @@ namespace Sharpheus {
 			.def("init", &Behavior::Init)
 			.def("sub_type", &Behavior::GetSubType);
 
-		py::class_<PythonBehavior, Behavior>(handle, "PythonBehavior")
+		py::class_<PythonRunnerBehavior, Behavior>(handle, "PythonRunnerBehavior")
 			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a);
 
-		// TODO local listeners
+		py::class_<PythonBehavior, Behavior, PythonBehaviorTrampoline>(handle, "PythonBehavior")
+			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a)
+			.def("subscribe_for_render", [](PythonBehavior& self, const std::string& layerName, std::function<void()>&& func) {
+				self.SubscribeForRender(self.GetLevel(), layerName, std::move(func));
+				}, "layer_name"_a, "func"_a)
+			.def("unsubscribe_for_render", &PythonBehavior::UnSubscribeForRender)
+			.def("subscribe_collision", &PythonBehavior::SubscribeCollision)
+			.def("unsubscribe_collision", &PythonBehavior::UnSubscribeCollision)
+			.def("subscribe_trigger_enter", &PythonBehavior::SubscribeOnTriggerEnter)
+			.def("unsubscribe_trigger_enter", &PythonBehavior::SubscribeOnTriggerEnter)
+			.def("subscribe_trigger_exit", &PythonBehavior::SubscribeOnTriggerExit)
+			.def("unsubscribe_trigger_exit", &PythonBehavior::SubscribeOnTriggerExit)
+			.def("subscribe_control_changed", &PythonBehavior::SubscribeControlChanged)
+			.def("unsubscribe_control_changed", &PythonBehavior::UnSubscribeControlChanged);
 	}
 
 
 	void Export_Colliders(py::module_& handle)
 	{
-		py::class_<CollData, Event>(handle, "CollData")
+		py::class_<CollData>(handle, "CollData")
 			.def(py::init<const Shape::Intersection&, bool, const Point&, float>(), "geom"_a, "is_dynamic"_a, "v_other"_a, "m_other"_a)
 			.def_readonly("geom", &CollData::geom)
 			.def_readonly("is_dynamic", &CollData::isDynamic)
@@ -142,7 +158,7 @@ namespace Sharpheus {
 			.def_readonly("obj", &OnEnterEvent::obj);
 
 		py::class_<OnExitEvent, Event>(handle, "OnExitEvent")
-			.def(py::init<Collider*, GameObject*>(), "source"_a, "obj"_a, "obj_destroyed"_a)
+			.def(py::init<Collider*, GameObject*, bool>(), "source"_a, "obj"_a, "obj_destroyed"_a)
 			.def_readonly("source", &OnExitEvent::source)
 			.def_readonly("obj", &OnExitEvent::obj)
 			.def_readonly("obj_destroyed", &OnExitEvent::objDestroyed);
@@ -257,7 +273,7 @@ namespace Sharpheus {
 			.def_property("tint", &Sprite::GetTint, &Sprite::SetTint)
 			.def("set_image_from_path", &Sprite::SetImageFromPath, "path"_a, "filtered"_a);
 
-		py::class_<Quad, RenderableGameObject>(handle, "Sprite")
+		py::class_<Quad, RenderableGameObject>(handle, "Quad")
 			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a)
 			.def_property("width", &Quad::GetWidth, &Quad::SetWidth)
 			.def_property("height", &Quad::GetHeight, &Quad::SetHeight)

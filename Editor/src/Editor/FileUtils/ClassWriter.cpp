@@ -164,7 +164,8 @@ namespace Sharpheus {
 		cw.WriteLine("#define SPH_PRESENT_BEHAVIOR(obj) \\");
 		cw.WriteLine(1, "SPH_START_PRESENTING(obj) \\");
 		cw.WriteLine(2, "SPH_PRESENT(PlaceholderBehavior, 0) \\");
-		cw.WriteLine(2, "SPH_PRESENT(PythonBehavior, 1) \\");
+		cw.WriteLine(2, "SPH_PRESENT(PythonRunnerBehavior, 1) \\");
+		cw.WriteLine(2, "SPH_PRESENT(PythonBehavior, 2) \\");
 		for (auto it = oldClasses.begin(); it != oldClasses.end(); ++it) {
 			cw.WriteLine(2, "SPH_PRESENT(" + (*it).second + ", " + wxString::Format("%d", (*it).first) + ") \\");
 		}
@@ -220,7 +221,8 @@ namespace Sharpheus {
 		cw.StartFunctionDef("Sharpheus::Behavior*", "Create", "uint32 subType, Sharpheus::GameObject* parent, const std::string& name");
 		cw.WriteLine(1, "SPH_START_BEHAVIORS(subType)");
 		cw.WriteLine(2, "SPH_CREATE_BEHAVIOR_2(Sharpheus::PlaceholderBehavior, 0, parent, name)");
-		cw.WriteLine(2, "SPH_CREATE_BEHAVIOR_2(Sharpheus::PythonBehavior, 1, parent, name)");
+		cw.WriteLine(2, "SPH_CREATE_BEHAVIOR_2(Sharpheus::PythonRunnerBehavior, 1, parent, name)");
+		cw.WriteLine(2, "SPH_CREATE_BEHAVIOR_2(Sharpheus::PythonBehavior, 2, parent, name)");
 		for (auto it = oldClasses.begin(); it != oldClasses.end(); ++it) {
 			cw.WriteLine(2, "SPH_CREATE_BEHAVIOR_2(" + (*it).second + ", " + wxString::Format("%d", (*it).first) + ", parent, name)");
 		}
@@ -232,7 +234,8 @@ namespace Sharpheus {
 		cw.StartFunctionDef("bool", "IsCompatibleWithParent", "uint32 subType, Sharpheus::GameObject* parent");
 		cw.WriteLine(1, "SPH_START_BEHAVIORS(subType)");
 		cw.WriteLine(2, "SPH_IS_BEHAVIOR_COMP(Sharpheus::PlaceholderBehavior, 0, parent)");
-		cw.WriteLine(2, "SPH_IS_BEHAVIOR_COMP(Sharpheus::PythonBehavior, 1, parent)");
+		cw.WriteLine(2, "SPH_IS_BEHAVIOR_COMP(Sharpheus::PythonRunnerBehavior, 1, parent)");
+		cw.WriteLine(2, "SPH_IS_BEHAVIOR_COMP(Sharpheus::PythonBehavior, 2, parent)");
 		for (auto it = oldClasses.begin(); it != oldClasses.end(); ++it) {
 			cw.WriteLine(2, "SPH_IS_BEHAVIOR_COMP(" + (*it).second + ", " + wxString::Format("%d", (*it).first) + ", parent)");
 		}

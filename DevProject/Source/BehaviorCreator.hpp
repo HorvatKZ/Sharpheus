@@ -18,12 +18,13 @@
 #define SPH_PRESENT_BEHAVIOR(obj) \
 	SPH_START_PRESENTING(obj) \
 		SPH_PRESENT(PlaceholderBehavior, 0) \
-		SPH_PRESENT(PythonBehavior, 1) \
-		SPH_PRESENT(DebugBehavior, 2) \
-		SPH_PRESENT(PlayerController, 3) \
-		SPH_PRESENT(TriggerTester, 4) \
-		SPH_PRESENT(MoueTester, 5) \
-		SPH_PRESENT(Controller, 6) \
+		SPH_PRESENT(PythonRunnerBehavior, 1) \
+		SPH_PRESENT(PythonBehavior, 2) \
+		SPH_PRESENT(DebugBehavior, 3) \
+		SPH_PRESENT(PlayerController, 4) \
+		SPH_PRESENT(TriggerTester, 5) \
+		SPH_PRESENT(MoueTester, 6) \
+		SPH_PRESENT(Controller, 7) \
 	SPH_END_PRESENTING() \
 
 

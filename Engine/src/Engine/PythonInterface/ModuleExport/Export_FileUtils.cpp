@@ -24,11 +24,6 @@ namespace Sharpheus {
 			.def("read", py::overload_cast<Point&>(&FileLoader::Read), "data"_a)
 			.def("read", py::overload_cast<Color&>(&FileLoader::Read), "data"_a)
 			.def("read", py::overload_cast<Transform&>(&FileLoader::Read), "data"_a)
-			.def("read", py::overload_cast<const Image**>(&FileLoader::Read), "data"_a)
-			/*.def("read", py::overload_cast<const Font**>(&FileLoader::Read), "data"_a)
-			.def("read", py::overload_cast<const Animation**>(&FileLoader::Read), "data"_a)
-			.def("read", py::overload_cast<const TileSet**>(&FileLoader::Read), "data"_a)
-			.def("read", py::overload_cast<const Audio**>(&FileLoader::Read), "data"_a)*/
 
 			.def("read_line", &FileLoader::ReadLine)
 			.def("try_reading_end", &FileLoader::TryReadingEnd);
@@ -51,11 +46,6 @@ namespace Sharpheus {
 			.def("read", py::overload_cast<const Point&>(&FileSaver::Write), "data"_a)
 			.def("read", py::overload_cast<const Color&>(&FileSaver::Write), "data"_a)
 			.def("read", py::overload_cast<const Transform&>(&FileSaver::Write), "data"_a)
-			.def("read", py::overload_cast<const Image*>(&FileSaver::Write), "data"_a)
-			.def("read", py::overload_cast<const Font*>(&FileSaver::Write), "data"_a)
-			.def("read", py::overload_cast<const Animation*>(&FileSaver::Write), "data"_a)
-			.def("read", py::overload_cast<const TileSet*>(&FileSaver::Write), "data"_a)
-			.def("read", py::overload_cast<const Audio*>(&FileSaver::Write), "data"_a)
 
 			.def("write_end", &FileSaver::WriteEnd);
 	}

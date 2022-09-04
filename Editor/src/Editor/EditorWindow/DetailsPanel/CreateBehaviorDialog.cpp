@@ -29,7 +29,7 @@ namespace Sharpheus {
 		parentClassLabel = new wxStaticText(this, wxID_ANY, "Parent class:", wxPoint(UI::border, y + UI::shift), wxSize(2 * labelWidth, UI::unitHeight));
 		parentClassLabel->SetFont(UI::titleFont);
 
-		uint32 maxId = 0;
+		uint32 maxId = 2; // PlaceholderBehavior, PythonRunnerBehavior, PythonBehavior
 		wxArrayString parentClasses;
 		parentClasses.Add("Sharpheus::Behavior");
 		for (auto it = ::BehaviorCreator::behaviorNames.begin(); it != ::BehaviorCreator::behaviorNames.end(); ++it) {

@@ -100,7 +100,6 @@ namespace Sharpheus {
 			.value("NP_7", KeyCode::NP_7)
 			.value("NP_8", KeyCode::NP_8)
 			.value("NP_9", KeyCode::NP_9)
-			.value("NP_9", KeyCode::NP_9)
 			.value("NP_DECIMAL", KeyCode::NP_DECIMAL)
 			.value("NP_DIVIDE", KeyCode::NP_DIVIDE)
 			.value("NP_MULTIPLY", KeyCode::NP_MULTIPLY)

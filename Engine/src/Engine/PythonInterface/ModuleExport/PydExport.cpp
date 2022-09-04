@@ -15,6 +15,7 @@ namespace Sharpheus {
 		Export_FileUtils(handle);
 		Export_Events(handle);
 		Export_GameObjects(handle);
+		Export_EngineCore(handle);
 	}
 
 }

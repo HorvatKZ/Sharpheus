@@ -154,8 +154,8 @@ namespace Sharpheus {
 				case GameObject::Type::RadioButton:
 					CreatePresenterFrom<RadioButton>(provider, y);
 					break;
-				case GameObject::Type::PythonBehavior:
-					CreatePresenterFrom<PythonBehavior>(provider, y);
+				case GameObject::Type::PythonRunnerBehavior:
+					CreatePresenterFrom<PythonRunnerBehavior>(provider, y);
 					break;
 				case GameObject::Type::CppBehavior:
 					SPH_PRESENT_BEHAVIOR(obj);
@@ -279,6 +279,9 @@ namespace Sharpheus {
 				break;
 			case CommonProvider::Type::LAYER:
 				presenters.push_back(new LayerPresenter<Class>(this, (LayerProvider<Class>*)provider, currDataChangedCallback, y));
+				break;
+			case CommonProvider::Type::SCRIPT:
+				presenters.push_back(new ScriptPresenter(this, (ScriptProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::BEHAVIOR:
 				presenters.push_back(new BehaviorPicker(this, provider->GetName(), behaviorChangedCallback, currDataChangedCallback, y));

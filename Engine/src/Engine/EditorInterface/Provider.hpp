@@ -14,7 +14,9 @@ namespace Sharpheus {
 	{
 	public:
 		enum class Type {
-			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR, IMAGE, FONT, FONTSTYLE, ANIM, TILESET, AUDIO, STRING, STRINGLIST, BEHAVIOR, TILEMAP, LAYER
+			BOOL, ONEWAYBOOL, INT, UINT, FLOAT, UFLOAT, POINT, TRAFO, COLOR,
+			IMAGE, FONT, FONTSTYLE, ANIM, TILESET, AUDIO, STRING, STRINGLIST,
+			BEHAVIOR, TILEMAP, LAYER, SCRIPT
 		};
 
 		CommonProvider(const std::string& name) : name(name) {}
@@ -147,6 +149,7 @@ namespace Sharpheus {
 	template <class Class> using AnimationProvider	= ResourceProvider<Class, const class Animation*, CommonProvider::Type::ANIM>;
 	template <class Class> using TileSetProvider	= ResourceProvider<Class, const class TileSet*, CommonProvider::Type::TILESET>;
 	template <class Class> using AudioProvider		= ResourceProvider<Class, const class Audio*, CommonProvider::Type::AUDIO>;
+	template <class Class> using ScriptProvider		= ResourceProvider<Class, const std::string&, CommonProvider::Type::SCRIPT>;
 
 
 	template <class Class>
@@ -291,6 +294,7 @@ namespace Sharpheus {
 #define SPH_PROVIDE_ANIM(Class, Title, Getter, Setter, PathSetter)		SPH_PROVIDE_RESOURCE(Animation, 2, Class, Title, Getter, Setter, PathSetter)
 #define SPH_PROVIDE_TILESET(Class, Title, Getter, Setter, PathSetter)	SPH_PROVIDE_RESOURCE(TileSet, 2, Class, Title, Getter, Setter, PathSetter)
 #define SPH_PROVIDE_AUDIO(Class, Title, Getter, Setter, PathSetter)		SPH_PROVIDE_RESOURCE(Audio, 2, Class, Title, Getter, Setter, PathSetter)
+#define SPH_PROVIDE_SCRIPT(Class, Title, Getter, Setter, PathSetter)	SPH_PROVIDE_RESOURCE(Script, 2, Class, Title, Getter, Setter, PathSetter)
 
 #define SPH_PROVIDE_BEHAVIOR(Title) SPH_PROVIDE_SIGNAL(Behavior, Title)
 #define SPH_PROVIDE_TILEMAP(Title)	SPH_PROVIDE_SIGNAL(TileMap, Title)

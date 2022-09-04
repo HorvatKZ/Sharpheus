@@ -27,6 +27,7 @@ namespace Sharpheus {
 		}
 		ResourceManager::Init(this->basePath);
 		SetWinProps(data.winProps);
+		EngineVersion::SetCurrent(data.version);
 
 		LoadLevel(data.defaultLevelPath);
 	}
@@ -224,6 +225,7 @@ namespace Sharpheus {
 		success &= fl.Read(vname);
 		success &= fl.TryReadingEnd();
 		data.version = EngineVersion(vname);
+		EngineVersion::SetCurrent(data.version);
 
 		if (Renderer::IsInited()) {
 			size_t pos = path.find_last_of('\\');

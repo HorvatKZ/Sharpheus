@@ -115,10 +115,11 @@ namespace Sharpheus {
 				return Create<RadioButton>(parent, newName);
 			case GameObject::Type::CppBehavior:
 				return Create<PlaceholderBehavior>(parent, newName);
-			case GameObject::Type::PythonBehavior:
-				return Create<PythonBehavior>(parent, newName);
+			case GameObject::Type::PythonRunnerBehavior:
+				return Create<PythonRunnerBehavior>(parent, newName);
 		}
 
+		SPH_ERROR("Unhandled type {0}", type);
 		return nullptr;
 	}
 
@@ -504,13 +505,13 @@ namespace Sharpheus {
 	}
 
 
-	void Level::SetLayerVisible(uint32 ind, bool visiblity)
+	void Level::SetLayerVisible(uint32 ind, bool visibility)
 	{
 		if (ind >= layers.size()) {
 			SPH_ERROR("SetLayerVisible: No layer with index \"{0}\" exists", ind);
 			return;
 		}
-		layers[ind].visible = visiblity;
+		layers[ind].visible = visibility;
 	}
 
 
@@ -624,7 +625,7 @@ namespace Sharpheus {
 
 		success &= fl.Read(objName);
 		GameObject* obj;
-		if (realType != GameObject::Type::CppBehavior) {
+		if (!GameObject::IsOfMask(realType, GameObject::TypeMasks::Behavior)) {
 			obj = Create(realType, parent, objName);
 		} else {
 			uint32 subType;

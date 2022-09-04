@@ -36,7 +36,7 @@ namespace Sharpheus {
 			return "OnEnterEvent from " + source->GetName() + ", obj: " + obj->GetName();
 		}
 
-		const GameObject* obj;
+		GameObject* const obj;
 	};
 
 

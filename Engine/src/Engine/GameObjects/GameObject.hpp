@@ -37,8 +37,6 @@ namespace Sharpheus {
 			// Basic types
 			None = 0x00,
 			Collection = 0x01,
-			CppBehavior = 0x02,
-			PythonBehavior = 0x03,
 
 			// Cameras
 			Camera = 0x10,
@@ -68,7 +66,11 @@ namespace Sharpheus {
 			Button = 0x60,
 			ImageButton = 0x61,
 			CheckBox = 0x62,
-			RadioButton = 0x63
+			RadioButton = 0x63,
+
+			CppBehavior = 0x70,
+			PythonRunnerBehavior = 0x71,
+			PythonBehavior = 0x72
 		};
 
 		enum class TypeMasks : byte {
@@ -79,6 +81,7 @@ namespace Sharpheus {
 			Collider = 0x40,
 			Sounds = 0x50,
 			Control = 0x60,
+			Behavior = 0x70,
 
 			MASK = 0xF0
 		};
@@ -95,14 +98,16 @@ namespace Sharpheus {
 		void					TickAll(float deltaTime);
 		virtual void			RenderAsSelected();
 
+		inline class Level*		GetLevel() { return level; }
 		virtual inline void		SetLevel(class Level* level) { this->level = level; }
 		inline GameObject*		GetParent() { return parent; }
 		GameObject*				GetRoot();
 		bool					IsDescendantOf(GameObject* other);
 		bool					Move(GameObject* newParent);
 
+		static inline bool		IsOfMask(Type type, TypeMasks mask) { return ((byte)type & (byte)TypeMasks::MASK) == (byte)mask; }
 		inline bool				Is(Type type)		{ return GetType() == type; }
-		inline bool				Is(TypeMasks mask)	{ return ((byte)GetType() & (byte)TypeMasks::MASK) == (byte)mask; }
+		inline bool				Is(TypeMasks mask) { return IsOfMask(GetType(), mask); }
 
 		inline const Transform& GetTrafo() { return trafo; }
 		inline const Transform&	GetWorldTrafo() { return worldTrafo; }

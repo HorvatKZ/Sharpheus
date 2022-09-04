@@ -19,7 +19,7 @@ namespace Sharpheus {
 
 	void Behavior::CopyFrom(GameObject* other)
 	{
-		SPH_CHECKTYPE(other, CppBehavior);
+		SPH_CHECKMASK(other, Behavior);
 		if (((Behavior*)other)->GetSubType() != GetSubType()) {
 			SPH_ERROR("\"{0}\" tries to copy from different type \"{1}\"", name, other->GetName());
 			return;

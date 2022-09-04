@@ -20,6 +20,7 @@ namespace Sharpheus {
 	void Export_FileUtils(py::module_& handle);
 	void Export_Events(py::module_& handle);
 	void Export_GameObjects(py::module_& handle);
+	void Export_EngineCore(py::module_& handle);
 
 	byte kwargs2FontStyle(const py::kwargs& kwargs);
 

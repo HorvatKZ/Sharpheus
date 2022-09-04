@@ -338,6 +338,24 @@ namespace Sharpheus {
 		virtual void HandleChange(wxCommandEvent& e);
 	};
 
+	template <class Class>
+	class ScriptPresenter : public Presenter
+	{
+	public:
+		ScriptPresenter(wxWindow* parent, ScriptProvider<Class>* provider, Signal signal, uint32& y);
+		virtual ~ScriptPresenter();
+
+		virtual void SetCurrent(GameObject* curr) override;
+		virtual inline void SetDefault() override;
+
+	protected:
+		ScriptProvider<Class>* provider;
+		wxStaticText* path;
+		wxButton* browse;
+
+		virtual void HandleChange(wxCommandEvent& e);
+	};
+
 
 	template <class Class>
 	class StringListPresenter : public Presenter

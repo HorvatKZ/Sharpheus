@@ -857,6 +857,60 @@ namespace Sharpheus {
 	}
 
 
+	// ScriptPresenter
+
+	template<class Class>
+	inline ScriptPresenter<Class>::ScriptPresenter(wxWindow* parent, ScriptProvider<Class>* provider, Signal signal, uint32& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	{
+		uint32 width = parent->GetSize().x - 3 * UI::border - UI::smallButtonSize.x;
+		y += UI::unitHeight;
+		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
+		path->SetMaxSize(wxSize(width, UI::unitHeight));
+		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(2 * UI::border + width, y - 3), UI::smallButtonSize);
+		browse->Bind(wxEVT_BUTTON, &ScriptPresenter<Class>::HandleChange, this);
+		y += UI::heightPadding;
+	}
+
+	template<class Class>
+	inline ScriptPresenter<Class>::~ScriptPresenter()
+	{
+		wxREMOVE(path);
+		wxREMOVE(browse);
+	}
+
+	template<class Class>
+	inline void ScriptPresenter<Class>::SetCurrent(GameObject* curr)
+	{
+		Presenter::SetCurrent(curr);
+
+		const std::string moduleName = provider->Get((Class*)curr);
+		path->SetLabel(moduleName);
+	}
+
+	template<class Class>
+	inline void ScriptPresenter<Class>::SetDefault()
+	{
+		Presenter::SetDefault();
+		this->path->SetLabel("");
+	}
+
+	template<class Class>
+	inline void ScriptPresenter<Class>::HandleChange(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			RelativeOpenDialog browseDialog(parent, "Browse for audio file", ProjectData::GetPath() + "Scripts\\",
+				"Python file(*.py) | *.py");
+
+			if (!browseDialog.Show())
+				return;
+
+			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+			signal();
+		}
+	}
+
+
 	// StringListPresenter
 
 	template<class Class>

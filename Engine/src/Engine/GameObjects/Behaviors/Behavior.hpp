@@ -23,7 +23,7 @@
 	}
 
 #define SPH_COPY_HEADER(subType, parent) \
-	SPH_CHECKTYPE(other, Behavior); \
+	SPH_CHECKMASK(other, Behavior); \
 	SPH_SUBCHECKTYPE(other, subType); \
 	parent::CopyContent(other);
 

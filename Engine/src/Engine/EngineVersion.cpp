@@ -10,6 +10,7 @@ namespace Sharpheus {
 	});
 
 	const EngineVersion EngineVersion::latest("alpha1");
+	EngineVersion EngineVersion::current = EngineVersion::latest;
 
 
 	EngineVersion::EngineVersion() : vnum(0), vname("unknown")

@@ -86,9 +86,9 @@ namespace Sharpheus {
 		bool RemoveFromLayers(RenderableGameObject* obj);
 		bool RemoveFromLayers(ID id);
 		bool IsLayerVisible(uint32 ind);
-		void SetLayerVisible(uint32 ind, bool visiblity);
+		void SetLayerVisible(uint32 ind, bool visibility);
 		inline bool IsLayerVisible(const std::string& name) { return IsLayerVisible(GetLayerInd(name)); }
-		inline void SetLayerVisible(const std::string& name, bool visiblity) { SetLayerVisible(GetLayerInd(name), visiblity); }
+		inline void SetLayerVisible(const std::string& name, bool visibility) { SetLayerVisible(GetLayerInd(name), visibility); }
 		inline const std::vector<std::string>* GetLayerNames() { return &layerNames; }
 		inline uint32 GetLayerNum() { return layers.size(); }
 		static inline bool IsDeletableLayer(const std::string& layer) { return layer != "Default" && layer != "HUD"; }
