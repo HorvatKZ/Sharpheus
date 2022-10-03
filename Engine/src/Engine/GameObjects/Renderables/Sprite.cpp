@@ -36,7 +36,7 @@ namespace Sharpheus {
 	void Sprite::Render()
 	{
 		if (image != nullptr) {
-			image->Render(shape->GetCorners(), tint);
+			image->Render(shape->GetCorners(), shape->NeedToMirrorX(), tint);
 		}
 	}
 

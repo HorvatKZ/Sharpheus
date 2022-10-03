@@ -39,13 +39,14 @@ namespace Sharpheus {
 		static bool IsValidTexture(uint32 texID);
 		static uint32 GetInvalidTexture();
 
-		static inline const Point* const GetFullTexCoords() { return fullTexCoords; }
+		static inline const Point* const GetFullTexCoords(bool mirrorX = false) { return mirrorX ? fullTexCoordsXMirrored : fullTexCoords; }
 
 		static const std::string& GetAPIVersion();
 
 	private:
 		static Renderer_API* renderer;
 		static const Point fullTexCoords[4];
+		static const Point fullTexCoordsXMirrored[4];
 	};
 
 }

@@ -74,7 +74,7 @@ namespace Sharpheus {
 	void AnimationPlayer::Render()
 	{
 		if (currAnimInd < anims.size()) {
-			GetAnimation(currAnimInd)->Render(shape->GetCorners(), currTime, tint);
+			GetAnimation(currAnimInd)->Render(shape->GetCorners(), currTime, shape->NeedToMirrorX(), tint);
 		}
 	}
 

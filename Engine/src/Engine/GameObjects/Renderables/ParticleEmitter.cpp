@@ -139,7 +139,7 @@ namespace Sharpheus {
 				if (fade) {
 					fadedTint.MakeOpaque(lifeTimePercent);
 				}
-				particle->Render(GetCorners(it->pos, shrink ? lifeTimePercent : 1.f), fadedTint);
+				particle->Render(GetCorners(it->pos, shrink ? lifeTimePercent : 1.f), scale.x * scale.y < 0, fadedTint);
 			}
 		}
 	}

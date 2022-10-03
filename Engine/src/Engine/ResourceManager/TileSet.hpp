@@ -24,7 +24,7 @@ namespace Sharpheus {
 
 		inline void SetName(const std::string& name) { this->name = name; }
 
-		void Render(const Point coords[4], byte ind, const Color& tint = Color::White) const;
+		void Render(const Point coords[4], byte ind, bool mirrorX = false, const Color& tint = Color::White) const;
 
 		bool Save();
 		bool Save(const std::string& path);

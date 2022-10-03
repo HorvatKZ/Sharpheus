@@ -73,7 +73,7 @@ namespace Sharpheus {
 	{
 		const Image* toDraw = isChecked ? checkedImg : uncheckedImg;
 		if (toDraw != nullptr) {
-			toDraw->Render(shape->GetCorners(), tint);
+			toDraw->Render(shape->GetCorners(), shape->NeedToMirrorX(), tint);
 
 			if (font != nullptr) {
 				Point extent = font->GetExtent(text, fontSize, fontStyle);

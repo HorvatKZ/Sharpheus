@@ -74,7 +74,7 @@ namespace Sharpheus {
 			start + xAxis * data.width * size + yAxis * data.height * size,
 			start + yAxis * data.height * size
 		};
-		img->RenderPart(coords, data.texCoords, color);
+		img->RenderPart(coords, data.texCoords, false, color);
 
 		if (style & SPH_FONT_BOLD) {
 			float boldShift = lineHeight * boldness * size / boldIterations;
@@ -82,7 +82,7 @@ namespace Sharpheus {
 				for (uint8 j = 0; j < 4; ++j) {
 					coords[j] += xAxis * boldShift;
 				}
-				img->RenderPart(coords, data.texCoords, color);
+				img->RenderPart(coords, data.texCoords, false, color);
 			}
 		}
 

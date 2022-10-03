@@ -14,7 +14,7 @@ namespace Sharpheus {
 
 		void BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback,
 			std::function<void()>&& currDataChangedCallback, std::function<void()>&& currTrafoChangedCallback,
-			std::function<void(uint32)>&& behaviorChangedCallback);
+			std::function<void(uint32)>&& behaviorChangedCallback, std::function<void()>&& moduleNameChangedCallback);
 
 		void CurrentChanged(GameObject* curr);
 		void CurrentNameChanged();
@@ -30,7 +30,7 @@ namespace Sharpheus {
 		std::vector<Presenter*> presenters;
 
 		std::function<void(const std::string&, const std::string&)> currNameChangedCallback = nullptr;
-		std::function<void()> currDataChangedCallback = nullptr, currTrafoChangedCallback = nullptr;
+		std::function<void()> currDataChangedCallback = nullptr, currTrafoChangedCallback = nullptr, moduleNameChangedCallback = nullptr;
 		std::function<void(uint32)> behaviorChangedCallback = nullptr;
 
 		uint32 freeY;

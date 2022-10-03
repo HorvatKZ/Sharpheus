@@ -860,8 +860,8 @@ namespace Sharpheus {
 	// ScriptPresenter
 
 	template<class Class>
-	inline ScriptPresenter<Class>::ScriptPresenter(wxWindow* parent, ScriptProvider<Class>* provider, Signal signal, uint32& y)
-		: Presenter(parent, provider->GetName(), signal, y), provider(provider)
+	inline ScriptPresenter<Class>::ScriptPresenter(wxWindow* parent, ScriptProvider<Class>* provider, Signal signal, Signal moduleChangedSignal, uint32& y)
+		: Presenter(parent, provider->GetName(), signal, y), provider(provider), moduleChangedSignal(moduleChangedSignal)
 	{
 		uint32 width = parent->GetSize().x - 3 * UI::border - UI::smallButtonSize.x;
 		y += UI::unitHeight;
@@ -907,6 +907,7 @@ namespace Sharpheus {
 
 			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
 			signal();
+			moduleChangedSignal();
 		}
 	}
 

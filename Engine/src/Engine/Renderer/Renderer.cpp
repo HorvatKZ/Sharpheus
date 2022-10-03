@@ -7,6 +7,7 @@ namespace Sharpheus {
 
 	Renderer_API* Renderer::renderer = nullptr;
 	const Point Renderer::fullTexCoords[] = { Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1) };
+	const Point Renderer::fullTexCoordsXMirrored[] = { Point(1, 0), Point(0, 0), Point(0, 1), Point(1, 1) };
 
 
 	void Renderer::Init()

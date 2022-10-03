@@ -51,7 +51,7 @@ namespace Sharpheus {
 	void AnimatedSprite::Render()
 	{
 		if (anim != nullptr) {
-			anim->Render(shape->GetCorners(), currTime, tint);
+			anim->Render(shape->GetCorners(), currTime, shape->NeedToMirrorX(), tint);
 		}
 	}
 

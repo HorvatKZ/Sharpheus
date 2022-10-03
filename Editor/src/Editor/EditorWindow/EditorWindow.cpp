@@ -22,7 +22,8 @@ namespace Sharpheus {
 		toolBar = new ToolBar(this, wxPoint(0, 0), wxSize(144, 30), viewPort);
 
 		levelHierarchy->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::CurrentChanged));
-		details->BindCallbacks(SPH_BIND_THIS_2(EditorWindow::CurrentNameChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged), SPH_BIND_THIS_0(EditorWindow::CurrentTrafoChanged), SPH_BIND_THIS_1(EditorWindow::BehaviorChanged));
+		details->BindCallbacks(SPH_BIND_THIS_2(EditorWindow::CurrentNameChanged), SPH_BIND_THIS_0(EditorWindow::CurrentDataChanged), SPH_BIND_THIS_0(EditorWindow::CurrentTrafoChanged),
+			SPH_BIND_THIS_1(EditorWindow::BehaviorChanged), SPH_BIND_THIS_0(EditorWindow::ModuleNameChanged));
 		viewPort->BindCallbacks(SPH_BIND_THIS_0(EditorWindow::CurrentChanged), SPH_BIND_THIS_0(EditorWindow::CurrentTrafoChanged));
 		toolBar->BindCallbacks(SPH_BIND_THIS_1(EditorWindow::StartGame), SPH_BIND_THIS_0(EditorWindow::StopGame));
 
@@ -96,7 +97,6 @@ namespace Sharpheus {
 
 	void EditorWindow::CurrentTrafoChanged()
 	{
-		GameObject* curr = EditorData::GetCurrent();
 		details->CurrentTrafoChanged();
 		viewPort->Refresh();
 	}
@@ -104,7 +104,6 @@ namespace Sharpheus {
 
 	void EditorWindow::CurrentDataChanged()
 	{
-		GameObject* curr = EditorData::GetCurrent();
 		details->CurrentDataChanged();
 		viewPort->Refresh();
 	}
@@ -113,6 +112,11 @@ namespace Sharpheus {
 	void EditorWindow::BehaviorChanged(uint32 subType)
 	{
 		behviorChangeRequests.push(subType);
+	}
+
+	void EditorWindow::ModuleNameChanged()
+	{
+		needCurrChangeOnIdle = true;
 	}
 
 
@@ -175,6 +179,10 @@ namespace Sharpheus {
 		if (!behviorChangeRequests.empty()) {
 			ChangeBehavior(behviorChangeRequests.front());
 			behviorChangeRequests.pop();
+		}
+		if (needCurrChangeOnIdle) {
+			needCurrChangeOnIdle = false;
+			CurrentChanged();
 		}
 		e.Skip();
 	}

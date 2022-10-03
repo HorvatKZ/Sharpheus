@@ -27,7 +27,7 @@ namespace Sharpheus {
 		inline void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
 		inline void SetName(const std::string& name) { this->name = name; }
 
-		void Render(const Point coords[4], float time, const Color& tint = Color::White) const;
+		void Render(const Point coords[4], float time, bool mirrorX = false, const Color& tint = Color::White) const;
 
 		bool Save();
 		bool Save(const std::string& path);

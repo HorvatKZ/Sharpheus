@@ -342,7 +342,7 @@ namespace Sharpheus {
 	class ScriptPresenter : public Presenter
 	{
 	public:
-		ScriptPresenter(wxWindow* parent, ScriptProvider<Class>* provider, Signal signal, uint32& y);
+		ScriptPresenter(wxWindow* parent, ScriptProvider<Class>* provider, Signal signal, Signal moduleChangedSignal, uint32& y);
 		virtual ~ScriptPresenter();
 
 		virtual void SetCurrent(GameObject* curr) override;
@@ -352,6 +352,7 @@ namespace Sharpheus {
 		ScriptProvider<Class>* provider;
 		wxStaticText* path;
 		wxButton* browse;
+		Signal moduleChangedSignal;
 
 		virtual void HandleChange(wxCommandEvent& e);
 	};

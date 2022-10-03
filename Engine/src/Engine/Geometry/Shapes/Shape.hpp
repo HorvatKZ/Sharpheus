@@ -28,6 +28,7 @@ namespace Sharpheus {
 
 		virtual inline uint8 GetPriority() { return 0; }
 
+		inline bool NeedToMirrorX() { CheckCorners(); return needToMirrorX; }
 		inline Point* GetCorners() { CheckCorners(); return corners; }
 		virtual inline Point* GetSATCorners() { return GetCorners(); }
 		virtual inline uint8 GetSATCornerNum() { return 4; }
@@ -87,6 +88,7 @@ namespace Sharpheus {
 		Point corners[4];
 		float rot, furthest;
 		bool needsToRecalc = true;
+		bool needToMirrorX = false;
 
 		void RecalcAxes();
 		virtual void CheckCorners();

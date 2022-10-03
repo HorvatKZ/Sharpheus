@@ -68,14 +68,14 @@ namespace Sharpheus {
 
 		m.def("is_valid_texture", &Renderer::IsValidTexture, "tex_id"_a);
 		m.def("get_invalid_texture", &Renderer::GetInvalidTexture);
-		m.def("get_full_tex_coords", [] {
+		m.def("get_full_tex_coords", [] (bool mirrorX) {
 			std::vector<Point> result;
-			const Point* coords = Renderer::GetFullTexCoords();
+			const Point* coords = Renderer::GetFullTexCoords(mirrorX);
 			for (uint8 i = 0; i < 4; ++i) {
 				result.push_back(coords[i]);
 			}
 			return result;
-		});
+		}, "mirror_x"_a = false);
 
 		m.def("get_API_version", &Renderer::GetAPIVersion);
 	}

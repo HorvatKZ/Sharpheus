@@ -19,15 +19,23 @@ namespace Sharpheus {
 	}
 
 
-	void Image::Render(const Point coords[4], const Color& tint) const
+	void Image::Render(const Point coords[4], bool mirrorX, const Color& tint) const
 	{
-		Renderer::DrawQuad(coords, Renderer::GetFullTexCoords(), tint, ID);
+		Renderer::DrawQuad(coords, Renderer::GetFullTexCoords(mirrorX), tint, ID);
 	}
 
 
-	void Image::RenderPart(const Point coords[4], const Point texCoords[4], const Color& tint) const
+	void Image::RenderPart(const Point coords[4], const Point texCoords[4], bool mirrorX, const Color& tint) const
 	{
-		Renderer::DrawQuad(coords, texCoords, tint, ID);
+		if (mirrorX) {
+			temp[0] = texCoords[1];
+			temp[1] = texCoords[0];
+			temp[2] = texCoords[3];
+			temp[3] = texCoords[2];
+			Renderer::DrawQuad(coords, temp, tint, ID);
+		} else {
+			Renderer::DrawQuad(coords, texCoords, tint, ID);
+		}
 	}
 
 

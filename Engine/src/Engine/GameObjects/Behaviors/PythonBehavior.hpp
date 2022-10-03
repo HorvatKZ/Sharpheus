@@ -5,6 +5,7 @@
 #include "LocalListeners/ControlListener.hpp"
 #include "LocalListeners/RenderableListener.hpp"
 #include "Engine/PythonInterface/PythonInterface.hpp"
+#include "Engine/PythonInterface/PythonObjectState.hpp"
 
 
 namespace Sharpheus {
@@ -24,7 +25,7 @@ namespace Sharpheus {
 	class SPH_EXPORT PythonRunnerBehavior : public Behavior
 	{
 	public:
-		PythonRunnerBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name) {}
+		PythonRunnerBehavior(GameObject* parent, const std::string& name);
 		virtual ~PythonRunnerBehavior();
 
 		inline const std::string& GetModuleName() { return moduleName; }
@@ -34,16 +35,31 @@ namespace Sharpheus {
 		virtual bool Load(FileLoader& fl) override;
 
 		SPH_DECL_GAMEOBJECT(PythonRunnerBehavior);
-		SPH_DECL_BEHAVIOR(PythonRunnerBehavior, 1);
+
+		// Simplified SPH_DECL_BEHAVIOR
+		virtual inline uint32 GetSubType() override { return 1; }
+		virtual inline ClassInfoPtr GetBehaviorClassInfo() override;
+		virtual void Init() override;
+		static bool IsCompatibleWithParent(GameObject* parent);
 
 	protected:
 		std::string moduleName;
+
 		py::object* pyBehavior = nullptr;
 		PythonBehavior* cppBehavior = nullptr;
+
+		PythonObjectState state;
+		bool objectStateInited = false;
+
+		ClassInfoPtr objInfo = nullptr;
+		std::string objInfosModuleName;
+
 
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void CopyContent(GameObject* other) override;
+
+		void InitObjectStateIfNeeded();
 	};
 
 

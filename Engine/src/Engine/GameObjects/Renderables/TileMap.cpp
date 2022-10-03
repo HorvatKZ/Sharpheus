@@ -115,7 +115,7 @@ namespace Sharpheus {
 				byte* arr = it->second.arr;
 				for (uint32 i = 0; i < chunkSize * chunkSize; ++i) {
 					if (arr[i] != 0) {
-						tiles->Render(GetCornersOf(it->first, i), arr[i] - 1, tint);
+						tiles->Render(GetCornersOf(it->first, i), arr[i] - 1, shape->NeedToMirrorX(), tint);
 					}
 				}
 			}

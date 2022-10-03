@@ -134,7 +134,7 @@ namespace Sharpheus {
 			bool success = true;
 			level = new Level();
 			success &= level->LoadLevelData(path);
-			std::string projPath = path.substr(0, path.find_last_of("Level\\"));
+			std::string projPath = path.substr(0, path.rfind("Levels\\"));
 			success &= LoadProjectData(projPath + level->GetProjectFileName());
 			std::string base = basePath + "Levels\\";
 			std::string relativePath = path.substr(base.length());

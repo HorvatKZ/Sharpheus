@@ -28,6 +28,7 @@ namespace Sharpheus {
 		void CurrentTrafoChanged();
 		void CurrentDataChanged();
 		void BehaviorChanged(uint32 subType);
+		void ModuleNameChanged();
 		void StartGame(bool withCurrent);
 		void StopGame();
 
@@ -44,6 +45,7 @@ namespace Sharpheus {
 		GamePreview* game = nullptr;
 		Camera* originalCamera = nullptr;
 		std::queue<uint32> behviorChangeRequests;
+		bool needCurrChangeOnIdle = false;
 
 		void OnGamePreviewExit(wxCloseEvent& e);
 		void OnClose(wxCloseEvent& e);

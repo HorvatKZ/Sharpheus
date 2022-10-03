@@ -12,8 +12,8 @@ namespace py = pybind11;
 namespace Sharpheus {
 
 	SPH_START_CLASSINFO(PythonRunnerBehavior, "behaviorpy.png")
-		SPH_PROVIDE_SCRIPT(PythonRunnerBehavior, "Script", GetModuleName, SetModuleName, SetModuleNameFromScriptPath)
 	SPH_END_CLASSINFO
+
 
 	SPH_START_CLASSINFO(PythonBehavior, "behaviorpy.png")
 	SPH_END_CLASSINFO
@@ -29,9 +29,22 @@ namespace Sharpheus {
 	}
 
 
+	PythonRunnerBehavior::PythonRunnerBehavior(GameObject* parent, const std::string& name)
+		: Behavior(parent, name)
+	{
+		objInfo = new ClassInfo("PythonRunnerBehavior", "behaviorpy.png", {
+			new ScriptProvider<PythonRunnerBehavior>("Script",
+				SPH_BIND_GETTER(PythonRunnerBehavior::GetModuleName),
+				SPH_BIND_SETTER(PythonRunnerBehavior::SetModuleName),
+				SPH_BIND_2(PythonRunnerBehavior::SetModuleNameFromScriptPath)
+			)
+		});
+	}
+
+
 	PythonRunnerBehavior::~PythonRunnerBehavior()
 	{
-		SPH_PYEXEC("Deleting pyObject from " + moduleName, [&] {
+		PythonInterface::Exec("Deleting pyObject from " + moduleName, [&] {
 			if (pyBehavior != nullptr) {
 				while (pyBehavior->ref_count() != 1) {
 					pyBehavior->dec_ref();
@@ -39,6 +52,7 @@ namespace Sharpheus {
 				delete pyBehavior;
 			}
 		});
+		delete objInfo;
 	}
 
 
@@ -50,6 +64,7 @@ namespace Sharpheus {
 		}
 
 		this->moduleName = moduleName;
+		objectStateInited = false;
 	}
 
 
@@ -73,6 +88,7 @@ namespace Sharpheus {
 	{
 		Behavior::Load(fl);
 		fl.Read(moduleName);
+		state.Load(fl);
 		return fl.GetStatus();
 	}
 
@@ -81,6 +97,8 @@ namespace Sharpheus {
 	{
 		Behavior::Save(fs);
 		fs.Write(moduleName);
+		InitObjectStateIfNeeded();
+		state.Save(fs);
 		return fs.GetStatus();
 	}
 
@@ -90,6 +108,29 @@ namespace Sharpheus {
 		SPH_COPY_HEADER(1, Behavior);
 		PythonRunnerBehavior* trueOther = (PythonRunnerBehavior*)other;
 		moduleName = trueOther->moduleName;
+		state = trueOther->state;
+	}
+
+
+	void PythonRunnerBehavior::InitObjectStateIfNeeded()
+	{
+		if (!objectStateInited) {
+			if (!moduleName.empty()) {
+				PythonInterface::Exec("Save PythonBehavior from " + moduleName, [&] {
+					py::object* moduleObj = PythonInterface::Import(moduleName);
+					if (py::hasattr(*moduleObj, "provide_list")) {
+						py::list provide_list = moduleObj->attr("provide_list")();
+						py::object* tempBehavior = new py::object(moduleObj->attr("create")(nullptr, "temp"));
+						state.FillFrom(*tempBehavior, provide_list);
+						SPH_ASSERT_0(tempBehavior->ref_count() == 1);
+						delete tempBehavior;
+					} else {
+						state.Clear();
+					}
+				});
+			}
+			objectStateInited = true;
+		}
 	}
 
 
@@ -99,9 +140,31 @@ namespace Sharpheus {
 	}
 
 
+	inline ClassInfoPtr PythonRunnerBehavior::GetBehaviorClassInfo()
+	{
+		InitObjectStateIfNeeded();
+		if (moduleName == objInfosModuleName) {
+			return objInfo;
+		}
+
+		std::vector<CommonProvider*> providers = state.ToProviders();
+		providers.insert(providers.begin(),
+			new ScriptProvider<PythonRunnerBehavior>("Script",
+				SPH_BIND_GETTER(PythonRunnerBehavior::GetModuleName),
+				SPH_BIND_SETTER(PythonRunnerBehavior::SetModuleName),
+				SPH_BIND_2(PythonRunnerBehavior::SetModuleNameFromScriptPath)
+			)
+		);
+		delete objInfo;
+		objInfo = new ClassInfo("PythonRunnerBehavior", "behaviorpy.png", providers);
+		objInfosModuleName = moduleName;
+		return objInfo;
+	}
+
+
 	void PythonRunnerBehavior::Init()
 	{
-		SPH_PYEXEC("Creating PythonBehavior from " + moduleName, [&] {
+		PythonInterface::Exec("Creating PythonBehavior from " + moduleName, [&] {
 			if (moduleName.empty()) {
 				SPH_WARN("PythonRunnerBehavior::modulaName is empty");
 				return;
@@ -109,6 +172,7 @@ namespace Sharpheus {
 			std::string pureName = name;
 			SetName(pureName + ".__runner__");
 			pyBehavior = new py::object(PythonInterface::Import(moduleName)->attr("create")(this, pureName));
+			state.FillTo(*pyBehavior);
 			cppBehavior = dynamic_cast<PythonBehavior*>(GetLastChild());
 			SPH_ASSERT_0(cppBehavior != nullptr);
 			level->Attach(cppBehavior);

@@ -35,9 +35,9 @@ namespace Sharpheus {
 	}
 
 
-	void TileSet::Render(const Point coords[4], byte ind, const Color& tint) const
+	void TileSet::Render(const Point coords[4], byte ind, bool mirrorX, const Color& tint) const
 	{
-		atlas->RenderPart(coords, texCoords + 4 * ind, tint);
+		atlas->RenderPart(coords, texCoords + 4 * ind, mirrorX, tint);
 	}
 
 

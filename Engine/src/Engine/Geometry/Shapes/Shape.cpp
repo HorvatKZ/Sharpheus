@@ -68,10 +68,11 @@ namespace Sharpheus {
 		if (needsToRecalc) {
 			Point height = yAxis * realDim.y;
 			Point width = xAxis * realDim.x;
-			corners[0] = pos - height - width;
-			corners[1] = pos - height + width;
-			corners[2] = pos + height + width;
-			corners[3] = pos + height - width;
+			needToMirrorX = (realDim.x * realDim.y) < 0;
+			corners[needToMirrorX ? 1 : 0] = pos - height - width;
+			corners[needToMirrorX ? 0 : 1] = pos - height + width;
+			corners[needToMirrorX ? 3 : 2] = pos + height + width;
+			corners[needToMirrorX ? 2 : 3] = pos + height - width;
 			needsToRecalc = false;
 		}
 	}

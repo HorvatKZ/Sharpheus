@@ -15,13 +15,14 @@ namespace Sharpheus {
 		inline uint32 GetHeight() const { return height; }
 		inline bool IsFiltered() const { return filtered; }
 
-		void Render(const Point coords[4], const Color& tint = Color::White) const;
-		void RenderPart(const Point coords[4], const Point texCoords[4], const Color& tint = Color::White) const;
+		void Render(const Point coords[4], bool mirrorX = false, const Color& tint = Color::White) const;
+		void RenderPart(const Point coords[4], const Point texCoords[4], bool mirrorX = false, const Color& tint = Color::White) const;
 
 	private:
 		uint32 ID;
 		uint32 width, height;
 		bool filtered;
+		mutable Point temp[4]; // for mirroring X
 
 		void LoadImg();
 	};

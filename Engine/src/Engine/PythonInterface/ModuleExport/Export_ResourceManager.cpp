@@ -23,12 +23,12 @@ namespace Sharpheus {
 			.def("get_height", &Image::GetHeight)
 			.def("is_filtered", &Image::IsFiltered)
 
-			.def("render", [](const Image& img, const std::vector<Point>& coords, const Color& tint) {
-				img.Render(coords.data(), tint);
-			}, "coords"_a, "tint"_a = Color::White)
-			.def("render_part", [](const Image& img, const std::vector<Point>& coords, const std::vector<Point>& texCoords, const Color& tint) {
-				img.RenderPart(coords.data(), texCoords.data(), tint);
-			}, "coords"_a, "tex_coords"_a, "tint"_a = Color::White)
+			.def("render", [](const Image& img, const std::vector<Point>& coords, bool mirrorX, const Color& tint) {
+				img.Render(coords.data(), mirrorX, tint);
+			}, "coords"_a, "mirror_x"_a = false, "tint"_a = Color::White)
+			.def("render_part", [](const Image& img, const std::vector<Point>& coords, const std::vector<Point>& texCoords, bool mirrorX, const Color& tint) {
+				img.RenderPart(coords.data(), texCoords.data(), mirrorX, tint);
+			}, "coords"_a, "tex_coords"_a, "mirror_x"_a = false, "tint"_a = Color::White)
 
 			.def("__repr__", [](const Image& img) { return "<Sharpheus.Image \"" + img.GetPath() + "\" [" + std::to_string(img.GetWidth()) + "x"
 				+ std::to_string(img.GetWidth()) + (img.IsFiltered() ? "] filtered>" : "]>"); });
@@ -82,9 +82,9 @@ namespace Sharpheus {
 			.def("get_num_of_all_frames", &Animation::GetNumOfAllFrames)
 			.def("get_full_time", &Animation::GetFullTime)
 
-			.def("render", [](const Animation& anim, const std::vector<Point>& coords, float time, const Color& tint) {
-				anim.Render(coords.data(), time, tint);
-			}, "coords"_a, "time"_a, "tint"_a = Color::White)
+			.def("render", [](const Animation& anim, const std::vector<Point>& coords, float time, bool mirrorX, const Color& tint) {
+				anim.Render(coords.data(), time, mirrorX, tint);
+			}, "coords"_a, "time"_a, "mirror_x"_a = false, "tint"_a = Color::White)
 
 			.def("__repr__", [](const Animation& anim) { return "<Sharpheus.Animation \"" + anim.GetPath() + "\">"; });
 	}
@@ -101,9 +101,9 @@ namespace Sharpheus {
 			.def("get_frame_cols", &TileSet::GetFrameCols)
 			.def("get_num_of_tiles", &TileSet::GetNumOfTiles)
 
-			.def("render", [](const TileSet& ts, const std::vector<Point>& coords, byte ind, const Color& tint) {
-				ts.Render(coords.data(), ind, tint);
-			}, "coords"_a, "ind"_a, "tint"_a = Color::White)
+			.def("render", [](const TileSet& ts, const std::vector<Point>& coords, byte ind, bool mirrorX, const Color& tint) {
+				ts.Render(coords.data(), ind, mirrorX, tint);
+			}, "coords"_a, "ind"_a, "mirror_x"_a = false, "tint"_a = Color::White)
 
 			.def("__repr__", [](const TileSet& ts) { return "<Sharpheus.TileSet \"" + ts.GetPath() + "\">"; });
 	}

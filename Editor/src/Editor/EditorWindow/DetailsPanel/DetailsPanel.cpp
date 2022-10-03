@@ -32,30 +32,30 @@ namespace Sharpheus {
 	}
 
 
-	void DetailsPanel::BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback,
-		std::function<void()>&& currDataChangedCallback, std::function<void()>&& currTrafoChangedCallback, std::function<void(uint32)>&& behaviorChangedCallback)
+	void DetailsPanel::BindCallbacks(std::function<void(const std::string&, const std::string&)>&& currNameChangedCallback, std::function<void()>&& currDataChangedCallback,
+		std::function<void()>&& currTrafoChangedCallback, std::function<void(uint32)>&& behaviorChangedCallback, std::function<void()>&& moduleNameChangedCallback)
 	{
 		this->currNameChangedCallback = std::move(currNameChangedCallback);
 		this->currDataChangedCallback = std::move(currDataChangedCallback);
 		this->currTrafoChangedCallback = std::move(currTrafoChangedCallback);
 		this->behaviorChangedCallback = std::move(behaviorChangedCallback);
+		this->moduleNameChangedCallback = std::move(moduleNameChangedCallback);
 	}
 
 
 	void DetailsPanel::CurrentChanged(GameObject* curr)
 	{
 		if (curr != nullptr) {
-			if (curr->GetType() == GameObject::Type::CppBehavior) {
+			GameObject::Type currType = curr->GetType();
+			if (currType == GameObject::Type::CppBehavior) {
 				if (lastType != GameObject::Type::CppBehavior || lastSubType != ((Behavior*)curr)->GetSubType()) {
 					lastType = GameObject::Type::CppBehavior;
 					lastSubType = ((Behavior*)curr)->GetSubType();
 					CreatePresenters(curr);
 				}
-			} else {
-				if (curr->GetType() != lastType) {
-					lastType = curr->GetType();
-					CreatePresenters(curr);
-				}
+			} else if (currType != lastType || currType == GameObject::Type::PythonRunnerBehavior) {
+				lastType = currType;
+				CreatePresenters(curr);
 			}
 			FillPresenters(curr);
 		} else {
@@ -281,7 +281,7 @@ namespace Sharpheus {
 				presenters.push_back(new LayerPresenter<Class>(this, (LayerProvider<Class>*)provider, currDataChangedCallback, y));
 				break;
 			case CommonProvider::Type::SCRIPT:
-				presenters.push_back(new ScriptPresenter(this, (ScriptProvider<Class>*)provider, currDataChangedCallback, y));
+				presenters.push_back(new ScriptPresenter(this, (ScriptProvider<Class>*)provider, currDataChangedCallback, moduleNameChangedCallback, y));
 				break;
 			case CommonProvider::Type::BEHAVIOR:
 				presenters.push_back(new BehaviorPicker(this, provider->GetName(), behaviorChangedCallback, currDataChangedCallback, y));

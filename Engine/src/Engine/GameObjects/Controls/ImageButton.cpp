@@ -82,9 +82,9 @@ namespace Sharpheus {
 	{
 		bool useClickedNow = isCurrentlyClicked && useClickedColors;
 		if (useClickedNow && clickedImg != nullptr) {
-			clickedImg->Render(shape->GetCorners(), useClickedNow ? clickedColor : color);
+			clickedImg->Render(shape->GetCorners(), shape->NeedToMirrorX(), useClickedNow ? clickedColor : color);
 		} else if (img != nullptr) {
-			img->Render(shape->GetCorners(), useClickedNow ? clickedColor : color);
+			img->Render(shape->GetCorners(), shape->NeedToMirrorX(), useClickedNow ? clickedColor : color);
 		}
 
 		if (font != nullptr && !text.empty()) {

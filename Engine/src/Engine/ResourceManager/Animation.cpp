@@ -34,13 +34,13 @@ namespace Sharpheus {
 	}
 
 
-	void Animation::Render(const Point coords[4], float time, const Color& tint) const
+	void Animation::Render(const Point coords[4], float time, bool mirrorX, const Color& tint) const
 	{
 		time = glm::clamp(time, 0.f, GetFullTime());
 
 		uint32 ind = time / frameTime;
 
-		atlas->RenderPart(coords, texCoords + 4 * ind, tint);
+		atlas->RenderPart(coords, texCoords + 4 * ind, mirrorX, tint);
 	}
 
 
