@@ -157,21 +157,13 @@ namespace Sharpheus {
 		std::string typeName;
 		fl.Read(typeName);
 		if (typeName == "int") {
-			int32 v;
-			fl.Read(v);
-			return new py::int_(v);
+			return LoadBuiltInType<int32, py::int_>(fl);
 		} else if (typeName == "float") {
-			float v;
-			fl.Read(v);
-			return new py::float_(v);
+			return LoadBuiltInType<float, py::float_>(fl);
 		} else if (typeName == "bool") {
-			bool v;
-			fl.Read(v);
-			return new py::bool_(v);
+			return LoadBuiltInType<bool, py::bool_>(fl);
 		} else if (typeName == "str") {
-			std::string v;
-			fl.Read(v);
-			return new py::str(v);
+			return LoadBuiltInType<std::string, py::str>(fl);
 		} else if (typeName == "list") {
 			uint32 size;
 			fl.Read(size);
@@ -204,43 +196,29 @@ namespace Sharpheus {
 		} else if (IsInternalTypeStr(typeName)) {
 			std::string internalType = typeName.substr(PythonInterface::moduleName.length() + 1);
 			if (internalType == "Point") {
-				Point v;
-				fl.Read(v);
-				return new py::object(py::cast(v));
+				return LoadInternalReference<Point>(fl);
 			} else if (internalType == "Color") {
-				Color v;
-				fl.Read(v);
-				return new py::object(py::cast(v));
+				return LoadInternalReference<Color>(fl);
 			} else if (internalType == "Transform") {
-				Transform v;
-				fl.Read(v);
-				return new py::object(py::cast(v));
+				return LoadInternalReference<Transform>(fl);
 			} else if (internalType == "Image") {
-				const Image* v;
-				fl.Read(&v);
-				return new py::object(py::cast(v));
+				return LoadResource<Image>(fl);
 			} else if (internalType == "Font") {
-				const Font* v;
-				fl.Read(&v);
-				return new py::object(py::cast(v));
+				return LoadResource<Font>(fl);
 			} else if (internalType == "Animation") {
-				const Animation* v;
-				fl.Read(&v);
-				return new py::object(py::cast(v));
+				return LoadResource<Animation>(fl);
 			} else if (internalType == "TileSet") {
-				const TileSet* v;
-				fl.Read(&v);
-				return new py::object(py::cast(v));
+				return LoadResource<TileSet>(fl);
 			} else if (internalType == "Audio") {
-				const Audio* v;
-				fl.Read(&v);
-				return new py::object(py::cast(v));
+				return LoadResource<Audio>(fl);
 			} else {
 				SPH_ERROR("Unhandled internal type {0} at load", typeName);
 			}
 		} else {
 			SPH_ERROR("Unhandled type {0} at load", typeName);
 		}
+
+		return nullptr;
 	}
 
 
@@ -267,112 +245,199 @@ namespace Sharpheus {
 		return typeName.substr(8, typeName.length() - 10);
 	}
 
+	template<typename T, class PyType>
+	py::object* PythonObjectState::LoadBuiltInType(FileLoader& fl)
+	{
+		T v;
+		fl.Read(v);
+		return new PyType(v);
+	}
+
+	template<typename T>
+	py::object* PythonObjectState::LoadInternalReference(FileLoader& fl)
+	{
+		T v;
+		fl.Read(v);
+		return new py::object(py::cast(v));
+	}
+
+	template<typename T>
+	py::object* PythonObjectState::LoadResource(FileLoader& fl)
+	{
+		const T* v;
+		fl.Read(&v);
+		return new py::object(py::cast(v));
+	}
+
+	template<class ProviderClass, typename T, class PyType>
+	CommonProvider* PythonObjectState::ProviderOfBuiltInType(const std::string& name)
+	{
+		return new ProviderClass(name,
+			[&](GameObject* unused) {
+				T result;
+				PythonInterface::Exec("PythonObjectState ProviderOfBuiltIn Get", [&] { result = states[name]->cast<T>(); });
+				return result;
+			},
+			[&](GameObject* unused, T value) {
+				PythonInterface::Exec("PythonObjectState ProviderOfBuiltIn Set", [&] {
+					delete states[name];
+					states[name] = new PyType(value);
+				});
+			}
+		);
+	}
+
+	template<>
+	CommonProvider* PythonObjectState::ProviderOfBuiltInType<StringProvider<GameObject>, const std::string&, py::str>(const std::string& name)
+	{
+		return new StringProvider<GameObject>(name,
+			[&](GameObject* unused) -> const std::string& {
+				PythonInterface::Exec("PythonObjectState StringProvider Get", [&] { temp = states[name]->cast<std::string>(); });
+				return temp;
+			},
+			[&](GameObject* unused, const std::string& value) {
+				PythonInterface::Exec("PythonObjectState StringProvider Set", [&] {
+					delete states[name];
+					states[name] = new py::str(value);
+				});
+			}
+		);
+	}
+
+
+	template<class ProviderClass, typename T>
+	CommonProvider* PythonObjectState::ProviderOfInternalReference(const std::string& name)
+	{
+		return new ProviderClass(name,
+			[&](GameObject* unused) {
+				T result;
+				PythonInterface::Exec("PythonObjectState ProviderOfInternalReference Get", [&] { result = states[name]->cast<T>(); });
+				return result;
+			},
+			[&](GameObject* unused, const T& value) {
+				PythonInterface::Exec("PythonObjectState ProviderOfInternalReference Set", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(value));
+				});
+			}
+		);
+	}
+
+
+	template<class ProviderClass, typename T>
+	CommonProvider* PythonObjectState::ProviderOfResource(const std::string& name)
+	{
+		return new ProviderClass(name,
+			[&](GameObject* unused) {
+				const T* result;
+				PythonInterface::Exec("PythonObjectState ProviderOfResource Get", [&] { result = states[name]->cast<const T*>(); });
+				return result;
+			},
+			[&](GameObject* unused, const T* value) {
+				PythonInterface::Exec("PythonObjectState ProviderOfResource Set", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(value));
+				});
+			},
+			[&](GameObject* unused, const std::string& path) {
+			PythonInterface::Exec("PythonObjectState ProviderOfResource SetByPath", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(ResourceManager::GetResource<T>(path)));
+				});
+			}
+		);
+	}
+
+
+	template<>
+	CommonProvider* PythonObjectState::ProviderOfResource<ImageProvider<GameObject>, Image>(const std::string& name)
+	{
+		return new ImageProvider<GameObject>(name,
+			[&](GameObject* unused) {
+				const Image* result;
+				PythonInterface::Exec("PythonObjectState ImageProvider Get", [&] { result = states[name]->cast<const Image*>(); });
+				return result;
+			},
+			[&](GameObject* unused, const Image* value) {
+				PythonInterface::Exec("PythonObjectState ImageProvider Set", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(value));
+				});
+			},
+			[&](GameObject* unused, const std::string& path, bool isFiltered) {
+				PythonInterface::Exec("PythonObjectState ImageProvider SetByPath", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(ResourceManager::GetImage(path, isFiltered)));
+				});
+			}
+		);
+	}
+
+
+	template<>
+	CommonProvider* PythonObjectState::ProviderOfResource<FontProvider<GameObject>, Font>(const std::string& name)
+	{
+		return new FontProvider<GameObject>(name,
+			[&](GameObject* unused) {
+				const Font* result;
+				PythonInterface::Exec("PythonObjectState FontProvider Get", [&] { result = states[name]->cast<const Font*>(); });
+				return result;
+			},
+			[&](GameObject* unused, const Font* value) {
+				PythonInterface::Exec("PythonObjectState ImageProvider Set", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(value));
+				});
+			},
+			[&](GameObject* unused, const std::string& name) {
+				PythonInterface::Exec("PythonObjectState FontProvider SetByName", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(ResourceManager::GetFont(name)));
+					});
+			},
+			[&](GameObject* unused, const std::string& fontFile, const std::string& imgFile) {
+				PythonInterface::Exec("PythonObjectState FontProvider SetByPath", [&] {
+					delete states[name];
+					states[name] = new py::object(py::cast(ResourceManager::GetFont(fontFile, imgFile)));
+				});
+			}
+		);
+	}
+
+
 	CommonProvider* PythonObjectState::ProviderOf(const std::string& name, py::object* obj)
 	{
 		std::string typeName = GetTypeStr(obj);
 		if (typeName == "int") {
-			return new IntProvider<GameObject>(name,
-				[&](GameObject* unused) {
-					int32 result;
-					PythonInterface::Exec("PythonObjectState IntProvider Get", [&] { result = states[name]->cast<int32>(); });
-					return result;
-				},
-				[&](GameObject* unused, int32 value) {
-					PythonInterface::Exec("PythonObjectState IntProvider Set", [&] {
-						delete states[name];
-						states[name] = new py::int_(value);
-					});
-				}
-			);
+			return ProviderOfBuiltInType<IntProvider<GameObject>, int32, py::int_>(name);
 		} else if (typeName == "float") {
-			return new FloatProvider<GameObject>(name,
-				[&](GameObject* unused) {
-					float result;
-					PythonInterface::Exec("PythonObjectState FloatProvider Get", [&] { result = states[name]->cast<float>(); });
-					return result;
-				},
-				[&](GameObject* unused, float value) {
-					PythonInterface::Exec("PythonObjectState FloatProvider Set", [&] {
-						delete states[name];
-						states[name] = new py::float_(value);
-					});
-				}
-			);
+			return ProviderOfBuiltInType<FloatProvider<GameObject>, float, py::float_>(name);
 		} else if (typeName == "bool") {
-			return new BoolProvider<GameObject>(name,
-				[&](GameObject* unused) {
-					bool result;
-					PythonInterface::Exec("PythonObjectState BoolProvider Get", [&] { result = states[name]->cast<bool>(); });
-					return result;
-				},
-				[&](GameObject* unused, bool value) {
-					PythonInterface::Exec("PythonObjectState BoolProvider Set", [&] {
-						delete states[name];
-						states[name] = new py::bool_(value);
-					});
-				}
-			);
+			return ProviderOfBuiltInType<BoolProvider<GameObject>, bool, py::bool_>(name);
 		} else if (typeName == "str") {
-			return new StringProvider<GameObject>(name,
-				[&](GameObject* unused) {
-					std::string result;
-					PythonInterface::Exec("PythonObjectState StringProvider Get", [&] { result = states[name]->cast<std::string>(); });
-					return result;
-				},
-				[&](GameObject* unused, const std::string& value) {
-					PythonInterface::Exec("PythonObjectState StringProvider Set", [&] {
-						delete states[name];
-						states[name] = new py::str(value);
-					});
-				}
-			);
+			return ProviderOfBuiltInType<StringProvider<GameObject>, const std::string&, py::str>(name);
 		} else if (IsInternalTypeStr(typeName)) {
 			std::string internalType = typeName.substr(PythonInterface::moduleName.length() + 1);
 			if (internalType == "Point") {
-				return new PointProvider<GameObject>(name,
-					[&](GameObject* unused) {
-						Point result;
-						PythonInterface::Exec("PythonObjectState PointProvider Get", [&] { result = states[name]->cast<Point>(); });
-						return result;
-					},
-					[&](GameObject* unused, const Point& value) {
-						PythonInterface::Exec("PythonObjectState PointProvider Set", [&] {
-							delete states[name];
-							states[name] = new py::object(py::cast(value));
-						});
-					}
-				);
+				return ProviderOfInternalReference<PointProvider<GameObject>, Point>(name);
 			} else if (internalType == "Color") {
-				return new ColorProvider<GameObject>(name,
-					[&](GameObject* unused) {
-						Color result;
-						PythonInterface::Exec("PythonObjectState ColorProvider Get", [&] { result = states[name]->cast<Color>(); });
-						return result;
-					},
-					[&](GameObject* unused, const Color& value) {
-						PythonInterface::Exec("PythonObjectState ColorProvider Set", [&] {
-							delete states[name];
-							states[name] = new py::object(py::cast(value));
-						});
-					}
-				);
+				return ProviderOfInternalReference<ColorProvider<GameObject>, Color>(name);
 			} else if (internalType == "Transform") {
-				return new TrafoProvider<GameObject>(name,
-					[&](GameObject* unused) {
-						Transform result;
-						PythonInterface::Exec("PythonObjectState TrafoProvider Get", [&] { result = states[name]->cast<Transform>(); });
-						return result;
-					},
-					[&](GameObject* unused, const Transform& value) {
-						PythonInterface::Exec("PythonObjectState TrafoProvider Set", [&] {
-							delete states[name];
-							states[name] = new py::object(py::cast(value));
-						});
-					}
-				);
+				return ProviderOfInternalReference<TrafoProvider<GameObject>, Transform>(name);
+			} else if (internalType == "Image") {
+				return ProviderOfResource<ImageProvider<GameObject>, Image>(name);
+			} else if (internalType == "Font") {
+				return ProviderOfResource<FontProvider<GameObject>, Font>(name);
+			} else if (internalType == "Animation") {
+				return ProviderOfResource<AnimationProvider<GameObject>, Animation>(name);
+			} else if (internalType == "TileSet") {
+				return ProviderOfResource<TileSetProvider<GameObject>, TileSet>(name);
+			} else if (internalType == "Audio") {
+				return ProviderOfResource<AudioProvider<GameObject>, Audio>(name);
 			}
 		}
 		return nullptr;
 	}
+
 
 }

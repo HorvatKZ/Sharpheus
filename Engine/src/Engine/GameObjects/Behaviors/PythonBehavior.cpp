@@ -108,6 +108,7 @@ namespace Sharpheus {
 		SPH_COPY_HEADER(1, Behavior);
 		PythonRunnerBehavior* trueOther = (PythonRunnerBehavior*)other;
 		moduleName = trueOther->moduleName;
+		objectStateInited = trueOther->objectStateInited;
 		state = trueOther->state;
 	}
 

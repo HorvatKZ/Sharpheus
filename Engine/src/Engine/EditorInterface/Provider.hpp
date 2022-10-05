@@ -86,7 +86,7 @@ namespace Sharpheus {
 
 
 	template <class Class> using IntProvider	= RangeableProvider<Class, int32,		CommonProvider::Type::INT>;
-	template <class Class> using UIntProvider	= RangeableProvider<Class, uint32,	CommonProvider::Type::UINT>;
+	template <class Class> using UIntProvider	= RangeableProvider<Class, uint32,		CommonProvider::Type::UINT>;
 	template <class Class> using FloatProvider	= RangeableProvider<Class, float,		CommonProvider::Type::FLOAT>;
 
 	template <class Class> using BoolProvider		= Provider<Class, bool,					CommonProvider::Type::BOOL>;

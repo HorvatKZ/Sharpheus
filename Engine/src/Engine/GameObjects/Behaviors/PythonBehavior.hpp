@@ -49,7 +49,7 @@ namespace Sharpheus {
 		PythonBehavior* cppBehavior = nullptr;
 
 		PythonObjectState state;
-		bool objectStateInited = false;
+		bool objectStateInited = true;
 
 		ClassInfoPtr objInfo = nullptr;
 		std::string objInfosModuleName;

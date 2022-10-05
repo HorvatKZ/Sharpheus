@@ -34,14 +34,22 @@ namespace Sharpheus {
 
 	private:
 		std::unordered_map<std::string, py::object*> states;
-
-		void SaveObject(FileSaver& fs, const py::object* obj);
-		py::object* LoadObject(FileLoader& fl);
+		std::string temp; // Temporary store string, when provider returns
 
 		bool IsInternalTypeStr(const std::string& typeName);
 		std::string GetTypeStr(const py::object* obj);
 
+		void SaveObject(FileSaver& fs, const py::object* obj);
+
+		py::object* LoadObject(FileLoader& fl);
+		template <typename T, class PyType> py::object* LoadBuiltInType(FileLoader& fl);
+		template <typename T> py::object* LoadInternalReference(FileLoader& fl);
+		template <typename T> py::object* LoadResource(FileLoader& fl);
+
 		CommonProvider* ProviderOf(const std::string& name, py::object* obj);
+		template <class ProviderClass, typename T, class PyType> CommonProvider* ProviderOfBuiltInType(const std::string& name);
+		template <class ProviderClass, typename T> CommonProvider* ProviderOfInternalReference(const std::string& name);
+		template <class ProviderClass, typename T> CommonProvider* ProviderOfResource(const std::string& name);
 	};
 
 }

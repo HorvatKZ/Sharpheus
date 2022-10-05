@@ -38,6 +38,9 @@ namespace Sharpheus {
 
 		static const Audio* GetAudio(const std::string& path);
 
+		template <typename T>
+		static const T* GetResource(const std::string& path);
+
 	private:
 		static std::string assetsRoot;
 		static std::string scriptRoot;
@@ -50,5 +53,31 @@ namespace Sharpheus {
 
 		static std::string Concat(const std::string& first, const std::string& second);
 	};
+
+
+	template<typename T>
+	inline const T* ResourceManager::GetResource(const std::string& path)
+	{
+		static_assert("Not supported resourtce type");
+		return nullptr;
+	}
+
+	template<>
+	inline const Animation* ResourceManager::GetResource<Animation>(const std::string& path)
+	{
+		return GetAnimation(path);
+	}
+
+	template<>
+	inline const TileSet* ResourceManager::GetResource<TileSet>(const std::string& path)
+	{
+		return GetTileSet(path);
+	}
+
+	template<>
+	inline const Audio* ResourceManager::GetResource<Audio>(const std::string& path)
+	{
+		return GetAudio(path);
+	}
 
 }
