@@ -6,6 +6,8 @@
 #include "Editor/ResourceManagement/ImageManager.hpp"
 #include "Engine/ResourceManager/Font.hpp"
 #include "Editor/EditorCommands.hpp"
+#include "CreatePyBehaviorDialog.hpp"
+#include "Editor/FileUtils/ClassWriter.hpp"
 #include <wx/valnum.h>
 
 
@@ -863,12 +865,14 @@ namespace Sharpheus {
 	inline ScriptPresenter<Class>::ScriptPresenter(wxWindow* parent, ScriptProvider<Class>* provider, Signal signal, Signal moduleChangedSignal, uint32& y)
 		: Presenter(parent, provider->GetName(), signal, y), provider(provider), moduleChangedSignal(moduleChangedSignal)
 	{
-		uint32 width = parent->GetSize().x - 3 * UI::border - UI::smallButtonSize.x;
+		uint32 width = parent->GetSize().x - 4 * UI::border - UI::smallButtonSize.x - UI::smallButtonSize.y;
 		y += UI::unitHeight;
 		path = new wxStaticText(parent, wxID_ANY, "", wxPoint(UI::border, y), wxSize(width, UI::unitHeight), wxST_ELLIPSIZE_START);
 		path->SetMaxSize(wxSize(width, UI::unitHeight));
 		browse = new wxButton(parent, wxID_ANY, "Browse...", wxPoint(2 * UI::border + width, y - 3), UI::smallButtonSize);
-		browse->Bind(wxEVT_BUTTON, &ScriptPresenter<Class>::HandleChange, this);
+		browse->Bind(wxEVT_BUTTON, &ScriptPresenter<Class>::Browse, this);
+		add = new wxButton(parent, wxID_ANY, "+", wxPoint(3 * UI::border + width + UI::smallButtonSize.x, y - 3), wxSize(UI::smallButtonSize.y, UI::smallButtonSize.y));
+		add->Bind(wxEVT_BUTTON, &ScriptPresenter<Class>::CreatePyBehavior, this);
 		y += UI::heightPadding;
 	}
 
@@ -877,6 +881,7 @@ namespace Sharpheus {
 	{
 		wxREMOVE(path);
 		wxREMOVE(browse);
+		wxREMOVE(add);
 	}
 
 	template<class Class>
@@ -896,7 +901,7 @@ namespace Sharpheus {
 	}
 
 	template<class Class>
-	inline void ScriptPresenter<Class>::HandleChange(wxCommandEvent& e)
+	inline void ScriptPresenter<Class>::Browse(wxCommandEvent& e)
 	{
 		if (curr != nullptr) {
 			RelativeOpenDialog browseDialog(parent, "Browse for audio file", ProjectData::GetPath() + "Scripts\\",
@@ -906,6 +911,30 @@ namespace Sharpheus {
 				return;
 
 			provider->SetByPath((Class*)curr, wxStr2StdStr(browseDialog.GetPath()));
+			signal();
+			moduleChangedSignal();
+		}
+	}
+
+	template<class Class>
+	inline void ScriptPresenter<Class>::CreatePyBehavior(wxCommandEvent& e)
+	{
+		if (curr != nullptr) {
+			CreatePyBehaviorDialog dialog(parent->GetParent(), ProjectData::GetPath());
+
+			if (dialog.ShowModal() == wxID_CANCEL) {
+				return;
+			}
+
+			wxString fileName = dialog.GetFile();
+			if (wxFile::Exists(fileName)) {
+				SPHE_ERROR("The given file already exists");
+				return;
+			}
+
+			PyClassWriter::CreatePyBehaviorFile(ProjectData::GetPath() + fileName, dialog.GetName());
+
+			provider->SetByPath((Class*)curr, wxStr2StdStr(fileName.SubString(8, fileName.Length()))); // Remove "Scripts\\"
 			signal();
 			moduleChangedSignal();
 		}

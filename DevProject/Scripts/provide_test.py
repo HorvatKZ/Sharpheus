@@ -23,5 +23,5 @@ class ProvideTestClass(sph.PythonBehavior):
 def create(parent: sph.GameObject, name: str):
     return ProvideTestClass(parent, name)
 
-def provide_list():
+def provide_list() -> list[str]:
     return ['int_', 'float_', 'bool_', 'str_', 'point_', 'color_', 'trafo_', 'image_', 'font_', 'anim_', 'tiles_', 'audio_']

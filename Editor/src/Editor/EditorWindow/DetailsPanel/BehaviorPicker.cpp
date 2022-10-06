@@ -104,10 +104,10 @@ namespace Sharpheus {
 		wxString cppPath = folder + className + ".cpp";
 		hppPath.Replace("\\", "/");
 		cppPath.Replace("\\", "/");
-		ClassWriter::CreateBehaviorHeader(ProjectData::GetPath() + hppPath, className, parentClassName, ID);
-		ClassWriter::CreateBehaviorSource(ProjectData::GetPath() + cppPath, className + ".hpp", className, parentClassName, ID);
-		ClassWriter::UpdateCreateBehaviorHeader(ProjectData::GetPath() + "Source\\BehaviorCreator.hpp", hppPath.Mid(7), className, ID, ::BehaviorCreator::behaviorNames);
-		ClassWriter::UpdateCreateBehaviorSource(ProjectData::GetPath() + "Source\\BehaviorCreator.cpp", className, ID, ::BehaviorCreator::behaviorNames);
+		CppClassWriter::CreateBehaviorHeader(ProjectData::GetPath() + hppPath, className, parentClassName, ID);
+		CppClassWriter::CreateBehaviorSource(ProjectData::GetPath() + cppPath, className + ".hpp", className, parentClassName, ID);
+		CppClassWriter::UpdateCreateBehaviorHeader(ProjectData::GetPath() + "Source\\BehaviorCreator.hpp", hppPath.Mid(7), className, ID, ::BehaviorCreator::behaviorNames);
+		CppClassWriter::UpdateCreateBehaviorSource(ProjectData::GetPath() + "Source\\BehaviorCreator.cpp", className, ID, ::BehaviorCreator::behaviorNames);
 	}
 
 

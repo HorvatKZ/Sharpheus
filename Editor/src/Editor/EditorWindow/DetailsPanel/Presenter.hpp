@@ -352,9 +352,11 @@ namespace Sharpheus {
 		ScriptProvider<Class>* provider;
 		wxStaticText* path;
 		wxButton* browse;
+		wxButton* add;
 		Signal moduleChangedSignal;
 
-		virtual void HandleChange(wxCommandEvent& e);
+		virtual void Browse(wxCommandEvent& e);
+		virtual void CreatePyBehavior(wxCommandEvent& e);
 	};
 
 
