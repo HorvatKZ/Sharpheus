@@ -3,6 +3,7 @@
 #include <wx/filename.h>
 #include "Exporter.hpp"
 #include "Editor/Registry/ProjectData.hpp"
+#include "Engine/PythonInterface/PythonInterface.hpp"
 
 
 namespace Sharpheus {
@@ -48,7 +49,12 @@ namespace Sharpheus {
 			return;
 		}
 
-		if (wxExecute("\"" + ProjectData::GetPath() + "Solution\\Exported\\GenSolution.bat\"", wxEXEC_SYNC) != 0) {
+		if (!PrecompilePyScripts()) {
+			wxMessageBox("Could not precompile python scripts", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
+			return;
+		}
+
+		if (wxExecute("\"" + ProjectData::GetPath() + "Solution\\Exported\\GenSolution.bat\" -nopause", wxEXEC_SYNC) != 0) {
 			wxMessageBox("Could not generate Exported project", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
 			return;
 		}
@@ -65,13 +71,12 @@ namespace Sharpheus {
 			return;
 		}
 
-		wxString pdbPath = ProjectData::GetPath() + "Exported\\Exported.pdb";
-		if (wxFileExists(pdbPath) && !wxRemoveFile(pdbPath)) {
+		if (!DeleteItems({ "Exported.pdb", "Engine.pdb", "Engine.lib", "Engine.exp" })) {
 			wxMessageBox("Could not delete unnecesarry files", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
 			return;
 		}
 
-		if (!RegenerateMainProject()) {
+		if (wxExecute("\"" + ProjectData::GetPath() + "Solution\\GenSolution.bat\" -nopause", wxEXEC_SYNC) != 0) {
 			wxMessageBox("Could not regenerate the main project", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
 			return;
 		}
@@ -138,21 +143,52 @@ namespace Sharpheus {
 		return success;
 	}
 
-	bool Exporter::RegenerateMainProject()
+	bool Exporter::PrecompilePyScripts()
 	{
-		bool found;
-		wxString name;
-		wxDir dir(ProjectData::GetPath() + "Solution");
-		found = dir.GetFirst(&name);
-		while (found && name.Left(11) != "GenSolution") {
-			found = dir.GetNext(&name);
+		wxString pyFolder = ProjectData::GetPath() + "Scripts\\";
+		wxString pycFolder = ProjectData::GetPath() + "Exported\\Scripts\\";
+
+		bool success = wxFileName::Mkdir(pycFolder, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+		if (success) {
+			wxDir dir(pyFolder);
+			success &= PrecompilePyScripts(dir, pycFolder);
+		}
+		return success;
+	}
+
+	bool Exporter::PrecompilePyScripts(wxDir& pyFolder, const wxString& pycFolder)
+	{
+		bool success = true;
+
+		wxString fileName;
+		bool found = pyFolder.GetFirst(&fileName);
+
+		while (found && success) {
+			wxString fullPath = pyFolder.GetNameWithSep() + fileName;
+			if (wxFileName::DirExists(fullPath)) {
+				wxDir subDir(fullPath);
+				success &= PrecompilePyScripts(subDir, pycFolder + fileName + "\\");
+			} else if (fileName.Length() > 3 && fileName.EndsWith(".py")) {
+				if (!wxFileName::DirExists(pyFolder.GetName())) {
+					success &= wxFileName::Mkdir(pycFolder, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+				}
+				success &= PythonInterface::Precompile(wxStr2StdStr(fullPath), wxStr2StdStr(pycFolder + fileName + "c"));
+			}
+
+			found = pyFolder.GetNext(&fileName);
 		}
 
-		if (name.Length() < 11 || name.Left(11) != "GenSolution") {
-			return false;
-		}
+		return success;
+	}
 
-		wxExecute(ProjectData::GetPath() + "Solution\\" + name, wxEXEC_SYNC);
+	bool Exporter::DeleteItems(const std::vector<wxString> items)
+	{
+		for (const wxString& item : items) {
+			wxString itemFullPath = ProjectData::GetPath() + "Exported\\" + item;
+			if (wxFileExists(itemFullPath) && !wxRemoveFile(itemFullPath)) {
+				return false;
+			}
+		}
 		return true;
 	}
 

@@ -16,8 +16,8 @@ namespace Sharpheus {
 		static void Resume();
 
 		static std::string GetLoadLevelPath();
-		static inline bool NeedToExit() { return needToExit; }
-		static inline bool IsPaused() { return isPaused; }
+		static bool NeedToExit();
+		static bool IsPaused();
 
 	private:
 		static std::string loadLevelPath;

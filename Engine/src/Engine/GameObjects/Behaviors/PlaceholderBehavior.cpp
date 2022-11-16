@@ -18,4 +18,8 @@ namespace Sharpheus {
 	{
 	}
 
+	ClassInfoPtr PlaceholderBehavior::GetBehaviorClassInfo()
+	{
+		return &classInfo;
+	}
 }

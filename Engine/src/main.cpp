@@ -2,7 +2,7 @@
 #include "Engine/Game.hpp"
 
 
-#ifdef SPH_EXPORTED
+#ifdef SPH_BUILD_EXPORTED
 int main() {
 	Sharpheus::Game* game = new Sharpheus::Game();
 	game->Run();

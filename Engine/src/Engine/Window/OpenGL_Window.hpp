@@ -9,7 +9,7 @@
 
 namespace Sharpheus {
 
-	class OpenGL_Window : public Window
+	class SPH_EXPORT OpenGL_Window : public Window
 	{
 	public:
 		OpenGL_Window(const Window::Props& props = Props());

@@ -11,7 +11,7 @@ namespace Sharpheus {
 		PlaceholderBehavior(GameObject* parent, const std::string& name) : Behavior(parent, name) {}
 		virtual ~PlaceholderBehavior() = default;
 
-		SPH_DECL_BEHAVIOR(PlaceholderBehavior, 0);
+		SPH_DECL_BEHAVIOR_INTERNAL(PlaceholderBehavior, 0);
 	};
 
 }

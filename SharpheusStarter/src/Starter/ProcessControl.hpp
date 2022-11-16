@@ -35,6 +35,7 @@ namespace Sharpheus {
 		static bool CopyFolderContent(class wxDir& from, const wxString& toUnder);
 		static bool CopyItem(const wxString& from, const wxString& to);
 		static bool GenerateSolution(const wxString& solutionFolder, const wxString& name, const wxString& ide, const wxString& commonFolder);
+		static bool GenerateGenSolutionBat(const wxString& solutionFolder, const wxString& ide, const wxString& commonFolder, const wxString& premakePath = "");
 		static bool CreateSharpheusFiles(const wxString& root, const wxString& name, const wxString& level);
 	};
 

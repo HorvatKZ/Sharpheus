@@ -39,15 +39,18 @@ namespace Sharpheus {
 		}
 
 		py::object* moduleFile = nullptr;
-		PythonInterface::Exec("Importing module " + moduleName, [&moduleFile, moduleName] {
+		if (PythonInterface::Exec("Importing module " + moduleName, [&moduleFile, moduleName] {
 			moduleFile = new py::object(py::module::import(moduleName.c_str()));
-		});
-		loadedModules[moduleName] = moduleFile;
-		return moduleFile;
+			})) {
+			loadedModules[moduleName] = moduleFile;
+			return moduleFile;
+		}
+
+		return nullptr;
 	}
 
 
-	void PythonInterface::Exec(const std::string& info, const std::function<void()>& func)
+	bool PythonInterface::Exec(const std::string& info, const std::function<void()>& func)
 	{
 		try {
 			if (!interpreter_inited) {
@@ -62,7 +65,18 @@ namespace Sharpheus {
 			func();
 		} catch (py::error_already_set& e) {
 			SPH_ERROR("PythonInterface::Exec error\n" + std::string(e.what()));
+			return false;
 		}
+		return true;
+	}
+
+
+	bool PythonInterface::Precompile(const std::string& pyFile, const std::string& pycResult)
+	{
+		return PythonInterface::Exec("Precompiling " + pyFile + " to " + pycResult, [&] {
+			py::object* py_compile = PythonInterface::Import("py_compile");
+			py_compile->attr("compile")(pyFile, pycResult, py::none(), true);
+		});
 	}
 
 }

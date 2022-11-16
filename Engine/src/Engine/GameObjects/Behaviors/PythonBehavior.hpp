@@ -18,7 +18,7 @@ namespace Sharpheus {
 		virtual ~PythonBehavior() = default;
 
 		SPH_DECL_GAMEOBJECT(PythonBehavior);
-		SPH_DECL_BEHAVIOR(PythonBehavior, 1);
+		SPH_DECL_BEHAVIOR_INTERNAL(PythonBehavior, 1);
 	};
 
 

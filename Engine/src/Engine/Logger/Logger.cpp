@@ -43,4 +43,14 @@ namespace Sharpheus {
 	{
 	}
 
+	std::shared_ptr<spdlog::logger>& Logger::GetEngineLogger()
+	{
+		return engineLogger;
+	}
+
+	std::shared_ptr<spdlog::logger>& Logger::GetEditorLogger()
+	{
+		return editorLogger;
+	}
+
 }

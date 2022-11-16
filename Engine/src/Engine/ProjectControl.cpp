@@ -1,3 +1,5 @@
+#include "ProjectControl.hpp"
+#include "ProjectControl.hpp"
 #include "pch.h"
 #include "ProjectControl.hpp"
 
@@ -50,6 +52,18 @@ namespace Sharpheus {
 		std::string result = loadLevelPath;
 		loadLevelPath.clear();
 		return result;
+	}
+
+
+	bool ProjectControl::NeedToExit()
+	{
+		return needToExit;
+	}
+
+
+	bool ProjectControl::IsPaused()
+	{
+		return isPaused;
 	}
 
 }

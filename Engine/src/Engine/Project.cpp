@@ -188,7 +188,7 @@ namespace Sharpheus {
 		f << "Project::Data projectData(\"" << data.name << "\", \"" << defLevel << "\", "
 			<< "WinProps(\"" << data.name << "\", " << data.winProps.width << ", " << data.winProps.height << ", "
 			<< data.winProps.fullscreen << ", " << data.winProps.vsync << ", Color(" << (uint32)data.winProps.background.r << ", "
-			<< (uint32)data.winProps.background.g << ", " << (uint32)data.winProps.background.b << ")), EngineVersion(" << data.version.GetVName() << "));\n";
+			<< (uint32)data.winProps.background.g << ", " << (uint32)data.winProps.background.b << ")), EngineVersion(\"" << data.version.GetVName() << "\"));\n";
 		f << "}\n";
 		f.close();
 		SPH_ASSERT(success, "Cannot save project data to \"{0}\"", path);

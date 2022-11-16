@@ -11,8 +11,8 @@ namespace Sharpheus {
 		static void Init();
 		static void Clear();
 
-		static inline std::shared_ptr<spdlog::logger>& GetEngineLogger() { return engineLogger; }
-		static inline std::shared_ptr<spdlog::logger>& GetEditorLogger() { return editorLogger; }
+		static std::shared_ptr<spdlog::logger>& GetEngineLogger();
+		static std::shared_ptr<spdlog::logger>& GetEditorLogger();
 
 		template <typename... Args>
 		static inline void LogEngineError(Args&&... args) { Logger::GetEngineLogger()->error(std::forward<Args>(args)...); SPH_BREAK(); }

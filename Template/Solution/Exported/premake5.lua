@@ -15,6 +15,9 @@ workspace "Exported"
 		"MultiProcessorCompile"
 	}
 
+	filter "action:vs*"
+		buildoptions { "/bigobj", "/wd4018", "/wd4133", "/wd4244", "/wd4251", "/wd4267", "/wd26812" } 
+
 outputdir = "%{cfg.buildcfg}"
 bindir = "%{wks.location}/../../Exported/"
 bintempdir = "%{wks.location}/../../bin-temp/Exported"
@@ -26,17 +29,21 @@ IncludeDir["GLFW"] = "%{CommonSource}/external/GLFW/include"
 IncludeDir["GLEW"] = "%{CommonSource}/external/GLEW/include"
 IncludeDir["glm"] = "%{CommonSource}/Engine/external/glm"
 IncludeDir["python"] = "%{pythondir}/include"
-IncludeDir["pybind"] = "%{CommonSource}/Engine/external/pybind11/include"
+IncludeDir["pybind"] = "%{CommonSource}/external/pybind11/include"
 IncludeDir["stb_image"] = "%{CommonSource}/Engine/external/stb_image"
 IncludeDir["spdlog"] = "%{CommonSource}/external/spdlog/include"
+IncludeDir["SoLoud"] = "%{CommonSource}/external/SoLoud/include"
 
 LibDir = {}
 LibDir["python"] = "%{pythondir}/libs"
+
+extraEngineDefine = "SPH_EXPORTED"
 
 group "Dependencies"
 	include "../GLFW"
 	include "../GLEW"
 	include "../spdlog"
+	include "../SoLoud"
 group ""
 
 
@@ -53,9 +60,6 @@ project "Exported"
 	objdir (bintempdir)
 
 	BaseDirEngine = "%{CommonSource}/Engine"
-
-	pchheader "pch.h"
-	pchsource "%{BaseDirEngine}/src/pch.cpp"
 
 	files
 	{
@@ -80,26 +84,30 @@ project "Exported"
 		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.spdlog}"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.SoLoud}"
 	}
 
 	links
 	{
+		"Engine",
 		"GLFW",
 		"GLEW",
 		"spdlog",
+		"SoLoud",
 		"opengl32.lib",
-		"Glu32.lib",
-		"Winmm.lib"
+		"Glu32.lib"
 	}
 	
 	defines
 	{
 		"SPH_EXPORTED",
+		"SPH_BUILD_EXPORTED",
 		"_CRT_SECURE_NO_WARNINGS",
 		"GLFW_INCLUDE_NONE",
 		"GLEW_STATIC",
-		"SPDLOG_COMPILED_LIB"
+		"SPDLOG_COMPILED_LIB",
+		"_UNICODE"
 	}
 
 

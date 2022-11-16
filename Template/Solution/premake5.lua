@@ -15,8 +15,8 @@ workspace "%{ProjectName}"
 		"MultiProcessorCompile"
 	}
 	
-	configuration "vs*"
-		buildoptions { "/bigobj" } 
+	filter "action:vs*"
+		buildoptions { "/bigobj", "/wd4018", "/wd4133", "/wd4244", "/wd4251", "/wd4267", "/wd26812" } 
 
 outputdir = "%{cfg.buildcfg}"
 bindir = "%{wks.location}/../bin/" .. outputdir
@@ -40,6 +40,7 @@ LibDir = {}
 LibDir["wxWidgets_win"] = "%{CommonSource}/external/wxWidgets/lib/vc_x64_dll/"
 LibDir["python"] = "%{pythondir}/libs"
 
+extraEngineDefine = ""
 
 group "Dependencies"
 	include "GLFW"

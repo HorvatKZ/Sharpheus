@@ -2,13 +2,20 @@
 
 #include "../GameObject.hpp"
 
-#define SPH_DECL_BEHAVIOR(Class, subType) \
+#define SPH_DECL_BEHAVIOR_CORE(Class, subType) \
 	static const ::Sharpheus::ClassInfo classInfo; \
 	static const uint32 classVersion; \
 	virtual inline uint32 GetSubType() override { return subType; } \
-	virtual inline ::Sharpheus::ClassInfoPtr GetBehaviorClassInfo() override { return &Class::classInfo; } \
 	virtual void Init() override; \
 	static bool IsCompatibleWithParent(::Sharpheus::GameObject* parent);
+
+#define SPH_DECL_BEHAVIOR_INTERNAL(Class, subType) \
+	SPH_DECL_BEHAVIOR_CORE(Class, subType) \
+	virtual ClassInfoPtr GetBehaviorClassInfo() override;
+
+#define SPH_DECL_BEHAVIOR(Class, subType) \
+	SPH_DECL_BEHAVIOR_CORE(Class, subType) \
+	virtual inline ::Sharpheus::ClassInfoPtr GetBehaviorClassInfo() override { return &Class::classInfo; }
 
 #define SPH_CHECK_CLASSVERSION(fl, version) \
 	uint32 oldVersion; \

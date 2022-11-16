@@ -71,7 +71,7 @@ namespace Sharpheus {
 
 			ChunkData() : arr(new byte[chunkSize * chunkSize]) {}
 			ChunkData(byte* arr, uint8 count) : arr(arr), count(count) {}
-			ChunkData(ChunkData&& other) : arr(other.arr), count(other.count) { other.arr = nullptr; }
+			ChunkData(ChunkData&& other) noexcept : arr(other.arr), count(other.count) { other.arr = nullptr; }
 			ChunkData(const ChunkData& other) = default;
 			ChunkData& operator=(const ChunkData& other) = default;
 			~ChunkData() { delete[] arr; }

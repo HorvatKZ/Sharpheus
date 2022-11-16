@@ -7,6 +7,8 @@ project "Engine"
 	targetdir (bindir)
 	objdir (bintempdir)
 
+	targetextension(".pyd")
+
 	BaseDirEngine = "%{CommonSource}/Engine"
 
 	pchheader "pch.h"
@@ -54,6 +56,7 @@ project "Engine"
 	
 	defines
 	{
+		extraEngineDefine,
 		"SPH_BUILD_ENGINE",
 		"_CRT_SECURE_NO_WARNINGS",
 		"_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING",

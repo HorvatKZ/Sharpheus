@@ -106,11 +106,6 @@ namespace Sharpheus {
 			return;
 		}
 
-		/*if (!wxRenameFile(newProject.GetFullPath() + "\\Solution\\Project", newProject.GetFullPath() + "\\Solution\\" + name)) {
-			wxMessageBox("Could not rename files", "Error", wxICON_ERROR | wxOK | wxCENTRE);
-			return;
-		}*/
-
 		wxFileName solution = newProject;
 		solution.AppendDir(name);
 		solution.SetName("Solution");
@@ -132,14 +127,12 @@ namespace Sharpheus {
 			if (wxExecute("MSBuild.exe \"" + solution.GetFullPath() + "\\" + name + ".sln\"", wxEXEC_SYNC) != 0) {
 				wxMessageBox("Could not build the solution. Maybe the building tool is not added to PATH", "Error", wxICON_ERROR | wxOK | wxCENTRE);
 				return;
-			}
-			else {
+			} else {
 				projectCreated(projectPath);
 				wxMessageBox("Project is successfully created!", "Success");
 				OpenProj(projectPath);
 			}
-		}
-		else {
+		} else {
 			wxMessageBox("Project is successfully created! You need to build it before running", "Success");
 			projectCreated(projectPath);
 		}
@@ -269,25 +262,27 @@ namespace Sharpheus {
 			success &= premakeInclude.Write();
 		}
 
+		success &= GenerateGenSolutionBat(solutionFolder, ide, commonFolder);
+		success &= GenerateGenSolutionBat(solutionFolder, ide, commonFolder, "\\Exported");
+
+		success &= wxExecute("\"" + solutionFolder + "\\GenSolution.bat\" -nopause", wxEXEC_SYNC) == 0;
+
+		return success;
+	}
+
+	bool ProcessControl::GenerateGenSolutionBat(const wxString& solutionFolder, const wxString& ide, const wxString& commonFolder, const wxString& premakePath)
+	{
 		wxTextFile genSlnBat;
-		wxString command = "\"" + commonFolder + "\\external\\Premake\\premake5.exe\" --file=\"" + solutionFolder + "\\premake5.lua\" " + ide;
-		success &= genSlnBat.Create(solutionFolder + "\\GenSolution_" + ide + ".bat");
+		wxString command = "\"" + commonFolder + "\\external\\Premake\\premake5.exe\" --file=\"" + solutionFolder + premakePath + "\\premake5.lua\" " + ide;
+		bool success = genSlnBat.Create(solutionFolder + premakePath + "\\GenSolution.bat");
 		if (success) {
+			genSlnBat.AddLine("@echo off");
 			genSlnBat.AddLine("call " + command);
+			genSlnBat.AddLine("if /i \"%1%\"==\"-nopause\" GOTO end");
 			genSlnBat.AddLine("PAUSE");
+			genSlnBat.AddLine(":end");
 			success &= genSlnBat.Write();
 		}
-
-		wxTextFile genExportBat;
-		wxString exportingCommand = "\"" + commonFolder + "\\external\\Premake\\premake5.exe\" --file=\"" + solutionFolder + "\\Exported\\premake5.lua\" " + ide;
-		success &= genExportBat.Create(solutionFolder + "\\Exported\\GenSolution.bat");
-		if (success) {
-			genExportBat.AddLine("call " + exportingCommand);
-			success &= genExportBat.Write();
-		}
-
-		success &= wxExecute(command, wxEXEC_SYNC) == 0;
-
 		return success;
 	}
 

@@ -1,13 +1,9 @@
 #pragma once
 
-#ifndef SPH_EXPORTED
-	#ifdef SPH_BUILD_ENGINE
-		#define SPH_EXPORT __declspec(dllexport)
-	#else
-		#define SPH_EXPORT __declspec(dllimport)
-	#endif
+#ifdef SPH_BUILD_ENGINE
+	#define SPH_EXPORT __declspec(dllexport)
 #else
-	#define SPH_EXPORT
+	#define SPH_EXPORT __declspec(dllimport)
 #endif
 
 #ifdef SPH_DEBUG

@@ -28,6 +28,11 @@ namespace Sharpheus {
 	{
 	}
 
+	ClassInfoPtr PythonBehavior::GetBehaviorClassInfo()
+	{
+		return &classInfo;
+	}
+
 
 	PythonRunnerBehavior::PythonRunnerBehavior(GameObject* parent, const std::string& name)
 		: Behavior(parent, name)

@@ -18,8 +18,8 @@ namespace Sharpheus {
 		Project* proj = nullptr;
 	};
 
-
-	class SPH_EXPORT Game : public GameBase
+#ifdef SPH_BUILD_EXPORTED
+	class Game : public GameBase
 	{
 	public:
 		Game();
@@ -35,5 +35,5 @@ namespace Sharpheus {
 		bool isRunning = true;
 		class Window* win;
 	};
-
+#endif
 }

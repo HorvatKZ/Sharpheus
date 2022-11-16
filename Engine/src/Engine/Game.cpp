@@ -8,13 +8,16 @@
 #include "Events/EventHandler.hpp"
 #include "Events/EventListener.hpp"
 
-#ifdef SPH_EXPORTED
+#if defined(SPH_EXPORTED) && !defined(SPH_BUILD_ENGINE)
 	#include "ExportedProjectData.hpp"
 	#include "FileUtils/OSPaths.hpp"
+	#include "BehaviorCreator.hpp"
 #endif
 
 
 namespace Sharpheus {
+
+#ifndef SPH_BUILD_EXPORTED
 
 	GameBase::GameBase()
 	{
@@ -25,10 +28,10 @@ namespace Sharpheus {
 	{
 	}
 
+#else
 
 	Game::Game() : GameBase()
 	{
-#ifdef SPH_EXPORTED
 		Engine::Init(BehaviorCreator::Instance());
 
 		EventHandler::Init(SPH_BIND(Game::WindowClosed));
@@ -37,7 +40,6 @@ namespace Sharpheus {
 
 		proj = new Project(projectData, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER), projectData.name + "proj.sharpheus");
 		win->SetProps(proj->GetWinProps());
-#endif 
 	}
 
 
@@ -84,4 +86,5 @@ namespace Sharpheus {
 		Stop();
 	}
 
+#endif
 }
