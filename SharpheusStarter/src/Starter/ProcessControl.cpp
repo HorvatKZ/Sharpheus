@@ -124,7 +124,10 @@ namespace Sharpheus {
 
 		wxString projectPath = newProject.GetFullPath() + "\\" + name + ".proj.sharpheus";
 		if (build) {
-			if (wxExecute("MSBuild.exe \"" + solution.GetFullPath() + "\\" + name + ".sln\"", wxEXEC_SYNC) != 0) {
+			wxString msbuild;
+			wxGetEnv("MSBUILD_PATH", &msbuild);
+			msbuild = "\"" + msbuild + "\"";
+			if (wxExecute(msbuild + " \"" + solution.GetFullPath() + "\\" + name + ".sln\"", wxEXEC_SYNC) != 0) {
 				wxMessageBox("Could not build the solution. Maybe the building tool is not added to PATH", "Error", wxICON_ERROR | wxOK | wxCENTRE);
 				return;
 			} else {

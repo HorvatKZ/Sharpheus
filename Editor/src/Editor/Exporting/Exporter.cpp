@@ -60,6 +60,9 @@ namespace Sharpheus {
 		}
 
 		wxString config = includeLogging ? "Release" : "Final";
+		wxString msbuild;
+		wxGetEnv("MSBUILD_PATH", &msbuild);
+		msbuild = "\"" + msbuild + "\"";
 		if (wxExecute("MSBuild.exe \"" + ProjectData::GetPath() + "Solution\\Exported\\Exported.sln\" /property:Configuration=" + config, wxEXEC_SYNC) != 0) {
 			wxMessageBox("Could not build Exported project", "Exporting error", wxICON_ERROR | wxOK | wxCENTRE);
 			return;
