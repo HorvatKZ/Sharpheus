@@ -2,55 +2,74 @@
 
 ![Sharpheus](/Assets/Branding/sharpheus_long_logo.png?raw=true "Sharpheus")
 
-**Sharpheus** is an easy-to-use 2D only C++ game engine, with an editor supporting it. The core principles behind are **simplycity and efficiency**. The project started as a university thesis in the begining of 2021, and has continued since. The entire codebase is free to use till the origin is indicated.
+**Sharpheus** is an easy-to-use 2D only C++ game engine, with an editor supporting it. The core principles behind are **simplycity and efficiency**. The project started as a university thesis in the beginning of 2021, and has continued since. The entire codebase is free to use till the origin is indicated.
 
-*Under Apache License 2.0*
+> Under MIT License
 
-### Main features of the Engine:
-+ 2D Batch Rendering using the GPU
-+ Mutlimedia support
-+ Collision system
-+ Event system for handing inputs (window, keyboard, mouse, controller)
-+ Efficient reource handling
-+ Logging
+## Features
 
-### Main features of the Editor:
-+ Useing the engine's capabilities with an intuitive UI
-+ Exporting the finished game for distribution
-+ Creating and editing levels
-+ Creating, organising and editing GameObjects
-+ Creating and using frame based animations
-+ Creating and using tilesets
+- An intuitive Editor
+![Editor](/Assets/Branding/editor.png?raw=true "Editor")
 
-### Supported platforms:
-+ **Windows**
-+ *Linux (in future)*
+- Custom code can be written in both Python and C++
+![Behaviors](/Assets/Branding/behaviors.png?raw=true "Behaviors")
 
-### Supported rendering APIs:
-+ **OpenGL**
-+ *More in future*
+- 2D batch rendering using the GPU
 
-### Supported architectures:
-+ **64-bit (x64) only**
-+ **Sharpheus will NOT support 32-bit (x86) architecture**
+- Exporting the game without external dependencies
 
-### Supported file formats:
-+ **Own formats:**
-    + proj.sharpheus - project file
-    + lvl.sharpheus - level file
-    + scene.sharpheus - scene file
-    + anim.sharpheus - animation file
-    + tile.sharpheus - tileset file
-+ **Images:**
-    + png (recommended)
-    + jpg & jpeg
-    + bmp
-    + gif (only first frame is displayed)
-+ **Audio:**
-    + mp3 (recommended)
-    + wav
-    + flac
-    + ogg
+- Multimedia support
+
+- Custom physics system
+
+- Global and local event handling system
+
+- Logging support
+![Logging](/Assets/Branding/logging.png?raw=true "Logging")
+
+- Animations, tilemaps, particle systems and more...
+![Extras](/Assets/Branding/extras.png?raw=true "Extras")
+
+## Supported
+
+### Operating System
+
+- **Windows**
+- *Linux (in future)*
+
+### Graphics APIs
+
+- **OpenGL**
+- *Vulkan in future*
+
+### Architectures
+
+- **64-bit (x64) only**
+- **Sharpheus will NOT support 32-bit (x86) architecture**
+
+### File formats
+
+- **Own formats:**
+
+  - proj.sharpheus - project file
+  - lvl.sharpheus - level file
+  - scene.sharpheus - scene file
+  - anim.sharpheus - animation file
+  - tile.sharpheus - tileset file
+
+- **Images:**
+
+  - png (recommended)
+  - jpg & jpeg
+  - bmp
+  - gif (only first frame is displayed)
+
+- **Audio:**
+
+  - mp3 (recommended)
+  - wav
+  - flac
+  - ogg
 
 ### How to use it
 + Clone this repo
@@ -79,6 +98,3 @@
 + SoLoud 2020.02.07
 + pybind11 2.9.0
 + Premake 5.0 alpha 15
-
-### Development:
-[Trello board](https://trello.com/b/oWa4OvIU/sharpheus)

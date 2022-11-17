@@ -18,7 +18,7 @@ namespace Sharpheus {
 		static inline void LogEngineError(Args&&... args) { Logger::GetEngineLogger()->error(std::forward<Args>(args)...); SPH_BREAK(); }
 
 		template <typename... Args>
-		static inline void LogEngineFatal(Args&&... args) { Logger::GetEngineLogger()->error(std::forward<Args>(args)...); SPH_BREAK(); }
+		static inline void LogEngineFatal(Args&&... args) { Logger::GetEngineLogger()->critical(std::forward<Args>(args)...); SPH_BREAK(); }
 
 	private:
 		static std::shared_ptr<spdlog::logger> engineLogger;
