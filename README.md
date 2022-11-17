@@ -9,25 +9,39 @@
 ## Features
 
 - An intuitive Editor
+
 ![Editor](/Assets/Branding/editor.png?raw=true "Editor")
 
 - Custom code can be written in both Python and C++
+
 ![Behaviors](/Assets/Branding/behaviors.png?raw=true "Behaviors")
 
 - 2D batch rendering using the GPU
 
+![Batch Rendering](/Assets/Branding/batch.png?raw=true "Batch Rendering")
+
 - Exporting the game without external dependencies
+
+![Exported](/Assets/Branding/exported.png?raw=true "Exported")
 
 - Multimedia support
 
+![Multimedia](/Assets/Branding/sounds.png?raw=true "Multimedia")
+
 - Custom physics system
+
+![Physics](/Assets/Branding/physics.png?raw=true "Physics")
 
 - Global and local event handling system
 
+![Events](/Assets/Branding/events.png?raw=true "Events")
+
 - Logging support
+
 ![Logging](/Assets/Branding/logging.png?raw=true "Logging")
 
 - Animations, tilemaps, particle systems and more...
+
 ![Extras](/Assets/Branding/extras.png?raw=true "Extras")
 
 ## Supported
