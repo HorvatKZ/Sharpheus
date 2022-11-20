@@ -109,6 +109,9 @@ namespace Sharpheus {
 				case GameObject::Type::Quad:
 					CreatePresenterFrom<Quad>(provider, y);
 					break;
+				case GameObject::Type::Circle:
+					CreatePresenterFrom<Circle>(provider, y);
+					break;
 				case GameObject::Type::Text:
 					CreatePresenterFrom<Text>(provider, y);
 					break;

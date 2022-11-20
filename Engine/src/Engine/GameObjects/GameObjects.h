@@ -4,6 +4,7 @@
 #include "Collection.hpp"
 #include "Renderables/Sprite.hpp"
 #include "Renderables/Quad.hpp"
+#include "Renderables/Circle.hpp"
 #include "Renderables/Text.hpp"
 #include "Renderables/AnimatedSprite.hpp"
 #include "Renderables/AnimationPlayer.hpp"

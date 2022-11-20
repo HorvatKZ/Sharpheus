@@ -83,6 +83,8 @@ namespace Sharpheus {
 				return Create<Sprite>(parent, newName);
 			case GameObject::Type::Quad:
 				return Create<Quad>(parent, newName);
+			case GameObject::Type::Circle:
+				return Create<Circle>(parent, newName);
 			case GameObject::Type::Text:
 				return Create<Text>(parent, newName);
 			case GameObject::Type::AnimatedSprite:

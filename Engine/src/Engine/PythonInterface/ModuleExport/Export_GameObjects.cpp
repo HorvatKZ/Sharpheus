@@ -279,6 +279,11 @@ namespace Sharpheus {
 			.def_property("height", &Quad::GetHeight, &Quad::SetHeight)
 			.def_property("color", &Quad::GetColor, &Quad::SetColor);
 
+		py::class_<Circle, RenderableGameObject>(handle, "Circle")
+			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a)
+			.def_property("radius", &Circle::GetRadius, &Circle::SetRadius)
+			.def_property("color", &Circle::GetColor, &Circle::SetColor);
+
 		py::class_<Text, RenderableGameObject>(handle, "Text")
 			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a)
 			.def_property("content", &Text::GetContent, &Text::SetContent)
