@@ -17,6 +17,8 @@ namespace Sharpheus {
 		Level(const std::string& name);
 		virtual ~Level();
 
+		void Clear();
+
 		void Tick(float deltaTime);
 		void Render();
 

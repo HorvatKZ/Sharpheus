@@ -17,6 +17,9 @@ namespace Sharpheus {
 		static void Init();
 		static void Clear();
 
+		static void ClearModules();
+		static void ReloadModules();
+
 		static py::object* Import(const std::string& moduleName);
 
 		static bool Exec(const std::string& info, const std::function<void()>& func);

@@ -35,6 +35,7 @@ namespace Sharpheus {
 		static void EditTileSet(const wxString& tileSetPath);
 
 		static void ReloadAssets();
+		static void ReloadScripts();
 
 		static void ExportTheGame(bool includeLogging);
 
@@ -55,6 +56,9 @@ namespace Sharpheus {
 		static void HandleTileSetCreator(class TileSetCreatorDialog& creator);
 
 		static inline void OnTMEClosed(wxCloseEvent& e) { tme = nullptr; e.Skip(); }
+
+		static bool CheckPlayingAndTME(const wxString& msg);
+		static void SaveCurrentLevelIfNeeded(const wxString& msg = "Do you want to save the current level?");
 	};
 
 }

@@ -92,7 +92,10 @@ namespace Sharpheus {
 	bool PythonRunnerBehavior::Load(FileLoader& fl)
 	{
 		Behavior::Load(fl);
-		fl.Read(moduleName);
+		std::string newModuleName;
+		fl.Read(newModuleName);
+		SetModuleName(newModuleName);
+		InitObjectStateIfNeeded();
 		state.Load(fl);
 		return fl.GetStatus();
 	}

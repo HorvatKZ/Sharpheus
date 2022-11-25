@@ -41,6 +41,20 @@ namespace Sharpheus {
 		delete root;
 	}
 
+	void Level::Clear()
+	{
+		if (root != nullptr && root->IsParentOfCurrentCamera()) {
+			Renderer::SetCamera(nullptr);
+		}
+		delete root;
+		root = nullptr;
+
+		collSys.Clear();
+		RadioButton::Clear();
+		layers.clear();
+		layerNames.clear();
+	}
+
 
 	void Level::Tick(float deltaTime)
 	{
@@ -225,12 +239,7 @@ namespace Sharpheus {
 
 	bool Level::Load(const std::string& base, const std::string& path)
 	{
-		Renderer::SetCamera(nullptr);
-		delete root;
-		collSys.Clear();
-		RadioButton::Clear();
-		layers.clear();
-		layerNames.clear();
+		Clear();
 
 		FileLoader fl((base + path).c_str());
 

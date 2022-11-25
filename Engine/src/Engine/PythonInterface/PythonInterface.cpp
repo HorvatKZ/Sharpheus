@@ -22,13 +22,31 @@ namespace Sharpheus {
 	void PythonInterface::Clear()
 	{
 		if (interpreter_inited) {
-			for (auto it = loadedModules.begin(); it != loadedModules.end(); ++it) {
-				PythonInterface::Exec("Freeing module " + it->first, [&] { delete it->second; });
-			}
+			ClearModules();
 
 			SPH_INFO("Finalize Python interpreter");
 			py::finalize_interpreter();
 		}
+	}
+
+	void PythonInterface::ClearModules()
+	{
+		PythonInterface::Exec("Freeing modules", [&] {
+			for (auto it = loadedModules.begin(); it != loadedModules.end(); ++it) {
+				delete it->second;
+			}
+			loadedModules.clear();
+		});
+	}
+
+	void PythonInterface::ReloadModules()
+	{
+		PythonInterface::Exec("Reimporting modules", [&] {
+			py::object implib = py::module::import("importlib");
+			for (auto it = loadedModules.begin(); it != loadedModules.end(); ++it) {
+				implib.attr("reload")(it->second);
+			}
+		});
 	}
 
 	py::object* PythonInterface::Import(const std::string& moduleName)
@@ -40,7 +58,7 @@ namespace Sharpheus {
 
 		py::object* moduleFile = nullptr;
 		if (PythonInterface::Exec("Importing module " + moduleName, [&moduleFile, moduleName] {
-			moduleFile = new py::object(py::module::import(moduleName.c_str()));
+				moduleFile = new py::object(py::module::import(moduleName.c_str()));
 			})) {
 			loadedModules[moduleName] = moduleFile;
 			return moduleFile;

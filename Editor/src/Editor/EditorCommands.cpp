@@ -9,6 +9,7 @@
 #include "Editor/TileMapEditor/TileMapEditor.hpp"
 #include "Editor/Registry/ProjectData.hpp"
 #include "Editor/Registry/EditorData.hpp"
+#include "Engine/PythonInterface/PythonInterface.hpp"
 
 
 namespace Sharpheus {
@@ -33,11 +34,11 @@ namespace Sharpheus {
 
 	void EditorCommands::NewLevel()
 	{
-		int response = wxMessageBox("Do you want to save the current level?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
-
-		if (response == wxYES) {
-			SaveLevel();
+		if (!CheckPlayingAndTME("creating a new level")) {
+			return;
 		}
+
+		SaveCurrentLevelIfNeeded();
 
 		wxTextEntryDialog levelNameDialog(EditorData::GetMainWindow(), "Level name:", "New Level");
 		levelNameDialog.SetTextValidator(wxFILTER_EMPTY);
@@ -52,11 +53,11 @@ namespace Sharpheus {
 
 	bool EditorCommands::LoadLevel()
 	{
-		int response = wxMessageBox("Do you want to save the current level?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
-
-		if (response == wxYES) {
-			SaveLevel();
+		if (!CheckPlayingAndTME("loading a level")) {
+			return false;
 		}
+
+		SaveCurrentLevelIfNeeded();
 
 		RelativeOpenDialog openDialog(EditorData::GetMainWindow(), "Open Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus");
 
@@ -72,11 +73,11 @@ namespace Sharpheus {
 
 	bool EditorCommands::LoadLevel(const wxString& levelPath)
 	{
-		int response = wxMessageBox("Do you want to save the current level?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
-
-		if (response == wxYES) {
-			SaveLevel();
+		if (!CheckPlayingAndTME("loading a level")) {
+			return false;
 		}
+
+		SaveCurrentLevelIfNeeded();
 
 		bool success = ProjectData::GetProj()->LoadLevel(wxStr2StdStr(levelPath));
 		SPHE_ASSERT(success, "Cannot load level. Check the log files for more information");
@@ -202,11 +203,11 @@ namespace Sharpheus {
 
 	void EditorCommands::ReloadAssets()
 	{
-		int response = wxMessageBox("Reloading assets involves reloading the current level. Do you want to save before?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
-
-		if (response == wxYES) {
-			SaveLevel();
+		if (!CheckPlayingAndTME("reloading assets")) {
+			return;
 		}
+
+		SaveCurrentLevelIfNeeded("Reloading assets involves reloading the current level. Do you want to save before?");
 
 		ResourceManager::Reload();
 		((EditorWindow*)EditorData::GetMainWindow())->ReloadAssets();
@@ -214,17 +215,28 @@ namespace Sharpheus {
 		bool success = ProjectData::GetProj()->LoadLevel(wxStr2StdStr(ProjectData::GetLevel()->GetPath()));
 		SPHE_ASSERT(success, "Cannot reload level. Check the log files for more information");
 		levelChangedCallback();
+	}
 
+
+	void EditorCommands::ReloadScripts()
+	{
+		if (!CheckPlayingAndTME("reloading scripts")) {
+			return;
+		}
+
+		SaveCurrentLevelIfNeeded("Reloading scripts involves reloading the current level. Do you want to save before?");
+
+		PythonInterface::ReloadModules();
+
+		bool success = ProjectData::GetProj()->LoadLevel(wxStr2StdStr(ProjectData::GetLevel()->GetPath()));
+		SPHE_ASSERT(success, "Cannot reload level. Check the log files for more information");
+		levelChangedCallback();
 	}
 
 
 	void EditorCommands::ExportTheGame(bool includeLogging)
 	{
-		int response = wxMessageBox("Do you want to save the current level before exporting?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
-
-		if (response == wxYES) {
-			SaveLevel();
-		}
+		SaveCurrentLevelIfNeeded("Do you want to save the current level before exporting?");
 
 		Exporter exp(includeLogging);
 		exp.Export();
@@ -233,13 +245,7 @@ namespace Sharpheus {
 
 	void EditorCommands::OpenTileMapEditor(TileMap* tileMap)
 	{
-		if (tme != nullptr) {
-			SPHE_WARN("TileMap Editor is already open");
-			return;
-		}
-
-		if (IsPlaying()) {
-			SPHE_WARN("Exit game preview before using the TileMap Editor");
+		if (!CheckPlayingAndTME("using the TileMap Editor")) {
 			return;
 		}
 
@@ -300,5 +306,30 @@ namespace Sharpheus {
 		delete tileSet;
 
 		SPHE_ASSERT(success, "Cannot save animation. Check the log files for more information");
+	}
+
+
+	bool EditorCommands::CheckPlayingAndTME(const wxString& msg)
+	{
+		if (IsTMEActive()) {
+			SPHE_WARN("Exit the TileMap Editor before " + wxStr2StdStr(msg));
+			return false;
+		}
+
+		if (IsPlaying()) {
+			SPHE_WARN("Exit game preview before " + wxStr2StdStr(msg));
+			return false;
+		}
+
+		return true;
+	}
+
+	void EditorCommands::SaveCurrentLevelIfNeeded(const wxString& msg)
+	{
+		int response = wxMessageBox(msg, "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
+
+		if (response == wxYES) {
+			SaveLevel();
+		}
 	}
 }

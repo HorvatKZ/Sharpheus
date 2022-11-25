@@ -72,10 +72,10 @@ namespace Sharpheus {
 
 	void EditorWindow::LevelChanged()
 	{
+		EditorData::SetCurrent(nullptr);
 		levelHierarchy->FillWith(ProjectData::GetLevel()->GetRoot());
 		viewPort->Refresh();
 		details->CurrentChanged(nullptr);
-		EditorData::SetCurrent(nullptr);
 	}
 
 

@@ -29,6 +29,7 @@ namespace Sharpheus {
 		void AnimatorCreator(wxCommandEvent& e);
 		void TileSetCreator(wxCommandEvent& e);
 		void ReloadAssets(wxCommandEvent& e);
+		void ReloadScripts(wxCommandEvent& e);
 
 		void ExportWithLogs(wxCommandEvent& e);
 		void ExportFinal(wxCommandEvent& e);
