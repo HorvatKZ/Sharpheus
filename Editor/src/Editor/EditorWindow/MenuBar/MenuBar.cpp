@@ -38,6 +38,8 @@ namespace Sharpheus {
 		editor->AppendSeparator();
 		editor->Append(10202, wxT("Animation Creator"));
 		editor->Append(10203, wxT("TileSet Creator"));
+		editor->AppendSeparator();
+		editor->Append(10204, wxT("Reload Assets\tF5"));
 		Append(editor, "Editor");
 
 		wxMenu* exporting = new wxMenu;
@@ -61,6 +63,7 @@ namespace Sharpheus {
 		Connect(10201, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::GridSettings));
 		Connect(10202, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::AnimatorCreator));
 		Connect(10203, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::TileSetCreator));
+		Connect(10204, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ReloadAssets));
 		Connect(10301, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportWithLogs));
 		Connect(10302, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::ExportFinal));
 		Connect(10401, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuBar::About));
@@ -174,6 +177,12 @@ namespace Sharpheus {
 	void MenuBar::TileSetCreator(wxCommandEvent& e)
 	{
 		EditorCommands::CreateTileSet();
+	}
+
+
+	void MenuBar::ReloadAssets(wxCommandEvent& e)
+	{
+		EditorCommands::ReloadAssets();
 	}
 
 

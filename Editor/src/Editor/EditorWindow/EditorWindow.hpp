@@ -29,6 +29,7 @@ namespace Sharpheus {
 		void CurrentDataChanged();
 		void BehaviorChanged(uint32 subType);
 		void ModuleNameChanged();
+		void ReloadAssets();
 		void StartGame(bool withCurrent);
 		void StopGame();
 

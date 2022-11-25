@@ -14,6 +14,7 @@ namespace Sharpheus {
 	public:
 		static void Init(const std::string& projectPath);
 		static void Clear();
+		static void Reload();
 
 		static inline const std::string& GetAssetsRoot() { return assetsRoot; }
 

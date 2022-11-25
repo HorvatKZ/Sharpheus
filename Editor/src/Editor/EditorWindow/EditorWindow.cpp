@@ -119,6 +119,11 @@ namespace Sharpheus {
 		needCurrChangeOnIdle = true;
 	}
 
+	void EditorWindow::ReloadAssets()
+	{
+		viewPort->ReloadAssets();
+	}
+
 
 	void EditorWindow::StartGame(bool withCurrent)
 	{

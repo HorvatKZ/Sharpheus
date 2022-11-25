@@ -16,6 +16,14 @@ namespace Sharpheus {
 	}
 
 
+	void EditingArrow::ReloadSprite()
+	{
+		delete sprite;
+		sprite = new Sprite(nullptr, "EditingArrow");
+		sprite->SetImageFromPath("Editor\\editing_arrow.png", true);
+	}
+
+
 	void EditingArrow::Render(const Transform& trafo)
 	{
 		this->trafo = trafo;

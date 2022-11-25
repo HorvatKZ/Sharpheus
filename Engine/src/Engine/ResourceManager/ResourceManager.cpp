@@ -29,6 +29,28 @@ namespace Sharpheus {
 		for (auto it = fontsByPaths.begin(); it != fontsByPaths.end(); ++it) {
 			delete (*it).second;
 		}
+		for (auto it = animations.begin(); it != animations.end(); ++it) {
+			delete (*it).second;
+		}
+		for (auto it = tileSets.begin(); it != tileSets.end(); ++it) {
+			delete (*it).second;
+		}
+		for (auto it = audios.begin(); it != audios.end(); ++it) {
+			delete (*it).second;
+		}
+
+		images.clear();
+		fontsByPaths.clear();
+		fontsByNames.clear();
+		animations.clear();
+		tileSets.clear();
+		audios.clear();
+	}
+
+
+	void ResourceManager::Reload()
+	{
+		Clear();
 	}
 
 

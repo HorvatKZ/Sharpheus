@@ -17,6 +17,8 @@ namespace Sharpheus {
 		EditingArrow(Camera* camera);
 		virtual ~EditingArrow();
 
+		void ReloadSprite();
+
 		void Render(const Transform& trafo);
 
 		EditType ClickOn(const Point& clickPos);

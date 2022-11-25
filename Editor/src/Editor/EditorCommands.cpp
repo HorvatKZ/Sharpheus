@@ -1,6 +1,7 @@
 #include "editor_pch.h"
 #include "EditorCommands.hpp"
 #include "Editor/FileUtils/RelativeFileDialog.hpp"
+#include "Editor/EditorWindow/EditorWindow.hpp"
 #include "Editor/EditorWindow/MenuBar/LayerEditorDialog.hpp"
 #include "Editor/EditorWindow/MenuBar/AnimationCreatorDialog.hpp"
 #include "Editor/EditorWindow/MenuBar/TileSetCreatorDialog.hpp"
@@ -196,6 +197,24 @@ namespace Sharpheus {
 	{
 		TileSetCreatorDialog creator(EditorData::GetMainWindow(), tileSetPath);
 		HandleTileSetCreator(creator);
+	}
+
+
+	void EditorCommands::ReloadAssets()
+	{
+		int response = wxMessageBox("Reloading assets involves reloading the current level. Do you want to save before?", "Save", wxICON_WARNING | wxYES | wxNO | wxCENTER);
+
+		if (response == wxYES) {
+			SaveLevel();
+		}
+
+		ResourceManager::Reload();
+		((EditorWindow*)EditorData::GetMainWindow())->ReloadAssets();
+
+		bool success = ProjectData::GetProj()->LoadLevel(wxStr2StdStr(ProjectData::GetLevel()->GetPath()));
+		SPHE_ASSERT(success, "Cannot reload level. Check the log files for more information");
+		levelChangedCallback();
+
 	}
 
 

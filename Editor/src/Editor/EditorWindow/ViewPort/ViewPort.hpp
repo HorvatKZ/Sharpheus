@@ -21,6 +21,8 @@ namespace Sharpheus {
 		inline void SetSnapToGrid(bool value) { isSnapToGrid = value; }
 		inline bool IsSnapToGrid() { return isSnapToGrid; }
 
+		inline void ReloadAssets() { editArrow->ReloadSprite(); }
+
 	private:
 		EditingArrow* editArrow;
 

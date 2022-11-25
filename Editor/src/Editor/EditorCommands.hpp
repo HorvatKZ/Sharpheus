@@ -34,6 +34,8 @@ namespace Sharpheus {
 		static void CreateTileSet();
 		static void EditTileSet(const wxString& tileSetPath);
 
+		static void ReloadAssets();
+
 		static void ExportTheGame(bool includeLogging);
 
 		static void OpenTileMapEditor(TileMap* tileMap);
