@@ -44,7 +44,10 @@ subprocess.run([ 'setx', 'MSBUILD_PATH', msbuild_path ])
 
 print('Copying wxWidgets dlls...')
 root_folder = str(pathlib.Path(os.path.abspath(__file__)).parent.absolute())
-shutil.copytree(root_folder + '\\Template\\bin', root_folder + '\\bin', dirs_exist_ok=True)
+shutil.copytree(root_folder + '\\external\\wxWidgets\\debug_dlls', root_folder + '\\bin\\Debug', dirs_exist_ok=True)
+shutil.copytree(root_folder + '\\external\\wxWidgets\\release_dlls', root_folder + '\\bin\\Release', dirs_exist_ok=True)
+shutil.copytree(root_folder + '\\external\\wxWidgets\\debug_dlls', root_folder + '\\Template\\bin\\Debug', dirs_exist_ok=True)
+shutil.copytree(root_folder + '\\external\\wxWidgets\\release_dlls', root_folder + '\\Template\\bin\\Release', dirs_exist_ok=True)
 
 print('Generation sln...')
 subprocess.run([ root_folder + '\\external\\Premake\\premake5.exe', f'--file={root_folder}\\SharpheusStarter\\premake5.lua', 'vs' + get_vs_version() ])

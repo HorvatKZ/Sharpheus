@@ -39,6 +39,11 @@
 # Others
 **.zip
 
-# Exceptions
-!Template/bin
-!Template/bin/**/*.dll
+# wxWidgets source
+external/wxWidgets_src
+
+# Exceprions
+!external/wxWidgets/**/*.dll
+!external/wxWidgets/**/*.pdb
+!external/wxWidgets/**/*.lib
+!external/wxWidgets/**/*.exp
