@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "PythonObjectState.hpp"
 #include "PythonInterface.hpp"
+#include "NonCopyPyCast.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
 #include "Engine/GameObjects/GameObject.hpp"
 
@@ -134,15 +135,15 @@ namespace Sharpheus {
 			} else if (internalType == "Transform") {
 				fs.Write(obj->cast<Transform>());
 			} else if (internalType == "Image") {
-				fs.Write(&obj->cast<Image>());
+				fs.Write(py::noncopy_cast<Image>(obj));
 			} else if (internalType == "Font") {
-				fs.Write(&obj->cast<Font>());
+				fs.Write(py::noncopy_cast<Font>(obj));
 			} else if (internalType == "Animation") {
-				fs.Write(&obj->cast<Animation>());
+				fs.Write(py::noncopy_cast<Animation>(obj));
 			} else if (internalType == "TileSet") {
-				fs.Write(&obj->cast<TileSet>());
+				fs.Write(py::noncopy_cast<TileSet>(obj));
 			} else if (internalType == "Audio") {
-				fs.Write(&obj->cast<Audio>());
+				fs.Write(py::noncopy_cast<Audio>(obj));
 			} else {
 				SPH_ERROR("Unhandled internal type {0} at save", typeName);
 			}

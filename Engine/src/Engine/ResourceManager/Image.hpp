@@ -11,6 +11,9 @@ namespace Sharpheus {
 		Image(const std::string& path, bool filtered = false);
 		~Image();
 
+		Image(const Image& anim) = delete;
+		Image(Image&& anim) = delete;
+
 		inline uint32 GetWidth() const { return width; }
 		inline uint32 GetHeight() const { return height; }
 		inline bool IsFiltered() const { return filtered; }

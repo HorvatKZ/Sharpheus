@@ -11,6 +11,9 @@ namespace Sharpheus {
 		TileSet(const Image* atlas, uint32 frameWidth, uint32 frameHeight);
 		virtual ~TileSet();
 
+		TileSet(const TileSet& anim) = delete;
+		TileSet(TileSet&& anim) = delete;
+
 		inline const std::string& GetName() const { return name; }
 		inline const Image* GetAtlas() const { return atlas; }
 		inline uint32 GetFrameWidth() const { return frameWidth; }

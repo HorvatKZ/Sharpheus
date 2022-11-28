@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PydExport.hpp"
+#include "Engine/PythonInterface/NonCopyPyCast.hpp"
 #include "Engine/ResourceManager/AudioPlayer.hpp"
 #include "Engine/ResourceManager/ResourceManager.hpp"
 
@@ -18,8 +19,10 @@ namespace Sharpheus {
 
 	void Export_Image(py::module_& handle)
 	{
-		py::class_<Image, Resource>(handle, "Image")
-			.def("get_width", &Image::GetWidth)
+		py::class_<Image, Resource> imag(handle, "Image");
+		py::prepare_for_noncopy_cast<Image>(imag);
+
+		imag.def("get_width", &Image::GetWidth)
 			.def("get_height", &Image::GetHeight)
 			.def("is_filtered", &Image::IsFiltered)
 
@@ -49,8 +52,10 @@ namespace Sharpheus {
 
 	void Export_Font(py::module_& handle)
 	{
-		py::class_<Font, Resource>(handle, "Font")
-			.def("get_image", &Font::GetImage, py::return_value_policy::reference)
+		py::class_<Font, Resource> font(handle, "Font");
+		py::prepare_for_noncopy_cast<Font>(font);
+
+		font.def("get_image", &Font::GetImage, py::return_value_policy::reference)
 			.def("get_name", &Font::GetName)
 
 			.def("render", [](const Font& fnt, const std::string& text, const Point& center, float size, const Color& color, const Point& xAxis, const Point& yAxis, const py::kwargs& kwargs) {
@@ -68,8 +73,10 @@ namespace Sharpheus {
 
 	void Export_Animation(py::module_& handle)
 	{
-		py::class_<Animation, Resource>(handle, "Animation")
-			.def("get_name", &Animation::GetName)
+		py::class_<Animation, Resource> anim(handle, "Animation");
+		py::prepare_for_noncopy_cast<Animation>(anim);
+
+		anim.def("get_name", &Animation::GetName)
 			.def("get_atlas", &Animation::GetAtlas, py::return_value_policy::reference)
 			.def("get_frame_width", &Animation::GetFrameWidth)
 			.def("get_frame_height", &Animation::GetFrameHeight)
@@ -92,8 +99,10 @@ namespace Sharpheus {
 
 	void Export_TileSet(py::module_& handle)
 	{
-		py::class_<TileSet, Resource>(handle, "TileSet")
-			.def("get_name", &TileSet::GetName)
+		py::class_<TileSet, Resource> tile(handle, "TileSet");
+		py::prepare_for_noncopy_cast<TileSet>(tile);
+
+		tile.def("get_name", &TileSet::GetName)
 			.def("get_atlas", &TileSet::GetAtlas, py::return_value_policy::reference)
 			.def("get_frame_width", &TileSet::GetFrameWidth)
 			.def("get_frame_height", &TileSet::GetFrameHeight)
@@ -111,8 +120,10 @@ namespace Sharpheus {
 
 	void Export_Audio(py::module_& handle)
 	{	
-		py::class_<Audio, Resource>(handle, "Audio")
-			.def("get_name", &Audio::GetName)
+		py::class_<Audio, Resource> audi(handle, "Audio");
+		py::prepare_for_noncopy_cast<Audio>(audi);
+
+		audi.def("get_name", &Audio::GetName)
 			.def("get_length", &Audio::GetLength)
 
 			.def("__repr__", [](const Audio& aud) { return "<Sharpheus.Audio \"" + aud.GetPath() + "\">"; });

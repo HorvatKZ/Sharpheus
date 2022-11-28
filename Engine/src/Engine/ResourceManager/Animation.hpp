@@ -11,6 +11,9 @@ namespace Sharpheus {
 		Animation(const Image* atlas, uint32 frameWidth, uint32 frameHeight, uint32 startFrame, uint32 endFrame);
 		virtual ~Animation();
 
+		Animation(const Animation& anim) = delete;
+		Animation(Animation&& anim) = delete;
+
 		inline const std::string& GetName() const { return name; }
 		inline const Image* GetAtlas() const { return atlas; }
 		inline uint32 GetFrameWidth() const { return frameWidth; }

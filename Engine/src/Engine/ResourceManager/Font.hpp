@@ -16,6 +16,9 @@ namespace Sharpheus {
 		Font(const std::string& fontFile, const Image* img);
 		virtual ~Font();
 
+		Font(const Font& anim) = delete;
+		Font(Font&& anim) = delete;
+
 		inline const Image* GetImage() const { return img; }
 		inline const std::string& GetName() const { return name; }
 

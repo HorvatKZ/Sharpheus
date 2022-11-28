@@ -13,6 +13,9 @@ namespace Sharpheus {
 		Audio(const std::string& path);
 		~Audio();
 
+		Audio(const Audio& anim) = delete;
+		Audio(Audio&& anim) = delete;
+
 		inline const std::string& GetName() const { return name; }
 		inline float GetLength() const { return audio.getLength(); }
 
