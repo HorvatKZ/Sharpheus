@@ -10,10 +10,10 @@ namespace Sharpheus {
 	void Export_Resource(py::module_& handle)
 	{
 		py::class_<Resource>(handle, "Resource")
-			.def("is_valid", &Resource::IsValid)
-			.def("has_path", &Resource::HasPath)
-			.def("get_path", &Resource::GetPath)
-			.def("get_full_path", &Resource::GetFullPath);
+			.def_property_readonly("is_valid", &Resource::IsValid)
+			.def_property_readonly("has_path", &Resource::HasPath)
+			.def_property_readonly("path", &Resource::GetPath)
+			.def_property_readonly("full_path", &Resource::GetFullPath);
 	}
 
 
@@ -22,9 +22,9 @@ namespace Sharpheus {
 		py::class_<Image, Resource> imag(handle, "Image");
 		py::prepare_for_noncopy_cast<Image>(imag);
 
-		imag.def("get_width", &Image::GetWidth)
-			.def("get_height", &Image::GetHeight)
-			.def("is_filtered", &Image::IsFiltered)
+		imag.def_property_readonly("width", &Image::GetWidth)
+			.def_property_readonly("height", &Image::GetHeight)
+			.def_property_readonly("is_filtered", &Image::IsFiltered)
 
 			.def("render", [](const Image& img, const std::vector<Point>& coords, bool mirrorX, const Color& tint) {
 				img.Render(coords.data(), mirrorX, tint);
@@ -55,8 +55,8 @@ namespace Sharpheus {
 		py::class_<Font, Resource> font(handle, "Font");
 		py::prepare_for_noncopy_cast<Font>(font);
 
-		font.def("get_image", &Font::GetImage, py::return_value_policy::reference)
-			.def("get_name", &Font::GetName)
+		font.def_property_readonly("image", &Font::GetImage, py::return_value_policy::reference)
+			.def_property_readonly("name", &Font::GetName)
 
 			.def("render", [](const Font& fnt, const std::string& text, const Point& center, float size, const Color& color, const Point& xAxis, const Point& yAxis, const py::kwargs& kwargs) {
 				fnt.Render(text, center, size, color, xAxis, yAxis, kwargs2FontStyle(kwargs));
@@ -76,18 +76,18 @@ namespace Sharpheus {
 		py::class_<Animation, Resource> anim(handle, "Animation");
 		py::prepare_for_noncopy_cast<Animation>(anim);
 
-		anim.def("get_name", &Animation::GetName)
-			.def("get_atlas", &Animation::GetAtlas, py::return_value_policy::reference)
-			.def("get_frame_width", &Animation::GetFrameWidth)
-			.def("get_frame_height", &Animation::GetFrameHeight)
-			.def("get_frame_rows", &Animation::GetFrameRows)
-			.def("get_frame_cols", &Animation::GetFrameCols)
-			.def("get_start_frame", &Animation::GetStartFrame)
-			.def("get_end_frame", &Animation::GetEndFrame)
-			.def("get_frame_time", &Animation::GetFrameTime)
-			.def("get_num_of_frames", &Animation::GetNumOfFrames)
-			.def("get_num_of_all_frames", &Animation::GetNumOfAllFrames)
-			.def("get_full_time", &Animation::GetFullTime)
+		anim.def_property_readonly("name", &Animation::GetName)
+			.def_property_readonly("atlas", &Animation::GetAtlas, py::return_value_policy::reference)
+			.def_property_readonly("frame_width", &Animation::GetFrameWidth)
+			.def_property_readonly("frame_height", &Animation::GetFrameHeight)
+			.def_property_readonly("frame_rows", &Animation::GetFrameRows)
+			.def_property_readonly("frame_cols", &Animation::GetFrameCols)
+			.def_property_readonly("start_frame", &Animation::GetStartFrame)
+			.def_property_readonly("end_frame", &Animation::GetEndFrame)
+			.def_property_readonly("frame_time", &Animation::GetFrameTime)
+			.def_property_readonly("num_of_frames", &Animation::GetNumOfFrames)
+			.def_property_readonly("num_of_all_frames", &Animation::GetNumOfAllFrames)
+			.def_property_readonly("full_time", &Animation::GetFullTime)
 
 			.def("render", [](const Animation& anim, const std::vector<Point>& coords, float time, bool mirrorX, const Color& tint) {
 				anim.Render(coords.data(), time, mirrorX, tint);
@@ -102,13 +102,13 @@ namespace Sharpheus {
 		py::class_<TileSet, Resource> tile(handle, "TileSet");
 		py::prepare_for_noncopy_cast<TileSet>(tile);
 
-		tile.def("get_name", &TileSet::GetName)
-			.def("get_atlas", &TileSet::GetAtlas, py::return_value_policy::reference)
-			.def("get_frame_width", &TileSet::GetFrameWidth)
-			.def("get_frame_height", &TileSet::GetFrameHeight)
-			.def("get_frame_rows", &TileSet::GetFrameRows)
-			.def("get_frame_cols", &TileSet::GetFrameCols)
-			.def("get_num_of_tiles", &TileSet::GetNumOfTiles)
+		tile.def_property_readonly("name", &TileSet::GetName)
+			.def_property_readonly("atlas", &TileSet::GetAtlas, py::return_value_policy::reference)
+			.def_property_readonly("frame_width", &TileSet::GetFrameWidth)
+			.def_property_readonly("frame_height", &TileSet::GetFrameHeight)
+			.def_property_readonly("frame_rows", &TileSet::GetFrameRows)
+			.def_property_readonly("frame_cols", &TileSet::GetFrameCols)
+			.def_property_readonly("num_of_tiles", &TileSet::GetNumOfTiles)
 
 			.def("render", [](const TileSet& ts, const std::vector<Point>& coords, byte ind, bool mirrorX, const Color& tint) {
 				ts.Render(coords.data(), ind, mirrorX, tint);
@@ -123,8 +123,8 @@ namespace Sharpheus {
 		py::class_<Audio, Resource> audi(handle, "Audio");
 		py::prepare_for_noncopy_cast<Audio>(audi);
 
-		audi.def("get_name", &Audio::GetName)
-			.def("get_length", &Audio::GetLength)
+		audi.def_property_readonly("name", &Audio::GetName)
+			.def_property_readonly("length", &Audio::GetLength)
 
 			.def("__repr__", [](const Audio& aud) { return "<Sharpheus.Audio \"" + aud.GetPath() + "\">"; });
 	}

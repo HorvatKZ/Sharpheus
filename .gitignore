@@ -42,6 +42,9 @@
 # wxWidgets source
 external/wxWidgets_src
 
+# Often changing levels
+DevProject/Levels/Level.lvl.sharpheus
+
 # Exceprions
 !external/wxWidgets/**/*.dll
 !external/wxWidgets/**/*.pdb
