@@ -437,8 +437,6 @@ namespace Sharpheus {
 			.def_property_readonly("height", &Camera::GetHeight)
 			.def_property_readonly("original_width", &Camera::GetOGWidth)
 			.def_property_readonly("original_height", &Camera::GetOGHeight)
-			.def_property_readonly_static("static_width", &Camera::GetStaticWidth)
-			.def_property_readonly_static("static_height", &Camera::GetStaticHeight)
 			.def_property_readonly("x_min", &Camera::GetXMin)
 			.def_property_readonly("x_max", &Camera::GetXMax)
 			.def_property_readonly("y_min", &Camera::GetYMin)

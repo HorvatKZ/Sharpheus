@@ -16,7 +16,7 @@ namespace Sharpheus {
 			.def_property_readonly("is_unknown", &EngineVersion::IsUnknown)
 			.def_property_readonly("is_valid", &EngineVersion::IsValid)
 			.def_property_readonly("is_latest", &EngineVersion::IsLatest)
-			.def_property_readonly_static("current", &EngineVersion::GetCurrent)
+			.def_static("get_current", &EngineVersion::GetCurrent)
 			.def_readonly_static("latest", &EngineVersion::latest)
 
 			.def(py::self == py::self)
