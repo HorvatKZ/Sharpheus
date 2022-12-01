@@ -11,7 +11,7 @@ public:
 	DebugBehavior(Sharpheus::GameObject* parent, const std::string& name);
 	virtual ~DebugBehavior();
 
-	SPH_DECL_BEHAVIOR(DebugBehavior, 1);
+	SPH_DECL_BEHAVIOR(DebugBehavior, 3);
 
 protected:
 	void Tick(float deltaTime) override;

@@ -12,7 +12,7 @@ public:
 	TriggerTester(Sharpheus::GameObject* parent, const std::string& name);
 	virtual ~TriggerTester();
 
-	SPH_DECL_BEHAVIOR(TriggerTester, 3);
+	SPH_DECL_BEHAVIOR(TriggerTester, 5);
 
 protected:
 	void Tick(float deltaTime) override;

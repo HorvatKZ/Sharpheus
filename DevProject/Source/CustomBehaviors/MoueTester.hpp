@@ -15,7 +15,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(MoueTester, 4);
+	SPH_DECL_BEHAVIOR(MoueTester, 6);
 
 protected:
 	Sharpheus::SafeObject<Sharpheus::Text> pressReleaseText;

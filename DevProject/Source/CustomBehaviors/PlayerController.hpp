@@ -21,7 +21,7 @@ public:
 	inline void SetJumpForce(float jumpForce) { this->jumpForce = jumpForce; }
 	inline void SetSpeed(float speed) { this->speed = speed; }
 
-	SPH_DECL_BEHAVIOR(PlayerController, 2);
+	SPH_DECL_BEHAVIOR(PlayerController, 4);
 
 protected:
 	float jumpForce = 0.f, speed = 0.f;

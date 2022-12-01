@@ -14,7 +14,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(Controller, 5);
+	SPH_DECL_BEHAVIOR(Controller, 7);
 
 protected:
 	virtual bool Save(Sharpheus::FileSaver& fs) override;
