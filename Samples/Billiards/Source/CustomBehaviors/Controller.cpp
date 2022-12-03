@@ -6,13 +6,13 @@
 
 using namespace Sharpheus;
 
-uint32_t Controller::classVersion = 3;
+const uint32_t Controller::classVersion = 3;
 
-ClassInfo Controller::classInfo("Controller", "behavior.png", {
-	new UFloatProvider<Controller>("Speed mult.", SPH_BIND_GETTER(Controller::GetSpeedMult), SPH_BIND_SETTER(Controller::SetSpeedMult)),
-	new UFloatProvider<Controller>("Speed limit", SPH_BIND_GETTER(Controller::GetSpeedLimit), SPH_BIND_SETTER(Controller::SetSpeedLimit)),
-	new UFloatProvider<Controller>("Stop speed", SPH_BIND_GETTER(Controller::GetStopSpeed), SPH_BIND_SETTER(Controller::SetStopSpeed))
-});
+SPH_START_CLASSINFO(Controller, "behaviorcpp.png")
+	SPH_PROVIDE_UFLOAT(Controller, "Speed mult.", GetSpeedMult, SetSpeedMult)
+	SPH_PROVIDE_UFLOAT(Controller, "Speed limit", GetSpeedLimit, SetSpeedLimit)
+	SPH_PROVIDE_UFLOAT(Controller, "Stop speed", GetStopSpeed, SetStopSpeed)
+SPH_END_CLASSINFO
 
 
 Controller::Controller(Sharpheus::Behavior* other)

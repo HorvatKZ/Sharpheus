@@ -1,5 +1,16 @@
 #pragma once
 
+#ifndef SPH_EXPORTED
+#ifdef SPH_BUILD_CUSTOM
+#define SPH_CUSTOM_EXPORT __declspec(dllexport)
+#else
+#define SPH_CUSTOM_EXPORT __declspec(dllimport)
+#endif
+#else
+#define SPH_CUSTOM_EXPORT
+#endif
+
+
 #define SPH_START_PRESENTING(obj) { switch (((Behavior*)obj)->GetSubType()) {
 #define SPH_END_PRESENTING() default: SPHE_ERROR("Unexpected Behavior type during the creation of presenters"); } }
 #define SPH_PRESENT(Class, subType) case subType: CreatePresenterFrom<Class>(provider, y); break;

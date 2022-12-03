@@ -1,12 +1,13 @@
 #pragma once
 
+#include "CustomMacros.h"
 #include "Behavior.hpp"
 #include "LocalListeners/ColliderListener.hpp"
 #include "Engine/GameObjects/Colliders/PhysicsObject.hpp"
 #include "Engine/GameObjects/Renderables/Sprite.hpp"
 
 
-class SPH_EXPORT Controller : public Sharpheus::Behavior, public Sharpheus::ColliderListener
+class SPH_CUSTOM_EXPORT Controller : public Sharpheus::Behavior, public Sharpheus::ColliderListener
 {
 public:
 	Controller(Sharpheus::Behavior* other);
@@ -22,7 +23,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(Controller, 1);
+	SPH_DECL_BEHAVIOR(Controller, 3);
 
 protected:
 	float speedMulitplier = 1.f, speedLimit = 500.f, stopSpeed = 20.f;

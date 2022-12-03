@@ -3,7 +3,9 @@
 
 #include "pch.h"
 #include "Behavior.hpp"
+#include "Engine/BehaviorCreatorBase.hpp"
 #include "PlaceholderBehavior.hpp"
+#include "PythonBehavior.hpp"
 #include "CustomMacros.h"
 
 // Custom behaviors
@@ -14,20 +16,26 @@
 #define SPH_PRESENT_BEHAVIOR(obj) \
 	SPH_START_PRESENTING(obj) \
 		SPH_PRESENT(PlaceholderBehavior, 0) \
-		SPH_PRESENT(Controller, 1) \
-		SPH_PRESENT(UIControl, 2) \
-		SPH_PRESENT(MenuControl, 3) \
+		SPH_PRESENT(PythonRunnerBehavior, 1) \
+		SPH_PRESENT(PythonBehavior, 2) \
+		SPH_PRESENT(Controller, 3) \
+		SPH_PRESENT(UIControl, 4) \
+		SPH_PRESENT(MenuControl, 5) \
 	SPH_END_PRESENTING() \
 
 
-class SPH_EXPORT BehaviorCreator
+
+
+class SPH_CUSTOM_EXPORT BehaviorCreator : public Sharpheus::BehaviorCreatorBase
 {
 public:
-	static Sharpheus::Behavior* Create(uint32_t subType, Sharpheus::PlaceholderBehavior* other);
-	static Sharpheus::Behavior* Create(uint32_t subType, Sharpheus::GameObject* parent, const std::string& name);
+	Sharpheus::Behavior* Create(uint32 subType, Sharpheus::PlaceholderBehavior* other);
+	Sharpheus::Behavior* Create(uint32 subType, Sharpheus::GameObject* parent, const std::string& name);
 
-	static bool IsCompatibleWithParent(uint32_t subType, Sharpheus::GameObject* parent);
+	bool IsCompatibleWithParent(uint32 subType, Sharpheus::GameObject* parent);
 
-	static std::unordered_map<uint32_t, std::string> behaviorNames;
+	static BehaviorCreator* Instance();
+
+	static const std::unordered_map<uint32, std::string> behaviorNames;
 };
 

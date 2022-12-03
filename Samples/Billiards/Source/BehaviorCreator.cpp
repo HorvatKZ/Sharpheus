@@ -3,19 +3,26 @@
 #include "BehaviorCreator.hpp"
 
 
-std::unordered_map<uint32_t, std::string> BehaviorCreator::behaviorNames({
-	{1, "Controller"},
-	{2, "UIControl"},
-	{3, "MenuControl"}
+const std::unordered_map<uint32_t, std::string> BehaviorCreator::behaviorNames({
+	{3, "Controller"},
+	{4, "UIControl"},
+	{5, "MenuControl"}
 });
+
+
+BehaviorCreator* BehaviorCreator::Instance()
+{
+	static BehaviorCreator instance;
+	return &instance;
+}
 
 
 Sharpheus::Behavior* BehaviorCreator::Create(uint32_t subType, Sharpheus::PlaceholderBehavior* other)
 {
 	SPH_START_BEHAVIORS(subType)
-		SPH_CREATE_BEHAVIOR_1(Controller, 1, other)
-		SPH_CREATE_BEHAVIOR_1(UIControl, 2, other)
-		SPH_CREATE_BEHAVIOR_1(MenuControl, 3, other)
+		SPH_CREATE_BEHAVIOR_1(Controller, 3, other)
+		SPH_CREATE_BEHAVIOR_1(UIControl, 4, other)
+		SPH_CREATE_BEHAVIOR_1(MenuControl, 5, other)
 	SPH_END_BEHAVIOR_CREATION(subType)
 }
 
@@ -24,9 +31,11 @@ Sharpheus::Behavior* BehaviorCreator::Create(uint32_t subType, Sharpheus::GameOb
 {
 	SPH_START_BEHAVIORS(subType)
 		SPH_CREATE_BEHAVIOR_2(Sharpheus::PlaceholderBehavior, 0, parent, name)
-		SPH_CREATE_BEHAVIOR_2(Controller, 1, parent, name)
-		SPH_CREATE_BEHAVIOR_2(UIControl, 2, parent, name)
-		SPH_CREATE_BEHAVIOR_2(MenuControl, 3, parent, name)
+		SPH_CREATE_BEHAVIOR_2(Sharpheus::PythonRunnerBehavior, 1, parent, name)
+		SPH_CREATE_BEHAVIOR_2(Sharpheus::PythonBehavior, 2, parent, name)
+		SPH_CREATE_BEHAVIOR_2(Controller, 3, parent, name)
+		SPH_CREATE_BEHAVIOR_2(UIControl, 4, parent, name)
+		SPH_CREATE_BEHAVIOR_2(MenuControl, 5, parent, name)
 	SPH_END_BEHAVIOR_CREATION(subType)
 }
 
@@ -35,9 +44,11 @@ bool BehaviorCreator::IsCompatibleWithParent(uint32_t subType, Sharpheus::GameOb
 {
 	SPH_START_BEHAVIORS(subType)
 		SPH_IS_BEHAVIOR_COMP(Sharpheus::PlaceholderBehavior, 0, parent)
-		SPH_IS_BEHAVIOR_COMP(Controller, 1, parent)
-		SPH_IS_BEHAVIOR_COMP(UIControl, 2, parent)
-		SPH_IS_BEHAVIOR_COMP(MenuControl, 3, parent)
+		SPH_IS_BEHAVIOR_COMP(Sharpheus::PythonRunnerBehavior, 1, parent)
+		SPH_IS_BEHAVIOR_COMP(Sharpheus::PythonBehavior, 2, parent)
+		SPH_IS_BEHAVIOR_COMP(Controller, 3, parent)
+		SPH_IS_BEHAVIOR_COMP(UIControl, 4, parent)
+		SPH_IS_BEHAVIOR_COMP(MenuControl, 5, parent)
 	SPH_END_BEHAVIOR_COMP(subType)
 }
 

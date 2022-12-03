@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CustomMacros.h"
 #include "Behavior.hpp"
 #include "LocalListeners/ControlListener.hpp"
 #include "Engine/GameObjects/Renderables/Sprite.hpp"
@@ -8,7 +9,7 @@
 #include "Engine/GameObjects/Controls/Button.hpp"
 
 
-class SPH_EXPORT UIControl : public Sharpheus::Behavior, public Sharpheus::ControlListener
+class SPH_CUSTOM_EXPORT UIControl : public Sharpheus::Behavior, public Sharpheus::ControlListener
 {
 public:
 	UIControl(Sharpheus::Behavior* other);
@@ -17,7 +18,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(UIControl, 2);
+	SPH_DECL_BEHAVIOR(UIControl, 4);
 
 protected:
 	Sharpheus::SafeObject<Sharpheus::Sprite> p11, p12, p21, p22;

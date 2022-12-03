@@ -8,11 +8,11 @@
 using namespace Sharpheus;
 
 
-uint32_t UIControl::classVersion = 1;
+const uint32_t UIControl::classVersion = 1;
 
-ClassInfo UIControl::classInfo("UIControl", "behavior.png", {
+SPH_START_CLASSINFO(UIControl, "behaviorcpp.png")
 	// Provide necessary data members here for the Editor to present them
-});
+SPH_END_CLASSINFO
 
 
 UIControl::UIControl(Sharpheus::Behavior* other)
