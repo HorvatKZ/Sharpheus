@@ -1,10 +1,11 @@
 #pragma once
 
+#include "CustomMacros.h"
 #include "Behavior.hpp"
 #include "LocalListeners/ColliderListener.hpp"
 
 
-class SPH_EXPORT BirdCtrl : public Sharpheus::Behavior, public Sharpheus::ColliderListener
+class SPH_CUSTOM_EXPORT BirdCtrl : public Sharpheus::Behavior, public Sharpheus::ColliderListener
 {
 public:
 	BirdCtrl(Sharpheus::Behavior* other);
@@ -16,7 +17,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(BirdCtrl, 1);
+	SPH_DECL_BEHAVIOR(BirdCtrl, 3);
 
 protected:
 	float jumpForce = 0.f;

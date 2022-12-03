@@ -40,12 +40,14 @@ project "Editor"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.GLEW}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.SoLoud}",
 		"%{IncludeDir.wxWidgets}"
 	}
 
 	links
 	{
 		"Engine",
+		"Project",
 		"GLEW",
 		"opengl32.lib",
 		"Glu32.lib"

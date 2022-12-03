@@ -6,11 +6,11 @@
 using namespace Sharpheus;
 
 
-uint32_t MenuCtrl::classVersion = 1;
+const uint32_t MenuCtrl::classVersion = 1;
 
-ClassInfo MenuCtrl::classInfo("MenuCtrl", "behavior.png", {
+SPH_START_CLASSINFO(MenuCtrl, "behaviorcpp.png")
 	// Provide necessary data members here for the Editor to present them
-});
+SPH_END_CLASSINFO
 
 
 MenuCtrl::MenuCtrl(Sharpheus::Behavior* other)

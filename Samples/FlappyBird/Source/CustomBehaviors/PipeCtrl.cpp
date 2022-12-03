@@ -7,15 +7,15 @@
 using namespace Sharpheus;
 
 
-uint32_t PipeCtrl::classVersion = 1;
+const uint32_t PipeCtrl::classVersion = 1;
 
-ClassInfo PipeCtrl::classInfo("PipeCtrl", "behavior.png", {
-	new UFloatProvider<PipeCtrl>("SpawnDist", SPH_BIND_GETTER(PipeCtrl::GetSpawnDist), SPH_BIND_SETTER(PipeCtrl::SetSpawnDist)),
-	new UFloatProvider<PipeCtrl>("X distance", SPH_BIND_GETTER(PipeCtrl::GetXDistance), SPH_BIND_SETTER(PipeCtrl::SetXDistance)),
-	new UFloatProvider<PipeCtrl>("X distribution", SPH_BIND_GETTER(PipeCtrl::GetXDistribution), SPH_BIND_SETTER(PipeCtrl::SetXDistribution)),
-	new UFloatProvider<PipeCtrl>("Y distribution", SPH_BIND_GETTER(PipeCtrl::GetYDistribution), SPH_BIND_SETTER(PipeCtrl::SetYDistribution)),
-	new UFloatProvider<PipeCtrl>("Y diff", SPH_BIND_GETTER(PipeCtrl::GetYDiff), SPH_BIND_SETTER(PipeCtrl::SetYDiff))
-});
+SPH_START_CLASSINFO(PipeCtrl, "behaviorcpp.png")
+	SPH_PROVIDE_UFLOAT(PipeCtrl, "SpawnDist", GetSpawnDist, SetSpawnDist)
+	SPH_PROVIDE_UFLOAT(PipeCtrl, "X distance", GetXDistance, SetXDistance)
+	SPH_PROVIDE_UFLOAT(PipeCtrl, "X distribution", GetXDistribution, SetXDistribution)
+	SPH_PROVIDE_UFLOAT(PipeCtrl, "Y distribution", GetYDistribution, SetYDistribution)
+	SPH_PROVIDE_UFLOAT(PipeCtrl, "Y diff", GetYDiff, SetYDiff)
+SPH_END_CLASSINFO
 
 
 PipeCtrl::PipeCtrl(Sharpheus::Behavior* other)

@@ -8,11 +8,11 @@
 using namespace Sharpheus;
 
 
-uint32_t CamCtrl::classVersion = 1;
+const uint32_t CamCtrl::classVersion = 1;
 
-ClassInfo CamCtrl::classInfo("CamCtrl", "behavior.png", {
+SPH_START_CLASSINFO(CamCtrl, "behaviorcpp.png")
 	// Provide necessary data members here for the Editor to present them
-});
+SPH_END_CLASSINFO
 
 
 CamCtrl::CamCtrl(Sharpheus::Behavior* other)

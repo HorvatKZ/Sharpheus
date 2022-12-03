@@ -1,10 +1,11 @@
 #pragma once
 
+#include "CustomMacros.h"
 #include "Behavior.hpp"
 #include "LocalListeners/ControlListener.hpp"
 
 
-class SPH_EXPORT MenuCtrl : public Sharpheus::Behavior, public Sharpheus::ControlListener
+class SPH_CUSTOM_EXPORT MenuCtrl : public Sharpheus::Behavior, public Sharpheus::ControlListener
 {
 public:
 	MenuCtrl(Sharpheus::Behavior* other);
@@ -13,7 +14,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(MenuCtrl, 4);
+	SPH_DECL_BEHAVIOR(MenuCtrl, 6);
 
 protected:
 	virtual bool Save(Sharpheus::FileSaver& fs) override;

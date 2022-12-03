@@ -1,4 +1,4 @@
-project "Engine"
+project "Project"
 	kind "SharedLib"
 	language "C++"
 	cppdialect "C++17"
@@ -7,26 +7,18 @@ project "Engine"
 	targetdir (bindir)
 	objdir (bintempdir)
 
-	targetextension(".pyd")
-
-	BaseDirEngine = "%{CommonSource}/Engine"
-
-	pchheader "pch.h"
-	pchsource "%{BaseDirEngine}/src/pch.cpp"
+    BaseDirEngine = "%{CommonSource}/Engine"
 
 	files
 	{
-        "%{BaseDirEngine}/src/**.h",
-        "%{BaseDirEngine}/src/**.hpp",
-		"%{BaseDirEngine}/src/**.cpp",
-		"%{BaseDirEngine}/external/glm/glm/**.hpp",
-		"%{BaseDirEngine}/external/glm/glm/**.inl",
-		"%{BaseDirEngine}/external/stb_image/stb_image.h",
-		"%{BaseDirEngine}/external/stb_image/stb_image.cpp"
+        "%{wks.location}/../Source/**.h",
+        "%{wks.location}/../Source/**.hpp",
+		"%{wks.location}/../Source/**.cpp"
 	}
 
 	includedirs
 	{
+        "%{wks.location}/../Source",
 		"%{BaseDirEngine}/src",
 		"%{BaseDirEngine}/src/Engine/Gameobjects/Behaviors",
 		"%{IncludeDir.GLFW}",
@@ -39,27 +31,16 @@ project "Engine"
 		"%{IncludeDir.SoLoud}"
 	}
 
-	libdirs
-	{	
-		"%{LibDir.python}"
-	}
-
 	links
 	{
-		"GLFW",
-		"GLEW",
-		"spdlog",
-		"SoLoud",
-		"opengl32.lib",
-		"Glu32.lib"
+		"Engine",
+		"spdlog"
 	}
 	
 	defines
 	{
-		extraEngineDefine,
-		"SPH_BUILD_ENGINE",
+		"SPH_BUILD_CUSTOM",
 		"_CRT_SECURE_NO_WARNINGS",
-		"_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING",
 		"GLFW_INCLUDE_NONE",
 		"GLEW_STATIC",
 		"SPDLOG_COMPILED_LIB"

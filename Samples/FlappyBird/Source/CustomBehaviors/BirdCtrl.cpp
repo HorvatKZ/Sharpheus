@@ -7,11 +7,11 @@
 using namespace Sharpheus;
 
 
-uint32_t BirdCtrl::classVersion = 1;
+const uint32_t BirdCtrl::classVersion = 1;
 
-ClassInfo BirdCtrl::classInfo("BirdCtrl", "behavior.png", {
-	new UFloatProvider<BirdCtrl>("JumpForce", SPH_BIND_GETTER(BirdCtrl::GetJumpForce), SPH_BIND_SETTER(BirdCtrl::SetJumpForce))
-});
+SPH_START_CLASSINFO(BirdCtrl, "behaviorcpp.png")
+	SPH_PROVIDE_UFLOAT(BirdCtrl, "JumpForce", GetJumpForce, SetJumpForce)
+SPH_END_CLASSINFO
 
 
 BirdCtrl::BirdCtrl(Sharpheus::Behavior* other)

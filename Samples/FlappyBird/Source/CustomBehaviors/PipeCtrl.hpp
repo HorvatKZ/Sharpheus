@@ -1,9 +1,10 @@
 #pragma once
 
+#include "CustomMacros.h"
 #include "Behavior.hpp"
 
 
-class SPH_EXPORT PipeCtrl : public Sharpheus::Behavior
+class SPH_CUSTOM_EXPORT PipeCtrl : public Sharpheus::Behavior
 {
 public:
 	PipeCtrl(Sharpheus::Behavior* other);
@@ -24,7 +25,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(PipeCtrl, 3);
+	SPH_DECL_BEHAVIOR(PipeCtrl, 5);
 
 protected:
 	float spawnDist = 2000.f, xDistance = 500.f, xDistribution = 100.f, yDistribution = 300.f, yDiff = 200.f;

@@ -1,12 +1,13 @@
 #pragma once
 
+#include "CustomMacros.h"
 #include "Behavior.hpp"
 #include "LocalListeners/ControlListener.hpp"
 #include "Engine/GameObjects/Renderables/Text.hpp"
 #include "Engine/GameObjects/Renderables/Quad.hpp"
 
 
-class SPH_EXPORT CamCtrl : public Sharpheus::Behavior, public Sharpheus::ControlListener
+class SPH_CUSTOM_EXPORT CamCtrl : public Sharpheus::Behavior, public Sharpheus::ControlListener
 {
 public:
 	CamCtrl(Sharpheus::Behavior* other);
@@ -15,7 +16,7 @@ public:
 
 	virtual bool Load(Sharpheus::FileLoader& fl) override;
 
-	SPH_DECL_BEHAVIOR(CamCtrl, 2);
+	SPH_DECL_BEHAVIOR(CamCtrl, 4);
 
 protected:
 	Sharpheus::SafeGameObject bird;
