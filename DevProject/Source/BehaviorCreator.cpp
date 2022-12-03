@@ -21,11 +21,11 @@ BehaviorCreator* BehaviorCreator::Instance()
 Sharpheus::Behavior* BehaviorCreator::Create(uint32 subType, Sharpheus::PlaceholderBehavior* other)
 {
 	SPH_START_BEHAVIORS(subType)
-		SPH_CREATE_BEHAVIOR_1(DebugBehavior, 2, other)
-		SPH_CREATE_BEHAVIOR_1(PlayerController, 3, other)
-		SPH_CREATE_BEHAVIOR_1(TriggerTester, 4, other)
-		SPH_CREATE_BEHAVIOR_1(MoueTester, 5, other)
-		SPH_CREATE_BEHAVIOR_1(Controller, 6, other)
+		SPH_CREATE_BEHAVIOR_1(DebugBehavior, 3, other)
+		SPH_CREATE_BEHAVIOR_1(PlayerController, 4, other)
+		SPH_CREATE_BEHAVIOR_1(TriggerTester, 5, other)
+		SPH_CREATE_BEHAVIOR_1(MoueTester, 6, other)
+		SPH_CREATE_BEHAVIOR_1(Controller, 7, other)
 	SPH_END_BEHAVIOR_CREATION(subType)
 }
 

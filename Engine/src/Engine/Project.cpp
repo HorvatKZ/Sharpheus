@@ -127,7 +127,7 @@ namespace Sharpheus {
 			success &= LoadProjectData(path);
 			level = new Level();
 			success &= level->Load(basePath + "Levels\\", data.defaultLevelPath);
-			level->SetProjectFileName(path.substr(basePath.length() + 7));
+			level->SetProjectFileName(path.substr(basePath.length()));
 			return success;
 		}
 		else if (type == "lvl") {
@@ -227,9 +227,11 @@ namespace Sharpheus {
 		data.version = EngineVersion(vname);
 		EngineVersion::SetCurrent(data.version);
 
+		size_t pos = path.find_last_of('\\');
+		basePath = path.substr(0, pos + 1);
+		fileName = path.substr(pos + 1);
+
 		if (Renderer::IsInited()) {
-			size_t pos = path.find_last_of('\\');
-			basePath = path.substr(0, pos + 1);
 			ResourceManager::Init(basePath);
 
 			SetWinProps(data.winProps);
