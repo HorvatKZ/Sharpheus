@@ -38,6 +38,7 @@ namespace Sharpheus {
 	{
 		py::class_<Level>(handle, "Level")
 			.def_property_readonly("name", &Level::GetName)
+			.def_property_readonly("pure_name", &Level::GetPureName)
 			.def_property_readonly("path", &Level::GetPath)
 			.def_property_readonly("full_path", &Level::GetFullPath)
 			.def_property_readonly("project_file_name", &Level::GetProjectFileName)
@@ -52,7 +53,7 @@ namespace Sharpheus {
 			.def("move", &Level::Move, "obj"_a, "new_parent"_a)
 			.def("move", &Level::Move, "obj"_a, "new_parent"_a)
 
-			.def("get_gameobject", &Level::GetGameObject, "name"_a)
+			.def("get_gameobject", &Level::GetGameObject, "name"_a, py::return_value_policy::reference)
 
 			.def("create_layer", py::overload_cast<const std::string&>(&Level::CreateLayer), "name"_a)
 			.def("create_layer", py::overload_cast<const std::string&, uint32>(&Level::CreateLayer), "name"_a, "ind"_a)

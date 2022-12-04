@@ -64,6 +64,7 @@ namespace Sharpheus {
 		}
 
 		inline const std::string& GetName() { return name; }
+		inline const std::string& GetPureName() { return name.substr(0, name.length() - 14); } // Cut ".lvl.sharpheus"
 		inline bool HasPath() { return !path.empty(); }
 		inline const std::string& GetPath() { return path; }
 		inline const std::string& GetFullPath() { return fullPath; }

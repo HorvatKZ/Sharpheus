@@ -100,7 +100,7 @@ namespace Sharpheus {
 
 	bool EditorCommands::SaveLevelAs()
 	{
-		RelativeSaveDialog saveDialog(EditorData::GetMainWindow(), "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus", ProjectData::GetLevel()->GetName());
+		RelativeSaveDialog saveDialog(EditorData::GetMainWindow(), "Save Level", ProjectData::GetPath() + "Levels\\", "Sharpheus level file(*.lvl.sharpheus) | *.lvl.sharpheus", ProjectData::GetLevel()->GetPureName());
 
 		if (!saveDialog.Show())
 			return true;
