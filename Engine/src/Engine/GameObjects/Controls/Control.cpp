@@ -4,6 +4,9 @@
 
 namespace Sharpheus {
 
+	std::vector<std::pair<const ControlChangedEventFunc*, Control*>> Control::eventFuncsToCall;
+
+
 	Control::Control(GameObject* parent, const std::string& name, Shape* shape)
 		: AxisGameObject(parent, name, shape)
 	{
@@ -58,6 +61,21 @@ namespace Sharpheus {
 	}
 
 
+	void Control::ClearEventFuncs()
+	{
+		eventFuncsToCall.clear();
+	}
+
+
+	void Control::CallEventFuncs()
+	{
+		for (const auto& eventPair : eventFuncsToCall) {
+			(*eventPair.first)(ControlChangedEvent(eventPair.second));
+		}
+		eventFuncsToCall.clear();
+	}
+
+
 	bool Control::Save(FileSaver& fs)
 	{
 		AxisGameObject::Save(fs);
@@ -72,13 +90,12 @@ namespace Sharpheus {
 
 	void Control::OnClick(const MousePressedEvent& e)
 	{
-		if (IsSelected(e.gamePos)) {
+		if (IsSelected(e.gamePos) && IsAllVisible()) {
 			isCurrentlyClicked = true;
 			ChangeOnClick();
 
-			ControlChangedEvent e(this);
 			for (auto it = subscribers.begin(); it != subscribers.end(); ++it) {
-				(*it).second(e);
+				CallEventFuncAfterEventProcessed(&it->second, this);
 			}
 		}
 	}
@@ -91,9 +108,8 @@ namespace Sharpheus {
 			if (DoesChangeOnRelease()) {
 				ChangeOnRelease();
 
-				ControlChangedEvent e(this);
 				for (auto it = subscribers.begin(); it != subscribers.end(); ++it) {
-					(*it).second(e);
+					CallEventFuncAfterEventProcessed(&it->second, this);
 				}
 			}
 		}

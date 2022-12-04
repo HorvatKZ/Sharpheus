@@ -46,6 +46,7 @@ namespace Sharpheus {
 		if (root != nullptr && root->IsParentOfCurrentCamera()) {
 			Renderer::SetCamera(nullptr);
 		}
+		Control::ClearEventFuncs();
 		delete root;
 		root = nullptr;
 
@@ -58,6 +59,8 @@ namespace Sharpheus {
 
 	void Level::Tick(float deltaTime)
 	{
+		Control::CallEventFuncs();
+
 		InitBehaviors();
 
 		root->TickAll(deltaTime);

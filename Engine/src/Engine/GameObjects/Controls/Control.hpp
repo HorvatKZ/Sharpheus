@@ -48,6 +48,9 @@ namespace Sharpheus {
 
 		virtual bool Load(FileLoader& fl) override;
 
+		static void ClearEventFuncs();
+		static void CallEventFuncs();
+
 	protected:
 		const Font* font = nullptr;
 		std::string text;
@@ -57,11 +60,16 @@ namespace Sharpheus {
 
 		bool isCurrentlyClicked = false;
 		std::unordered_map<ID, ControlChangedEventFunc> subscribers;
+		static std::vector<std::pair<const ControlChangedEventFunc*, Control*>> eventFuncsToCall;
 
 		virtual bool Save(FileSaver& fs) override;
 
 		virtual void OnClick(const MousePressedEvent& e);
 		virtual void OnRelease(const MouseReleasedEvent& e);
+
+		static inline void CallEventFuncAfterEventProcessed(const ControlChangedEventFunc* eventFunc, Control* control) {
+			eventFuncsToCall.push_back(std::make_pair(eventFunc, control));
+		}
 
 		virtual inline bool DoesChangeOnRelease() = 0;
 		virtual void ChangeOnClick() = 0;
