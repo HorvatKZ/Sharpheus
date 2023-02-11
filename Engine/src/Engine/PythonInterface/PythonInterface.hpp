@@ -22,7 +22,7 @@ namespace Sharpheus {
 
 		static py::object* Import(const std::string& moduleName);
 
-		static bool Exec(const std::string& info, const std::function<void()>& func);
+		static bool Exec(const std::string& info, const std::function<void()>& func, bool onlyLogOnError = false);
 
 		static bool Precompile(const std::string& pyFile, const std::string& pycResult);
 

@@ -68,7 +68,7 @@ namespace Sharpheus {
 	}
 
 
-	bool PythonInterface::Exec(const std::string& info, const std::function<void()>& func)
+	bool PythonInterface::Exec(const std::string& info, const std::function<void()>& func, bool onlyLogOnError)
 	{
 		try {
 			if (!interpreter_inited) {
@@ -79,7 +79,9 @@ namespace Sharpheus {
 				sys.attr("path").cast<py::list>().insert(0, OSPaths::Get(OSPaths::Folder::EXEC_FOLDER));
 				interpreter_inited = true;
 			}
-			SPH_LOG(info);
+			if (!onlyLogOnError) {
+				SPH_LOG(info);
+			}
 			func();
 		} catch (py::error_already_set& e) {
 			SPH_ERROR("PythonInterface::Exec error\n" + std::string(e.what()));

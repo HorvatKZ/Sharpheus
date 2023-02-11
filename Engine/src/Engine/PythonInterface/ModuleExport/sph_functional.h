@@ -96,7 +96,7 @@ public:
                 Sharpheus::PythonInterface::Exec("func_wrapper", [&]() {
                     gil_scoped_acquire acq;
                     object retval(hfunc.f(std::forward<Args>(args)...));
-                });
+                }, true);
                 /* Visual studio 2015 parser issue: need parentheses around this expression */
                 return (retval.template cast<Return>());
             }

@@ -59,8 +59,6 @@ namespace Sharpheus {
 
 	void Level::Tick(float deltaTime)
 	{
-		Control::CallEventFuncs();
-
 		InitBehaviors();
 
 		root->TickAll(deltaTime);

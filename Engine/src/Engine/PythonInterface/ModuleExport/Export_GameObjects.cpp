@@ -53,13 +53,29 @@ namespace Sharpheus {
 			.value("Control", GameObject::TypeMasks::Control);
 
 		gobj.def_property("name", &GameObject::GetName, &GameObject::SetName)
-			.def_property("trafo", &GameObject::GetTrafo, &GameObject::SetTrafo)
-			.def_property("world_trafo", &GameObject::GetWorldTrafo, &GameObject::SetWorldTrafo)
 			.def_property("is_visible", &GameObject::IsVisible, &GameObject::SetVisible)
 			.def_property_readonly("parent", &GameObject::GetParent, py::return_value_policy::reference)
 			.def_property_readonly("root", &GameObject::GetRoot, py::return_value_policy::reference)
 			.def_property_readonly("children", &GameObject::GetChildren, py::return_value_policy::reference)
 			.def_property_readonly("level", &GameObject::GetLevel, py::return_value_policy::reference)
+
+			.def_property("trafo", &GameObject::GetTrafo, &GameObject::SetTrafo)
+			.def_property("trafo_pos", [](GameObject& obj) { return obj.GetTrafo().pos; }, [](GameObject& obj, const Point& pos) { Transform trafo = obj.GetTrafo(); trafo.pos = pos; obj.SetTrafo(trafo); })
+			.def_property("trafo_pos_x", [](GameObject& obj) { return obj.GetTrafo().pos.x; }, [](GameObject& obj, float x) { Transform trafo = obj.GetTrafo(); trafo.pos.x = x; obj.SetTrafo(trafo); })
+			.def_property("trafo_pos_y", [](GameObject& obj) { return obj.GetTrafo().pos.y; }, [](GameObject& obj, float y) { Transform trafo = obj.GetTrafo(); trafo.pos.y = y; obj.SetTrafo(trafo); })
+			.def_property("trafo_scale", [](GameObject& obj) { return obj.GetTrafo().scale; }, [](GameObject& obj, const Point& scale) { Transform trafo = obj.GetTrafo(); trafo.scale = scale; obj.SetTrafo(trafo); })
+			.def_property("trafo_scale_x", [](GameObject& obj) { return obj.GetTrafo().scale.x; }, [](GameObject& obj, float x) { Transform trafo = obj.GetTrafo(); trafo.scale.x = x; obj.SetTrafo(trafo); })
+			.def_property("trafo_scale_y", [](GameObject& obj) { return obj.GetTrafo().scale.y; }, [](GameObject& obj, float y) { Transform trafo = obj.GetTrafo(); trafo.scale.y = y; obj.SetTrafo(trafo); })
+			.def_property("trafo_rot", [](GameObject& obj) { return obj.GetTrafo().rot; }, [](GameObject& obj, float rot) { Transform trafo = obj.GetTrafo(); trafo.rot = rot; obj.SetTrafo(trafo); })
+
+			.def_property("world_trafo", &GameObject::GetWorldTrafo, &GameObject::SetWorldTrafo)
+			.def_property("world_trafo_pos", [](GameObject& obj) { return obj.GetWorldTrafo().pos; }, [](GameObject& obj, const Point& pos) { Transform trafo = obj.GetWorldTrafo(); trafo.pos = pos; obj.SetWorldTrafo(trafo); })
+			.def_property("world_trafo_pos_x", [](GameObject& obj) { return obj.GetWorldTrafo().pos.x; }, [](GameObject& obj, float x) { Transform trafo = obj.GetWorldTrafo(); trafo.pos.x = x; obj.SetWorldTrafo(trafo); })
+			.def_property("world_trafo_pos_y", [](GameObject& obj) { return obj.GetWorldTrafo().pos.y; }, [](GameObject& obj, float y) { Transform trafo = obj.GetWorldTrafo(); trafo.pos.y = y; obj.SetWorldTrafo(trafo); })
+			.def_property("world_trafo_scale", [](GameObject& obj) { return obj.GetWorldTrafo().scale; }, [](GameObject& obj, const Point& scale) { Transform trafo = obj.GetWorldTrafo(); trafo.scale = scale; obj.SetWorldTrafo(trafo); })
+			.def_property("world_trafo_scale_x", [](GameObject& obj) { return obj.GetWorldTrafo().scale.x; }, [](GameObject& obj, float x) { Transform trafo = obj.GetWorldTrafo(); trafo.scale.x = x; obj.SetWorldTrafo(trafo); })
+			.def_property("world_trafo_scale_y", [](GameObject& obj) { return obj.GetWorldTrafo().scale.y; }, [](GameObject& obj, float y) { Transform trafo = obj.GetWorldTrafo(); trafo.scale.y = y; obj.SetWorldTrafo(trafo); })
+			.def_property("world_trafo_rot", [](GameObject& obj) { return obj.GetWorldTrafo().rot; }, [](GameObject& obj, float rot) { Transform trafo = obj.GetWorldTrafo(); trafo.rot = rot; obj.SetWorldTrafo(trafo); })
 
 			.def("copy_from", &GameObject::CopyFrom)
 
@@ -82,12 +98,16 @@ namespace Sharpheus {
 			.def("get_first_child_of_mask", &GameObject::GetFirstChildOfMask, "mask"_a, py::return_value_policy::reference)
 			.def("get_last_child_of_mask", &GameObject::GetLastChildOfMask, "mask"_a, py::return_value_policy::reference)
 
-			.def("type", &GameObject::GetType)
+			.def_property_readonly("type", &GameObject::GetType)
 
 			.def(py::self == py::self)
 			.def(py::self != py::self)
 
-			.def("is_parent_of_current_camera", &GameObject::IsParentOfCurrentCamera);
+			.def("is_parent_of_current_camera", &GameObject::IsParentOfCurrentCamera)
+			
+			.def("__repr__", [](py::object& obj) {
+				return "<sph.GameObject named '" + py::str(obj.attr("name")).cast<std::string>() + "' with " + py::str(obj.attr("type")).cast<std::string>() + ">";
+			});
 
 		py::class_<Collection>(handle, "Collection", gobj)
 			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a);
@@ -121,6 +141,7 @@ namespace Sharpheus {
 
 		py::class_<PythonBehavior, Behavior, PythonBehaviorTrampoline>(handle, "PythonBehavior")
 			.def(py::init<GameObject*, const std::string&>(), "parent"_a, "name"_a)
+			.def_property_readonly("parent", [](PythonBehavior& behav) { return behav.GetParent()->GetParent(); }, py::return_value_policy::reference)
 			.def("subscribe_for_render", [](PythonBehavior& self, const std::string& layerName, std::function<void()>&& func) {
 				self.SubscribeForRender(self.GetLevel(), layerName, std::move(func));
 				}, "layer_name"_a, "func"_a)

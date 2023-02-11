@@ -102,9 +102,11 @@ namespace Sharpheus {
 			ProjectControl::Resume();
 		}
 		
+		Control::CallEventFuncs();
 		if (!ProjectControl::IsPaused()) {
 			level->Tick(allTime - lastTime);
 		}
+
 		lastTime = allTime;
 		timeOfRun = allTime;
 	}

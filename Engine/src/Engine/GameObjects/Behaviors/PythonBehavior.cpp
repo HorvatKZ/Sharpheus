@@ -192,12 +192,16 @@ namespace Sharpheus {
 	void PythonBehaviorTrampoline::Init()
 	{
 		PythonBehavior::Init();
-		PYBIND11_OVERRIDE_NAME(void, PythonBehavior, "sph_init", Init);
+		PythonInterface::Exec("PythonBehaviorTrampoline::Init", [&]() {
+			PYBIND11_OVERRIDE_NAME(void, PythonBehavior, "sph_init", Init);
+		});
 	}
 	
 	void PythonBehaviorTrampoline::Tick(float deltaTime)
 	{
-		PYBIND11_OVERRIDE_NAME(void, PythonBehavior, "tick", Tick, deltaTime);
+		PythonInterface::Exec("PythonBehaviorTrampoline::Tick", [&]() {
+			PYBIND11_OVERRIDE_NAME(void, PythonBehavior, "tick", Tick, deltaTime);
+		}, true);
 	}
 
 }
