@@ -9,7 +9,7 @@ def is_sample(root_folder: str, sample: str):
     return os.path.isdir(f'{root_folder}\\Samples\\{sample}') and os.path.exists(f'{root_folder}\\Samples\\{sample}\\{sample}.proj.sharpheus')
 
 
-def setup_sample(root_folder: str, sample: str):
+def setup_sample(sample: str):
     print('Generating sample', sample)
     setup.copy_folder('external\\wxWidgets\\debug_dlls', f'Samples\\{sample}\\bin\\Debug')
     setup.copy_folder('external\\wxWidgets\\release_dlls', f'Samples\\{sample}\\bin\\Release')
@@ -18,10 +18,10 @@ def setup_sample(root_folder: str, sample: str):
 
 
 def main():
-    root_folder = str(pathlib.Path(os.path.abspath(__file__)).parent.absolute())
+    root_folder = setup.get_root_folder()
     for dir in os.listdir(root_folder + '\\Samples'):
         if is_sample(root_folder, dir):
-            setup_sample(root_folder, dir)
+            setup_sample(dir)
 
 
 if __name__ == '__main__':
