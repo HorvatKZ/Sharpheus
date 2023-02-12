@@ -2,7 +2,7 @@
 
 ![Sharpheus](/Assets/Branding/sharpheus_long_logo.png?raw=true "Sharpheus")
 
-**Sharpheus** is an easy-to-use 2D only C-- game engine, with an editor supporting it. The core principles behind are **simplycity and efficiency**. The project started as a university thesis in the beginning of 2021, and has continued since. The entire codebase is free to use till the origin is indicated.
+**Sharpheus** is an easy-to-use 2D only C++ game engine, with an editor supporting it. The engine has full Python support, meaning the custom behaviors can be written entirely in Python. The project started as a university thesis in the beginning of 2021, and has continued since. The entire codebase is free to use till the origin is indicated.
 
 > Under MIT License
 
