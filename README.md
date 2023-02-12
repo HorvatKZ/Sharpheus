@@ -89,6 +89,7 @@
 
 1. Clone this repo
 1. Run `setup.py` from the repo's folder
+1. Optionally run `setup_samples.py` from the repo's folder to use the sample projects later
 1. Start `bin/Release/SharpheusStarter` and have fun using Sharpheus
 
 ## Docs
